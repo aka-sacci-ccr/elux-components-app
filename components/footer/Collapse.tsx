@@ -2,8 +2,9 @@ import { Category, ItemText } from "./Collumn.tsx";
 import { useId } from "../../sdk/useId.ts";
 import Icon from "../ui/Icon.tsx";
 import { clx } from "../../utils/clx.ts";
+import { TEXT_COLORS } from "../../utils/constants.tsx";
 
-export function Collapse({ items, link, title, isBlank }: Category) {
+export function Collapse({ items, link, title, isBlank, textColor }: Category) {
   const id = useId();
 
   return (
@@ -18,7 +19,10 @@ export function Collapse({ items, link, title, isBlank }: Category) {
             )}
           >
             <a
-              class="font-semibold"
+              class={clx(
+                "font-semibold",
+                textColor && TEXT_COLORS[textColor],
+              )}
               href={link}
               target={isBlank ? "_blank" : "_self"}
               rel={isBlank ? "noopener noreferrer" : ""}
