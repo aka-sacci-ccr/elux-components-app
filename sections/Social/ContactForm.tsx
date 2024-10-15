@@ -1,9 +1,10 @@
 import { TEXT_COLORS } from "../../utils/constants.tsx";
 import { clx } from "../../utils/clx.ts";
-import { ButtonProps, TextProps } from "../../utils/types.ts";
+import { ButtonProps, Colors, TextProps } from "../../utils/types.ts";
 import Container, { SpacingConfig } from "../container/Container.tsx";
 import ContactFormComponent from "../../components/social/ContactForm.tsx";
 import { AppContext } from "../../mod.ts";
+import { FontWeight } from "../../utils/types.ts";
 
 export const loader = (props: Props, _req: Request, ctx: AppContext) => {
   return {
@@ -12,9 +13,18 @@ export const loader = (props: Props, _req: Request, ctx: AppContext) => {
   };
 };
 
+export interface FormLabelProps extends Omit<TextProps, "text"> {
+  fontWeight: FontWeight;
+  personalDataLabelColor: Colors;
+}
+
 export interface Props {
   title: TextProps;
   description?: TextProps;
+  /**
+   * @description Styling of the form labels
+   */
+  formLabels?: FormLabelProps;
   /**
    * @description The list of countries to be displayed in the dropdown
    */
@@ -67,6 +77,7 @@ export default function ContactForm({
   buttonProps,
   errorMessages,
   language,
+  formLabels,
 }: ReturnType<typeof loader>) {
   return (
     <Container
@@ -100,6 +111,7 @@ export default function ContactForm({
         buttonProps={buttonProps}
         errorMessages={errorMessages}
         language={language}
+        formLabels={formLabels}
       />
     </Container>
   );

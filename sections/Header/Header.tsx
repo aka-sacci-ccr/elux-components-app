@@ -47,7 +47,7 @@ const Desktop = ({ logo, menu }: Props) => {
               <div>
                 <label
                   htmlFor="open-menu"
-                  class="cursor-pointer text-white text-sm flex flex-row font-medium"
+                  class="cursor-pointer text-white text-sm flex flex-row font-medium items-center"
                 >
                   <p>{menu.allCategoriesText}</p>{" "}
                   <Icon
@@ -91,7 +91,12 @@ const Mobile = ({ logo, menu }: Props) => (
   <>
     <div style={{ boxShadow: "0px 2px 4px 0px #56697326" }}>
       <div class="container flex items-center justify-between px-4 py-2">
-        <div class="flex items-center gap-2">
+        <div
+          class={clx(
+            "flex items-center gap-2",
+            menu.languages.hide && "w-full",
+          )}
+        >
           <label
             for={"open-menu"}
             class="flex items-center justify-center rounded-[4px] bg-primary w-[48px] h-[48px]"
@@ -114,6 +119,7 @@ const Mobile = ({ logo, menu }: Props) => (
               />
             </a>
           )}
+          {menu.languages.hide && <div class="w-12 h-12" />}
         </div>
         {!menu.languages.hide && <Dropdown {...menu.languages} />}
       </div>

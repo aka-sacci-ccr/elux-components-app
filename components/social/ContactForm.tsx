@@ -2,6 +2,7 @@ import { useScript } from "@deco/deco/hooks";
 import { clx } from "../../utils/clx.ts";
 import {
   ErrorProps,
+  FormLabelProps,
   TextareaProps,
 } from "../../sections/Social/ContactForm.tsx";
 import Icon from "../ui/Icon.tsx";
@@ -27,6 +28,7 @@ export interface Props {
   buttonProps?: ButtonProps;
   displayToast?: "success" | "error";
   language: "ES" | "EN";
+  formLabels?: FormLabelProps;
 }
 
 function script(charLimit: number) {
@@ -164,11 +166,21 @@ export default function ContactForm({
   },
   displayToast,
   language,
+  formLabels = {
+    fontSize: "text-xs",
+    fontColor: "secondary",
+    fontWeight: "font-semibold",
+    personalDataLabelColor: "secondary",
+  },
 }: Props) {
   const inputClass =
     "input w-full rounded border-xs border-neutral text-sm h-11.5";
   const selectClass = "select w-full rounded border-xs border-neutral text-sm";
-  const labelClass = "text-xs font-semibold text-secondary";
+  const labelClass = clx(
+    formLabels.fontSize,
+    TEXT_COLORS[formLabels.fontColor],
+    formLabels.fontWeight,
+  );
   const { characterLimit, textareaRows } = textareaProps;
   const { requiredFieldText, mustBeEqualEmailField } = errorMessages;
   const { contactForm } = LANGUAGE_DIFFS[language];
@@ -207,6 +219,7 @@ export default function ContactForm({
           buttonProps,
           errorMessages,
           language,
+          formLabels,
         })}
       >
         <div class="flex flex-col gap-6 mt-12 max-w-[687px] outline-0">
@@ -277,11 +290,19 @@ export default function ContactForm({
               id="messageTextarea"
             >
             </textarea>
-            <label id="charCount" class={clx(labelClass, "self-end")}>
+            <label
+              id="charCount"
+              class={clx(labelClass, "self-end", "text-sm")}
+            >
               0/{characterLimit}
             </label>
           </div>
-          <span class="text-secondary font-bold md:mt-6">
+          <span
+            class={clx(
+              "font-bold md:mt-6",
+              TEXT_COLORS[formLabels.personalDataLabelColor],
+            )}
+          >
             {contactForm.label}
           </span>
           {/* Personal data section */}
