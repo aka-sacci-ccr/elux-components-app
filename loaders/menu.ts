@@ -100,6 +100,8 @@ export interface ExtraMenu {
 
 export interface Mobile {
   logo: ImageWidget;
+  logoWidth?: number
+  logoHeight?: number
   textGoBack: string;
 }
 

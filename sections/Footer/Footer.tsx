@@ -6,7 +6,12 @@ import Collumn, {
 } from "../../components/footer/Collumn.tsx";
 import { Colors, GapSizes, TextProps } from "../../utils/types.ts";
 import { clx } from "../../utils/clx.ts";
-import { BG_COLORS, GAP_SIZES, TEXT_COLORS } from "../../utils/constants.tsx";
+import {
+  ALIGN_ITEMS_OPTIONS,
+  BG_COLORS,
+  GAP_SIZES,
+  TEXT_COLORS,
+} from "../../utils/constants.tsx";
 import Container, { SpacingConfig } from "../container/Container.tsx";
 
 /** @titleBy alt */
@@ -32,6 +37,8 @@ interface Props {
   hideHr?: boolean;
   /** @title Columns*/
   collumns: CollumProps[];
+  /** @title Gap between columns*/
+  gap?: GapSizes;
   /** @title Description */
   richText: RichText;
   /** @title Extra media */
@@ -42,10 +49,11 @@ interface Props {
 }
 
 interface ExtraMediaProps {
-  title?: TextProps;
-  description?: TextProps;
+  title?: Partial<TextProps>;
+  description?: Partial<TextProps>;
   images?: ImageProps[];
   gap?: GapSizes;
+  align?: "start" | "center" | "end";
 }
 
 function Footer({
@@ -59,6 +67,7 @@ function Footer({
   hideHr,
   extraMedia,
   reverseColumn,
+  gap,
 }: Props) {
   return (
     <Container spacing={spacing}>
@@ -88,11 +97,14 @@ function Footer({
           <div>
             <div
               class={clx(
-                "flex md:gap-5 max-md:flex-col text-secondary max-md:px-4",
+                "flex max-md:flex-col text-secondary max-md:px-4",
                 justifyBetween && "justify-between",
+                GAP_SIZES[gap ?? "0"],
               )}
             >
-              {collumns.map((props) => <Collumn {...props} />)}
+              {collumns.map((props) => (
+                <Collumn {...props} justifyBetween={justifyBetween} />
+              ))}
             </div>
             {!hideHr && <hr class="border-base-300 sm:mt-6" />}
           </div>
@@ -110,13 +122,18 @@ function Footer({
               dangerouslySetInnerHTML={{ __html: richText }}
             />
             {/* Extra media */}
-            <div class="flex flex-col gap-2 min-w-[245px]">
+            <div
+              class={clx(
+                "flex flex-col gap-2 min-w-[245px]",
+                extraMedia.align && ALIGN_ITEMS_OPTIONS[extraMedia.align],
+              )}
+            >
               {/* Title of extra media */}
-              {extraMedia.title && (
+              {extraMedia.title && extraMedia.title.text && (
                 <p
                   class={clx(
                     extraMedia.title.fontSize,
-                    TEXT_COLORS[extraMedia.title.fontColor],
+                    TEXT_COLORS[extraMedia.title.fontColor ?? "primary"],
                     "font-bold",
                   )}
                 >
@@ -124,11 +141,11 @@ function Footer({
                 </p>
               )}
               {/* Description of extra media */}
-              {extraMedia.description && (
+              {extraMedia.description && extraMedia.description.text && (
                 <p
                   class={clx(
                     extraMedia.description.fontSize,
-                    TEXT_COLORS[extraMedia.description.fontColor],
+                    TEXT_COLORS[extraMedia.description.fontColor ?? "primary"],
                     "pb-2",
                   )}
                 >

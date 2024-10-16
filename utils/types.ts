@@ -48,7 +48,7 @@ export type FontSize =
   | "text-3xl"
   | "text-4xl";
 
-export type GapSizes = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "8";
+export type GapSizes = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "8" | "10" | "12" | "16" | "20";
 
 export interface TextProps {
   /**

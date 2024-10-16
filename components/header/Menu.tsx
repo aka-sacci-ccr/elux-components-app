@@ -51,7 +51,7 @@ const MenuMobile = ({ links, extraLinks, mobile, menuText }: MenuProps) => {
         )}
       >
         <div class="h-[52px] bg-primary w-full p-2 flex items-center justify-between pl-4">
-          <Image src={mobile.logo} width={140} height={32} />
+          <Image src={mobile.logo} width={mobile.logoWidth ?? 140} height={mobile.logoHeight ?? 32} />
           <label
             class="h-9 w-9 flex items-center justify-center"
             htmlFor={"open-menu"}

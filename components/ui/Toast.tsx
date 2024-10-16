@@ -1,7 +1,7 @@
 import { useId } from "../../sdk/useId.ts";
 import { clx } from "../../utils/clx.ts";
 import Icon from "../ui/Icon.tsx";
-import { useScript } from "@deco/deco/hooks";
+import { useDevice, useScript } from "@deco/deco/hooks";
 interface Props {
   /**
       @title Texto exibido
@@ -42,19 +42,20 @@ const closeElement = (id: string) => {
 };
 export default function TooltipAddButton({ text, time, type }: Props) {
   const id = useId();
+  const device = useDevice()
   return (
     <div
       id={id}
       class={clx(
         "absolute flex flex-row",
-        "w-screen h-12 items-center px-4 justify-between",
+        "h-12 items-center px-4 justify-between",
         "text-xs font-medium text-white",
         "sm:m-8 sm:text-sm toast-shadow",
         "transition-all duration-300 ease-in-out",
         "transform translate-y-full opacity-0",
         type === "success" ? "bg-success" : "bg-error",
       )}
-      style={{ width: "18rem", bottom: "-100vh" }}
+      style={{ width: device === "desktop" ? "18rem" : "100vw", bottom: "-100vh" }}
     >
       <span>{text}</span>
       <button hx-on:click={useScript(closeElement, id)}>

@@ -39,6 +39,7 @@ export interface Category {
  */
 export interface Props {
   categories: Category[];
+  justifyBetween?: boolean;
 }
 
 const SocialItems = ({ title, link, isBlank, items, textColor }: Category) => {
@@ -71,9 +72,13 @@ const SocialItems = ({ title, link, isBlank, items, textColor }: Category) => {
   );
 };
 
-const TextItems = ({ title, link, isBlank, items, textColor }: Category) => {
+const TextItems = (
+  { title, link, isBlank, items, textColor, justifyBetween }: Category & {
+    justifyBetween?: boolean;
+  },
+) => {
   return (
-    <div class="flex flex-col gap-4 w-[245px]">
+    <div class={clx("flex flex-col gap-4", !justifyBetween && "w-[245px]")}>
       <a
         class={clx(
           "font-semibold text-sm",
@@ -103,7 +108,7 @@ const TextItems = ({ title, link, isBlank, items, textColor }: Category) => {
   );
 };
 
-function Collumn({ categories }: Props) {
+function Collumn({ categories, justifyBetween }: Props) {
   const device = useDevice();
   return (
     <div>
@@ -114,7 +119,7 @@ function Collumn({ categories }: Props) {
               return <SocialItems {...props} />;
             default:
               return device === "desktop"
-                ? <TextItems {...props} />
+                ? <TextItems {...props} justifyBetween={justifyBetween} />
                 : <Collapse {...props} />;
           }
         })}

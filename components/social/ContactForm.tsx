@@ -188,13 +188,13 @@ export default function ContactForm({
     ? displayToast === "success"
       ? useToast({
         text: "Formulario de contacto enviado!",
-        time: 5,
+        time: 50,
         trigger: "load",
         type: "success",
       })
       : useToast({
         text: "No se pudo enviar el formulario",
-        time: 5,
+        time: 50,
         trigger: "load",
         type: "error",
       })

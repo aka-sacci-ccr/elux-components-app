@@ -412,6 +412,12 @@ export const PEER_CHECKED_BORDER_COLORS = {
   "transparent": "peer-checked:!border-transparent",
 };
 
+export const ALIGN_ITEMS_OPTIONS = {
+  "start": "items-start",
+  "end": "items-end",
+  "center": "items-center",
+};
+
 export const GAP_SIZES = {
   "0": "gap-0",
   "1": "gap-1",
@@ -421,6 +427,10 @@ export const GAP_SIZES = {
   "5": "gap-5",
   "6": "gap-6",
   "8": "gap-8",
+  "10": "gap-10",
+  "12": "gap-12",
+  "16": "gap-16",
+  "20": "gap-20",
 };
 
 export const GAP_X_SIZES = {
@@ -432,6 +442,10 @@ export const GAP_X_SIZES = {
   "5": "gap-x-5",
   "6": "gap-x-6",
   "8": "gap-x-8",
+  "10": "gap-x-10",
+  "12": "gap-x-12",
+  "16": "gap-x-16",
+  "20": "gap-x-20",
 };
 
 export const GRID_SIZES_DESKTOP = {
