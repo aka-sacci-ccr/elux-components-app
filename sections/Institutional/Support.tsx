@@ -89,7 +89,11 @@ interface CardsIconProps {
 }
 interface CardsTextProps {
   /**
-   * @title Font color
+   * @title Title Font color
+   */
+  titleFontColor?: Colors;
+  /**
+   * @title Info font color
    */
   fontColor: Colors;
   /**
@@ -115,7 +119,7 @@ export default function Support(
         class={clx(
           TEXT_COLORS[title.fontColor ?? "primary"],
           title.fontSize,
-          "font-bold",
+          title.fontWeight ?? "font-semibold",
         )}
       >
         {title.text}
@@ -123,9 +127,10 @@ export default function Support(
       {description && (
         <div
           class={clx(
-            "mt-4 lg:mt-6",
+            "mt-4 lg:mt-6 ",
             TEXT_COLORS[description.fontColor ?? "primary"],
             description.fontSize,
+            description?.fontWeight ?? "font-light",
           )}
         >
           <span>{description.text}</span>
@@ -143,17 +148,25 @@ export default function Support(
             <div
               class={clx(
                 "flex flex-col gap-4 pb-6 md:pb-10",
-                TEXT_COLORS[text.fontColor],
                 text.fontSize,
                 index >= columns ? "md:pt-8" : "",
                 "max-md:border-b max-md:border-base-200 max-md:pt-6",
                 "max-md:last:border-b-0 max-md:first:pt-0",
               )}
             >
-              <span class="text-base font-bold">{title}</span>
-              <div class="flex flex-col gap-3">
+              <span
+                class={clx(
+                  "text-base font-semibold",
+                  TEXT_COLORS[text.titleFontColor ?? text.fontColor],
+                )}
+              >
+                {title}
+              </span>
+              <div
+                class={clx("flex flex-col gap-3", TEXT_COLORS[text.fontColor])}
+              >
                 {cardItems.map(({ href, icon, label }) => (
-                  <div class="flex flex-row gap-3 sm:gap-4 items-center">
+                  <div class="flex flex-row gap-3 sm:gap-4 items-center font-light">
                     <Icon
                       id={icon}
                       width={icons.iconSize}

@@ -1,5 +1,6 @@
 import type { Column, NavItem } from "../../loaders/menu.ts";
 import { clx } from "../../utils/clx.ts";
+import { TEXT_COLORS } from "../../utils/constants.tsx";
 import Icon from "../ui/Icon.tsx";
 
 const Item = ({ title, link, isBlank }: NavItem) => {
@@ -7,7 +8,7 @@ const Item = ({ title, link, isBlank }: NavItem) => {
     <li class="w-full md:border-b border-base-200">
       <a
         class={clx(
-          "flex items-center justify-start w-full text-sm font-normal h-[42px]",
+          "flex items-center justify-start w-full text-sm font-light h-[42px]",
           "max-md:h-[34px]",
         )}
         href={link}
@@ -31,14 +32,16 @@ function Column({ categories }: Column) {
               target={category?.isBlank ? "_blank" : "_self"}
               rel={category?.isBlank ? "noopener noreferrer" : ""}
               class={clx(
-                "flex items-center gap-2 font-bold text-base h-[56px]",
+                "flex items-center gap-2 font-semibold text-base h-[56px]",
                 "max-md:text-[18px] max-md:h-9",
               )}
             >
               {category?.icon && (
                 <Icon class="text-primary" id={category.icon} />
               )}
-              <p>
+              <p
+                class={category.titleColor && TEXT_COLORS[category.titleColor]}
+              >
                 {category.title}
               </p>
             </a>

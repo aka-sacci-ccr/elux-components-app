@@ -1,12 +1,16 @@
 import { useDevice } from "jsr:@deco/deco@^1.99.1/hooks";
 import Icon, { AvailableIcons } from "../ui/Icon.tsx";
 import Collapse from "./Collapse.tsx";
+import { Colors, FontWeight } from "../../utils/types.ts";
+import { clx } from "../../utils/clx.ts";
+import { TEXT_COLORS } from "../../utils/constants.tsx";
 
 /** @titleBy title */
 export interface ItemText {
   title: string;
   link: string;
   isBlank?: boolean;
+  fontWeight?: FontWeight;
 }
 
 /** @titleBy icon */
@@ -26,6 +30,7 @@ export interface Category {
   link: string;
   isBlank?: boolean;
   items: ItemSocial[] | ItemText[];
+  textColor?: Colors;
 }
 
 /**
@@ -34,13 +39,17 @@ export interface Category {
  */
 export interface Props {
   categories: Category[];
+  justifyBetween?: boolean;
 }
 
-const SocialItems = ({ title, link, isBlank, items }: Category) => {
+const SocialItems = ({ title, link, isBlank, items, textColor }: Category) => {
   return (
     <div class="flex flex-col gap-3 max-md:border-b border-base-200 max-md:pb-8 md:mt-16">
       <a
-        class="text-sm font-semibold"
+        class={clx(
+          "font-semibold text-sm",
+          textColor && TEXT_COLORS[textColor],
+        )}
         href={link}
         target={isBlank ? "_blank" : "_self"}
         rel={isBlank ? "noopener noreferrer" : ""}
@@ -63,23 +72,30 @@ const SocialItems = ({ title, link, isBlank, items }: Category) => {
   );
 };
 
-const TextItems = ({ title, link, isBlank, items }: Category) => {
+const TextItems = (
+  { title, link, isBlank, items, textColor, justifyBetween }: Category & {
+    justifyBetween?: boolean;
+  },
+) => {
   return (
-    <div class="flex flex-col gap-2">
+    <div class={clx("flex flex-col gap-4", !justifyBetween && "w-[245px]")}>
       <a
-        class="font-semibold text-sm"
+        class={clx(
+          "font-semibold text-sm",
+          textColor && TEXT_COLORS[textColor],
+        )}
         href={link}
         target={isBlank ? "_blank" : "_self"}
         rel={isBlank ? "noopener noreferrer" : ""}
       >
         {title}
       </a>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-4">
         {(items as unknown[] as ItemText[]).map((
-          { link, title, isBlank },
+          { link, title, isBlank, fontWeight },
         ) => (
           <a
-            class="text-sm"
+            class={clx("text-sm", fontWeight)}
             href={link}
             target={isBlank ? "_blank" : "_self"}
             rel={isBlank ? "noopener noreferrer" : ""}
@@ -92,7 +108,7 @@ const TextItems = ({ title, link, isBlank, items }: Category) => {
   );
 };
 
-function Collumn({ categories }: Props) {
+function Collumn({ categories, justifyBetween }: Props) {
   const device = useDevice();
   return (
     <div>
@@ -103,7 +119,7 @@ function Collumn({ categories }: Props) {
               return <SocialItems {...props} />;
             default:
               return device === "desktop"
-                ? <TextItems {...props} />
+                ? <TextItems {...props} justifyBetween={justifyBetween} />
                 : <Collapse {...props} />;
           }
         })}

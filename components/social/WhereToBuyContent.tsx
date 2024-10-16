@@ -39,12 +39,7 @@ export default function WhereToBuyContent({ cardStyle, stores }: Props) {
       )}
     >
       {stores.map((store) => (
-        <div
-          class={clx(
-            "flex flex-col gap-2 sm:gap-4",
-            TEXT_COLORS[fontColor],
-          )}
-        >
+        <div class="flex flex-col gap-2 sm:gap-4">
           {/* Image */}
           <Picture
             class={clx(
@@ -73,12 +68,21 @@ export default function WhereToBuyContent({ cardStyle, stores }: Props) {
           </Picture>
           {/* Text */}
           <div class="flex flex-col">
-            <label class={titleFontSize}>{store.title}</label>
+            <label
+              class={clx(
+                titleFontSize,
+                TEXT_COLORS[fontColor],
+                cardStyle.fontWeight,
+              )}
+            >
+              {store.title}
+            </label>
             <a
               href={store.href}
               class={clx(
                 descriptionFontSize,
                 "font-light underline",
+                TEXT_COLORS[cardStyle.descriptionFontColor ?? fontColor],
               )}
             >
               {store.description}

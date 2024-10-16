@@ -1,9 +1,10 @@
 import Icon from "../../components/ui/Icon.tsx";
 import { AvailableIcons } from "../../components/ui/Icon.tsx";
-import { TEXT_COLORS } from "../../utils/constants.tsx";
+import { GAP_SIZES, TEXT_COLORS } from "../../utils/constants.tsx";
 import { clx } from "../../utils/clx.ts";
-import { Colors, FontSize } from "../../utils/types.ts";
+import { Colors, FontSize, FontWeight } from "../../utils/types.ts";
 import Container, { SpacingConfig } from "../container/Container.tsx";
+import { GapSizes } from "../../utils/types.ts";
 
 export interface Props {
   /**
@@ -23,9 +24,17 @@ export interface Props {
    */
   fontSize: FontSize;
   /**
+   * @title Font weight
+   */
+  fontWeight?: FontWeight;
+  /**
    * @title Items
    */
   items: Items[];
+  /**
+   * @title GAP between items
+   */
+  gap?: GapSizes;
   /**
    * @title Spacing config
    */
@@ -41,18 +50,29 @@ interface Items {
    * @title Href
    */
   href?: string;
+  /**
+   * @title Override font color
+   */
+  overrideFontColor?: Colors;
+  /**
+   * @title Underline on hover
+   */
+  hoverUnderline?: boolean;
 }
 
 export default function Breadcrumb(
-  { icon, fontColor, fontSize, spacing, iconSize = 16, items }: Props,
+  { icon, fontColor, fontSize, spacing, iconSize = 16, items, fontWeight, gap }:
+    Props,
 ) {
   return (
     <Container spacing={spacing} class="container px-4 lg:px-0">
       <div
         class={clx(
-          "flex flex-row gap-2 font-medium",
+          "flex flex-row items-center",
           TEXT_COLORS[fontColor ?? "primary"],
+          fontWeight ?? "font-medium",
           fontSize,
+          GAP_SIZES[gap ?? "2"],
         )}
       >
         {icon && (
@@ -67,17 +87,34 @@ export default function Breadcrumb(
             </a>
             <Icon
               id="chevron-frigidaire"
-              size={iconSize}
-              width={iconSize}
-              height={iconSize}
+              size={16}
+              width={16}
+              height={16}
               class="text-accent"
             />
           </>
         )}
-        {items.map(({ label, href }) => (
-          <a href={href}>
-            {label}
-          </a>
+        {items.map(({ label, href, overrideFontColor, hoverUnderline }, i) => (
+          <>
+            <a
+              href={href}
+              class={clx(
+                overrideFontColor && TEXT_COLORS[overrideFontColor],
+                hoverUnderline && "border-b-2 border-primary mt-0.5",
+              )}
+            >
+              {label}
+            </a>
+            {i < items.length - 1 && (
+              <Icon
+                id="chevron-frigidaire"
+                size={16}
+                width={16}
+                height={16}
+                class="text-accent"
+              />
+            )}
+          </>
         ))}
       </div>
     </Container>
