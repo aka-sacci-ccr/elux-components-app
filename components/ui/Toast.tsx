@@ -42,7 +42,7 @@ const closeElement = (id: string) => {
 };
 export default function TooltipAddButton({ text, time, type }: Props) {
   const id = useId();
-  const device = useDevice()
+  const device = useDevice();
   return (
     <div
       id={id}
@@ -55,7 +55,10 @@ export default function TooltipAddButton({ text, time, type }: Props) {
         "transform translate-y-full opacity-0",
         type === "success" ? "bg-success" : "bg-error",
       )}
-      style={{ width: device === "desktop" ? "18rem" : "100vw", bottom: "-100vh" }}
+      style={{
+        width: device === "desktop" ? "18rem" : "100vw",
+        bottom: "-100vh",
+      }}
     >
       <span>{text}</span>
       <button hx-on:click={useScript(closeElement, id)}>

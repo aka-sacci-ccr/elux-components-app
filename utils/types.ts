@@ -48,7 +48,19 @@ export type FontSize =
   | "text-3xl"
   | "text-4xl";
 
-export type GapSizes = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "8" | "10" | "12" | "16" | "20";
+export type GapSizes =
+  | "0"
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "8"
+  | "10"
+  | "12"
+  | "16"
+  | "20";
 
 export interface TextProps {
   /**
@@ -64,6 +76,10 @@ export interface TextProps {
    * @description text-xs: 12px, text-sm: 14px, text-base: 16px, text-lg: 18px, text-xl: 20px, text-2xl: 24px, text-2.5xl: 28px, text-3xl: 30px, text-4xl: 36px,
    */
   fontSize: FontSize;
+  /**
+   * @title Font weight
+   */
+  fontWeight?: FontWeight;
 }
 
 export interface ButtonProps {

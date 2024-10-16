@@ -88,7 +88,7 @@ export default function ContactForm({
         class={clx(
           TEXT_COLORS[title.fontColor ?? "primary"],
           title.fontSize,
-          "font-bold",
+          title?.fontWeight ?? "font-semibold",
         )}
       >
         {title.text}
@@ -99,6 +99,7 @@ export default function ContactForm({
             "mt-4 lg:mt-6",
             TEXT_COLORS[description.fontColor ?? "primary"],
             description.fontSize,
+            description?.fontWeight,
           )}
         >
           <span>{description.text}</span>

@@ -68,7 +68,7 @@ const Desktop = ({ logo, menu }: Props) => {
       </div>
       {!hideSecondaryMenu && (
         <div class="bg-base-200 h-[72px]">
-          <ul class="flex justify-start h-full max-w-[1280px] mx-auto text-sm text-secondary font-semibold">
+          <ul class="flex justify-start h-full max-w-[1280px] mx-auto text-sm text-secondary font-medium">
             <li class="relative w-[182px]">
               <label
                 htmlFor="open-menu"

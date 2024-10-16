@@ -51,10 +51,10 @@ export function Collapse({ items, link, title, isBlank, textColor }: Category) {
       <div class="collapse-content !p-0">
         <div class="flex flex-col gap-6 py-6">
           {(items as unknown[] as ItemText[]).map((
-            { link, title, isBlank },
+            { link, title, isBlank, fontWeight },
           ) => (
             <a
-              class="text-sm"
+              class={clx("text-sm", fontWeight)}
               href={link}
               target={isBlank ? "_blank" : "_self"}
               rel={isBlank ? "noopener noreferrer" : ""}

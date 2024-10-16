@@ -119,7 +119,7 @@ export default function Support(
         class={clx(
           TEXT_COLORS[title.fontColor ?? "primary"],
           title.fontSize,
-          "font-bold",
+          title.fontWeight ?? "font-semibold",
         )}
       >
         {title.text}
@@ -127,9 +127,10 @@ export default function Support(
       {description && (
         <div
           class={clx(
-            "mt-4 lg:mt-6",
+            "mt-4 lg:mt-6 ",
             TEXT_COLORS[description.fontColor ?? "primary"],
             description.fontSize,
+            description?.fontWeight ?? "font-light",
           )}
         >
           <span>{description.text}</span>
@@ -155,7 +156,7 @@ export default function Support(
             >
               <span
                 class={clx(
-                  "text-base font-bold",
+                  "text-base font-semibold",
                   TEXT_COLORS[text.titleFontColor ?? text.fontColor],
                 )}
               >
@@ -165,7 +166,7 @@ export default function Support(
                 class={clx("flex flex-col gap-3", TEXT_COLORS[text.fontColor])}
               >
                 {cardItems.map(({ href, icon, label }) => (
-                  <div class="flex flex-row gap-3 sm:gap-4 items-center">
+                  <div class="flex flex-row gap-3 sm:gap-4 items-center font-light">
                     <Icon
                       id={icon}
                       width={icons.iconSize}

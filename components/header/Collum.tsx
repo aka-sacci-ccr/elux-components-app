@@ -8,7 +8,7 @@ const Item = ({ title, link, isBlank }: NavItem) => {
     <li class="w-full md:border-b border-base-200">
       <a
         class={clx(
-          "flex items-center justify-start w-full text-sm font-normal h-[42px]",
+          "flex items-center justify-start w-full text-sm font-light h-[42px]",
           "max-md:h-[34px]",
         )}
         href={link}
@@ -32,7 +32,7 @@ function Column({ categories }: Column) {
               target={category?.isBlank ? "_blank" : "_self"}
               rel={category?.isBlank ? "noopener noreferrer" : ""}
               class={clx(
-                "flex items-center gap-2 font-bold text-base h-[56px]",
+                "flex items-center gap-2 font-semibold text-base h-[56px]",
                 "max-md:text-[18px] max-md:h-9",
               )}
             >

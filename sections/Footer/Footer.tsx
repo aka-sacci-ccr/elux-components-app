@@ -118,7 +118,7 @@ function Footer({
           >
             {/* Rich text */}
             <div
-              class="text-xxs text-info"
+              class="text-xxs text-info font-light"
               dangerouslySetInnerHTML={{ __html: richText }}
             />
             {/* Extra media */}
@@ -134,7 +134,7 @@ function Footer({
                   class={clx(
                     extraMedia.title.fontSize,
                     TEXT_COLORS[extraMedia.title.fontColor ?? "primary"],
-                    "font-bold",
+                    "font-semibold",
                   )}
                 >
                   {extraMedia.title.text}

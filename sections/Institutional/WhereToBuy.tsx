@@ -16,6 +16,7 @@ import { clx } from "../../utils/clx.ts";
 import {
   Colors,
   FontSize,
+  FontWeight,
   GapSizes,
   TextProps,
   WidthAndHeight,
@@ -140,19 +141,28 @@ interface CountryCardStyle {
 
 export interface StoreCardStyle {
   /**
-   * @title Font color
-   */
-  fontColor: Colors;
-  /**
    * @title Title Font size
    * @description text-xs: 12px, text-sm: 14px, text-base: 16px, text-lg: 18px, text-xl: 20px, text-2xl: 24px, text-3xl: 30px
    */
   titleFontSize: FontSize;
   /**
+   * @title Title Font color
+   */
+  fontColor: Colors;
+  /**
+   * @title Title Font Weight
+   */
+  fontWeight?: FontWeight;
+  /**
    * @title Description Font size
    * @description text-xs: 12px, text-sm: 14px, text-base: 16px, text-lg: 18px, text-xl: 20px, text-2xl: 24px, text-3xl: 30px
    */
   descriptionFontSize: FontSize;
+  /**
+   * @title Description font color
+   */
+  descriptionFontColor?: Colors;
+
   /**
    * @title Images Sizes
    */
@@ -195,7 +205,7 @@ export default function Support(
       <h1
         class={clx(
           TEXT_COLORS[title.fontColor ?? "primary"],
-          "font-bold",
+          title.fontWeight ?? "font-semibold",
           title.fontSize,
         )}
       >
@@ -208,6 +218,7 @@ export default function Support(
             "mt-4 lg:mt-6",
             TEXT_COLORS[description.fontColor ?? "primary"],
             description.fontSize,
+            description.fontWeight ?? "font-light",
           )}
         >
           <span>{description.text}</span>

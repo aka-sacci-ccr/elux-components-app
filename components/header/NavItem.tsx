@@ -23,7 +23,7 @@ function NavItem(
         target={isBlank ? "_blank" : "_self"}
         rel={isBlank ? "noopener noreferrer" : ""}
       >
-        <p class="leading-none text-secondary font-semibold text-sm">{title}</p>
+        <p class="leading-none text-secondary font-medium text-sm">{title}</p>
       </a>
 
       {hasContentDiv && (

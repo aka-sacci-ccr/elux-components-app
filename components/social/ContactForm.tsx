@@ -205,7 +205,7 @@ export default function ContactForm({
       {...toast}
     >
       <form
-        class="flex flex-col"
+        class="flex flex-col font-light"
         hx-sync="this:replace"
         hx-trigger="submit"
         hx-target="this"
@@ -299,7 +299,7 @@ export default function ContactForm({
           </div>
           <span
             class={clx(
-              "font-bold md:mt-6",
+              "font-semibold md:mt-6",
               TEXT_COLORS[formLabels.personalDataLabelColor],
             )}
           >
