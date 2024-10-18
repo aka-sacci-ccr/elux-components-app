@@ -1,3 +1,5 @@
+import { ImageWidget } from "apps/admin/widgets.ts";
+
 export type Colors =
   | "base-100"
   | "primary"
@@ -46,6 +48,7 @@ export type FontSize =
   | "text-2xl"
   | "text-2.5xl"
   | "text-3xl"
+  | "text-3.5xl"
   | "text-4xl";
 
 export type GapSizes =
@@ -73,7 +76,7 @@ export interface TextProps {
   fontColor: Colors;
   /**
    * @title Font size
-   * @description text-xs: 12px, text-sm: 14px, text-base: 16px, text-lg: 18px, text-xl: 20px, text-2xl: 24px, text-2.5xl: 28px, text-3xl: 30px, text-4xl: 36px,
+   * @description text-xs: 12px, text-sm: 14px, text-base: 16px, text-lg: 18px, text-xl: 20px, text-2xl: 24px, text-2.5xl: 28px, text-3xl: 30px, text-3.5xl: 34px, text-4xl: 36px,
    */
   fontSize: FontSize;
   /**
@@ -129,4 +132,24 @@ export interface SubmitContactFormProps {
   personEmail?: string;
   personPhone?: string;
   status?: string;
+}
+
+export interface Image {
+  desktop: ImageProps;
+  mobile: ImageProps;
+  /**
+   * @title Alt
+   */
+  alt: string;
+}
+
+export interface ImageProps {
+  /**
+   * @title Image
+   */
+  src: ImageWidget;
+  /**
+   * @title Size
+   */
+  sizing: WidthAndHeight;
 }
