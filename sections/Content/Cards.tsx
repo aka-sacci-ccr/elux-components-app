@@ -1,6 +1,4 @@
-import Container, {
-  SpacingConfig,
-} from "../container/Container.tsx";
+import Container, { SpacingConfig } from "../container/Container.tsx";
 import { clx } from "../../utils/clx.ts";
 import {
   BG_COLORS,
@@ -8,11 +6,7 @@ import {
   GRID_SIZES_DESKTOP,
   TEXT_COLORS,
 } from "../../utils/constants.tsx";
-import {
-  Colors,
-  GapSizes,
-  TextProps,
-} from "../../utils/types.ts";
+import { Colors, GapSizes, TextProps } from "../../utils/types.ts";
 
 export interface Props {
   /** @title Background color  */
