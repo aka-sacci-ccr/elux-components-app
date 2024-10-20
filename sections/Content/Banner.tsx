@@ -43,6 +43,10 @@ export interface Props {
    */
   fullWidth?: boolean;
   /**
+   * @title Invert the Image/Text position in desktop
+   */
+  invertPosition?: boolean;
+  /**
    * @title Spacing config
    */
   spacing?: SpacingConfig;
@@ -59,6 +63,7 @@ export default function Banner(
     imageGap,
     fullWidth,
     spacing,
+    invertPosition
   }: Props,
 ) {
   return (
@@ -70,9 +75,10 @@ export default function Banner(
     >
       <div
         class={clx(
-          "flex flex-col-reverse lg:flex-row container",
+          "flex flex-col-reverse container",
           GAP_SIZES[imageGap],
           !fullWidth && BG_COLORS[backgroundColor],
+          invertPosition ? "lg:flex-row" : "lg:flex-row-reverse"
         )}
       >
         <div
