@@ -63,7 +63,7 @@ export default function Banner(
     imageGap,
     fullWidth,
     spacing,
-    invertPosition
+    invertPosition,
   }: Props,
 ) {
   return (
@@ -78,14 +78,16 @@ export default function Banner(
           "flex flex-col-reverse container",
           GAP_SIZES[imageGap],
           !fullWidth && BG_COLORS[backgroundColor],
-          invertPosition ? "lg:flex-row" : "lg:flex-row-reverse"
+          invertPosition ? "lg:flex-row-reverse" : "lg:flex-row",
         )}
       >
         <div
           class={clx(
             "flex flex-col max-lg:px-6 lg:pb-0 self-center",
             GAP_SIZES[textGap],
-            !fullWidth && PADDING_SIZES.left[imageGap],
+            !fullWidth && (invertPosition
+              ? PADDING_SIZES.right[imageGap]
+              : PADDING_SIZES.left[imageGap]),
             PADDING_SIZES.bottom[imageGap],
           )}
         >
