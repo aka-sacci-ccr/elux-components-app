@@ -448,6 +448,21 @@ export const GAP_X_SIZES = {
   "20": "gap-x-20",
 };
 
+export const GAP_Y_SIZES = {
+  "0": "gap-y-0",
+  "1": "gap-y-1",
+  "2": "gap-y-2",
+  "3": "gap-y-3",
+  "4": "gap-y-4",
+  "5": "gap-y-5",
+  "6": "gap-y-6",
+  "8": "gap-y-8",
+  "10": "gap-y-10",
+  "12": "gap-y-12",
+  "16": "gap-y-16",
+  "20": "gap-y-20",
+};
+
 export const GRID_SIZES_DESKTOP = {
   "1": "md:grid-cols-1",
   "2": "md:grid-cols-2",
