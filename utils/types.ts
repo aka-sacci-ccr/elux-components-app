@@ -1,4 +1,5 @@
 import { ImageWidget } from "apps/admin/widgets.ts";
+import { AvailableIcons } from "../components/ui/Icon.tsx";
 
 export type Colors =
   | "base-100"
@@ -63,7 +64,9 @@ export type GapSizes =
   | "10"
   | "12"
   | "16"
-  | "20";
+  | "20"
+  | "24"
+  | "28";
 
 export interface TextProps {
   /**
@@ -152,4 +155,10 @@ export interface ImageProps {
    * @title Size
    */
   sizing: WidthAndHeight;
+}
+
+export interface IconProps {
+  icon?: AvailableIcons;
+  color?: Colors;
+  size?: number;
 }

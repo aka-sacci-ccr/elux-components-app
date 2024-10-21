@@ -6,8 +6,16 @@ import {
   TEXT_COLORS,
 } from "../../utils/constants.tsx";
 import { clx } from "../../utils/clx.ts";
-import { Colors, GapSizes, Image, TextProps } from "../../utils/types.ts";
+import {
+  Colors,
+  GapSizes,
+  IconProps,
+  Image,
+  TextProps,
+} from "../../utils/types.ts";
 import Container, { SpacingConfig } from "../container/Container.tsx";
+import Icon from "../../components/ui/Icon.tsx";
+import { LoadingFallbackProps } from "@deco/deco";
 
 export interface Props {
   /**
@@ -19,17 +27,21 @@ export interface Props {
    */
   title: TextProps;
   /**
-   * @title Descriptions
+   * @title Description
    */
-  description: TextProps;
+  description: Description;
   /**
    * @title Image
    */
   image: Image;
   /**
-   * @title Url
+   * @title Banner link
    */
-  link?: Partial<TextProps> & { url?: string };
+  link?: Partial<TextProps> & {
+    url?: string;
+    icon?: IconProps;
+    disableUnderline?: boolean;
+  };
   /**
    * @title Gap between text
    */
@@ -47,9 +59,20 @@ export interface Props {
    */
   invertPosition?: boolean;
   /**
+   * @title Disable paddings of the text
+   */
+  disablePaddings?: boolean;
+  /**
    * @title Spacing config
    */
   spacing?: SpacingConfig;
+}
+
+interface Description extends TextProps {
+  /**
+   *  @format rich-text
+   */
+  text: string;
 }
 
 export default function Banner(
@@ -64,6 +87,7 @@ export default function Banner(
     fullWidth,
     spacing,
     invertPosition,
+    disablePaddings,
   }: Props,
 ) {
   return (
@@ -73,6 +97,7 @@ export default function Banner(
         !fullWidth ? "container max-sm:px-6" : BG_COLORS[backgroundColor],
       )}
     >
+      {/** Container */}
       <div
         class={clx(
           "flex flex-col-reverse container",
@@ -81,16 +106,19 @@ export default function Banner(
           invertPosition ? "lg:flex-row-reverse" : "lg:flex-row",
         )}
       >
+        {/** Text Div */}
         <div
           class={clx(
-            "flex flex-col max-lg:px-6 lg:pb-0 self-center",
+            "flex flex-col lg:pb-0 self-center",
             GAP_SIZES[textGap],
-            !fullWidth && (invertPosition
+            !fullWidth && !disablePaddings && (invertPosition
               ? PADDING_SIZES.right[imageGap]
               : PADDING_SIZES.left[imageGap]),
+            !disablePaddings && "max-lg:px-6",
             PADDING_SIZES.bottom[imageGap],
           )}
         >
+          {/** Title */}
           <p
             class={clx(
               title.fontSize,
@@ -100,29 +128,38 @@ export default function Banner(
           >
             {title.text}
           </p>
-          <p
+          <div
             class={clx(
               description.fontSize,
               description.fontWeight,
               TEXT_COLORS[description.fontColor],
             )}
-          >
-            {description.text}
-          </p>
+            dangerouslySetInnerHTML={{ __html: description.text }}
+          />
           {link && link.text && (
-            <a
-              class={clx(
-                TEXT_COLORS[link?.fontColor ?? "white"],
-                link.fontSize,
-                link.fontWeight,
-                "underline mt-6.5 sm:mt-2",
+            <div class="flex flex-row justify-between mt-6.5 sm:mt-2">
+              <a
+                class={clx(
+                  TEXT_COLORS[link?.fontColor ?? "white"],
+                  link.fontSize,
+                  link.fontWeight,
+                  !link?.disableUnderline && "underline",
+                )}
+                href={link.url}
+              >
+                {link.text}
+              </a>
+              {link.icon && link.icon.icon && (
+                <Icon
+                  id={link.icon.icon}
+                  size={link.icon.size}
+                  class={clx(TEXT_COLORS[link.icon.color ?? "primary"])}
+                />
               )}
-              href={link.url}
-            >
-              {link.text}
-            </a>
+            </div>
           )}
         </div>
+        {/** Picture Div */}
         <Picture class="h-min">
           <Source
             media="(max-width: 1024px)"
@@ -146,3 +183,41 @@ export default function Banner(
     </Container>
   );
 }
+
+export const LoadingFallback = (
+  { spacing, fullWidth, textGap, invertPosition, imageGap }:
+    LoadingFallbackProps<Props>,
+) => (
+  <Container
+    spacing={spacing}
+    class={clx(
+      !fullWidth && "container max-sm:px-6",
+    )}
+  >
+    <div
+      class={clx(
+        "flex flex-col-reverse container",
+        GAP_SIZES[imageGap ?? 4],
+        invertPosition ? "lg:flex-row-reverse" : "lg:flex-row",
+      )}
+    >
+      {/** Title */}
+      <div
+        class={clx(
+          "flex flex-col lg:pb-0 self-center w-full",
+          GAP_SIZES[textGap ?? 4],
+          !fullWidth && (invertPosition
+            ? PADDING_SIZES.right[imageGap ?? 4]
+            : PADDING_SIZES.left[imageGap ?? 4]),
+          PADDING_SIZES.bottom[imageGap ?? 4],
+        )}
+      >
+        <div class="w-full h-7 sm:h-8 pb-2 skeleton" />
+        <div class="w-full h-4 skeleton" />
+        <div class="w-full h-4 skeleton" />
+      </div>
+      {/** Image */}
+      <div class="h-[210px] sm:h-[359px] w-full sm:w-[510px] sm:min-w-[510px] sm:min-h-[359px] skeleton" />
+    </div>
+  </Container>
+);

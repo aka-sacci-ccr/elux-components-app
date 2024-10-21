@@ -173,13 +173,21 @@ export default function ContactForm({
     personalDataLabelColor: "secondary",
   },
 }: Props) {
-  const inputClass =
-    "input w-full rounded border-xs border-neutral text-sm h-11.5";
-  const selectClass = "select w-full rounded border-xs border-neutral text-sm";
+  const inputClass = clx(
+    "input w-full rounded border-xs border-neutral text-sm h-11.5",
+    TEXT_COLORS[formLabels.fontColor],
+    "focus:border-neutral",
+  );
+  const selectClass = clx(
+    "select w-full rounded border-xs border-neutral text-sm",
+    TEXT_COLORS[formLabels.fontColor],
+    "focus:border-neutral",
+  );
   const labelClass = clx(
     formLabels.fontSize,
     TEXT_COLORS[formLabels.fontColor],
     formLabels.fontWeight,
+    "focus:border-neutral",
   );
   const { characterLimit, textareaRows } = textareaProps;
   const { requiredFieldText, mustBeEqualEmailField } = errorMessages;
@@ -282,7 +290,7 @@ export default function ContactForm({
               {contactForm.message.label}
             </label>
             <textarea
-              class="textarea w-full rounded-sm border border-neutral text-sm"
+              class="textarea w-full rounded-sm border-xs border-neutral text-sm focus:border-neutral"
               placeholder={contactForm.message.placeholder}
               maxLength={characterLimit}
               rows={textareaRows}

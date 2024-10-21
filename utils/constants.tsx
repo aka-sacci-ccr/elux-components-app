@@ -431,6 +431,8 @@ export const GAP_SIZES = {
   "12": "gap-12",
   "16": "gap-16",
   "20": "gap-20",
+  "24": "gap-24",
+  "28": "gap-28",
 };
 
 export const GAP_X_SIZES = {
@@ -446,6 +448,8 @@ export const GAP_X_SIZES = {
   "12": "gap-x-12",
   "16": "gap-x-16",
   "20": "gap-x-20",
+  "24": "gap-x-24",
+  "28": "gap-x-28",
 };
 
 export const GAP_Y_SIZES = {
@@ -461,6 +465,8 @@ export const GAP_Y_SIZES = {
   "12": "gap-y-12",
   "16": "gap-y-16",
   "20": "gap-y-20",
+  "24": "gap-y-24",
+  "28": "gap-y-28",
 };
 
 export const GRID_SIZES_DESKTOP = {
@@ -578,6 +584,8 @@ export const PADDING_SIZES = {
     "12": "p-12",
     "16": "p-16",
     "20": "p-20",
+    "24": "p-24",
+    "28": "p-28",
   },
   left: {
     "0": "pl-0",
@@ -592,6 +600,8 @@ export const PADDING_SIZES = {
     "12": "pl-12",
     "16": "pl-16",
     "20": "pl-20",
+    "24": "pl-24",
+    "28": "pl-28",
   },
   right: {
     "0": "pr-0",
@@ -606,6 +616,8 @@ export const PADDING_SIZES = {
     "12": "pr-12",
     "16": "pr-16",
     "20": "pr-20",
+    "24": "pr-24",
+    "28": "pr-28",
   },
   top: {
     "0": "pt-0",
@@ -620,6 +632,8 @@ export const PADDING_SIZES = {
     "12": "pt-12",
     "16": "pt-16",
     "20": "pt-20",
+    "24": "pt-24",
+    "28": "pt-28",
   },
   bottom: {
     "0": "pb-0",
@@ -634,5 +648,7 @@ export const PADDING_SIZES = {
     "12": "pb-12",
     "16": "pb-16",
     "20": "pb-20",
+    "24": "pb-24",
+    "28": "pb-28",
   },
 };
