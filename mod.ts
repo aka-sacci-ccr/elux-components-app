@@ -8,6 +8,7 @@ export type AppContext = FnContext<State, Manifest>;
 
 export interface Props {
   language: "EN" | "ES";
+  originSite?: string;
 }
 
 export interface State extends Omit<Props, "token"> {

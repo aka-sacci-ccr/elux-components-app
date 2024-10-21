@@ -1,14 +1,15 @@
 import { logger } from "@deco/deco/o11y";
-import { type AppContext } from "apps/records/mod.ts";
+import { type AppContext as RecordsContext } from "apps/records/mod.ts";
 import { contact } from "../../db/schema.ts";
 import { SubmitContactFormProps, Success } from "../../utils/types.ts";
+import { AppContext } from "../../mod.ts";
 
 export type Props = SubmitContactFormProps;
 
 export default async function loader(
   props: Props,
   _req: Request,
-  ctx: AppContext,
+  ctx: AppContext & RecordsContext,
 ): Promise<Success> {
   const records = await ctx.invoke.records.loaders.drizzle();
 
@@ -16,6 +17,7 @@ export default async function loader(
     await records.insert(contact).values({
       ...props,
       date: new Date().toISOString(),
+      originSite: ctx.originSite,
     });
     return {
       success: true,
