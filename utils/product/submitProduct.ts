@@ -18,6 +18,7 @@ import {
 } from "../../db/schema.ts";
 import { Props as SubmitProductProps } from "../../actions/product/submit.ts";
 import { Description } from "../types.ts";
+import { eq } from "drizzle-orm";
 
 export async function insertBaseData(product: Product, ctx: AppContext) {
   const records = await ctx.invoke.records.loaders.drizzle();
@@ -147,5 +148,25 @@ export async function insertProduct(
   await insertImages(images, product.sku, ctx);
   if (videos && videos.length > 0) {
     await insertVideos(videos, product.sku, ctx);
+  }
+}
+
+export async function updateBaseData(
+  product: Partial<Product>,
+  ctx: AppContext,
+) {
+  const records = await ctx.invoke.records.loaders.drizzle();
+  const updateData: Partial<Product> = {};
+  Object.keys(product).forEach((key) => {
+    const value = product[key as keyof Product];
+    if (value) {
+      updateData[key as keyof Product] = value;
+    }
+  });
+  if (Object.keys(updateData).length > 0) {
+    await records
+      .update(products)
+      .set(updateData)
+      .where(eq(products.sku, product.sku!));
   }
 }
