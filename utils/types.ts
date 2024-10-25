@@ -308,5 +308,5 @@ export interface AvaliableIn {
    * @format dynamic-options
    * @options elux-components-app/loaders/product/avaliableSites.ts
    */
-  site: string;
+  domain: string;
 }

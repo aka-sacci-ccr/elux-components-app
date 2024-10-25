@@ -118,10 +118,9 @@ export async function insertAvaliability(
 ) {
   const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(avaliableIn).values(
-    avaliablility.map(({ site }) => {
-      const avaliable = site.split("---");
+    avaliablility.map(({ domain }) => {
       return {
-        site: Number(avaliable[0]),
+        domain,
         subjectOf: sku,
       };
     }),

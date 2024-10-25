@@ -5,10 +5,10 @@ import {
   brands,
   categories,
   descriptions,
+  domains,
   images,
   productCategories,
   products,
-  siteNames,
   videos,
 } from "../../db/schema.ts";
 import { eq } from "drizzle-orm";
@@ -68,15 +68,17 @@ interface Category {
 }
 
 interface Avaliability {
-  identifier: number;
-  name: string;
+  identifier: string;
+  description: string;
 }
 
 export async function getProductBySku(
   sku: string,
   ctx: AppContext,
+  url: URL,
 ): Promise<Product | null> {
   const records = await ctx.invoke.records.loaders.drizzle();
+  console.log(url.hostname);
   const productBase = await records
     .select({
       name: products.name,
@@ -143,11 +145,11 @@ export async function getProductBySku(
 
     records
       .select({
-        identifier: siteNames.identifier,
-        name: siteNames.name,
+        identifier: domains.identifier,
+        description: domains.description,
       })
       .from(avaliableIn)
-      .innerJoin(siteNames, eq(avaliableIn.site, siteNames.identifier))
+      .innerJoin(domains, eq(avaliableIn.domain, domains.identifier))
       .where(eq(avaliableIn.subjectOf, sku))
       .all(),
   ]);
@@ -168,8 +170,10 @@ export async function getProductBySku(
 export async function getProductBySlug(
   slug: string,
   ctx: AppContext,
+  url: URL,
 ): Promise<Product | null> {
   const records = await ctx.invoke.records.loaders.drizzle();
+  console.log(url.hostname);
   const productBase = await records
     .select({
       sku: products.sku,
@@ -237,11 +241,11 @@ export async function getProductBySlug(
 
     records
       .select({
-        identifier: siteNames.identifier,
-        name: siteNames.name,
+        identifier: domains.identifier,
+        description: domains.description,
       })
       .from(avaliableIn)
-      .innerJoin(siteNames, eq(avaliableIn.site, siteNames.identifier))
+      .innerJoin(domains, eq(avaliableIn.domain, domains.identifier))
       .where(eq(avaliableIn.subjectOf, productBase.sku))
       .all(),
   ]);
@@ -320,11 +324,11 @@ function productsObject(
           value: identifier,
         }
       )),
-      ...avaliability.map(({ identifier, name }) => (
+      ...avaliability.map(({ identifier, description }) => (
         {
           "@type": "PropertyValue" as const,
           propertyID: "AVALIABLEIN",
-          name: name,
+          name: description,
           value: String(identifier),
         }
       )),

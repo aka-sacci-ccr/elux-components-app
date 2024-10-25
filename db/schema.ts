@@ -39,7 +39,7 @@ export const productCategories = sqliteTable("productCategories", {
 export const products = sqliteTable("products", {
   sku: text("sku").primaryKey(), // P.K
   name: text("name").notNull(),
-  productID: text("productID").notNull(),
+  productID: text("productID").notNull().unique(),
   brand: text("brand").references(() => brands.identifier), // F.K
   description: text("description"),
   gtin: text("gtin"),
@@ -90,13 +90,13 @@ export const videos = sqliteTable("videos", {
   duration: text("duration"),
 });
 
-export const siteNames = sqliteTable("siteNames", {
-  identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
-  name: text("name").notNull(),
-});
-
 export const avaliableIn = sqliteTable("avaliableIn", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
-  site: integer("site").references(() => siteNames.identifier), // F.K
+  domain: text("domain").references(() => domains.identifier), // F.K
+});
+
+export const domains = sqliteTable("domains", {
+  identifier: text("identifier").primaryKey(), // P.K
+  description: text("name").notNull(),
 });

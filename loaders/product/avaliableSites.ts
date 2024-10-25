@@ -1,6 +1,6 @@
 import { allowCorsFor, type FnContext } from "@deco/deco";
 import { AppContext as RecordsContext } from "apps/records/mod.ts";
-import { siteNames } from "../../db/schema.ts";
+import { domains } from "../../db/schema.ts";
 
 export default async function avaliableSites(
   _props: unknown,
@@ -16,12 +16,12 @@ export default async function avaliableSites(
   const records = await recordsCtx.invoke.records.loaders.drizzle();
 
   const allSites = await records.select({
-    identifier: siteNames.identifier,
-    name: siteNames.name,
-  }).from(siteNames);
+    identifier: domains.identifier,
+    name: domains.description,
+  }).from(domains);
 
   return allSites.map(({ identifier, name }) => ({
-    label: name,
-    value: `${identifier}---${name}`,
+    label: `${name} (${identifier})`,
+    value: identifier,
   }));
 }

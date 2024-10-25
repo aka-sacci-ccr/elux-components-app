@@ -18,11 +18,12 @@ export interface Props {
 
 export default async function loader(
   { slug, useSkuAsSlug }: Props,
-  _req: Request,
+  req: Request,
   ctx: AppContext,
 ): Promise<Product | null> {
+  const url = new URL(req.url);
   const result = useSkuAsSlug
-    ? await getProductBySku(slug, ctx)
-    : await getProductBySlug(slug, ctx);
+    ? await getProductBySku(slug, ctx, url)
+    : await getProductBySlug(slug, ctx, url);
   return result;
 }

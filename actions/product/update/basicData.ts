@@ -19,17 +19,18 @@ export interface Props extends Partial<DatabaseProduct> {
  */
 export default async function basicData(
   props: Props,
-  _req: Request,
+  req: Request,
   ctx: AppContext,
 ): Promise<Product | { success: boolean; message: string }> {
   const productBrand = props?.brand?.split("---");
+  const url = new URL(req.url);
   try {
     await updateBaseData({
       ...props,
       brand: productBrand ? productBrand[0] ?? undefined : undefined,
     }, ctx);
 
-    const product = await getProductBySku(props.sku, ctx);
+    const product = await getProductBySku(props.sku, ctx, url);
     if (!product) {
       throw new Error("Product not found");
     }
