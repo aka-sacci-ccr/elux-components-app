@@ -162,3 +162,155 @@ export interface IconProps {
   color?: Colors;
   size?: number;
 }
+
+export interface Category {
+  /**
+   * @description Category identifier
+   */
+  identifier: string;
+  /**
+   * @title Name
+   * @description Category name
+   */
+  value: string;
+  /**
+   * @description Category description
+   */
+  description?: string;
+  /**
+   * @title Category father
+   * @format dynamic-options
+   * @options elux-components-app/loaders/product/avaliableCategories.ts
+   */
+  subjectOf?: string;
+}
+
+export interface ProductCategory {
+  /**
+   * @title Category ID
+   * @format dynamic-options
+   * @options elux-components-app/loaders/product/avaliableCategories.ts
+   */
+  subjectOf: string;
+}
+
+export interface Product {
+  sku: string;
+  name: string;
+  /**
+   * @title Slug
+   */
+  productID: string;
+  /**
+   * @title Brand
+   * @format dynamic-options
+   * @options elux-components-app/loaders/product/avaliableBrands.ts
+   */
+  brand?: string;
+  description?: string;
+  gtin?: string;
+  /**
+   * @format datetime
+   */
+  releaseDate?: string;
+}
+
+export interface Brand {
+  /**
+   * @title Brand Id
+   */
+  identifier: string;
+  name: string;
+  description?: string;
+  /**
+   * @format image-uri
+   */
+  logo?: string;
+}
+
+export interface AdditionalProperty {
+  /**
+   * @title Property Identificator
+   */
+  propertyID:
+    | "OTHER"
+    | "HEIGHT"
+    | "WIDITH"
+    | "DEPTH"
+    | "WEIGHT"
+    | "BOX_HEIGHT"
+    | "BOX_WIDITH"
+    | "BOX_DEPTH"
+    | "BOX_WEIGHT";
+  /**
+   * @title Property Name
+   */
+  name: string;
+  value: string;
+  unitCode?: string;
+  unitText?: string;
+}
+
+export interface Description {
+  name: string;
+  /**
+   * @format rich-text
+   */
+  value: string;
+  /**
+   * @format image-uri
+   */
+  image?: string;
+}
+
+export interface ImageProduct {
+  /**
+   * @title Image
+   * @format image-uri
+   */
+  url: string;
+  /**
+   * @title Alt
+   */
+  disambiguatingDescription?: string;
+  /**
+   * @title Image type
+   */
+  additionalType?:
+    | "INFO_BANNER"
+    | "MAIN_BANNER"
+    | "PRODUCT_IMAGE"
+    | "MAIN_BANNER_MOBILE";
+  /**
+   * @title Title (if banner)
+   */
+  name?: string;
+  /**
+   * @format rich-text
+   * @title Description (if banner)
+   */
+  description?: string;
+}
+
+export interface Video {
+  /**
+   * @title Video
+   * @format video-uri
+   */
+  contentUrl: string;
+  /**
+   * @title Thumbnail
+   * @format image-uri
+   */
+  thumbnailUrl: string;
+  duration?: string;
+}
+
+export interface AvaliableIn {
+  /**
+   * @title Site
+   * @format dynamic-options
+   * @options elux-components-app/loaders/product/avaliableSites.ts
+   */
+  domain: string;
+}
