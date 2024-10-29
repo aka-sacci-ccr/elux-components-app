@@ -165,19 +165,25 @@ export async function getProductBySku(
       .all(),
   ]);
 
-  return productsObject(
-    {
-      productBase: { ...productBase, sku },
-      additionalProperty,
-      description,
-      image,
-      video,
-      category: category.rows as unknown as Category[],
-      avaliability,
-      url,
-      skuAsSlug: true,
-    },
+  const isAvaliable = avaliability.some(({ identifier }) =>
+    url.hostname.endsWith(identifier)
   );
+
+  return isAvaliable
+    ? productsObject(
+      {
+        productBase: { ...productBase, sku },
+        additionalProperty,
+        description,
+        image,
+        video,
+        category: category.rows as unknown as Category[],
+        avaliability,
+        url,
+        skuAsSlug: true,
+      },
+    )
+    : null;
 }
 
 export async function getProductBySlug(
@@ -275,18 +281,27 @@ export async function getProductBySlug(
       .all(),
   ]);
 
-  return productsObject(
-    {
-      productBase,
-      additionalProperty,
-      description,
-      image,
-      video,
-      category: category.rows as unknown as Category[],
-      avaliability,
-      url,
-    },
+  const isAvaliable = avaliability.some(({ identifier }) =>
+    url.hostname.endsWith(identifier)
   );
+
+  console.log(url.hostname);
+  console.log(isAvaliable);
+
+  return isAvaliable
+    ? productsObject(
+      {
+        productBase,
+        additionalProperty,
+        description,
+        image,
+        video,
+        category: category.rows as unknown as Category[],
+        avaliability,
+        url,
+      },
+    )
+    : null;
 }
 
 function productsObject(
