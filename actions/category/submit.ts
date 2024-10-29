@@ -11,7 +11,7 @@ export default async function submit(
   const records = await ctx.invoke.records.loaders.drizzle();
   const category = subjectOf?.split("---");
   try {
-    const additionalType = category ? category[2] : "1";
+    const additionalType = category ? String(Number(category[2]) + 1) : "1";
     const subjectOf = category ? category[0] : undefined;
     await records.insert(categories).values({
       ...props,

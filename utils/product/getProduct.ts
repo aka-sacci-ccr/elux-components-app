@@ -341,7 +341,7 @@ function productsObject(
       disambiguatingDescription: i.disambiguatingDescription ?? undefined,
       subjectOf: i.subjectOf ?? undefined,
       identifier: String(i.identifier),
-      additionalType: i.additionalType ? "BANNER" : "IMAGE",
+      additionalType: i.additionalType ?? undefined,
     })),
     video: video?.map((v) => ({
       "@type": "VideoObject" as const,

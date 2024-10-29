@@ -274,9 +274,13 @@ export interface ImageProduct {
    */
   disambiguatingDescription?: string;
   /**
-   * @title IsBanner?
+   * @title Image type
    */
-  additionalType?: boolean;
+  additionalType?:
+    | "INFO_BANNER"
+    | "MAIN_BANNER"
+    | "PRODUCT_IMAGE"
+    | "MAIN_BANNER_MOBILE";
   /**
    * @title Title (if banner)
    */

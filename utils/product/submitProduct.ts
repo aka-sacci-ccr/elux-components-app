@@ -89,7 +89,7 @@ export async function insertImages(
       return {
         ...props,
         subjectOf: sku,
-        additionalType: props.additionalType ? "BANNER" : "IMAGE",
+        additionalType: props.additionalType,
       };
     }),
   );
