@@ -3,15 +3,13 @@ import {
   additionalProperties,
   avaliableIn,
   brands,
-  categories,
   descriptions,
   domains,
   images,
-  productCategories,
   products,
   videos,
 } from "../../db/schema.ts";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { Product } from "apps/commerce/types.ts";
 
 interface ProductBase {
@@ -65,6 +63,7 @@ interface Video {
 interface Category {
   identifier: string;
   value: string;
+  subjectOf: string | null;
 }
 
 interface Avaliability {
@@ -78,7 +77,6 @@ export async function getProductBySku(
   url: URL,
 ): Promise<Product | null> {
   const records = await ctx.invoke.records.loaders.drizzle();
-  console.log(url.hostname);
   const productBase = await records
     .select({
       name: products.name,
@@ -130,18 +128,31 @@ export async function getProductBySku(
       .where(eq(videos.subjectOf, sku))
       .all(),
 
-    records
-      .select({
-        identifier: categories.identifier,
-        value: categories.value,
-      })
-      .from(productCategories)
-      .innerJoin(
-        categories,
-        eq(productCategories.subjectOf, categories.identifier),
-      )
-      .where(eq(productCategories.product, sku))
-      .all(),
+    records.run(sql`
+        WITH RECURSIVE CategoryHierarchy AS (
+          SELECT
+            c.identifier,
+            c.value,
+            c.subjectOf
+          FROM
+            productCategories AS pc
+            INNER JOIN categories AS c ON pc.subjectOf = c.identifier
+          WHERE
+            pc.product = ${sku}
+          UNION
+          SELECT
+            parent.identifier,
+            parent.value,
+            parent.subjectOf
+          FROM
+            categories AS parent
+            INNER JOIN CategoryHierarchy AS child ON child.subjectOf = parent.identifier
+        )
+        SELECT
+          *
+        FROM
+          CategoryHierarchy
+        `),
 
     records
       .select({
@@ -161,8 +172,10 @@ export async function getProductBySku(
       description,
       image,
       video,
-      category,
+      category: category.rows as unknown as Category[],
       avaliability,
+      url,
+      skuAsSlug: true,
     },
   );
 }
@@ -173,7 +186,6 @@ export async function getProductBySlug(
   url: URL,
 ): Promise<Product | null> {
   const records = await ctx.invoke.records.loaders.drizzle();
-  console.log(url.hostname);
   const productBase = await records
     .select({
       sku: products.sku,
@@ -226,18 +238,31 @@ export async function getProductBySlug(
       .where(eq(videos.subjectOf, productBase.sku))
       .all(),
 
-    records
-      .select({
-        identifier: categories.identifier,
-        value: categories.value,
-      })
-      .from(productCategories)
-      .innerJoin(
-        categories,
-        eq(productCategories.subjectOf, categories.identifier),
-      )
-      .where(eq(productCategories.product, productBase.sku))
-      .all(),
+    records.run(sql`
+        WITH RECURSIVE CategoryHierarchy AS (
+          SELECT
+            c.identifier,
+            c.value,
+            c.subjectOf
+          FROM
+            productCategories AS pc
+            INNER JOIN categories AS c ON pc.subjectOf = c.identifier
+          WHERE
+            pc.product = ${productBase.sku}
+          UNION
+          SELECT
+            parent.identifier,
+            parent.value,
+            parent.subjectOf
+          FROM
+            categories AS parent
+            INNER JOIN CategoryHierarchy AS child ON child.subjectOf = parent.identifier
+        )
+        SELECT
+          *
+        FROM
+          CategoryHierarchy
+        `),
 
     records
       .select({
@@ -257,8 +282,9 @@ export async function getProductBySlug(
       description,
       image,
       video,
-      category,
+      category: category.rows as unknown as Category[],
       avaliability,
+      url,
     },
   );
 }
@@ -272,6 +298,8 @@ function productsObject(
     avaliability,
     image,
     video,
+    url,
+    skuAsSlug,
   }: {
     productBase: ProductBase;
     additionalProperty: AdditionalProperty[];
@@ -280,8 +308,15 @@ function productsObject(
     avaliability: Avaliability[];
     image: Image[];
     video: Video[];
+    url: URL;
+    skuAsSlug?: boolean;
   },
 ): Product {
+  const productUrl = new URL(
+    skuAsSlug ? `${productBase.sku}/p` : `${productBase.productID}/p`,
+    url.origin,
+  );
+
   return {
     "@type": "Product",
     name: productBase?.name,
@@ -290,6 +325,7 @@ function productsObject(
     gtin: productBase.gtin ?? undefined,
     releaseDate: productBase.releaseDate ?? undefined,
     description: productBase.description ?? undefined,
+    url: productUrl.href,
     brand: {
       "@type": "Brand",
       name: productBase.brand_name,
@@ -316,12 +352,13 @@ function productsObject(
           }],
         }
       )),
-      ...category.map(({ identifier, value }) => (
+      ...category.map(({ identifier, value, subjectOf }) => (
         {
           "@type": "PropertyValue" as const,
           propertyID: "CATEGORY",
           name: value,
           value: identifier,
+          subjectOf,
         }
       )),
       ...avaliability.map(({ identifier, description }) => (
