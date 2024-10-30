@@ -1,15 +1,19 @@
-import { ProductDetailsPage } from "apps/commerce/types.ts";
+import { BreadcrumbList } from "apps/commerce/types.ts";
 
-interface Props{
-    page: ProductDetailsPage | null
+interface Props {
+    /** @description breadCrumb items*/
+    breadcrumbList: BreadcrumbList
+
+    /** @description limit of items*/
+    maxQuantity?: number
 }
 
-export default function BreadCrumb({page}:Props) {
-    console.log(page)
-    if(!page) return <></>
+export default function BreadCrumb({ breadcrumbList, maxQuantity }: Props) {
 
-    const { breadcrumbList }= page
+    console.log("test1 ", breadcrumbList)
+    console.log("test2", maxQuantity
 
+    )
     const { itemListElement } = breadcrumbList;
 
     return (
