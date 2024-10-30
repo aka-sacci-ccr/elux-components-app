@@ -15,7 +15,7 @@ interface Props {
 export default function ProductMainBanner({ image }: Props) {
 
     return (
-        <div className="w-full relative h-[600px] overflow-hidden max-w-7xl">
+        <div className="w-full relative h-[600px] overflow-hidden max-w-7xl mx-auto">
             <Image
                 alt={image.alt}
                 src={image.desktopSrc}
