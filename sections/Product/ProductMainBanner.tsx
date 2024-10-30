@@ -23,7 +23,7 @@ export default function ProductMainBanner({ image }: Props) {
                 height={600}
                 class=" object-contain w-full"
             />
-            <div class="absolute z-10 w-full h-full top-0 bg-warning opacity-40"></div>
+            <div class="absolute z-10 w-full h-full top-0 bg-black opacity-40"></div>
             <div class="absolute z-20 flex flex-col bottom-5 lg:bottom-32 lg:left-40 text-white px-5 lg:p-0 gap-2 max-w-96">
                 <span className="text-base lg:text-xl uppercase">
                     FRFWV5HTS
