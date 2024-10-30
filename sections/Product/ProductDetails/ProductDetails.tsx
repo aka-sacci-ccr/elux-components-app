@@ -67,7 +67,7 @@ export default function ProductDetails() {
                 <ul>
                     {test.map((item) => {
                         return (
-                            <li className="even:bg-gray-200 flex justify-between items-center p-2 text-sm">
+                            <li className="even:bg-[#F5F5F5] flex justify-between items-center p-2 text-sm">
                                 <span className="text-[#323333]">
                                     {item.firstText}
                                 </span>
