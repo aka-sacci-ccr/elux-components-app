@@ -1,6 +1,24 @@
 import { ImageWidget } from "apps/admin/widgets.ts";
 
 interface Props {
+    backgroundColor:{
+        /** @description Primary background component */
+        primary: string;
+        /** @description Secondary background component */
+        secondary: string;
+    }
+    titleColor:{
+        /** @description Primary title color */
+        primary: string;
+        /** @description Secondary title color */
+        secondary: string;
+    }
+    contentColor:{
+        /** @description Primary text color */
+        primary: string;
+        /** @description Secondary text color */
+        secondary: string;
+    }
     image: {
         /** @description Image for big screens */
         src: ImageWidget;
