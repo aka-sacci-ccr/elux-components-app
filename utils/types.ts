@@ -235,11 +235,11 @@ export interface AdditionalProperty {
   propertyID:
     | "OTHER"
     | "HEIGHT"
-    | "WIDITH"
+    | "WIDTH"
     | "DEPTH"
     | "WEIGHT"
     | "BOX_HEIGHT"
-    | "BOX_WIDITH"
+    | "BOX_WIDTH"
     | "BOX_DEPTH"
     | "BOX_WEIGHT";
   /**
