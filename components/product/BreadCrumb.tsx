@@ -6,12 +6,15 @@ interface Props {
 
     /** @description limit of items*/
     maxQuantity?: number
+
+    /** @description color of current item of breadcrumb */
+    selectedColor: string
 }
 
-export default function BreadCrumb({ breadcrumbList, maxQuantity }: Props) {
+export default function BreadCrumb({ breadcrumbList, maxQuantity, selectedColor }: Props) {
 
     console.log("test1 ", breadcrumbList)
-    console.log("test2", maxQuantity
+    console.log("test2", maxQuantity, selectedColor
 
     )
     const { itemListElement } = breadcrumbList;

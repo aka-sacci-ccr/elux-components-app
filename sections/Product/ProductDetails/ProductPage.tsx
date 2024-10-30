@@ -1,4 +1,5 @@
 import { ProductDetailsPage } from "apps/commerce/types.ts";
+import BreadCrumb from "../../../components/product/BreadCrumb.tsx";
 
 interface ProductPageProps {
     /** @description product loader of the page */
@@ -40,7 +41,7 @@ interface ProductPageProps {
     }
 }
 
-export default function ProductPage({ page }: ProductPageProps) {
+export default function ProductPage({ page, breadCrumb }: ProductPageProps) {
 
     if (!page) return <></>
 
@@ -51,6 +52,11 @@ export default function ProductPage({ page }: ProductPageProps) {
     return (
         <div>
             Product page
+            <BreadCrumb
+            breadcrumbList={page.breadcrumbList}
+            maxQuantity={breadCrumb.maxQuantity}
+            selectedColor={breadCrumb.selectedColor}
+            />
         </div>
     );
 
