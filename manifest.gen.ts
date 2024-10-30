@@ -26,9 +26,9 @@ import * as $$$$$$8 from "./sections/Institutional/Policy.tsx";
 import * as $$$$$$9 from "./sections/Institutional/Support.tsx";
 import * as $$$$$$10 from "./sections/Institutional/WhereToBuy.tsx";
 import * as $$$$$$19 from "./sections/mySection.tsx";
-import * as $$$$$$11 from "./sections/Product/BreadCrumb.tsx";
-import * as $$$$$$12 from "./sections/Product/ProductDetails/AdditionalPropertyCards.tsx";
-import * as $$$$$$13 from "./sections/Product/ProductDetails/ProductDetails.tsx";
+import * as $$$$$$11 from "./sections/Product/ProductDetails/AdditionalPropertyCards.tsx";
+import * as $$$$$$12 from "./sections/Product/ProductDetails/ProductDetails.tsx";
+import * as $$$$$$13 from "./sections/Product/ProductDetails/ProductPage.tsx";
 import * as $$$$$$14 from "./sections/Product/ProductInfoBanners.tsx";
 import * as $$$$$$15 from "./sections/Product/ProductMain.tsx";
 import * as $$$$$$16 from "./sections/Product/ProductMainBanner.tsx";
@@ -57,10 +57,11 @@ const manifest = {
     "elux-components-app/sections/Institutional/Support.tsx": $$$$$$9,
     "elux-components-app/sections/Institutional/WhereToBuy.tsx": $$$$$$10,
     "elux-components-app/sections/mySection.tsx": $$$$$$19,
-    "elux-components-app/sections/Product/BreadCrumb.tsx": $$$$$$11,
     "elux-components-app/sections/Product/ProductDetails/AdditionalPropertyCards.tsx":
-      $$$$$$12,
+      $$$$$$11,
     "elux-components-app/sections/Product/ProductDetails/ProductDetails.tsx":
+      $$$$$$12,
+    "elux-components-app/sections/Product/ProductDetails/ProductPage.tsx":
       $$$$$$13,
     "elux-components-app/sections/Product/ProductInfoBanners.tsx": $$$$$$14,
     "elux-components-app/sections/Product/ProductMain.tsx": $$$$$$15,
