@@ -30,7 +30,7 @@ export default function ProductInfoBanners({ image }: Props) {
                     <p className="text-lg text-red-500 ml-4 flex-1 bg-slate-500">{item.secondText}</p>
                 </div>
             ))} */}
-            <div class="flex flex-col lg:flex-row">
+            <div class="flex flex-col lg:flex-row max-w-[65rem] lg:mx-auto">
                 <img src={image.src} alt={"teste"} />
                 <div class="w-full flex items-center bg-red-400 min-h-56 max-h-[516px]">
                     <div className="w-full max-w-[400px] h-full flex flex-col mx-auto text-left justify-center gap-4 p-3">
