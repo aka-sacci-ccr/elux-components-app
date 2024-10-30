@@ -1,35 +1,14 @@
-export default function BreadCrumb() {
+import { ProductDetailsPage } from "apps/commerce/types.ts";
 
-    const breadcrumbList = {
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {
-                "@type": "ListItem",
-                "item": "Eletrodomésticos",
-                "url": "http://localhost--elux-latam.deco.site/eletrodomesticos",
-                "position": 1
-            },
-            {
-                "@type": "ListItem",
-                "item": "Fogão",
-                "url": "http://localhost--elux-latam.deco.site/eletrodomesticos/fogao",
-                "position": 2
-            },
-            {
-                "@type": "ListItem",
-                "item": "Fogão Preto",
-                "url": "http://localhost--elux-latam.deco.site/eletrodomesticos/fogao/fogao-preto",
-                "position": 3
-            },
-            {
-                "@type": "ListItem",
-                "item": "Fogão 4 bocas",
-                "url": "http://localhost--elux-latam.deco.site/eletrodomesticos/fogao/fogao-4-bocas",
-                "position": 3
-            }
-        ],
-        "numberOfItems": 4
-    };
+interface Props{
+    page: ProductDetailsPage | null
+}
+
+export default function BreadCrumb({page}:Props) {
+    console.log(page)
+    if(!page) return <></>
+
+    const { breadcrumbList }= page
 
     const { itemListElement } = breadcrumbList;
 
