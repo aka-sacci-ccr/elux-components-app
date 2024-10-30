@@ -19,7 +19,7 @@ export default function ProductInfoBanners({ image }: Props) {
     // ];
 
     return (
-        <div className="w-full max-w-[80rem] lg:mx-auto ">
+        <div className="w-full max-w-7xl lg:mx-auto">
             {/* {test.map((item, index) => (
                 <div
                     key={index}
