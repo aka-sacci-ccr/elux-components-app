@@ -1,4 +1,9 @@
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+  AnySQLiteColumn,
+  integer,
+  sqliteTable,
+  text,
+} from "drizzle-orm/sqlite-core";
 
 export const contact = sqliteTable("contact", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -13,4 +18,85 @@ export const contact = sqliteTable("contact", {
   date: text("date"),
   status: text("status"),
   originSite: text("originSite"),
+});
+
+export const categories = sqliteTable("categories", {
+  identifier: text("identifier").primaryKey(),
+  value: text("value").notNull(),
+  description: text("description"),
+  additionalType: text("additionalType").notNull(),
+  subjectOf: text("subjectOf").references((): AnySQLiteColumn =>
+    categories.identifier
+  ),
+});
+
+export const productCategories = sqliteTable("productCategories", {
+  identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
+  subjectOf: text("subjectOf").references(() => categories.identifier), // F.K
+  product: text("product").references(() => products.sku), // F.K
+});
+
+export const products = sqliteTable("products", {
+  sku: text("sku").primaryKey(), // P.K
+  name: text("name").notNull(),
+  productID: text("productID").notNull().unique(),
+  brand: text("brand").references(() => brands.identifier), // F.K
+  description: text("description"),
+  gtin: text("gtin"),
+  releaseDate: text("releaseDate"),
+});
+
+export const brands = sqliteTable("brands", {
+  identifier: text("identifier").primaryKey(), // P.K
+  name: text("name").notNull(),
+  description: text("description"),
+  logo: text("logo"),
+});
+
+export const additionalProperties = sqliteTable("additionalProperties", {
+  identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
+  subjectOf: text("subjectOf").references(() => products.sku), // F.K
+  propertyID: text("propertyID").notNull(),
+  name: text("name").notNull(),
+  value: text("value").notNull(),
+  unitCode: text("unitCode"),
+  unitText: text("unitText"),
+});
+
+export const descriptions = sqliteTable("descriptions", {
+  identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
+  subjectOf: text("subjectOf").references(() => products.sku), // F.K
+  name: text("name").notNull(),
+  value: text("value").notNull(),
+  image: text("image"),
+});
+
+export const images = sqliteTable("images", {
+  identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
+  subjectOf: text("subjectOf").references(() => products.sku), // F.K
+  url: text("url").notNull(),
+  disambiguatingDescription: text("disambiguatingDescription"),
+  additionalType: text("additionalType"),
+  name: text("name"),
+  description: text("description"),
+});
+
+export const videos = sqliteTable("videos", {
+  identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
+  subjectOf: text("subjectOf").references(() => products.sku), // F.K
+  contentUrl: text("contentUrl").notNull(),
+  thumbnailUrl: text("thumbnailUrl").notNull(),
+  uploadDate: text("uploadDate"),
+  duration: text("duration"),
+});
+
+export const avaliableIn = sqliteTable("avaliableIn", {
+  identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
+  subjectOf: text("subjectOf").references(() => products.sku), // F.K
+  domain: text("domain").references(() => domains.identifier), // F.K
+});
+
+export const domains = sqliteTable("domains", {
+  identifier: text("identifier").primaryKey(), // P.K
+  description: text("name").notNull(),
 });
