@@ -1,13 +1,9 @@
 import Image from "apps/website/components/Image.tsx";
-import { ImageWidget } from "apps/admin/widgets.ts";
 
 interface Props {
     image: {
-        /** @description Image for big screens */
-        desktopSrc: ImageWidget;
-        /** @description Image for small screens */
-        mobileSrc: ImageWidget;
-        /** @description image alt text */
+        desktopSrc: string;
+        mobileSrc: string;
         alt: string;
     };
 }

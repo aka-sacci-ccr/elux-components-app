@@ -1,5 +1,6 @@
 import { ProductDetailsPage } from "apps/commerce/types.ts";
 import BreadCrumb from "../../../components/product/BreadCrumb.tsx";
+import ProductMainBanner from "../../../components/product/ProductMainBanner.tsx";
 
 interface ProductPageProps {
     /** @description product loader of the page */
@@ -44,19 +45,22 @@ interface ProductPageProps {
 export default function ProductPage({ page, breadCrumb }: ProductPageProps) {
 
     if (!page) return <></>
+    const { product } = page
+    const { image } = product
 
-
-    console.log("test :", page)
+   console.log("image :", image)
 
 
     return (
-        <div>
+        <div className="mt-20 flex flex-col container bg-slate-200">
             Product page
             <BreadCrumb
-            breadcrumbList={page.breadcrumbList}
-            maxQuantity={breadCrumb.maxQuantity}
-            selectedColor={breadCrumb.selectedColor}
+                breadcrumbList={page.breadcrumbList}
+                maxQuantity={breadCrumb.maxQuantity}
+                selectedColor={breadCrumb.selectedColor}
             />
+            {/* <ProductMainBanner
+                image={ } /> */}
         </div>
     );
 
