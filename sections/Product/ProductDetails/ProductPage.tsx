@@ -49,7 +49,7 @@ export default function ProductPage({ page, breadCrumb, infoBanners }: ProductPa
 
     if (!page) return <></>
     const { product } = page
-    const { image, additionalProperty } = product
+    const { image, additionalProperty, description } = product
 
     const mainBannerImages = image?.filter(image =>
         image.additionalType === "MAIN_BANNER" || image.additionalType === "MAIN_BANNER_MOBILE"
@@ -79,7 +79,7 @@ export default function ProductPage({ page, breadCrumb, infoBanners }: ProductPa
                 backgroundColor={infoBanners.backgroundColor}
             />
             <ProductMain />
-            <ProductDetails additionalProperty={additionalProperty}/>
+            <ProductDetails additionalProperty={additionalProperty} description={description}/>
         </div>
     );
 

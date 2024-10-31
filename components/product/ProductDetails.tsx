@@ -1,13 +1,14 @@
 import { PropertyValue } from "apps/commerce/types.ts";
 
 interface Props {
-    additionalProperty: PropertyValue[] | undefined
+    additionalProperty: PropertyValue[] | undefined,
+    description: string | undefined
 
 }
 
 
-export default function ProductDetails({additionalProperty}: Props) {
-    
+export default function ProductDetails({additionalProperty, description}: Props) {
+
     const dimensionsProperties = additionalProperty?.filter(property =>
         property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" || property.propertyID === "DEPTH" || property.propertyID === "WEIGHT" 
     )
@@ -29,7 +30,7 @@ export default function ProductDetails({additionalProperty}: Props) {
                 Descripción del Producto
             </h2>
             <article className="py-3 text-sm font-light text-[#323333] leading-6">
-                Con el Refrigerador Multidoor Frost Free 298 litros de Electrolux puedes elegir entre sus 2 puertas o 2 cajones, con característica 50/50*, mitad congelador y mitad freezer. El refrigerador tiene apenas 64 cm de ancho, te permites organizar tus alimentos de la mejor manera y administrar tus alimentos congelados con más espacio, en un refrigerador compacto.
+                {description}
             </article>
             <h2 className="text-[#323333] text-base text-center py-4">
                 Ficha Técnica
