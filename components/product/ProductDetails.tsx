@@ -1,4 +1,17 @@
-export default function ProductDetails() {
+import { PropertyValue } from "apps/commerce/types.ts";
+
+interface Props {
+    additionalProperty: PropertyValue[] | undefined
+
+}
+
+
+export default function ProductDetails({additionalProperty}: Props) {
+    
+    const dimensionsProperties = additionalProperty?.filter(property =>
+        property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" || property.propertyID === "DEPTH" || property.propertyID === "WEIGHT" 
+    )
+
     const test = [
         { firstText: "Alto empaquetado (cm)", secondText: "193,3" },
         { firstText: "Alto empaquetado (cm)", secondText: "193,3" },

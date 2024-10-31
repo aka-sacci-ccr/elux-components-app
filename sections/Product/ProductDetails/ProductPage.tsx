@@ -57,9 +57,7 @@ export default function ProductPage({ page, breadCrumb, infoBanners }: ProductPa
     const infoBannerImages = image?.filter(image =>
         image.additionalType === "INFO_BANNER"
     );
-    // const dimensionsProperties = additionalProperty?.filter(property =>
-    //     property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" || property.propertyID === "DEPTH" || property.propertyID === "WEIGHT" 
-    // )
+
 
     console.log("------ main banner -----------")
     console.log(mainBannerImages)
@@ -81,7 +79,7 @@ export default function ProductPage({ page, breadCrumb, infoBanners }: ProductPa
                 backgroundColor={infoBanners.backgroundColor}
             />
             <ProductMain />
-            <ProductDetails />
+            <ProductDetails additionalProperty={additionalProperty}/>
         </div>
     );
 
