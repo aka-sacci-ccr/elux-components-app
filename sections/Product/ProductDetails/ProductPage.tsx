@@ -1,4 +1,4 @@
-import { ProductDetailsPage } from "apps/commerce/types.ts";
+import { ProductDetailsPage, ImageObject } from "apps/commerce/types.ts";
 import BreadCrumb from "../../../components/product/BreadCrumb.tsx";
 import ProductMainBanner from "../../../components/product/ProductMainBanner.tsx";
 
@@ -48,19 +48,26 @@ export default function ProductPage({ page, breadCrumb }: ProductPageProps) {
     const { product } = page
     const { image } = product
 
-   console.log("image :", image)
+    const mainBannerImages = image?.filter(image =>
+        image.additionalType === "MAIN_BANNER" || image.additionalType === "MAIN_BANNER_MOBILE"
+    );
+    const infoBannerImages = image?.filter(image =>
+        image.additionalType === "INFO_BANNER" 
+    );
 
+    console.log("------ main banner -----------")
+    console.log(mainBannerImages)
+    console.log("------ info banners -----------")
+    console.log(infoBannerImages)
 
     return (
         <div className="mt-20 flex flex-col container bg-slate-200">
-            Product page
             <BreadCrumb
                 breadcrumbList={page.breadcrumbList}
                 maxQuantity={breadCrumb.maxQuantity}
                 selectedColor={breadCrumb.selectedColor}
             />
-            {/* <ProductMainBanner
-                image={ } /> */}
+            <ProductMainBanner images={mainBannerImages} />
         </div>
     );
 
