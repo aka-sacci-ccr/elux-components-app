@@ -13,6 +13,10 @@ export default function ProductDetails({additionalProperty, description}: Props)
         property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" || property.propertyID === "DEPTH" || property.propertyID === "WEIGHT" 
     )
 
+    const tableProperties = additionalProperty?.filter(property =>
+        property.propertyID === "OTHER" 
+    )
+
     const test = [
         { firstText: "Alto empaquetado (cm)", secondText: "193,3" },
         { firstText: "Alto empaquetado (cm)", secondText: "193,3" },
@@ -76,23 +80,26 @@ export default function ProductDetails({additionalProperty, description}: Props)
                     </li>
                 </ul>
             </div>
-
-            <div className="w-full">
-                <ul>
-                    {test.map((item) => {
-                        return (
-                            <li className="even:bg-[#F5F5F5] flex justify-between items-center p-2 text-sm">
-                                <span className="text-[#323333]">
-                                    {item.firstText}
-                                </span>
-                                <span className="text-[#848585] font-light">
-                                    {item.secondText}
-                                </span>
-                            </li>
-                        )
-                    })}
-                </ul>
-            </div>
+            {
+                test && (
+                    <div className="w-full">
+                    <ul>
+                        {test.map((item) => {
+                            return (
+                                <li className="even:bg-[#F5F5F5] flex justify-between items-center p-2 text-sm">
+                                    <span className="text-[#323333]">
+                                        {item.firstText}
+                                    </span>
+                                    <span className="text-[#848585] font-light">
+                                        {item.secondText}
+                                    </span>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                </div>
+                )
+            }
         </div>
     )
 }
