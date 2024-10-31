@@ -28,7 +28,7 @@ import * as $$$$$$10 from "./sections/Institutional/WhereToBuy.tsx";
 import * as $$$$$$16 from "./sections/mySection.tsx";
 import * as $$$$$$11 from "./sections/Product/ProductDetails/AdditionalPropertyCards.tsx";
 import * as $$$$$$12 from "./sections/Product/ProductDetails/ProductPage.tsx";
-import * as $$$$$$13 from "./sections/Product/ProductMain.tsx";
+import * as $$$$$$13 from "./components/product/ProductMain.tsx";
 import * as $$$$$$14 from "./sections/Social/ContactForm.tsx";
 
 const manifest = {
