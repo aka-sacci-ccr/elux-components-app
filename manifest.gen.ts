@@ -29,7 +29,7 @@ import * as $$$$$$19 from "./sections/mySection.tsx";
 import * as $$$$$$11 from "./sections/Product/ProductDetails/AdditionalPropertyCards.tsx";
 import * as $$$$$$12 from "./sections/Product/ProductDetails/ProductDetails.tsx";
 import * as $$$$$$13 from "./sections/Product/ProductDetails/ProductPage.tsx";
-import * as $$$$$$14 from "./sections/Product/ProductInfoBanners.tsx";
+import * as $$$$$$14 from "./components/product/ProductInfoBanners.tsx";
 import * as $$$$$$15 from "./sections/Product/ProductMain.tsx";
 import * as $$$$$$16 from "./components/product/ProductMainBanner.tsx";
 import * as $$$$$$17 from "./sections/Social/ContactForm.tsx";
