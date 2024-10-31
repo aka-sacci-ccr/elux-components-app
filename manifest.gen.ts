@@ -14,7 +14,7 @@ import * as $$$3 from "./loaders/product/avaliableSites.ts";
 import * as $$$4 from "./loaders/product/avaliableSkus.ts";
 import * as $$$5 from "./loaders/product/details/productDetails.ts";
 import * as $$$$$$0 from "./sections/Component.tsx";
-import * as $$$$$$17 from "./sections/container/Container.tsx";
+import * as $$$$$$18 from "./sections/container/Container.tsx";
 import * as $$$$$$1 from "./sections/Content/Banner.tsx";
 import * as $$$$$$2 from "./sections/Content/Breadcrumb.tsx";
 import * as $$$$$$3 from "./sections/Content/Cards.tsx";
@@ -25,13 +25,14 @@ import * as $$$$$$7 from "./sections/Header/Header.tsx";
 import * as $$$$$$8 from "./sections/Institutional/Policy.tsx";
 import * as $$$$$$9 from "./sections/Institutional/Support.tsx";
 import * as $$$$$$10 from "./sections/Institutional/WhereToBuy.tsx";
-import * as $$$$$$18 from "./sections/mySection.tsx";
+import * as $$$$$$19 from "./sections/mySection.tsx";
 import * as $$$$$$11 from "./sections/Product/ProductDetails/AdditionalPropertyCards.tsx";
 import * as $$$$$$12 from "./sections/Product/ProductDetails/ProductDetails.tsx";
 import * as $$$$$$13 from "./sections/Product/ProductDetails/ProductPage.tsx";
 import * as $$$$$$14 from "./sections/Product/ProductInfoBanners.tsx";
 import * as $$$$$$15 from "./sections/Product/ProductMain.tsx";
-import * as $$$$$$16 from "./sections/Social/ContactForm.tsx";
+import * as $$$$$$16 from "./components/product/ProductMainBanner.tsx";
+import * as $$$$$$17 from "./sections/Social/ContactForm.tsx";
 
 const manifest = {
   "loaders": {
@@ -44,7 +45,7 @@ const manifest = {
   },
   "sections": {
     "elux-components-app/sections/Component.tsx": $$$$$$0,
-    "elux-components-app/sections/container/Container.tsx": $$$$$$17,
+    "elux-components-app/sections/container/Container.tsx": $$$$$$18,
     "elux-components-app/sections/Content/Banner.tsx": $$$$$$1,
     "elux-components-app/sections/Content/Breadcrumb.tsx": $$$$$$2,
     "elux-components-app/sections/Content/Cards.tsx": $$$$$$3,
@@ -55,7 +56,7 @@ const manifest = {
     "elux-components-app/sections/Institutional/Policy.tsx": $$$$$$8,
     "elux-components-app/sections/Institutional/Support.tsx": $$$$$$9,
     "elux-components-app/sections/Institutional/WhereToBuy.tsx": $$$$$$10,
-    "elux-components-app/sections/mySection.tsx": $$$$$$18,
+    "elux-components-app/sections/mySection.tsx": $$$$$$19,
     "elux-components-app/sections/Product/ProductDetails/AdditionalPropertyCards.tsx":
       $$$$$$11,
     "elux-components-app/sections/Product/ProductDetails/ProductDetails.tsx":
@@ -64,7 +65,8 @@ const manifest = {
       $$$$$$13,
     "elux-components-app/sections/Product/ProductInfoBanners.tsx": $$$$$$14,
     "elux-components-app/sections/Product/ProductMain.tsx": $$$$$$15,
-    "elux-components-app/sections/Social/ContactForm.tsx": $$$$$$16,
+    "elux-components-app/sections/Product/ProductMainBanner.tsx": $$$$$$16,
+    "elux-components-app/sections/Social/ContactForm.tsx": $$$$$$17,
   },
   "actions": {
     "elux-components-app/actions/category/submit.ts": $$$$$$$$$0,
