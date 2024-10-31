@@ -12,9 +12,9 @@ export default function ProductDetails({ additionalProperty, description }: Prop
     const dimensionsProperties = additionalProperty?.filter(property =>
         property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" || property.propertyID === "DEPTH" || property.propertyID === "WEIGHT"
     )
-    const widthDimension = dimensionsProperties?.find((dimension) => dimension.propertyID === "WIDTH")
-    const heightDimension = dimensionsProperties?.find((dimension) => dimension.propertyID === "HEIGHT")
-    const depthDimension = dimensionsProperties?.find((dimension) => dimension.propertyID === "DEPTH")
+    const widthDimension = dimensionsProperties?.find((dimension) => dimension.propertyID === "WIDTH" )?.value
+    const heightDimension = dimensionsProperties?.find((dimension) => dimension.propertyID === "HEIGHT")?.value
+    const depthDimension = dimensionsProperties?.find((dimension) => dimension.propertyID === "DEPTH")?.value
 
     const tableProperties = additionalProperty?.filter(property =>
         property.propertyID === "OTHER"
