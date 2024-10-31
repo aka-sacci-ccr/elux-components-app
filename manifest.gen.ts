@@ -65,7 +65,6 @@ const manifest = {
       $$$$$$13,
     "elux-components-app/sections/Product/ProductInfoBanners.tsx": $$$$$$14,
     "elux-components-app/sections/Product/ProductMain.tsx": $$$$$$15,
-    "elux-components-app/sections/Product/ProductMainBanner.tsx": $$$$$$16,
     "elux-components-app/sections/Social/ContactForm.tsx": $$$$$$17,
   },
   "actions": {
