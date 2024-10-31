@@ -1,7 +1,9 @@
-import { ProductDetailsPage, ImageObject } from "apps/commerce/types.ts";
+import { ProductDetailsPage } from "apps/commerce/types.ts";
 import BreadCrumb from "../../../components/product/BreadCrumb.tsx";
 import ProductMainBanner from "../../../components/product/ProductMainBanner.tsx";
 import ProductInfoBanners from "../../../components/product/ProductInfoBanners.tsx";
+import ProductMain from "../../../components/product/ProductMain.tsx";
+import ProductDetails from "../../../components/product/ProductDetails.tsx";
 
 interface ProductPageProps {
     /** @description product loader of the page */
@@ -78,6 +80,8 @@ export default function ProductPage({ page, breadCrumb, infoBanners }: ProductPa
                 contentColor={infoBanners.contentColor}
                 backgroundColor={infoBanners.backgroundColor}
             />
+            <ProductMain />
+            <ProductDetails />
         </div>
     );
 
