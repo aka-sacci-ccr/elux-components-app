@@ -1,6 +1,7 @@
 import { ProductDetailsPage, ImageObject } from "apps/commerce/types.ts";
 import BreadCrumb from "../../../components/product/BreadCrumb.tsx";
 import ProductMainBanner from "../../../components/product/ProductMainBanner.tsx";
+import ProductInfoBanners from "../../../components/product/ProductInfoBanners.tsx";
 
 interface ProductPageProps {
     /** @description product loader of the page */
@@ -42,18 +43,21 @@ interface ProductPageProps {
     }
 }
 
-export default function ProductPage({ page, breadCrumb }: ProductPageProps) {
+export default function ProductPage({ page, breadCrumb, infoBanners }: ProductPageProps) {
 
     if (!page) return <></>
     const { product } = page
-    const { image } = product
+    const { image, additionalProperty } = product
 
     const mainBannerImages = image?.filter(image =>
         image.additionalType === "MAIN_BANNER" || image.additionalType === "MAIN_BANNER_MOBILE"
     );
     const infoBannerImages = image?.filter(image =>
-        image.additionalType === "INFO_BANNER" 
+        image.additionalType === "INFO_BANNER"
     );
+    // const dimensionsProperties = additionalProperty?.filter(property =>
+    //     property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" || property.propertyID === "DEPTH" || property.propertyID === "WEIGHT" 
+    // )
 
     console.log("------ main banner -----------")
     console.log(mainBannerImages)
@@ -68,6 +72,12 @@ export default function ProductPage({ page, breadCrumb }: ProductPageProps) {
                 selectedColor={breadCrumb.selectedColor}
             />
             <ProductMainBanner images={mainBannerImages} />
+            <ProductInfoBanners
+                images={infoBannerImages}
+                titleColor={infoBanners.titleColor}
+                contentColor={infoBanners.contentColor}
+                backgroundColor={infoBanners.backgroundColor}
+            />
         </div>
     );
 

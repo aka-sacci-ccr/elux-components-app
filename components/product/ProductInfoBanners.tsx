@@ -1,4 +1,6 @@
-import { ImageWidget } from "apps/admin/widgets.ts";
+
+import { ImageObject } from "apps/commerce/types.ts";
+import Image from "apps/website/components/Image.tsx";
 
 interface Props {
     backgroundColor: {
@@ -19,42 +21,40 @@ interface Props {
         /** @description Secondary text color */
         secondary: string;
     }
-    image: {
-        /** @description Image for big screens */
-        src: ImageWidget;
-    };
+    images: ImageObject[] | undefined
 }
 
-export default function ProductInfoBanners({ image, backgroundColor, titleColor, contentColor }: Props) {
-
-    const test = [
-        { firstText: "Lorem ipsum dolor", secondText: " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel ultricies leo. Nam vel urna at mi ullamcorper sagittis. Aliquam erat volutpat." },
-        { firstText: "Lorem ipsum dolor", secondText: " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel ultricies leo. Nam vel urna at mi ullamcorper sagittis. Aliquam erat volutpat." },
-        { firstText: "Lorem ipsum dolor", secondText: " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel ultricies leo. Nam vel urna at mi ullamcorper sagittis. Aliquam erat volutpat." },
-        { firstText: "Lorem ipsum dolor", secondText: " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel ultricies leo. Nam vel urna at mi ullamcorper sagittis. Aliquam erat volutpat." },
-    ];
+export default function ProductInfoBanners({ images, backgroundColor, titleColor, contentColor }: Props) {
 
     return (
         <div className="w-full max-w-7xl lg:mx-auto">
-            {test.map((item, index) => (
+            {images && images?.map((image, index) => (
                 <div className={`flex flex-col ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"}`}
                     style={{
                         backgroundColor: index % 2 === 0 ? backgroundColor.primary : backgroundColor.secondary
                     }}>
-                    <img src={image.src} alt={"teste"} />
-                    <div class="w-full flex items-center bg-red-400 min-h-56 max-h-[516px]">
+                    <div className="max-w-[640px]">
+                        <Image
+                            alt={image.description}
+                            src={image.url || ''}
+                            width={640}
+                            height={516}
+                            class=" object-contain"
+                        />
+                    </div>
+                    <div class="w-full flex items-center bg-red-400 min-h-56 max-h-[516px] lg:w-[640px]">
                         <div className="w-full max-w-[400px] h-full flex flex-col mx-auto text-left justify-center gap-4 p-3">
                             <span className="text-xl"
                                 style={{
                                     color: index % 2 === 0 ? titleColor.primary : titleColor.secondary
                                 }}>
-                                {item.firstText}
+                                {image.name}
                             </span>
                             <p className="text-base font-light"
                                 style={{
                                     color: index % 2 === 0 ? contentColor.primary : contentColor.secondary
                                 }}>
-                                {item.secondText}
+                                {image.description}
                             </p>
                         </div>
                     </div>
