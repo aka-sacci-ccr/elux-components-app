@@ -13,15 +13,11 @@ interface Props {
 
 export default function BreadCrumb({ breadcrumbList, maxQuantity, selectedColor }: Props) {
 
-    console.log("test1 ", breadcrumbList)
-    console.log("test2", maxQuantity, selectedColor
-
-    )
     const { itemListElement } = breadcrumbList;
 
     return (
         <nav aria-label="Breadcrumb">
-            <ul className="flex h-9 items-center gap-4 text-xs text-[#848585] font-light">
+            <ul className="flex h-9 items-center gap-4 text-xs text-[#848585] font-light my-6">
                 <li>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3.33333 8H2L8 2L14 8H12.6667" stroke="#EE405A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
