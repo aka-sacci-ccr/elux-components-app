@@ -124,7 +124,8 @@ export default function ProductPage(
         contentColor={infoBanners.contentColor}
         backgroundColor={infoBanners.backgroundColor}
       />
-      <ProductMain />
+      <ProductMain 
+      page={page}/>
       <ProductDetails
         additionalProperty={additionalProperty}
         description={description}
