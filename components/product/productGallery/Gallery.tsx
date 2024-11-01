@@ -43,7 +43,7 @@ export default function GallerySlider(props: Props) {
     <>
       <div
         id={id}
-        class="grid grid-flow-row sm:grid-flow-col grid-cols-1 sm:grid-cols-[min-content_1fr] gap-5"
+        class="flex flex-col"
       >
         {/* Image Slider */}
         <div class="col-start-1 col-span-1 sm:col-start-2">
@@ -71,14 +71,14 @@ export default function GallerySlider(props: Props) {
             </Slider>
 
             <Slider.PrevButton
-              class="no-animation absolute left-2 top-1/2 btn btn-circle btn-outline disabled:invisible"
+              class="no-animation absolute left-2  btn btn-circle btn-outline disabled:invisible hidden lg:flex top-25"
               disabled
             >
               <Icon id="chevron-right" class="rotate-180" />
             </Slider.PrevButton>
 
             <Slider.NextButton
-              class="no-animation absolute right-2 top-1/2 btn btn-circle btn-outline disabled:invisible"
+              class="no-animation absolute right-2 btn btn-circle btn-outline disabled:invisible hidden lg:flex top-25"
               disabled={images.length < 2}
             >
               <Icon id="chevron-right" />
@@ -93,11 +93,10 @@ export default function GallerySlider(props: Props) {
         </div>
 
         {/* Dots */}
-        <div class="col-start-1 col-span-1">
+        <div class="col-start-1 col-span-1 lg:max-w-25 lg:ml-12">
           <ul
             class={clx(
               "carousel carousel-center",
-              "sm:carousel-vertical",
               "gap-2",
               "max-w-full",
               "overflow-x-auto",
