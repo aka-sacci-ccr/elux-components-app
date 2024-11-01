@@ -4,7 +4,7 @@ import ProductImageZoom from "./ProductImageZoom.tsx";
 import { clx } from "../../../utils/clx.ts";
 import Icon from "../../ui/Icon.tsx";
 import Slider from "../../ui/Slider.tsx";
-import { useId } from "../../../sdk/useId.ts"
+import { useId } from "../../../sdk/useId.ts";
 
 export interface Props {
   /** @title Integration */

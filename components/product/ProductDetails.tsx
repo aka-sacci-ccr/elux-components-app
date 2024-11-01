@@ -44,8 +44,18 @@ export default function ProductDetails(
   return (
     <div className="w-full max-w-[65rem] mx-auto px-5 lg:px-0">
       <div class="hidden lg:flex w-full mt-4 mb-10">
-        <a href="#description" class="flex flex-1 border-b-2 border-[#EE405A] text-[#EE405A]  items-center justify-center py-3">Descripción</a>
-        <a href="#properties" class="flex flex-1 border-b-2 border-[#D6D6D6] text-[#848585] font-light items-center justify-center py-3">Ficha Técnica</a>
+        <a
+          href="#description"
+          class="flex flex-1 border-b-2 border-[#EE405A] text-[#EE405A]  items-center justify-center py-3"
+        >
+          Descripción
+        </a>
+        <a
+          href="#properties"
+          class="flex flex-1 border-b-2 border-[#D6D6D6] text-[#848585] font-light items-center justify-center py-3"
+        >
+          Ficha Técnica
+        </a>
       </div>
       <h2 className="text-[#323333] text-base text-center py-6">
         Descripción del Producto
@@ -55,7 +65,7 @@ export default function ProductDetails(
       </article>
       <div>
         <AdditionalPropertyCards
-        PropertyCards={PropertyCards}
+          PropertyCards={PropertyCards}
         />
       </div>
       <h2 className="text-[#323333] text-base text-center py-6" id="properties">
