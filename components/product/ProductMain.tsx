@@ -8,7 +8,6 @@ export interface Props {
 export default function ProductMain({ page }: Props) {
   if (!page) return <></>;
   const { product } = page;
-  console.log("product ",product)
   const { sku, name } = product
   return (
     <div className="container flex flex-col lg:flex-row gap-4 my-6 px-5 lg:p-0 lg:h-30">

@@ -1,4 +1,5 @@
 import { PropertyValue } from "apps/commerce/types.ts";
+import AdditionalPropertyCards from "./AdditionalPropertyCards.tsx";
 
 interface Props {
   additionalProperty: PropertyValue[] | undefined;
@@ -11,6 +12,9 @@ export default function ProductDetails(
   const dimensionsProperties = additionalProperty?.filter((property) =>
     property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" ||
     property.propertyID === "DEPTH" || property.propertyID === "WEIGHT"
+  );
+  const PropertyCards = additionalProperty?.filter((property) =>
+    property.propertyID === "DESCRIPTION"
   );
   const widthDimension = dimensionsProperties?.find((dimension) =>
     dimension.propertyID === "WIDTH"
@@ -43,13 +47,18 @@ export default function ProductDetails(
         <a href="#description" class="flex flex-1 border-b-2 border-[#EE405A] text-[#EE405A]  items-center justify-center py-3">Descripción</a>
         <a href="#properties" class="flex flex-1 border-b-2 border-[#D6D6D6] text-[#848585] font-light items-center justify-center py-3">Ficha Técnica</a>
       </div>
-      <h2 className="text-[#323333] text-base text-center py-4">
+      <h2 className="text-[#323333] text-base text-center py-6">
         Descripción del Producto
       </h2>
       <article className="py-3 text-sm font-light text-[#323333] leading-6">
         {description}
       </article>
-      <h2 className="text-[#323333] text-base text-center py-4" id="properties">
+      <div>
+        <AdditionalPropertyCards
+        PropertyCards={PropertyCards}
+        />
+      </div>
+      <h2 className="text-[#323333] text-base text-center py-6" id="properties">
         Ficha Técnica
       </h2>
 
