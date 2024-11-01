@@ -8,16 +8,17 @@ export interface Props {
 export default function ProductMain({ page }: Props) {
   if (!page) return <></>;
   const { product } = page;
+  console.log("product ",product)
   const { sku, name } = product
   return (
-    <div className="container flex flex-col lg:flex-row gap-4 my-6 px-5 lg:p-0">
+    <div className="container flex flex-col lg:flex-row gap-4 my-6 px-5 lg:p-0 lg:h-30">
       {/* Galeria do produto */}
-      <div className="flex-1 bg-slate-400 h-96">
+      <div className="h-96 w-full lg:w-2/4">
         <GallerySlider
           page={page}
         />
       </div>
-      <div className="flex flex-col gap-2 flex-1">
+      <div className="flex flex-col gap-2  w-full lg:w-2/4 lg:mt-12 lg:ml-6">
         <span className="text-sm text=[#848585] uppercase font-light">
           {sku}
         </span>
