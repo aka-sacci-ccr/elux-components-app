@@ -71,22 +71,21 @@ export default function GallerySlider(props: Props) {
             </Slider>
 
             <Slider.PrevButton
-              class="no-animation absolute left-2  btn btn-circle btn-outline disabled:invisible hidden lg:flex top-25"
+              class="no-animation absolute left-2 disabled:opacity-40 hidden lg:flex items-center h-16 top-25"
               disabled
             >
               <Icon id="chevron-right" class="rotate-180" />
             </Slider.PrevButton>
 
             <Slider.NextButton
-              class="no-animation absolute right-2 btn btn-circle btn-outline disabled:invisible hidden lg:flex top-25"
+              class="no-animation absolute right-2 disabled:opacity-40 hidden lg:flex items-center h-16 top-25"
               disabled={images.length < 2}
             >
               <Icon id="chevron-right" />
             </Slider.NextButton>
 
-            <div class="absolute top-2 right-2 bg-base-100 rounded-full">
-              <label class="btn btn-ghost hidden sm:inline-flex" for={zoomId}>
-                <Icon id="pan_zoom" />
+            <div class="absolute top-2 right-2 bg-transparent w-full h-2/4 lg:h-4/5">
+              <label class="btn btn-ghost sm:inline-flex w-full h-full" for={zoomId}>
               </label>
             </div>
           </div>
@@ -94,9 +93,11 @@ export default function GallerySlider(props: Props) {
 
         {/* Dots */}
         <div class="col-start-1 col-span-1 lg:max-w-25 lg:ml-12">
+          {/* Dots with images*/}
           <ul
             class={clx(
               "carousel carousel-center",
+              "hidden lg:flex",
               "gap-2",
               "max-w-full",
               "overflow-x-auto",
@@ -119,8 +120,33 @@ export default function GallerySlider(props: Props) {
               </li>
             ))}
           </ul>
-        </div>
 
+          {/* Dots mobile */}
+          <ul
+            class={clx(
+              "carousel carousel-center justify-center gap-3",
+              "rounded-full",
+              "border-[1px] border-slate-200",
+              "flex lg:hidden",
+              "gap-2",
+              "max-w-40 h-6 mx-auto",
+              "overflow-x-auto",
+              "sm:overflow-y-auto",
+            )}
+            style={{ maxHeight: "600px" }}
+          >
+            {images.map((_, index) => (
+              <li class="carousel-item w-3 h-full flex justify-center">
+                <Slider.Dot index={index}>
+                  <span
+                    className={`flex w-2.5 h-2.5 rounded-full ${index === 2 ? "bg-[#EE405A]" : "bg-[#EBEBEB]"
+                      }`}
+                  ></span>
+                </Slider.Dot>
+              </li>
+            ))}
+          </ul>
+        </div>
         <Slider.JS rootId={id} />
       </div>
       <ProductImageZoom
