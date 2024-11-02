@@ -49,7 +49,7 @@ export default function ProductInfoBanners(
             />
 
             <div class="sm:w-2/4 flex items-center">
-              <div className="w-full max-w-[400px] h-full flex flex-col mx-auto text-left justify-center gap-4 p-3">
+              <div className="w-full max-w-[400px] h-full flex flex-col mx-auto text-left justify-center gap-4 p-5">
                 <span
                   className="text-xl"
                   style={{
