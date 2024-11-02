@@ -9,15 +9,15 @@ export default function ProductMain({ page }: Props) {
   if (!page) return <></>;
   const { product } = page;
   const { sku, name } = product;
-  return (
-    <div className="container flex flex-col lg:flex-row gap-4 my-6 px-5 lg:p-0 lg:h-30">
+   return (
+    <div className="container flex flex-col lg:flex-row gap-4 my-6 px-5 lg:p-0 lg:mb-28">
       {/* Galeria do produto */}
       <div className="h-96 w-full lg:w-2/4">
         <GallerySlider
           page={page}
         />
       </div>
-      <div className="flex flex-col gap-2  w-full lg:w-2/4 lg:mt-12 lg:ml-6">
+      <div className="flex flex-col gap-2  w-full lg:w-2/4 mt-6 lg:mt-12 lg:ml-6">
         <span className="text-sm text=[#848585] uppercase font-light">
           {sku}
         </span>
