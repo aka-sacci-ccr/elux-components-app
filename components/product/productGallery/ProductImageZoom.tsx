@@ -19,7 +19,7 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
     <Modal id={id}>
       <div
         id={container}
-        class="modal-box w-11/12 max-w-7xl grid grid-cols-[48px_1fr_48px] grid-rows-1 place-items-center"
+        class="w-screen h-[100vh] bg-slate-200 lg:w-11/12 max-w-7xl grid grid-cols-[48px_1fr_48px] grid-rows-1 place-items-center"
       >
         <Slider class="carousel col-span-full col-start-1 row-start-1 row-span-full h-full w-full">
           {images.map((image, index) => (
@@ -27,14 +27,16 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
               index={index}
               class="carousel-item w-full h-full justify-center items-center"
             >
-              <Image
-                style={{ aspectRatio: `${width} / ${height}` }}
-                src={image.url!}
-                alt={image.alternateName}
-                width={width}
-                height={height}
-                class="h-full w-auto"
-              />
+              <div class="lg:w-[510px] lg:h-[410px]">
+                <Image
+                  style={{ aspectRatio: `auto` }}
+                  src={image.url!}
+                  alt={image.alternateName}
+                  width={width}
+                  height={height}
+                  class="h-full w-auto"
+                />
+              </div>
             </Slider.Item>
           ))}
         </Slider>

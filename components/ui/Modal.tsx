@@ -23,7 +23,7 @@ function Modal({ children, open, id = useId() }: Props) {
   return (
     <>
       <input id={id} checked={open} type="checkbox" class="modal-toggle" />
-      <div class="modal">
+      <div class="modal !bg-white">
         {children}
         <label class="modal-backdrop" for={id}>Close</label>
       </div>
