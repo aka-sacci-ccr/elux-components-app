@@ -73,17 +73,19 @@ export default function ProductDetails(
       </h2>
 
       <div className="flex flex-col px-2">
-        <div className="flex gap-2">
+        <div className="flex flex-col md:flex-row gap-2">
           <span className="text-[#323333] text-sm">
             Dimensiones del producto:
           </span>
-          <a href="#" className="text-xs text-[#848585] font-light underline">
-            con caja
-          </a>
-          <span>|</span>
-          <a href="#" className="text-xs text-[#EE405A] font-light underline">
-            sin caja
-          </a>
+          <div className="flex gap-2">
+            <a href="#" className="text-xs text-[#848585] font-light underline">
+              con caja
+            </a>
+            <span className="text-[#EBEBEB] mb-2">|</span>
+            <a href="#" className="text-xs text-[#EE405A] font-light underline">
+              sin caja
+            </a>
+          </div>
         </div>
         <ul className="flex items-center w-full my-4 text-[#323333]">
           <li className="flex flex-col gap-1 items-center flex-1">
