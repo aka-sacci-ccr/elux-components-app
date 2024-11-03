@@ -58,9 +58,9 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
             </Slider.Item>
           ))}
         </Slider>
-        <div class="flex px-2 max-w-full lg:max-w-[687px] mx-auto gap-4 lg:gap-6">
+        <div class="flex px-2 max-w-[80%] overflow-x-auto px-3 lg:px-0 lg:max-w-[687px] mx-auto gap-4 lg:gap-6 relative">
           <Slider.PrevButton class="w-6 disabled:opacity-40">
-            <Icon id="chevron-right" class="rotate-180 text-primary" />
+            <Icon id="chevron-right" class="rotate-180 text-primary absolute left-0 bottom-4 lg:static" />
           </Slider.PrevButton>
           {images.map((img, index) => (
             <li class="carousel-item w-14 h-14 relative">
@@ -96,7 +96,7 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
             </li>
           ))}
           <Slider.NextButton class="w-6 disabled:opacity-40">
-            <Icon id="chevron-right" class="text-primary" />
+            <Icon id="chevron-right" class="text-primary absolute right-0 bottom-4 lg:static"  />
           </Slider.NextButton>
         </div>
 
