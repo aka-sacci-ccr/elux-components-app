@@ -20,13 +20,13 @@ export default function ProductMain({ page }: Props) {
         />
       </div>
       <div className="flex flex-col gap-2  w-full lg:w-2/4 mt-6 lg:mt-12 lg:ml-6">
-        <span className="text-sm text=[#848585] uppercase font-light">
+        <span className="text-sm text-info uppercase font-light">
           {sku}
         </span>
-        <h2 className="text-xl text-[#323333]">
+        <h2 className="text-xl text-secondary">
           {name}
         </h2>
-        <button className="flex justify-center items-center w-full lg:max-w-80 h-[42px] rounded-3xl bg-[#EE405A] text-white text-sm font-semibold mt-4">
+        <button className="flex justify-center items-center w-full lg:max-w-80 h-[42px] rounded-3xl bg-primary text-white text-sm font-semibold mt-4">
           Where to buy
         </button>
       </div>

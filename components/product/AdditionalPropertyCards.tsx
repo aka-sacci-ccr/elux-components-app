@@ -58,7 +58,7 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
                 <div
                   className={`w-[90vw] overflow-hidden flex ${
                     itemsGroup.length > 1 ? "flex-col gap-4" : "flex-col lg:flex-row-reverse"
-                  } lg:border-t border-[#EBEBEB]`}
+                  } lg:border-t border-base-200`}
                 >
                   {itemsGroup.map((item, idx) => (
                     <div key={item["@id"] || idx} className="w-full max-w-[520px] pt-4">
@@ -73,7 +73,7 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
                           />
                         </div>
                       )}
-                      <div className="flex flex-col flex-1 gap-2 text-[#323333] text-sm pt-6 px-1">
+                      <div className="flex flex-col flex-1 gap-2 text-secondary text-sm pt-6 px-1">
                         {item.name && <span>{item.name}</span>}
                         {item.value && (
                           <article
@@ -107,7 +107,7 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
               <li key={index} className="carousel-item w-3 h-full flex justify-center items-center">
                 <Slider.Dot
                   index={index}
-                  className="disabled:bg-primary flex w-2.5 h-2.5 rounded-full bg-[#EBEBEB]"
+                  className="disabled:bg-primary flex w-2.5 h-2.5 rounded-full bg-base-200"
                 ></Slider.Dot>
               </li>
             ))}
@@ -119,7 +119,7 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
           {PropertyCards.map((card) => (
             <div
               key={card["@id"]}
-              className="w-full max-w-[520px] lg:max-h-[231px] overflow-hidden flex flex-col lg:flex-row-reverse lg:border-t border-[#EBEBEB]"
+              className="w-full max-w-[520px] lg:max-h-[231px] overflow-hidden flex flex-col lg:flex-row-reverse lg:border-t border-base-200"
             >
               {card.image?.[0]?.url && (
                 <div className="w-full lg:max-w-[240px] h-[240px] flex justify-center overflow-hidden">
@@ -132,7 +132,7 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
                   />
                 </div>
               )}
-              <div className="flex flex-col flex-1 gap-2 text-[#323333] text-sm pt-6">
+              <div className="flex flex-col flex-1 gap-2 text-secondary text-sm pt-6">
                 <span>{card.name}</span>
                 <article
                   className="font-light max-w-[500px]"

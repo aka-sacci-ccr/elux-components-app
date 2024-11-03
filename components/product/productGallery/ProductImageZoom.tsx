@@ -22,8 +22,9 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
         id={container}
         class="w-screen h-[100vh] lg:w-11/12 max-w-7xl flex flex-col"
       >
-        <span class="absolute top-5 left-5 lg:left-1/2 lg:top-6">1/12</span>
-        <Slider class="carousel col-span-full col-start-1  h-3/5 w-full">
+        <span class="absolute top-5 left-5 lg:left-1/2 lg:top-6">1/{images.length}</span>
+        <Slider class="carousel col-span-full col-start-1  h-3/5 w-full"
+        >
           {images.map((image, index) => (
             <Slider.Item
               index={index}
@@ -44,7 +45,7 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
         </Slider>
         <div class="flex px-2 max-w-full lg:max-w-[687px] mx-auto lg:gap-6">
         <Slider.PrevButton class="w-6 disabled:opacity-40">
-          <Icon id="chevron-right" class="rotate-180" />
+          <Icon id="chevron-right" class="rotate-180 text-primary" />
         </Slider.PrevButton>
         <ul
             class={clx(
@@ -73,7 +74,7 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
             ))}
           </ul>
           <Slider.NextButton class="w-6 disabled:opacity-40">
-          <Icon id="chevron-right" />
+          <Icon id="chevron-right" class="text-primary"/>
         </Slider.NextButton>
           </div>
 

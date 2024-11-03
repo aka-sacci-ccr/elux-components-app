@@ -76,18 +76,18 @@ export default function GallerySlider(props: Props) {
               class="no-animation absolute left-2 disabled:opacity-40 hidden lg:flex items-center h-16 top-25"
               disabled
             >
-              <Icon id="chevron-right" class="rotate-180" />
+              <Icon id="chevron-right" class="rotate-180 text-primary" />
             </Slider.PrevButton>
 
             <Slider.NextButton
               class="no-animation absolute right-2 disabled:opacity-40 hidden lg:flex items-center h-16 top-25"
               disabled={images.length < 2}
             >
-              <Icon id="chevron-right" />
+              <Icon id="chevron-right" class="text-primary" />
             </Slider.NextButton>
 
-            <div class="absolute top-2 right-2 bg-transparent w-full h-2/4 lg:h-4/5 cursor-pointer">
-              <label class="sm:inline-flex w-full h-full" for={zoomId}>
+            <div class="absolute top-2 right-2  w-full h-2/4 lg:h-4/5 cursor-pointer">
+              <label class="flex w-full h-full cursor-pointer" for={zoomId}>
               </label>
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function GallerySlider(props: Props) {
             >
               {images.map((_, index) => (
                 <li class="carousel-item w-3 h-full flex justify-center items-center">
-                  <Slider.Dot index={index} className="disabled:bg-[#EE405A] flex w-2.5 h-2.5 rounded-full bg-[#EBEBEB]">
+                  <Slider.Dot index={index} className="disabled:bg-primary flex w-2.5 h-2.5 rounded-full bg-base-200">
                   </Slider.Dot>
                 </li>
               ))}
