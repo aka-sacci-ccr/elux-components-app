@@ -86,14 +86,14 @@ export default function GallerySlider(props: Props) {
               <Icon id="chevron-right" />
             </Slider.NextButton>
 
-            <div class="absolute top-2 right-2 bg-transparent w-full h-2/4 lg:h-4/5">
-              <label class="btn btn-ghost sm:inline-flex w-full h-full" for={zoomId}>
+            <div class="absolute top-2 right-2 bg-transparent w-full h-2/4 lg:h-4/5 cursor-pointer">
+              <label class="sm:inline-flex w-full h-full" for={zoomId}>
               </label>
             </div>
           </div>
         </div>
 
-        <div class="col-start-1 col-span-1 lg:max-w-25 lg:ml-12">
+        <div class="lg:max-w-25 lg:ml-14">
           {
             device === "mobile" ? (
               <ul
@@ -120,7 +120,7 @@ export default function GallerySlider(props: Props) {
               <ul
               class={clx(
                 "carousel carousel-center",
-                "hidden lg:flex",
+                "flex justify-center gap-3",
                 "gap-2",
                 "max-w-full",
                 "overflow-x-auto",
@@ -129,14 +129,14 @@ export default function GallerySlider(props: Props) {
               style={{ maxHeight: "600px" }}
             >
               {images.map((img, index) => (
-                <li class="carousel-item w-16 h-16">
+                <li class="carousel-item w-14 w-14">
                   <Slider.Dot index={index} className="disabled:border-2 border-base-400 rounded overflow-hidden"
                   style={{borderColor: "#011E41"}}>
                     <Image
                       style={{ aspectRatio: "1 / 1" }}
                       class="object-cover w-full h-full"
-                      width={64}
-                      height={64}
+                      width={56}
+                      height={56}
                       src={img.url!}
                       alt={img.alternateName}
                     />
