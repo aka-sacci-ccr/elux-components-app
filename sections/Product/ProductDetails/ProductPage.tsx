@@ -94,10 +94,6 @@ export default function ProductPage(
     });
   }
 
-  const mainBannerImages = image?.filter((image) =>
-    image.additionalType === "MAIN_BANNER" ||
-    image.additionalType === "MAIN_BANNER_MOBILE"
-  );
   const infoBannerImages = image?.filter((image) =>
     image.additionalType === "INFO_BANNER"
   );
@@ -112,7 +108,7 @@ export default function ProductPage(
           disableContainer={true}
         />
       </div>
-      <ProductMainBanner images={mainBannerImages} />
+      <ProductMainBanner product={product}/>
       <ProductInfoBanners
         images={infoBannerImages}
         titleColor={infoBanners.titleColor}

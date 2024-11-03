@@ -1,19 +1,29 @@
 import Image from "apps/website/components/Image.tsx";
-import { ImageObject } from "apps/commerce/types.ts";
+import { ImageObject, Product } from "apps/commerce/types.ts";
 
 interface Props {
-  images: ImageObject[] | undefined;
+  product: Product
 }
 
-export default function ProductMainBanner({ images }: Props) {
-  if (!images) return <></>;
+export default function ProductMainBanner({  product }: Props) {
+  if (!product) return <></>;
+  const { name, image, sku, brand } = product
+
+  console.log(product)
+
+  const mainBannerMobile = image?.find((image) =>
+    image.additionalType === "MAIN_BANNER_MOBILE"
+  );
+  const mainBannerDesktop = image?.find((image) =>
+    image.additionalType === "MAIN_BANNER"
+  );
 
   return (
     <div className="w-full relative overflow-hidden mx-auto">
       <div className="flex lg:hidden">
         <Image
-          alt={images[1].name}
-          src={images[1].url || ""}
+          alt={mainBannerMobile?.description}
+          src={mainBannerMobile?.url ?? ""}
           width={400}
           height={600}
           class=" object-contain w-full"
@@ -21,8 +31,8 @@ export default function ProductMainBanner({ images }: Props) {
       </div>
       <div className="hidden lg:flex">
         <Image
-          alt={images[0].name}
-          src={images[0].url || ""}
+          alt={mainBannerDesktop?.description}
+          src={mainBannerDesktop?.url ?? ""}
           width={1280}
           height={600}
           class=" object-contain w-full"
@@ -31,13 +41,13 @@ export default function ProductMainBanner({ images }: Props) {
       <div class="absolute z-10 w-full h-full top-0 bg-black opacity-40"></div>
       <div class="absolute z-20 flex flex-col bottom-5 lg:bottom-32 lg:left-40 text-white px-5 lg:p-0 gap-2 max-w-96">
         <span className="text-base lg:text-xl uppercase">
-          FRFWV5HTS
+          {sku}
         </span>
         <h1 className="text-[1.75rem] lg:text-4xl leading-9">
-          Frigidaire
+          {brand?.name}
         </h1>
         <h2 className="text-base leading-6 font-light">
-          French Door 4 puertas 11 Cu. Ft. Refrigerador Gris
+          {name}
         </h2>
       </div>
     </div>
