@@ -1,69 +1,69 @@
 import Image from "apps/website/components/Image.tsx";
 import { PropertyValue } from "apps/commerce/types.ts";
-import { useDevice } from "@deco/deco/hooks";
 import Slider from "../ui/Slider.tsx";
+import { clx } from "../../utils/clx.ts";
+import { useDevice } from "@deco/deco/hooks";
+import { useId } from "../../sdk/useId.ts";
 
 interface Props {
   PropertyCards: PropertyValue[] | undefined;
 }
 
 export default function AdditionalPropertyCards({ PropertyCards }: Props) {
-
   if (!PropertyCards) return <></>;
 
+  const id = useId();
+  
   const sortedPropertyCardsMobile = PropertyCards.sort((a, b) => {
-    // Checa se a URL da imagem está definida para os primeiros itens
     const hasUrlA = a.image?.[0]?.url !== undefined;
     const hasUrlB = b.image?.[0]?.url !== undefined;
 
-    // Ordena de modo que os itens com `url` definido venham primeiro
-    if (hasUrlA && !hasUrlB) return -1; // `a` vem antes de `b`
-    if (!hasUrlA && hasUrlB) return 1;  // `b` vem antes de `a`
-    return 0; // Manter a ordem relativa para itens com ambas URLs definidas ou indefinidas
+    if (hasUrlA && !hasUrlB) return -1;
+    if (!hasUrlA && hasUrlB) return 1;
+    return 0;
   });
 
-  const alreadyRenderedIndices = new Set();
+  // Função que calcula a estrutura de itens para renderizar com base no array completo
+  const getItemsToRender = (cards: PropertyValue[]) => {
+    const alreadyRenderedIndices = new Set();
+    const itemsToRender = cards.map((card, index) => {
+      if (alreadyRenderedIndices.has(index)) return null;
 
-  const device = useDevice()
-  console.log("device ", device)
+      const noImage = !card.image?.[0]?.url;
+      const itemsGroup = noImage
+        ? [card, cards[index + 1], cards[index + 2]]
+            .filter((item, idx) => item && !alreadyRenderedIndices.has(index + idx))
+        : [card];
 
-  const slideCount = sortedPropertyCardsMobile.reduce((count, card, index) => {
-    if (!card.image?.[0]?.url) {
-      index += 2;
-    }
-    return count + 1;
-  }, 0);
+      // Marcar os índices já processados
+      if (noImage) {
+        itemsGroup.forEach((_, idx) => alreadyRenderedIndices.add(index + idx));
+      }
+      return itemsGroup;
+    });
+
+    return itemsToRender.filter((group) => group !== null) as PropertyValue[][];
+  };
+
+  const itemsGroups = getItemsToRender(sortedPropertyCardsMobile);
+  const device = useDevice();
+
   return (
     <>
-      <div className="w-full max-w-[65rem] mx-auto flex flex-col lg:hidden my-6">
-        <Slider class="carousel carousel-center sm:carousel-end gap-5 sm:gap-10 w-full">
-          {sortedPropertyCardsMobile.map((card, index) => {
-            if (alreadyRenderedIndices.has(index)) return null;
-
-            const noImage = !card.image?.[0]?.url;
-            const itemsToRender = noImage
-              ? [card, sortedPropertyCardsMobile[index + 1], sortedPropertyCardsMobile[index + 2]]
-                .filter((item, idx) => item && !alreadyRenderedIndices.has(index + idx))
-              : [card];
-
-            if (noImage) {
-              itemsToRender.forEach((_, idx) => alreadyRenderedIndices.add(index + idx));
-            }
-
-            return (
-              <Slider.Item
-                key={index}
-                index={index}
-                className="carousel-item"
-              >
+      {device === "mobile" ? (
+        <div className="w-full max-w-[65rem] mx-auto flex flex-col lg:hidden my-6">
+          <Slider class="carousel carousel-center sm:carousel-end gap-5 sm:gap-10 w-full">
+            {itemsGroups.map((itemsGroup, index) => (
+              <Slider.Item key={index} index={index} className="carousel-item">
                 <div
-                  className={`w-[90vw] overflow-hidden flex ${noImage ? 'flex-col gap-4' : 'flex-col lg:flex-row-reverse'
-                    } lg:border-t border-[#EBEBEB]`}
+                  className={`w-[90vw] overflow-hidden flex ${
+                    itemsGroup.length > 1 ? "flex-col gap-4" : "flex-col lg:flex-row-reverse"
+                  } lg:border-t border-[#EBEBEB]`}
                 >
-                  {itemsToRender.map((item, idx) => (
+                  {itemsGroup.map((item, idx) => (
                     <div key={item["@id"] || idx} className="w-full max-w-[520px] pt-4">
                       {item.image?.[0]?.url && (
-                        <div className="w-full  flex justify-center overflow-hidden">
+                        <div className="w-full flex justify-center overflow-hidden">
                           <Image
                             alt={item.name || "Imagem do card"}
                             src={item.image[0].url}
@@ -86,48 +86,63 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
                   ))}
                 </div>
               </Slider.Item>
-            );
-          })}
-        </Slider>
-        {/* dots */}
-        <div className="flex justify-center gap-2 mt-4 bg-slate-200">
-          {[...Array(slideCount)].map((_, dotIndex) => (
-            <button
-              key={dotIndex}
-              className="bg-red-200"
-            />
-          ))}
-        </div>
-      </div>
+            ))}
+          </Slider>
 
-
-      <div className="w-full max-w-[65rem] mx-auto hidden  lg:grid lg:grid-cols-[520px_520px] my-6">
-        {PropertyCards.map((card) => (
-          <div
-            key={card["@id"]}
-            className="w-full max-w-[520px] lg:max-h-[231px] overflow-hidden flex flex-col lg:flex-row-reverse lg:border-t border-[#EBEBEB]"
+          {/* Dots */}
+          <ul
+            className={clx(
+              "carousel carousel-center justify-center gap-3",
+              "rounded-full",
+              "border-[1px] border-slate-200",
+              "flex lg:hidden",
+              "gap-2",
+              "max-w-40 h-6 mx-auto",
+              "overflow-x-auto",
+              "sm:overflow-y-auto"
+            )}
+            style={{ maxHeight: "600px" }}
           >
-            {card.image?.[0]?.url && (
-              <div className="w-full lg:max-w-[240px] h-[240px] flex justify-center overflow-hidden">
-                <Image
-                  alt={card.name}
-                  src={card.image[0].url}
-                  width={375}
-                  height={300}
-                  className="object-contain w-full"
+            {itemsGroups.map((_, index) => (
+              <li key={index} className="carousel-item w-3 h-full flex justify-center items-center">
+                <Slider.Dot
+                  index={index}
+                  className="disabled:bg-primary flex w-2.5 h-2.5 rounded-full bg-[#EBEBEB]"
+                ></Slider.Dot>
+              </li>
+            ))}
+          </ul>
+          <Slider.JS rootId={id} />
+        </div>
+      ) : (
+        <div className="w-full max-w-[65rem] mx-auto hidden lg:grid lg:grid-cols-[520px_520px] my-6">
+          {PropertyCards.map((card) => (
+            <div
+              key={card["@id"]}
+              className="w-full max-w-[520px] lg:max-h-[231px] overflow-hidden flex flex-col lg:flex-row-reverse lg:border-t border-[#EBEBEB]"
+            >
+              {card.image?.[0]?.url && (
+                <div className="w-full lg:max-w-[240px] h-[240px] flex justify-center overflow-hidden">
+                  <Image
+                    alt={card.name}
+                    src={card.image[0].url}
+                    width={375}
+                    height={300}
+                    className="object-contain w-full"
+                  />
+                </div>
+              )}
+              <div className="flex flex-col flex-1 gap-2 text-[#323333] text-sm pt-6">
+                <span>{card.name}</span>
+                <article
+                  className="font-light max-w-[500px]"
+                  dangerouslySetInnerHTML={{ __html: card.value! }}
                 />
               </div>
-            )}
-            <div className="flex flex-col flex-1 gap-2 text-[#323333] text-sm pt-6">
-              <span>{card.name}</span>
-              <article
-                className="font-light max-w-[500px]"
-                dangerouslySetInnerHTML={{ __html: card.value! }}
-              />
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }
