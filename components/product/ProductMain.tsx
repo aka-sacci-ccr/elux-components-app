@@ -1,18 +1,20 @@
 import { ProductDetailsPage } from "apps/commerce/types.ts";
 import GallerySlider from "./productGallery/Gallery.tsx";
+
 export interface Props {
   /** @title Integration */
   page: ProductDetailsPage | null;
 }
 
 export default function ProductMain({ page }: Props) {
+
   if (!page) return <></>;
   const { product } = page;
   const { sku, name } = product;
    return (
     <div className="container flex flex-col lg:flex-row gap-4 my-6 px-5 lg:p-0 lg:mb-28">
       {/* Galeria do produto */}
-      <div className="lg:h-96 w-full lg:w-2/4">
+      <div className="w-full lg:w-2/4">
         <GallerySlider
           page={page}
         />
