@@ -4,6 +4,7 @@ import Icon from "../../ui/Icon.tsx";
 import Modal from "../../../components/ui/Modal.tsx";
 import Slider from "../../../components/ui/Slider.tsx";
 import { useId } from "../../../sdk/useId.ts";
+import { clx } from "../../../utils/clx.ts";
 
 export interface Props {
   id?: string;
@@ -19,15 +20,16 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
     <Modal id={id}>
       <div
         id={container}
-        class="w-screen h-[100vh] bg-slate-200 lg:w-11/12 max-w-7xl grid grid-cols-[48px_1fr_48px] grid-rows-1 place-items-center"
+        class="w-screen h-[100vh] bg-slate-200 lg:w-11/12 max-w-7xl flex flex-col"
       >
-        <Slider class="carousel col-span-full col-start-1 row-start-1 row-span-full h-full w-full">
+        <span class="absolute top-5 left-5">1/12</span>
+        <Slider class="carousel col-span-full col-start-1  h-3/5 w-full">
           {images.map((image, index) => (
             <Slider.Item
               index={index}
               class="carousel-item w-full h-full justify-center items-center"
             >
-              <div class="lg:w-[510px] lg:h-[410px]">
+              <div class="w-[90%] lg:w-[510px] lg:h-[410px] flex justify-center">
                 <Image
                   style={{ aspectRatio: `auto` }}
                   src={image.url!}
@@ -40,14 +42,40 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
             </Slider.Item>
           ))}
         </Slider>
-
-        <Slider.PrevButton class="btn btn-circle btn-outline col-start-1 col-end-2 row-start-1 row-span-full">
+        <div class="flex px-4">
+        <Slider.PrevButton class="w-6 disabled:opacity-40">
           <Icon id="chevron-right" class="rotate-180" />
         </Slider.PrevButton>
-
-        <Slider.NextButton class="btn btn-circle btn-outline col-start-3 col-end-4 row-start-1 row-span-full">
+        <ul
+            class={clx(
+              "carousel carousel-center",
+              "flex mx-auto",
+              "gap-2",
+              "max-w-[70%] lg:max-w-full h-20 mt-4",
+              "overflow-x-auto",
+              "sm:overflow-y-auto",
+            )}
+          >
+            {images.map((img, index) => (
+              <li class="carousel-item w-14 h-14">
+                <Slider.Dot index={index}>
+                  <Image
+                    style={{ aspectRatio: "1 / 1" }}
+                    class="group-disabled:border-base-400 border rounded object-cover w-full h-full"
+                    width={57}
+                    height={57}
+                    src={img.url!}
+                    alt={img.alternateName}
+                  />
+                </Slider.Dot>
+              </li>
+            ))}
+          </ul>
+          <Slider.NextButton class="w-6 disabled:opacity-40">
           <Icon id="chevron-right" />
         </Slider.NextButton>
+          </div>
+
       </div>
       <Slider.JS rootId={container} />
     </Modal>

@@ -1,6 +1,7 @@
 import { ComponentChildren } from "preact";
 import { useId } from "../../sdk/useId.ts";
 import { useScript } from "@deco/deco/hooks";
+import Icon from "./Icon.tsx";
 interface Props {
   open?: boolean;
   children?: ComponentChildren;
@@ -19,13 +20,14 @@ const script = (id: string) => {
   };
   addEventListener("keydown", handler);
 };
+
 function Modal({ children, open, id = useId() }: Props) {
   return (
     <>
       <input id={id} checked={open} type="checkbox" class="modal-toggle" />
-      <div class="modal !bg-white">
+      <div class="modal !bg-white flex flex-col px-4">
+        <label class="modal-backdrop text-black flex- justify-end h-16 items-center" for={id}> <Icon id="close" class="rotate-180" size={32} /></label>
         {children}
-        <label class="modal-backdrop" for={id}>Close</label>
       </div>
       <script
         type="module"
