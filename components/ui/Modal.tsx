@@ -26,7 +26,7 @@ function Modal({ children, open, id = useId() }: Props) {
     <>
       <input id={id} checked={open} type="checkbox" class="modal-toggle" />
       <div class="modal !bg-white flex flex-col px-4">
-        <label class="modal-backdrop text-black flex- justify-end h-16 items-center" for={id}> <Icon id="close" class="rotate-180" size={32} /></label>
+        <label class="modal-backdrop text-black flex justify-end h-16 items-center w-fit ml-auto cursor-pointer" for={id}> <Icon id="close" class="rotate-180 text-primary" size={32} /></label>
         {children}
       </div>
       <script
