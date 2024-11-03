@@ -1,4 +1,4 @@
-import type { ImageObject } from "apps/commerce/types.ts";
+import type { ImageObject, VideoObject } from "apps/commerce/types.ts";
 import Image from "apps/website/components/Image.tsx";
 import Icon from "../../ui/Icon.tsx";
 import Modal from "../../../components/ui/Modal.tsx";
@@ -10,7 +10,7 @@ export interface Props {
   id?: string;
   width: number;
   height: number;
-  images: ImageObject[];
+  images: Array<ImageObject | VideoObject>;
 }
 
 function ProductImageZoom({ images, width, height, id = useId() }: Props) {
@@ -31,52 +31,74 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
               class="carousel-item w-full h-full justify-center items-center"
             >
               <div class="w-[90%] lg:w-[510px] lg:h-[410px] flex justify-center">
-                <Image
-                  style={{ aspectRatio: `auto` }}
-                  src={image.url!}
-                  alt={image.alternateName}
-                  width={width}
-                  height={height}
-                  class="h-full w-auto"
-                />
+                {
+                  image["@type"] === "ImageObject" ? (
+                    <Image
+                      style={{ aspectRatio: `auto` }}
+                      src={image.url!}
+                      alt={image.alternateName}
+                      width={width}
+                      height={height}
+                      class="h-full w-auto"
+                    />
+                  ) : (
+                    <iframe
+                      src={image.contentUrl?.replace(
+                        "watch?v=",
+                        "embed/"
+                      )}
+                      title="YouTube video player"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      class="w-full h-[400px] max-w-full  lg:max-h-full z-20"
+                    />
+                  )
+                }
               </div>
             </Slider.Item>
           ))}
         </Slider>
-        <div class="flex px-2 max-w-full lg:max-w-[687px] mx-auto lg:gap-6">
-        <Slider.PrevButton class="w-6 disabled:opacity-40">
-          <Icon id="chevron-right" class="rotate-180 text-primary" />
-        </Slider.PrevButton>
-        <ul
-            class={clx(
-              "carousel carousel-center",
-              "flex mx-auto",
-              "gap-2 lg:gap-5",
-              "max-w-[70%] lg:max-w-full h-20 mt-4",
-              "overflow-x-auto",
-              "sm:overflow-y-auto",
-            )}
-          >
-            {images.map((img, index) => (
-              <li class="carousel-item w-14 h-14">
-                 <Slider.Dot index={index} className="disabled:border-2 border-base-400 rounded overflow-hidden"
-                 style={{borderColor: "#011E41"}}>
-                  <Image
-                    style={{ aspectRatio: "1 / 1" }}
-                    class="object-cover w-full h-full"
-                    width={57}
-                    height={57}
-                    src={img.url!}
-                    alt={img.alternateName}
-                  />
-                </Slider.Dot>
-              </li>
-            ))}
-          </ul>
+        <div class="flex px-2 max-w-full lg:max-w-[687px] mx-auto gap-4 lg:gap-6">
+          <Slider.PrevButton class="w-6 disabled:opacity-40">
+            <Icon id="chevron-right" class="rotate-180 text-primary" />
+          </Slider.PrevButton>
+          {images.map((img, index) => (
+            <li class="carousel-item w-14 h-14 relative">
+              <Slider.Dot index={index} className="disabled:border-2 border-base-400 rounded overflow-hidden"
+                style={{ borderColor: "#011E41" }}>
+                {
+                  img["@type"] === "ImageObject" ? (
+                    <Image
+                      style={{ aspectRatio: "1 / 1" }}
+                      class="object-cover w-14 h-14"
+                      width={56}
+                      height={56}
+                      src={img.url!}
+                      alt={img.alternateName}
+                    />
+                  ) : (
+                    <div class="w-14 h-14 relative overflow-hidden">
+                      <Icon id="chevron-right" class="absolute text-primary z-20 left-1/2 text-white" />
+                      <div className="absolute w-full h-full bg-black opacity-40 z-10"></div>
+                      <Image
+                        style={{ aspectRatio: "1 / 1" }}
+                        class="object-cover w-full h-full"
+                        width={56}
+                        height={56}
+                        src={img.thumbnailUrl!}
+                        alt={img.alternateName}
+                      />
+                    </div>
+                  )
+                }
+
+              </Slider.Dot>
+            </li>
+          ))}
           <Slider.NextButton class="w-6 disabled:opacity-40">
-          <Icon id="chevron-right" class="text-primary"/>
-        </Slider.NextButton>
-          </div>
+            <Icon id="chevron-right" class="text-primary" />
+          </Slider.NextButton>
+        </div>
 
       </div>
       <Slider.JS rootId={container} />
