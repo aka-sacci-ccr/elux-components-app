@@ -102,11 +102,6 @@ export default function ProductPage(
     image.additionalType === "INFO_BANNER"
   );
 
-  /*     console.log("------ main banner -----------");
-    console.log(mainBannerImages);
-    console.log("------ info banners -----------");
-    console.log(infoBannerImages); */
-
   return (
     <Container class="flex flex-col" spacing={spacing}>
       <div class="my-6 sm:mt-6 sm:mb-8 max-w-[1280px] sm:w-[1280px] sm:pl-10 mx-auto">
