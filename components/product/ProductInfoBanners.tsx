@@ -20,16 +20,19 @@ interface Props {
     /** @description Secondary text color */
     secondary: string;
   };
-  images: ImageObject[] | undefined;
+  images: ImageObject[] | null | undefined;
 }
 
 export default function ProductInfoBanners(
   { images, backgroundColor, titleColor, contentColor }: Props,
 ) {
+  const infoBannerImages = images?.filter((image) =>
+    image.additionalType === "INFO_BANNER"
+  );
   return (
     <div className="w-full lg:mx-auto">
-      {images &&
-        images?.map((image, index) => (
+      {infoBannerImages &&
+        infoBannerImages?.map((image, index) => (
           <div
             className={`flex flex-col ${
               index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"

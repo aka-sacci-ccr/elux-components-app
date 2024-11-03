@@ -94,10 +94,6 @@ export default function ProductPage(
     });
   }
 
-  const infoBannerImages = image?.filter((image) =>
-    image.additionalType === "INFO_BANNER"
-  );
-
   return (
     <Container class="flex flex-col" spacing={spacing}>
       <div class="my-6 sm:mt-6 sm:mb-8 max-w-[1280px] sm:w-[1280px] sm:pl-10 mx-auto">
@@ -110,7 +106,7 @@ export default function ProductPage(
       </div>
       <ProductMainBanner product={product}/>
       <ProductInfoBanners
-        images={infoBannerImages}
+        images={image}
         titleColor={infoBanners.titleColor}
         contentColor={infoBanners.contentColor}
         backgroundColor={infoBanners.backgroundColor}
