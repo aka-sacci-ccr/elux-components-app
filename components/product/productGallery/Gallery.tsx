@@ -130,10 +130,11 @@ export default function GallerySlider(props: Props) {
             >
               {images.map((img, index) => (
                 <li class="carousel-item w-16 h-16">
-                  <Slider.Dot index={index}>
+                  <Slider.Dot index={index} className="disabled:border-2 border-base-400 rounded overflow-hidden"
+                  style={{borderColor: "#011E41"}}>
                     <Image
                       style={{ aspectRatio: "1 / 1" }}
-                      class="group-disabled:border-base-400 border rounded object-cover w-full h-full"
+                      class="object-cover w-full h-full"
                       width={64}
                       height={64}
                       src={img.url!}

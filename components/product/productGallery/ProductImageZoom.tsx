@@ -20,9 +20,9 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
     <Modal id={id}>
       <div
         id={container}
-        class="w-screen h-[100vh] bg-slate-200 lg:w-11/12 max-w-7xl flex flex-col"
+        class="w-screen h-[100vh] lg:w-11/12 max-w-7xl flex flex-col"
       >
-        <span class="absolute top-5 left-5">1/12</span>
+        <span class="absolute top-5 left-5 lg:left-1/2 lg:top-6">1/12</span>
         <Slider class="carousel col-span-full col-start-1  h-3/5 w-full">
           {images.map((image, index) => (
             <Slider.Item
@@ -42,7 +42,7 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
             </Slider.Item>
           ))}
         </Slider>
-        <div class="flex px-4">
+        <div class="flex px-2 max-w-full lg:max-w-[687px] mx-auto lg:gap-6">
         <Slider.PrevButton class="w-6 disabled:opacity-40">
           <Icon id="chevron-right" class="rotate-180" />
         </Slider.PrevButton>
@@ -50,7 +50,7 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
             class={clx(
               "carousel carousel-center",
               "flex mx-auto",
-              "gap-2",
+              "gap-2 lg:gap-5",
               "max-w-[70%] lg:max-w-full h-20 mt-4",
               "overflow-x-auto",
               "sm:overflow-y-auto",
@@ -58,10 +58,11 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
           >
             {images.map((img, index) => (
               <li class="carousel-item w-14 h-14">
-                <Slider.Dot index={index}>
+                 <Slider.Dot index={index} className="disabled:border-2 border-base-400 rounded overflow-hidden"
+                 style={{borderColor: "#011E41"}}>
                   <Image
                     style={{ aspectRatio: "1 / 1" }}
-                    class="group-disabled:border-base-400 border rounded object-cover w-full h-full"
+                    class="object-cover w-full h-full"
                     width={57}
                     height={57}
                     src={img.url!}
