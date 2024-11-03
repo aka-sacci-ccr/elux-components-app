@@ -5,14 +5,15 @@ import { clx } from "../../../utils/clx.ts";
 import Icon from "../../ui/Icon.tsx";
 import Slider from "../../ui/Slider.tsx";
 import { useId } from "../../../sdk/useId.ts";
+import { useDevice } from "@deco/deco/hooks";
 
 export interface Props {
   /** @title Integration */
   page: ProductDetailsPage | null;
 }
 
-const WIDTH = 820;
-const HEIGHT = 615;
+const WIDTH = 536;
+const HEIGHT = 550;
 const ASPECT_RATIO = `${WIDTH} / ${HEIGHT}`;
 
 /**
@@ -24,6 +25,7 @@ const ASPECT_RATIO = `${WIDTH} / ${HEIGHT}`;
 export default function GallerySlider(props: Props) {
   const id = useId();
   const zoomId = `${id}-zoom`;
+  const device = useDevice();
 
   if (!props.page) {
     throw new Error("Missing Product Details Page Info");
@@ -91,61 +93,58 @@ export default function GallerySlider(props: Props) {
           </div>
         </div>
 
-        {/* Dots */}
         <div class="col-start-1 col-span-1 lg:max-w-25 lg:ml-12">
-          {/* Dots with images*/}
-          <ul
-            class={clx(
-              "carousel carousel-center",
-              "hidden lg:flex",
-              "gap-2",
-              "max-w-full",
-              "overflow-x-auto",
-              "sm:overflow-y-auto",
-            )}
-            style={{ maxHeight: "600px" }}
-          >
-            {images.map((img, index) => (
-              <li class="carousel-item w-16 h-16">
-                <Slider.Dot index={index}>
-                  <Image
-                    style={{ aspectRatio: "1 / 1" }}
-                    class="group-disabled:border-base-400 border rounded object-cover w-full h-full"
-                    width={64}
-                    height={64}
-                    src={img.url!}
-                    alt={img.alternateName}
-                  />
-                </Slider.Dot>
-              </li>
-            ))}
-          </ul>
-
-          {/* Dots mobile */}
-          <ul
-            class={clx(
-              "carousel carousel-center justify-center gap-3",
-              "rounded-full",
-              "border-[1px] border-slate-200",
-              "flex lg:hidden",
-              "gap-2",
-              "max-w-40 h-6 mx-auto",
-              "overflow-x-auto",
-              "sm:overflow-y-auto",
-            )}
-            style={{ maxHeight: "600px" }}
-          >
-            {images.map((_, index) => (
-              <li class="carousel-item w-3 h-full flex justify-center">
-                <Slider.Dot index={index}>
-                  <span
-                    className={`flex w-2.5 h-2.5 rounded-full ${index === 2 ? "bg-[#EE405A]" : "bg-[#EBEBEB]"
-                      }`}
-                  ></span>
-                </Slider.Dot>
-              </li>
-            ))}
-          </ul>
+          {
+            device === "mobile" ? (
+              <ul
+              class={clx(
+                "carousel carousel-center justify-center gap-3",
+                "rounded-full",
+                "border-[1px] border-slate-200",
+                "flex lg:hidden",
+                "gap-2",
+                "max-w-40 h-6 mx-auto",
+                "overflow-x-auto",
+                "sm:overflow-y-auto",
+              )}
+              style={{ maxHeight: "600px" }}
+            >
+              {images.map((_, index) => (
+                <li class="carousel-item w-3 h-full flex justify-center items-center">
+                  <Slider.Dot index={index} className="disabled:bg-[#EE405A] flex w-2.5 h-2.5 rounded-full bg-[#EBEBEB]">
+                  </Slider.Dot>
+                </li>
+              ))}
+            </ul>
+            ) : (
+              <ul
+              class={clx(
+                "carousel carousel-center",
+                "hidden lg:flex",
+                "gap-2",
+                "max-w-full",
+                "overflow-x-auto",
+                "sm:overflow-y-auto",
+              )}
+              style={{ maxHeight: "600px" }}
+            >
+              {images.map((img, index) => (
+                <li class="carousel-item w-16 h-16">
+                  <Slider.Dot index={index}>
+                    <Image
+                      style={{ aspectRatio: "1 / 1" }}
+                      class="group-disabled:border-base-400 border rounded object-cover w-full h-full"
+                      width={64}
+                      height={64}
+                      src={img.url!}
+                      alt={img.alternateName}
+                    />
+                  </Slider.Dot>
+                </li>
+              ))}
+            </ul>
+            )
+          }
         </div>
         <Slider.JS rootId={id} />
       </div>
