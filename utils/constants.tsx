@@ -652,3 +652,5 @@ export const PADDING_SIZES = {
     "28": "pb-28",
   },
 };
+
+export const DEFAULT_DOMAINS = ["deno.dev", "decocdn.com", "localhost"];

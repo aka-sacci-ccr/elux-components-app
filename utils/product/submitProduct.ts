@@ -19,6 +19,7 @@ import {
 import { Props as SubmitProductProps } from "../../actions/product/submit.ts";
 import { Description } from "../types.ts";
 import { eq } from "drizzle-orm";
+import { DEFAULT_DOMAINS } from "../constants.tsx";
 
 export async function insertBaseData(product: Product, ctx: AppContext) {
   const records = await ctx.invoke.records.loaders.drizzle();
@@ -117,14 +118,16 @@ export async function insertAvaliability(
   ctx: AppContext,
 ) {
   const records = await ctx.invoke.records.loaders.drizzle();
-  await records.insert(avaliableIn).values(
-    avaliablility.map(({ domain }) => {
-      return {
-        domain,
-        subjectOf: sku,
-      };
-    }),
-  );
+  await records.insert(avaliableIn).values([
+    ...avaliablility.map(({ domain }) => ({
+      domain,
+      subjectOf: sku,
+    })),
+    ...DEFAULT_DOMAINS.map((domain) => ({
+      domain,
+      subjectOf: sku,
+    })),
+  ]);
 }
 
 export async function insertProduct(

@@ -20,6 +20,13 @@ export const contact = sqliteTable("contact", {
   originSite: text("originSite"),
 });
 
+//Define the avaliable domains to the product and his categories
+export const domains = sqliteTable("domains", {
+  identifier: text("identifier").primaryKey(), // P.K
+  description: text("name").notNull(),
+});
+
+//Define the categories
 export const categories = sqliteTable("categories", {
   identifier: text("identifier").primaryKey(),
   value: text("value").notNull(),
@@ -30,12 +37,21 @@ export const categories = sqliteTable("categories", {
   ),
 });
 
+//Define where the categories are avaliable
+export const categoryAvaliableIn = sqliteTable("categoryAvaliableIn", {
+  identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
+  subjectOf: text("subjectOf").references(() => categories.identifier), // F.K
+  domain: text("domain").references(() => domains.identifier), // F.K
+});
+
+//Define categories of a product
 export const productCategories = sqliteTable("productCategories", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => categories.identifier), // F.K
   product: text("product").references(() => products.sku), // F.K
 });
 
+//Define products
 export const products = sqliteTable("products", {
   sku: text("sku").primaryKey(), // P.K
   name: text("name").notNull(),
@@ -46,6 +62,7 @@ export const products = sqliteTable("products", {
   releaseDate: text("releaseDate"),
 });
 
+//Define brands
 export const brands = sqliteTable("brands", {
   identifier: text("identifier").primaryKey(), // P.K
   name: text("name").notNull(),
@@ -53,6 +70,7 @@ export const brands = sqliteTable("brands", {
   logo: text("logo"),
 });
 
+//Define product additionalProperties
 export const additionalProperties = sqliteTable("additionalProperties", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
@@ -63,6 +81,7 @@ export const additionalProperties = sqliteTable("additionalProperties", {
   unitText: text("unitText"),
 });
 
+//Define product extra descriptions
 export const descriptions = sqliteTable("descriptions", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
@@ -71,6 +90,7 @@ export const descriptions = sqliteTable("descriptions", {
   image: text("image"),
 });
 
+//Define product images
 export const images = sqliteTable("images", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
@@ -81,6 +101,7 @@ export const images = sqliteTable("images", {
   description: text("description"),
 });
 
+//Define product videos
 export const videos = sqliteTable("videos", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
@@ -90,13 +111,9 @@ export const videos = sqliteTable("videos", {
   duration: text("duration"),
 });
 
+//Define product avaliability
 export const avaliableIn = sqliteTable("avaliableIn", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
   domain: text("domain").references(() => domains.identifier), // F.K
-});
-
-export const domains = sqliteTable("domains", {
-  identifier: text("identifier").primaryKey(), // P.K
-  description: text("name").notNull(),
 });
