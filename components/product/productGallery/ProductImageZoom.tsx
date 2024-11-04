@@ -69,8 +69,7 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
             <li class="carousel-item w-14 h-14 relative">
               <Slider.Dot
                 index={index}
-                className="disabled:border-2 border-base-400 rounded overflow-hidden"
-                style={{ borderColor: "#011E41" }}
+                className="border-2 border-transparent disabled:border-primary rounded overflow-hidden"
               >
                 {img["@type"] === "ImageObject"
                   ? (
@@ -85,12 +84,6 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
                   )
                   : (
                     <div class="w-14 h-14 relative overflow-hidden">
-                      <Icon
-                        id="chevron-right"
-                        class="absolute text-primary z-20 left-1/2 text-white"
-                      />
-                      <div className="absolute w-full h-full bg-black opacity-40 z-10">
-                      </div>
                       <Image
                         style={{ aspectRatio: "1 / 1" }}
                         class="object-cover w-full h-full"
