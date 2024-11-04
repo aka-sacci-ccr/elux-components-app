@@ -7,11 +7,10 @@ export interface Props {
 }
 
 export default function ProductMain({ page }: Props) {
-
   if (!page) return <></>;
   const { product } = page;
   const { sku, name, url } = product;
-   return (
+  return (
     <div className="container flex flex-col lg:flex-row gap-4 my-6 px-5 lg:p-0 lg:mb-28">
       {/* Galeria do produto */}
       <div className="w-full lg:w-2/4">
@@ -26,8 +25,10 @@ export default function ProductMain({ page }: Props) {
         <h2 className="text-xl text-secondary">
           {name}
         </h2>
-        <a className="flex justify-center items-center w-full lg:max-w-80 h-[42px] rounded-3xl bg-primary text-white text-sm font-semibold mt-4"
-        href={url}>
+        <a
+          className="flex justify-center items-center w-full lg:max-w-80 h-[42px] rounded-3xl bg-primary text-white text-sm font-semibold mt-4"
+          href={url}
+        >
           Where to buy
         </a>
       </div>

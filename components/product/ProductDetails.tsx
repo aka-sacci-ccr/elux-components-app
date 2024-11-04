@@ -70,7 +70,10 @@ export default function ProductDetails(
             Dimensiones del producto:
           </span>
           <div className="flex gap-2">
-            <a href="#" className="text-xs text-base-content font-light underline">
+            <a
+              href="#"
+              className="text-xs text-base-content font-light underline"
+            >
               con caja
             </a>
             <span className="text-base-200 mb-2">|</span>
@@ -79,32 +82,39 @@ export default function ProductDetails(
             </a>
           </div>
         </div>
-        <ul className={`${dimensionsProperties && dimensionsProperties.length < 3 ? 'flex items-center' : 'grid grid-cols-2 grid-rows-2'} w-full my-4 text-secondary lg:flex lg:items-center`}>
-  {
-    dimensionsProperties?.map((dimension) => { 
-      const propertyIcon = () => {
-        switch (dimension.propertyID) {
-          case "WIDTH":
-            return "width-property";
-          case "HEIGHT":
-            return "height-property";
-            case "WEIGHT":
-              return "weight-property";
-          default:
-            return "depth-property";
-        }
-      };
+        <ul
+          className={`${
+            dimensionsProperties && dimensionsProperties.length < 3
+              ? "flex items-center"
+              : "grid grid-cols-2 grid-rows-2"
+          } w-full my-4 text-secondary lg:flex lg:items-center`}
+        >
+          {dimensionsProperties?.map((dimension) => {
+            const propertyIcon = () => {
+              switch (dimension.propertyID) {
+                case "WIDTH":
+                  return "width-property";
+                case "HEIGHT":
+                  return "height-property";
+                case "WEIGHT":
+                  return "weight-property";
+                default:
+                  return "depth-property";
+              }
+            };
 
-      return (
-        <li className="flex flex-col gap-1 items-center flex-1 h-28" key={dimension["@id"]}>
-          <Icon id={propertyIcon()} className="text-primary" size={24} />
-          <span className="mt-1">{dimension.value}</span>
-          <span className="font-light text-sm">{dimension.name}</span>
-        </li>
-      );
-    })
-  }
-</ul>
+            return (
+              <li
+                className="flex flex-col gap-1 items-center flex-1 h-28"
+                key={dimension["@id"]}
+              >
+                <Icon id={propertyIcon()} className="text-primary" size={24} />
+                <span className="mt-1">{dimension.value}</span>
+                <span className="font-light text-sm">{dimension.name}</span>
+              </li>
+            );
+          })}
+        </ul>
       </div>
       {test && (
         <div className="w-full">

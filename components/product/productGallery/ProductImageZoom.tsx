@@ -4,7 +4,6 @@ import Icon from "../../ui/Icon.tsx";
 import Modal from "../../../components/ui/Modal.tsx";
 import Slider from "../../../components/ui/Slider.tsx";
 import { useId } from "../../../sdk/useId.ts";
-import { clx } from "../../../utils/clx.ts";
 
 export interface Props {
   id?: string;
@@ -22,17 +21,18 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
         id={container}
         class="w-screen h-[100vh] lg:w-11/12 max-w-7xl flex flex-col"
       >
-        <span class="absolute top-5 left-5 lg:left-1/2 lg:top-6">1/{images.length}</span>
-        <Slider class="carousel col-span-full col-start-1  h-3/5 w-full"
-        >
+        <span class="absolute top-5 left-5 lg:left-1/2 lg:top-6">
+          1/{images.length}
+        </span>
+        <Slider class="carousel col-span-full col-start-1  h-3/5 w-full">
           {images.map((image, index) => (
             <Slider.Item
               index={index}
               class="carousel-item w-full h-full justify-center items-center"
             >
               <div class="w-[90%] lg:w-[510px] lg:h-[410px] flex justify-center">
-                {
-                  image["@type"] === "ImageObject" ? (
+                {image["@type"] === "ImageObject"
+                  ? (
                     <Image
                       style={{ aspectRatio: `auto` }}
                       src={image.url!}
@@ -41,33 +41,39 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
                       height={height}
                       class="h-full w-auto"
                     />
-                  ) : (
+                  )
+                  : (
                     <iframe
                       src={image.contentUrl?.replace(
                         "watch?v=",
-                        "embed/"
+                        "embed/",
                       )}
                       title="YouTube video player"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                       class="w-full h-[400px] max-w-full  lg:max-h-full z-20"
                     />
-                  )
-                }
+                  )}
               </div>
             </Slider.Item>
           ))}
         </Slider>
         <div class="flex px-2 max-w-[80%] overflow-x-auto px-3 lg:px-0 lg:max-w-[687px] mx-auto gap-4 lg:gap-6 relative">
           <Slider.PrevButton class="w-6 disabled:opacity-40">
-            <Icon id="chevron-right" class="rotate-180 text-primary absolute left-0 bottom-4 lg:static" />
+            <Icon
+              id="chevron-right"
+              class="rotate-180 text-primary absolute left-0 bottom-4 lg:static"
+            />
           </Slider.PrevButton>
           {images.map((img, index) => (
             <li class="carousel-item w-14 h-14 relative">
-              <Slider.Dot index={index} className="disabled:border-2 border-base-400 rounded overflow-hidden"
-                style={{ borderColor: "#011E41" }}>
-                {
-                  img["@type"] === "ImageObject" ? (
+              <Slider.Dot
+                index={index}
+                className="disabled:border-2 border-base-400 rounded overflow-hidden"
+                style={{ borderColor: "#011E41" }}
+              >
+                {img["@type"] === "ImageObject"
+                  ? (
                     <Image
                       style={{ aspectRatio: "1 / 1" }}
                       class="object-cover w-14 h-14"
@@ -76,10 +82,15 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
                       src={img.url!}
                       alt={img.alternateName}
                     />
-                  ) : (
+                  )
+                  : (
                     <div class="w-14 h-14 relative overflow-hidden">
-                      <Icon id="chevron-right" class="absolute text-primary z-20 left-1/2 text-white" />
-                      <div className="absolute w-full h-full bg-black opacity-40 z-10"></div>
+                      <Icon
+                        id="chevron-right"
+                        class="absolute text-primary z-20 left-1/2 text-white"
+                      />
+                      <div className="absolute w-full h-full bg-black opacity-40 z-10">
+                      </div>
                       <Image
                         style={{ aspectRatio: "1 / 1" }}
                         class="object-cover w-full h-full"
@@ -89,17 +100,17 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
                         alt={img.alternateName}
                       />
                     </div>
-                  )
-                }
-
+                  )}
               </Slider.Dot>
             </li>
           ))}
           <Slider.NextButton class="w-6 disabled:opacity-40">
-            <Icon id="chevron-right" class="text-primary absolute right-0 bottom-4 lg:static"  />
+            <Icon
+              id="chevron-right"
+              class="text-primary absolute right-0 bottom-4 lg:static"
+            />
           </Slider.NextButton>
         </div>
-
       </div>
       <Slider.JS rootId={container} />
     </Modal>

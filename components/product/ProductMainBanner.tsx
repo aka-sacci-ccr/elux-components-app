@@ -1,15 +1,15 @@
 import Image from "apps/website/components/Image.tsx";
-import { ImageObject, Product } from "apps/commerce/types.ts";
+import { Product } from "apps/commerce/types.ts";
 
 interface Props {
-  product: Product
+  product: Product;
 }
 
-export default function ProductMainBanner({  product }: Props) {
+export default function ProductMainBanner({ product }: Props) {
   if (!product) return <></>;
-  const { name, image, sku, brand } = product
+  const { name, image, sku, brand } = product;
 
-  console.log(product)
+  console.log(product);
 
   const mainBannerMobile = image?.find((image) =>
     image.additionalType === "MAIN_BANNER_MOBILE"
