@@ -15,6 +15,7 @@ import Breadcrumb, {
   Props as BreadcrumbProps,
 } from "../../Content/Breadcrumb.tsx";
 import { Colors } from "../../../utils/types.ts";
+import { AppContext } from "../../../mod.ts";
 
 interface ProductPageProps {
   /** @description product loader of the page */
@@ -50,8 +51,21 @@ interface PDPBreadcrumbProps extends
   hideProductName?: boolean;
 }
 
+export const loader = (
+  props: ProductPageProps,
+  _req: Request,
+  ctx: AppContext,
+) => {
+  return {
+    language: ctx.language,
+    ...props,
+  };
+};
+
 export default function ProductPage(
-  { page, bannersProps, spacing, breadcrumbProps }: ProductPageProps,
+  { page, bannersProps, spacing, breadcrumbProps, language }: ReturnType<
+    typeof loader
+  >,
 ) {
   if (!page) return <></>;
   const { product, breadcrumbList } = page;
@@ -88,6 +102,7 @@ export default function ProductPage(
       <ProductDetails
         additionalProperty={additionalProperty}
         description={description}
+        language={language}
       />
     </Container>
   );

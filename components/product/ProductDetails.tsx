@@ -5,6 +5,7 @@ import Icon from "../ui/Icon.tsx";
 interface Props {
   additionalProperty: PropertyValue[] | undefined;
   description: string | undefined;
+  language: "EN" | "ES";
 }
 
 export default function ProductDetails(

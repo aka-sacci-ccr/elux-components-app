@@ -54,7 +54,10 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
     <>
       {device === "mobile"
         ? (
-          <div className="w-full max-w-[65rem] mx-auto flex flex-col lg:hidden my-6">
+          <div
+            className="w-full max-w-[65rem] mx-auto flex flex-col lg:hidden my-6 gap-6"
+            id={id}
+          >
             <Slider class="carousel carousel-center sm:carousel-end gap-5 sm:gap-10 w-full">
               {itemsGroups.map((itemsGroup, index) => (
                 <Slider.Item
@@ -72,7 +75,7 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
                     {itemsGroup.map((item, idx) => (
                       <div
                         key={item["@id"] || idx}
-                        className="w-full max-w-[520px] pt-4"
+                        className="w-full flex flex-col gap-6"
                       >
                         {item.image?.[0]?.url && (
                           <div className="w-full flex justify-center overflow-hidden">
@@ -85,11 +88,11 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
                             />
                           </div>
                         )}
-                        <div className="flex flex-col flex-1 gap-2 text-secondary text-sm pt-6 px-1">
+                        <div className="flex flex-col flex-1 gap-2 text-secondary text-sm px-1">
                           {item.name && <span>{item.name}</span>}
                           {item.value && (
                             <article
-                              className="font-light max-w-[500px]"
+                              className="font-light"
                               dangerouslySetInnerHTML={{ __html: item.value }}
                             />
                           )}
@@ -104,11 +107,10 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
             {/* Dots */}
             <ul
               className={clx(
-                "carousel carousel-center justify-center gap-3",
+                "carousel carousel-center justify-center gap-3 px-5",
                 "rounded-full",
                 "border-[1px] border-slate-200",
                 "flex lg:hidden",
-                "gap-2",
                 "max-w-40 h-6 mx-auto",
                 "overflow-x-auto",
                 "sm:overflow-y-auto",
