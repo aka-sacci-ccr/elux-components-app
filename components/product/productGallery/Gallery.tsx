@@ -128,7 +128,7 @@ export default function GallerySlider(props: Props) {
             ? (
               <ul
                 class={clx(
-                  "carousel carousel-center justify-center gap-3 px-3",
+                  "carousel carousel-center justify-center gap-3 px-5",
                   "rounded-full",
                   "border-[1px] border-slate-200",
                   "flex lg:hidden",
@@ -207,6 +207,7 @@ export default function GallerySlider(props: Props) {
       <ProductImageZoom
         id={zoomId}
         images={productMidia}
+        fatherSliderId={id}
         width={700}
         height={Math.trunc(700 * HEIGHT / WIDTH)}
       />

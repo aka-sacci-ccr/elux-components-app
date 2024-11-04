@@ -4,26 +4,45 @@ import Icon from "../../ui/Icon.tsx";
 import Modal from "../../../components/ui/Modal.tsx";
 import Slider from "../../../components/ui/Slider.tsx";
 import { useId } from "../../../sdk/useId.ts";
+import { useScript } from "@deco/deco/hooks";
 
 export interface Props {
   id?: string;
   width: number;
   height: number;
   images: Array<ImageObject | VideoObject>;
+  fatherSliderId: string;
 }
 
-function ProductImageZoom({ images, width, height, id = useId() }: Props) {
-  const container = `${id}-container`;
+const goToItem = (fatherSliderId: string, modalId: string): void => {
+  const modal = document.getElementById(modalId) as HTMLInputElement;
+  const container = document.getElementById(`${modalId}-container`);
 
+  modal?.addEventListener("change", function () {
+    if (!this.checked) return;
+
+    const fatherDots = document.getElementById(fatherSliderId)
+      ?.querySelectorAll<HTMLElement>("[data-dot]");
+    const childDots = container?.querySelectorAll<HTMLElement>("[data-dot]");
+
+    const disabledIndex = Array.from(fatherDots || []).findIndex((dot) =>
+      dot.hasAttribute("disabled")
+    );
+    childDots?.[disabledIndex]?.click();
+  });
+};
+
+function ProductImageZoom(
+  { images, width, height, id = useId(), fatherSliderId }: Props,
+) {
+  const container = `${id}-container`;
   return (
     <Modal id={id}>
       <div
         id={container}
         class="w-screen h-[100vh] lg:w-11/12 max-w-7xl flex flex-col"
       >
-        <span class="absolute top-5 left-5 lg:left-1/2 lg:top-6">
-          1/{images.length}
-        </span>
+        <Slider.Counter class="absolute top-5 left-5 lg:left-1/2 lg:top-6" />
         <Slider class="carousel col-span-full col-start-1  h-3/5 w-full">
           {images.map((image, index) => (
             <Slider.Item
@@ -59,7 +78,7 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
           ))}
         </Slider>
         <div class="flex px-2 max-w-[80%] overflow-x-auto px-3 lg:px-0 lg:max-w-[687px] mx-auto gap-4 lg:gap-6 relative">
-          <Slider.PrevButton class="w-6 disabled:opacity-40">
+          <Slider.PrevButton class="w-6" disabled={false}>
             <Icon
               id="chevron-right"
               class="rotate-180 text-primary absolute left-0 bottom-4 lg:static"
@@ -97,7 +116,7 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
               </Slider.Dot>
             </li>
           ))}
-          <Slider.NextButton class="w-6 disabled:opacity-40">
+          <Slider.NextButton class="w-6" disabled={false}>
             <Icon
               id="chevron-right"
               class="text-primary absolute right-0 bottom-4 lg:static"
@@ -105,7 +124,13 @@ function ProductImageZoom({ images, width, height, id = useId() }: Props) {
           </Slider.NextButton>
         </div>
       </div>
-      <Slider.JS rootId={container} />
+      <Slider.JS rootId={container} infinite={true} />
+      <script
+        type="module"
+        dangerouslySetInnerHTML={{
+          __html: useScript(goToItem, fatherSliderId, id),
+        }}
+      />
     </Modal>
   );
 }
