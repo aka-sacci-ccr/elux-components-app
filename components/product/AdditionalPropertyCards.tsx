@@ -135,7 +135,7 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
               <div className="flex flex-col flex-1 gap-2 text-secondary text-sm pt-6">
                 <span>{card.name}</span>
                 <article
-                  className="font-light max-w-[500px]"
+                  className="font-light max-w-[500px] pb-4"
                   dangerouslySetInnerHTML={{ __html: card.value! }}
                 />
               </div>
