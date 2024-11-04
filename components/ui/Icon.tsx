@@ -51,7 +51,12 @@ export type AvailableIcons =
   | "tool-frigidaire"
   | "book-frigidaire"
   | "heart-frigidaire"
-  | "dots-frigidaire";
+  | "dots-frigidaire"
+  | "height-property"
+  | "width-property"
+  | "depth-property"
+  | "weight-property";
+
 
 interface Props extends JSX.SVGAttributes<SVGSVGElement> {
   /**
