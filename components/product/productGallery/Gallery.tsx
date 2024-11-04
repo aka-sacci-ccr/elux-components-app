@@ -57,22 +57,20 @@ export default function GallerySlider(props: Props) {
 
     const videos = product.video.length > 0 ? product.video : [];
 
-    return [...videos, ...filteredImages];
+    return [...filteredImages, ...videos];
   }
   const productMidia = imagesAndVideosData(images, {
     video: product.video ?? [],
   });
 
-  console.log("productMidia ", productMidia);
-
   return (
     <>
       <div
         id={id}
-        class="flex flex-col"
+        class="flex flex-col sm:gap-14"
       >
         {/* Image Slider */}
-        <div class="col-start-1 col-span-1 sm:col-start-2">
+        <div class={clx("grid col-start-1 col-span-1 sm:col-start-2")}>
           <div class="relative h-min flex-grow">
             <Slider class="carousel carousel-center gap-6 w-full">
               {productMidia.map((img, index) => (
@@ -82,7 +80,10 @@ export default function GallerySlider(props: Props) {
                 >
                   {img["@type"] === "ImageObject"
                     ? (
-                      <>
+                      <label
+                        class="flex w-full h-full cursor-zoom-in"
+                        for={zoomId}
+                      >
                         <Image
                           class="w-full"
                           sizes="(max-width: 640px) 100vw, 40vw"
@@ -95,15 +96,7 @@ export default function GallerySlider(props: Props) {
                           preload={index === 0}
                           loading={index === 0 ? "eager" : "lazy"}
                         />
-
-                        <div class="absolute top-2 right-2  w-full h-2/4 lg:h-4/5 cursor-pointer z-10">
-                          <label
-                            class="flex w-full h-full cursor-pointer"
-                            for={zoomId}
-                          >
-                          </label>
-                        </div>
-                      </>
+                      </label>
                     )
                     : (
                       <iframe
@@ -120,33 +113,25 @@ export default function GallerySlider(props: Props) {
                 </Slider.Item>
               ))}
             </Slider>
-
-            <Slider.PrevButton
-              class="no-animation absolute left-2 disabled:opacity-40 hidden lg:flex items-center h-16 top-25"
-              disabled
-            >
-              <Icon id="chevron-right" class="rotate-180 text-primary" />
-            </Slider.PrevButton>
-
-            <Slider.NextButton
-              class="no-animation absolute right-2 disabled:opacity-40 hidden lg:flex items-center h-16 top-25"
-              disabled={productMidia.length < 2}
-            >
-              <Icon id="chevron-right" class="text-primary" />
-            </Slider.NextButton>
           </div>
         </div>
 
-        <div class="lg:max-w-25 lg:ml-14">
+        {/**  */}
+        <div class="flex flex-row justify-between">
+          <Slider.PrevButton
+            class="no-animation hidden lg:flex items-center"
+            disabled={false}
+          >
+            <Icon id="chevron-right" class="rotate-180 text-primary" />
+          </Slider.PrevButton>
           {device === "mobile"
             ? (
               <ul
                 class={clx(
-                  "carousel carousel-center justify-center gap-3",
+                  "carousel carousel-center justify-center gap-3 px-3",
                   "rounded-full",
                   "border-[1px] border-slate-200",
                   "flex lg:hidden",
-                  "gap-2",
                   "max-w-40 h-6 mx-auto",
                   "overflow-x-auto",
                   "sm:overflow-y-auto",
@@ -195,7 +180,7 @@ export default function GallerySlider(props: Props) {
                           />
                         )
                         : (
-                          <div class="w-14 h-14 relative overflow-hidden">
+                          <div class="w-14 relative overflow-hidden">
                             <Icon
                               id="chevron-right"
                               class="absolute text-primary z-20 left-1/2 text-white"
@@ -217,8 +202,14 @@ export default function GallerySlider(props: Props) {
                 ))}
               </ul>
             )}
+          <Slider.NextButton
+            class="no-animation hidden lg:flex items-center h-16"
+            disabled={false}
+          >
+            <Icon id="chevron-right" class="text-primary" />
+          </Slider.NextButton>
         </div>
-        <Slider.JS rootId={id} />
+        <Slider.JS rootId={id} infinite={true} />
       </div>
       <ProductImageZoom
         id={zoomId}
