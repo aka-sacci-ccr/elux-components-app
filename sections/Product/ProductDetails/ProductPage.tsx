@@ -1,6 +1,13 @@
-import { ListItem, ProductDetailsPage } from "apps/commerce/types.ts";
+import {
+  BreadcrumbList,
+  ListItem,
+  Product,
+  ProductDetailsPage,
+} from "apps/commerce/types.ts";
 import ProductMainBanner from "../../../components/product/ProductMainBanner.tsx";
-import ProductInfoBanners from "../../../components/product/ProductInfoBanners.tsx";
+import ProductInfoBanners, {
+  BannerColors,
+} from "../../../components/product/ProductInfoBanners.tsx";
 import ProductMain from "../../../components/product/ProductMain.tsx";
 import ProductDetails from "../../../components/product/ProductDetails.tsx";
 import Container, { SpacingConfig } from "../../container/Container.tsx";
@@ -13,37 +20,10 @@ interface ProductPageProps {
   /** @description product loader of the page */
   page: ProductDetailsPage | null;
 
-  breadcrumbProps:
-    & Omit<
-      BreadcrumbProps,
-      "items" | "fontColor" | "spacing" | "useGreaterContainer"
-    >
-    & {
-      iconColor: Colors;
-      breadcrumbColor: Colors;
-      maxItems?: number;
-      hideProductName?: boolean;
-    };
-  infoBanners: {
-    backgroundColor: {
-      /** @description Primary background component */
-      primary: string;
-      /** @description Secondary background component */
-      secondary: string;
-    };
-    titleColor: {
-      /** @description Primary title color */
-      primary: string;
-      /** @description Secondary title color */
-      secondary: string;
-    };
-    contentColor: {
-      /** @description Primary text color */
-      primary: string;
-      /** @description Secondary text color */
-      secondary: string;
-    };
-  };
+  /** @description Props of PDP breadcrumb */
+  breadcrumbProps: PDPBreadcrumbProps;
+  /** @description Define alternating banners colors */
+  bannersProps: BannerColors[];
   productMain: {
     buyButton: {
       /** @description Button background color */
@@ -54,7 +34,66 @@ interface ProductPageProps {
   };
   spacing?: SpacingConfig;
 }
-const sortAndFilterItems = (items: ListItem[]): ListItem[] =>
+
+interface PDPBreadcrumbProps extends
+  Omit<
+    BreadcrumbProps,
+    "items" | "fontColor" | "spacing" | "disableContainer"
+  > {
+  /** @description Breadcrumb icon color */
+  iconColor: Colors;
+  /** @description Breadcrumb font color */
+  breadcrumbColor: Colors;
+  /** @description Max qty of items in breadcrumb */
+  maxItems?: number;
+  /** @description Hide product name in breadcrumb */
+  hideProductName?: boolean;
+}
+
+export default function ProductPage(
+  { page, bannersProps, spacing, breadcrumbProps }: ProductPageProps,
+) {
+  if (!page) return <></>;
+  const { product, breadcrumbList } = page;
+  const { image, additionalProperty, description } = product;
+
+  const breadcrumbItems = getBreadcrumbItems(
+    breadcrumbList,
+    breadcrumbProps,
+    product,
+  );
+
+  const infoBannerImages = image?.filter((image) =>
+    image.additionalType === "INFO_BANNER"
+  );
+
+  return (
+    <Container class="flex flex-col" spacing={spacing}>
+      <div class="my-6 sm:mt-6 sm:mb-8 max-w-[1280px] sm:w-[1280px] sm:pl-10 mx-auto">
+        <Breadcrumb
+          {...breadcrumbProps}
+          items={breadcrumbItems}
+          fontColor={breadcrumbProps.iconColor}
+          disableContainer={true}
+        />
+      </div>
+      <ProductMainBanner product={product} />
+      <ProductInfoBanners
+        banners={infoBannerImages}
+        bannerColors={bannersProps}
+      />
+      <ProductMain
+        page={page}
+      />
+      <ProductDetails
+        additionalProperty={additionalProperty}
+        description={description}
+      />
+    </Container>
+  );
+}
+
+const sortAndFilterBreadcrumbItems = (items: ListItem[]): ListItem[] =>
   Object.values(
     [...items].sort((a, b) =>
       a.position === b.position
@@ -66,14 +105,12 @@ const sortAndFilterItems = (items: ListItem[]): ListItem[] =>
     }), {} as Record<number, ListItem>),
   );
 
-export default function ProductPage(
-  { page, infoBanners, spacing, breadcrumbProps }: ProductPageProps,
-) {
-  if (!page) return <></>;
-  const { product, breadcrumbList } = page;
-  const { image, additionalProperty, description } = product;
-
-  const orderedBreadcrumbList = sortAndFilterItems(
+const getBreadcrumbItems = (
+  breadcrumbList: BreadcrumbList,
+  breadcrumbProps: PDPBreadcrumbProps,
+  product: Product,
+) => {
+  const orderedBreadcrumbList = sortAndFilterBreadcrumbItems(
     breadcrumbList.itemListElement,
   ).slice(
     0,
@@ -94,30 +131,5 @@ export default function ProductPage(
     });
   }
 
-  return (
-    <Container class="flex flex-col" spacing={spacing}>
-      <div class="my-6 sm:mt-6 sm:mb-8 max-w-[1280px] sm:w-[1280px] sm:pl-10 mx-auto">
-        <Breadcrumb
-          {...breadcrumbProps}
-          items={breadcrumbItems}
-          fontColor={breadcrumbProps.iconColor}
-          disableContainer={true}
-        />
-      </div>
-      <ProductMainBanner product={product}/>
-      <ProductInfoBanners
-        images={image}
-        titleColor={infoBanners.titleColor}
-        contentColor={infoBanners.contentColor}
-        backgroundColor={infoBanners.backgroundColor}
-      />
-      <ProductMain
-        page={page}
-      />
-      <ProductDetails
-        additionalProperty={additionalProperty}
-        description={description}
-      />
-    </Container>
-  );
-}
+  return breadcrumbItems;
+};
