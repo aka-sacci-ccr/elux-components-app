@@ -31,6 +31,8 @@ interface ProductPageProps {
       background: string;
       /** @description Button text color */
       textColor: string;
+      /** @description Prop to disable the CTA */
+      isDisable: boolean;
     };
   };
   spacing?: SpacingConfig;
@@ -63,7 +65,7 @@ export const loader = (
 };
 
 export default function ProductPage(
-  { page, bannersProps, spacing, breadcrumbProps, language }: ReturnType<
+  { page, bannersProps, spacing, breadcrumbProps, language, productMain }: ReturnType<
     typeof loader
   >,
 ) {
@@ -98,6 +100,7 @@ export default function ProductPage(
       />
       <ProductMain
         page={page}
+        productMain={productMain}
       />
       <ProductDetails
         additionalProperty={additionalProperty}
