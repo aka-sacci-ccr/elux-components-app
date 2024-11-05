@@ -43,7 +43,7 @@ export default function ProductDetails(
     if (iconMap[propertyID]) return iconMap[propertyID];
 
     const cleanedPropertyID = propertyID.replace(/^BOX_/, "");
-    
+
     return iconMap[cleanedPropertyID] || "depth-property";
   };
 
@@ -107,7 +107,7 @@ export default function ProductDetails(
         <div role="tablist" class="tabs border-primary tabs-bordered">
         <input type="text" disabled value="Dimensiones del producto:" class="tab !text-secondary !bg-transparent text-sm px-0 lg:w-48" />
           <input type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:border-primary" aria-label="con caja" />
-          <div role="tabpanel" class="tab-content bg-base-100 rounded-box p-6">
+          <div role="tabpanel" class="tab-content bg-base-100 rounded-box py-5">
             <DimensionsCards additionalProperty={dimensionsPropertiesWithBox}/>
           </div>
 
