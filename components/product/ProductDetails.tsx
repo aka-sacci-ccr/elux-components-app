@@ -28,15 +28,17 @@ export default function ProductDetails(
   const tableProperties = additionalProperty?.filter((property) =>
     property.propertyID === "OTHER"
   );
-  const DimensionsCards = () => {
+
+
+  const DimensionsCards: React.FC<Pick<Props, 'additionalProperty'>> = ({ additionalProperty: dimensions }) => {
     return (
       <ul
-        className={`${dimensionsProperties && dimensionsProperties.length <= 3
+        className={`${dimensions && dimensions.length <= 3
           ? "flex items-center"
           : "grid grid-cols-2 grid-rows-2"
           } w-full my-4 text-secondary lg:flex lg:items-center`}
       >
-        {dimensionsProperties?.map((dimension) => {
+        {dimensions?.map((dimension) => {
           const propertyIcon = () => {
             switch (dimension.propertyID) {
               case "WIDTH":
@@ -49,7 +51,7 @@ export default function ProductDetails(
                 return "depth-property";
             }
           };
-
+  
           return (
             <li
               className="flex flex-col gap-1 items-center flex-1 h-28"
@@ -62,45 +64,8 @@ export default function ProductDetails(
           );
         })}
       </ul>
-    )
-  }
-
-  const DimensionsCardsWithBox = () => {
-    return (
-      <ul
-        className={`${dimensionsPropertiesWithBox && dimensionsPropertiesWithBox.length <= 3
-          ? "flex items-center"
-          : "grid grid-cols-2 grid-rows-2"
-          } w-full my-4 text-secondary lg:flex lg:items-center`}
-      >
-        {dimensionsProperties?.map((dimension) => {
-          const propertyIcon = () => {
-            switch (dimension.propertyID) {
-              case "WIDTH":
-                return "width-property";
-              case "HEIGHT":
-                return "height-property";
-              case "WEIGHT":
-                return "weight-property";
-              default:
-                return "depth-property";
-            }
-          };
-
-          return (
-            <li
-              className="flex flex-col gap-1 items-center flex-1 h-28"
-              key={dimension["@id"]}
-            >
-              <Icon id={propertyIcon()} className="text-primary" size={24} />
-              <span className="mt-1">{dimension.value}</span>
-              <span className="font-light text-sm">{dimension.name}</span>
-            </li>
-          );
-        })}
-      </ul>
-    )
-  }
+    );
+  };
 
   return (
     <div className="w-full max-w-[65rem] mx-auto px-5 lg:px-0">
@@ -138,13 +103,13 @@ export default function ProductDetails(
         <input type="text" disabled value="Dimensiones del producto:" class="tab !text-secondary !bg-transparent text-sm px-0 lg:w-48" />
           <input type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:border-primary" aria-label="con caja" />
           <div role="tabpanel" class="tab-content bg-base-100 rounded-box p-6">
-            <DimensionsCardsWithBox />
+            <DimensionsCards additionalProperty={dimensionsPropertiesWithBox}/>
           </div>
 
           <input
             type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:border-primary" aria-label="sin caja" checked={true} />
           <div role="tabpanel" class="tab-content bg-base-100  rounded-box p-6">
-            <DimensionsCards />
+            <DimensionsCards additionalProperty={dimensionsProperties} />
           </div>
         </div>
       </div>
