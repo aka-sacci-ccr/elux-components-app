@@ -74,7 +74,7 @@ export default function ProductDetails(
         </div>
         <ul
           className={`${
-            dimensionsProperties && dimensionsProperties.length < 3
+            dimensionsProperties && dimensionsProperties.length <= 3
               ? "flex items-center"
               : "grid grid-cols-2 grid-rows-2"
           } w-full my-4 text-secondary lg:flex lg:items-center`}
