@@ -136,7 +136,7 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
             {PropertyCards.map((card) => (
               <div
                 key={card["@id"]}
-                className="w-full max-w-[520px] lg:max-h-[231px] overflow-hidden flex flex-col lg:flex-row-reverse lg:border-t border-base-200"
+                className="w-full max-w-[520px] lg:max-h-[231px] overflow-hidden flex flex-col lg:flex-row-reverse lg:border-b border-base-200"
               >
                 {card.image?.[0]?.url && (
                   <div className="w-full lg:max-w-[240px] h-[240px] flex justify-center overflow-hidden">

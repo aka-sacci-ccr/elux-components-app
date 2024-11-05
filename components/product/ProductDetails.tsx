@@ -52,7 +52,7 @@ export default function ProductDetails(
       <h2 className="text-secondary text-base text-center py-6">
         Descripción del Producto
       </h2>
-      <article className="py-3 text-sm font-light text-secondary leading-6">
+      <article className="py-4 text-sm font-light text-secondary leading-6 lg:border-b border-base-200">
         {description}
       </article>
       <div>
