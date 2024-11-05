@@ -15,6 +15,12 @@ export default function ProductDetails(
     property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" ||
     property.propertyID === "DEPTH" || property.propertyID === "WEIGHT"
   );
+  const dimensionsPropertiesWithBox = additionalProperty?.filter((property) =>
+    property.propertyID === "BOX_HEIGHT" || property.propertyID === "BOX_WIDTH" ||
+    property.propertyID === "BOX_DEPTH" || property.propertyID === "BOX_WEIGHT"
+  );
+
+  console.log("with box ", dimensionsPropertiesWithBox)
   const PropertyCards = additionalProperty?.filter((property) =>
     property.propertyID === "DESCRIPTION"
   );
@@ -22,7 +28,7 @@ export default function ProductDetails(
   const tableProperties = additionalProperty?.filter((property) =>
     property.propertyID === "OTHER"
   );
-
+console.log("aditional ", additionalProperty)
   return (
     <div className="w-full max-w-[65rem] mx-auto px-5 lg:px-0">
       <div class="hidden lg:flex w-full mt-4 mb-10">
