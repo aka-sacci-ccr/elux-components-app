@@ -20,7 +20,7 @@ export default function ProductMain({ page, productMain }: Props) {
   if (!page) return <></>;
   const { product } = page;
   const { sku, name, url } = product;
-  const { buyButton: { isDisable } } = productMain
+  const { buyButton: { isDisable } } = productMain;
   return (
     <div className="container flex flex-col lg:flex-row gap-4 my-6 px-5 lg:p-0 lg:mb-28">
       {/* Galeria do produto */}
@@ -36,16 +36,14 @@ export default function ProductMain({ page, productMain }: Props) {
         <h2 className="text-xl text-secondary">
           {name}
         </h2>
-        {
-          !isDisable && (
-            <a
-              className="flex justify-center items-center w-full lg:max-w-80 h-[42px] rounded-3xl bg-primary text-white text-sm font-semibold mt-4"
-              href={url}
-            >
-              Where to buy
-            </a>
-          )
-        }
+        {!isDisable && (
+          <a
+            className="flex justify-center items-center w-full lg:max-w-80 h-[42px] rounded-3xl bg-primary text-white text-sm font-semibold mt-4"
+            href={url}
+          >
+            Where to buy
+          </a>
+        )}
       </div>
     </div>
   );

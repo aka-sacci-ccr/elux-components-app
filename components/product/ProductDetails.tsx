@@ -17,11 +17,12 @@ export default function ProductDetails(
     property.propertyID === "DEPTH" || property.propertyID === "WEIGHT"
   );
   const dimensionsPropertiesWithBox = additionalProperty?.filter((property) =>
-    property.propertyID === "BOX_HEIGHT" || property.propertyID === "BOX_WIDTH" ||
+    property.propertyID === "BOX_HEIGHT" ||
+    property.propertyID === "BOX_WIDTH" ||
     property.propertyID === "BOX_DEPTH" || property.propertyID === "BOX_WEIGHT"
   );
 
-  console.log("with box ", dimensionsPropertiesWithBox)
+  console.log("with box ", dimensionsPropertiesWithBox);
   const PropertyCards = additionalProperty?.filter((property) =>
     property.propertyID === "DESCRIPTION"
   );
@@ -37,7 +38,7 @@ export default function ProductDetails(
     BOX_WIDTH: "width-property",
     BOX_HEIGHT: "height-property",
     BOX_WEIGHT: "weight-property",
-    BOX_DEPTH: "depth-property"
+    BOX_DEPTH: "depth-property",
   };
 
   const getIconId = (propertyID: string) => {
@@ -48,13 +49,16 @@ export default function ProductDetails(
     return iconMap[cleanedPropertyID] || "depth-property";
   };
 
-  const DimensionsCards: React.FC<Pick<Props, 'additionalProperty'>> = ({ additionalProperty: dimensions }) => {
+  const DimensionsCards: React.FC<Pick<Props, "additionalProperty">> = (
+    { additionalProperty: dimensions },
+  ) => {
     return (
       <ul
-        className={`${dimensions && dimensions.length <= 3
-          ? "flex items-center"
-          : "grid grid-cols-2 grid-rows-2"
-          } w-full my-4 text-secondary lg:flex lg:items-center`}
+        className={`${
+          dimensions && dimensions.length <= 3
+            ? "flex items-center"
+            : "grid grid-cols-2 grid-rows-2"
+        } w-full my-4 text-secondary lg:flex lg:items-center`}
       >
         {dimensions?.map((dimension) => {
           const iconId = getIconId(dimension.propertyID ?? "");
@@ -90,7 +94,7 @@ export default function ProductDetails(
         </a>
       </div>
       <h2 className="text-secondary text-base text-center py-6">
-      {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
+        {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
       </h2>
       <article className="py-4 text-sm font-light text-secondary leading-6 lg:border-b border-base-200">
         {description}
@@ -101,19 +105,38 @@ export default function ProductDetails(
         />
       </div>
       <h2 className="text-secondary text-base text-center py-6" id="properties">
-      {LANGUAGE_DIFFS[language].productPage.recordTitle}
-      </h2> 
-      <span class="text-sm text-secondary flex lg:hidden py-2">{LANGUAGE_DIFFS[language].productPage.dimensionsProduct}</span>
+        {LANGUAGE_DIFFS[language].productPage.recordTitle}
+      </h2>
+      <span class="text-sm text-secondary flex lg:hidden py-2">
+        {LANGUAGE_DIFFS[language].productPage.dimensionsProduct}
+      </span>
       <div className="flex flex-col px-2 min-h-60">
         <div role="tablist" class="tabs border-primary tabs-bordered">
-        <input type="text" disabled value={LANGUAGE_DIFFS[language].productPage.dimensionsProduct} class="tab !text-secondary !bg-transparent !border-0 text-sm px-0 lg:w-48 hidden lg:flex" />
-          <input type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:!border-primary" aria-label={LANGUAGE_DIFFS[language].productPage.dimensionsBox} />
+          <input
+            type="text"
+            disabled
+            value={LANGUAGE_DIFFS[language].productPage.dimensionsProduct}
+            class="tab !text-secondary !bg-transparent !border-0 text-sm px-0 lg:w-48 hidden lg:flex"
+          />
+          <input
+            type="radio"
+            name="my_tabs_2"
+            role="tab"
+            class="tab text-xs text-primary font-light checked:!border-primary"
+            aria-label={LANGUAGE_DIFFS[language].productPage.dimensionsBox}
+          />
           <div role="tabpanel" class="tab-content bg-base-100 rounded-box py-5">
-            <DimensionsCards additionalProperty={dimensionsPropertiesWithBox}/>
+            <DimensionsCards additionalProperty={dimensionsPropertiesWithBox} />
           </div>
 
           <input
-            type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:!border-primary" aria-label={LANGUAGE_DIFFS[language].productPage.dimensions} checked={true} />
+            type="radio"
+            name="my_tabs_2"
+            role="tab"
+            class="tab text-xs text-primary font-light checked:!border-primary"
+            aria-label={LANGUAGE_DIFFS[language].productPage.dimensions}
+            checked={true}
+          />
           <div role="tabpanel" class="tab-content bg-base-100  rounded-box p-6">
             <DimensionsCards additionalProperty={dimensionsProperties} />
           </div>

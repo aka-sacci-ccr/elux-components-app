@@ -65,9 +65,10 @@ export const loader = (
 };
 
 export default function ProductPage(
-  { page, bannersProps, spacing, breadcrumbProps, language, productMain }: ReturnType<
-    typeof loader
-  >,
+  { page, bannersProps, spacing, breadcrumbProps, language, productMain }:
+    ReturnType<
+      typeof loader
+    >,
 ) {
   if (!page) return <></>;
   const { product, breadcrumbList } = page;

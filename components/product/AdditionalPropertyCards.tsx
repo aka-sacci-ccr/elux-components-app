@@ -135,40 +135,44 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
         )
         : (
           <div className="w-full max-w-[65rem] mx-auto hidden lg:grid lg:grid-cols-[520px_520px] my-6">
-            {PropertyCards.map((card, index) =>{ 
-              const isLastAndOdd = index === PropertyCards.length - 1 && (index + 1) % 2 !== 0;
+            {PropertyCards.map((card, index) => {
+              const isLastAndOdd = index === PropertyCards.length - 1 &&
+                (index + 1) % 2 !== 0;
 
-              return(
-              <>
-              <div
-                key={card["@id"]}
-                className={`w-full max-w-[520px] lg:max-h-[231px] overflow-hidden flex flex-col lg:flex-row-reverse ${!isLastAndOdd && 'lg:border-b'} border-base-200`}
-              >
-                {card.image?.[0]?.url && (
-                  <div className="w-full lg:max-w-[240px] h-[240px] flex justify-center overflow-hidden">
-                    <Image
-                      alt={card.name}
-                      src={card.image[0].url}
-                      width={375}
-                      height={300}
-                      className="object-contain w-full"
-                    />
+              return (
+                <>
+                  <div
+                    key={card["@id"]}
+                    className={`w-full max-w-[520px] lg:max-h-[231px] overflow-hidden flex flex-col lg:flex-row-reverse ${
+                      !isLastAndOdd && "lg:border-b"
+                    } border-base-200`}
+                  >
+                    {card.image?.[0]?.url && (
+                      <div className="w-full lg:max-w-[240px] h-[240px] flex justify-center overflow-hidden">
+                        <Image
+                          alt={card.name}
+                          src={card.image[0].url}
+                          width={375}
+                          height={300}
+                          className="object-contain w-full"
+                        />
+                      </div>
+                    )}
+                    <div className="flex flex-col flex-1 gap-2 text-secondary text-sm pt-6">
+                      <span>{card.name}</span>
+                      <article
+                        className="font-light max-w-[500px] pb-4"
+                        dangerouslySetInnerHTML={{ __html: card.value! }}
+                      />
+                    </div>
                   </div>
-                )}
-                <div className="flex flex-col flex-1 gap-2 text-secondary text-sm pt-6">
-                  <span>{card.name}</span>
-                  <article
-                    className="font-light max-w-[500px] pb-4"
-                    dangerouslySetInnerHTML={{ __html: card.value! }}
-                  />
-                </div>
-   
-              </div>
-              { isLastAndOdd && (
-                <div class="h-[1px] bg-base-200 hidden lg:grid col-span-2"></div>
-              )}
-              </>
-            )})}
+                  {isLastAndOdd && (
+                    <div class="h-[1px] bg-base-200 hidden lg:grid col-span-2">
+                    </div>
+                  )}
+                </>
+              );
+            })}
           </div>
         )}
     </>
