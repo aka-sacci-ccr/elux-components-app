@@ -18,7 +18,7 @@ export default function ProductMain({ page }: Props) {
           page={page}
         />
       </div>
-      <div className="flex flex-col gap-2  w-full lg:w-2/4 mt-6 lg:mt-12">
+      <div className="flex flex-col gap-2  w-full lg:w-2/4 mt-6 lg:mt-12 lg:ml-6">
         <span className="text-sm text-info uppercase font-light">
           {sku}
         </span>
