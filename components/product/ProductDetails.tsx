@@ -19,20 +19,9 @@ export default function ProductDetails(
     property.propertyID === "DESCRIPTION"
   );
 
-  const _tableProperties = additionalProperty?.filter((property) =>
+  const tableProperties = additionalProperty?.filter((property) =>
     property.propertyID === "OTHER"
   );
-
-  const test = [
-    { firstText: "Alto empaquetado (cm)", secondText: "193,3" },
-    { firstText: "Alto empaquetado (cm)", secondText: "193,3" },
-    { firstText: "Alto empaquetado (cm)", secondText: "193,3" },
-    { firstText: "Alto empaquetado (cm)", secondText: "193,3" },
-    { firstText: "Alto empaquetado (cm)", secondText: "193,3" },
-    { firstText: "Alto empaquetado (cm)", secondText: "193,3" },
-    { firstText: "Alto empaquetado (cm)", secondText: "193,3" },
-    { firstText: "Alto empaquetado (cm)", secondText: "193,3" },
-  ];
 
   return (
     <div className="w-full max-w-[65rem] mx-auto px-5 lg:px-0">
@@ -117,17 +106,17 @@ export default function ProductDetails(
           })}
         </ul>
       </div>
-      {test && (
+      {tableProperties && (
         <div className="w-full">
           <ul>
-            {test.map((item) => {
+            {tableProperties.map((item) => {
               return (
                 <li className="even:bg-base-300 flex justify-between items-center p-2 text-sm">
                   <span className="text-secondary">
-                    {item.firstText}
+                    {item.name}
                   </span>
                   <span className="text-base-content font-light">
-                    {item.secondText}
+                    {item.value}
                   </span>
                 </li>
               );
