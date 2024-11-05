@@ -103,7 +103,7 @@ export default function ProductDetails(
         Ficha Técnica
       </h2> 
       <span class="text-sm text-secondary flex lg:hidden py-2">Dimensiones del producto:</span>
-      <div className="flex flex-col px-2">
+      <div className="flex flex-col px-2 min-h-60">
         <div role="tablist" class="tabs border-primary tabs-bordered">
         <input type="text" disabled value="Dimensiones del producto:" class="tab !text-secondary !bg-transparent !border-0 text-sm px-0 lg:w-48 hidden lg:flex" />
           <input type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:!border-primary" aria-label="con caja" />
