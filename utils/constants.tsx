@@ -526,6 +526,14 @@ export const LANGUAGE_DIFFS = {
         placeholder: "Insert your contact phone number",
       },
     },
+    productPage:{
+      descriptionTitle:"Description",
+      recordTitle:"Technical sheet",
+      dimensionsProduct:"product dimensions",
+      dimensions:"without box",
+      dimensionsBox:"with box",
+
+    }
   },
   ES: {
     contactForm: {
@@ -567,6 +575,14 @@ export const LANGUAGE_DIFFS = {
         placeholder: "Inserta tu número de teléfono de contacto",
       },
     },
+    productPage:{
+      descriptionTitle:"Descripción",
+      recordTitle:"Ficha Técnica",
+      dimensionsProduct:"Dimensiones del producto:",
+      dimensions:"con caja",
+      dimensionsBox:"sin caja",
+
+    }
   },
 };
 
