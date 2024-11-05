@@ -36,6 +36,11 @@ function PrevButton(props: JSX.IntrinsicElements["button"]) {
     <button disabled data-slide="prev" aria-label="Previous item" {...props} />
   );
 }
+
+function SliderCounter(props: JSX.IntrinsicElements["span"]) {
+  return <span data-slider-counter {...props} />;
+}
+
 export interface Props {
   rootId: string;
   scroll?: "smooth" | "auto";
@@ -73,6 +78,7 @@ const onLoad = ({ rootId, scroll, interval, infinite }: Props) => {
     const prev = root?.querySelector<HTMLElement>('[data-slide="prev"]');
     const next = root?.querySelector<HTMLElement>('[data-slide="next"]');
     const dots = root?.querySelectorAll<HTMLElement>("[data-dot]");
+    const counter = root?.querySelector<HTMLElement>("[data-slider-counter]");
     if (!root || !slider || !items || items.length === 0) {
       console.warn(
         "Missing necessary slider attributes. It will not work as intended. Necessary elements:",
@@ -127,6 +133,12 @@ const onLoad = ({ rootId, scroll, interval, infinite }: Props) => {
       const pageIndex = Math.floor(indices[0] / itemsPerPage);
       goToItem(isShowingLast ? 0 : (pageIndex + 1) * itemsPerPage);
     };
+    const updateCounter = (index: number) => {
+      if (counter) {
+        counter.innerHTML = `${index + 1}/${items.length}`;
+      }
+    };
+
     const observer = new IntersectionObserver(
       (elements) =>
         elements.forEach((e) => {
@@ -135,6 +147,7 @@ const onLoad = ({ rootId, scroll, interval, infinite }: Props) => {
           const dot = dots?.item(index);
           if (e.isIntersecting) {
             dot?.setAttribute("disabled", "");
+            updateCounter(index);
           } else {
             dot?.removeAttribute("disabled");
           }
@@ -188,4 +201,5 @@ Slider.Item = Item;
 Slider.NextButton = NextButton;
 Slider.PrevButton = PrevButton;
 Slider.JS = JS;
+Slider.Counter = SliderCounter;
 export default Slider;
