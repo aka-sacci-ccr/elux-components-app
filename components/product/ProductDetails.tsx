@@ -1,6 +1,6 @@
 import { PropertyValue } from "apps/commerce/types.ts";
 import AdditionalPropertyCards from "./AdditionalPropertyCards.tsx";
-import Icon from "../ui/Icon.tsx";
+import Icon, { AvailableIcons } from "../ui/Icon.tsx";
 
 interface Props {
   additionalProperty: PropertyValue[] | undefined;
@@ -28,7 +28,24 @@ export default function ProductDetails(
   const tableProperties = additionalProperty?.filter((property) =>
     property.propertyID === "OTHER"
   );
+  const iconMap: Record<string, AvailableIcons> = {
+    WIDTH: "width-property",
+    HEIGHT: "height-property",
+    WEIGHT: "weight-property",
+    DEPTH: "depth-property",
+    BOX_WIDTH: "width-property",
+    BOX_HEIGHT: "height-property",
+    BOX_WEIGHT: "weight-property",
+    BOX_DEPTH: "depth-property"
+  };
 
+  const getIconId = (propertyID: string) => {
+    if (iconMap[propertyID]) return iconMap[propertyID];
+
+    const cleanedPropertyID = propertyID.replace(/^BOX_/, "");
+    
+    return iconMap[cleanedPropertyID] || "depth-property";
+  };
 
   const DimensionsCards: React.FC<Pick<Props, 'additionalProperty'>> = ({ additionalProperty: dimensions }) => {
     return (
@@ -39,25 +56,13 @@ export default function ProductDetails(
           } w-full my-4 text-secondary lg:flex lg:items-center`}
       >
         {dimensions?.map((dimension) => {
-          const propertyIcon = () => {
-            switch (dimension.propertyID) {
-              case "WIDTH":
-                return "width-property";
-              case "HEIGHT":
-                return "height-property";
-              case "WEIGHT":
-                return "weight-property";
-              default:
-                return "depth-property";
-            }
-          };
-  
+          const iconId = getIconId(dimension.propertyID ?? "");
           return (
             <li
               className="flex flex-col gap-1 items-center flex-1 h-28"
               key={dimension["@id"]}
             >
-              <Icon id={propertyIcon()} className="text-primary" size={24} />
+              <Icon id={iconId} className="text-primary" size={24} />
               <span className="mt-1">{dimension.value}</span>
               <span className="font-light text-sm">{dimension.name}</span>
             </li>
