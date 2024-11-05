@@ -1,6 +1,7 @@
 import { PropertyValue } from "apps/commerce/types.ts";
 import AdditionalPropertyCards from "./AdditionalPropertyCards.tsx";
 import Icon, { AvailableIcons } from "../ui/Icon.tsx";
+import { LANGUAGE_DIFFS } from "../../utils/constants.tsx";
 
 interface Props {
   additionalProperty: PropertyValue[] | undefined;
@@ -9,7 +10,7 @@ interface Props {
 }
 
 export default function ProductDetails(
-  { additionalProperty, description }: Props,
+  { additionalProperty, description, language }: Props,
 ) {
   const dimensionsProperties = additionalProperty?.filter((property) =>
     property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" ||
@@ -79,17 +80,17 @@ export default function ProductDetails(
           href="#description"
           class="flex flex-1 border-b-2 border-primary text-primary  items-center justify-center py-3"
         >
-          Descripción
+          {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
         </a>
         <a
           href="#properties"
           class="flex flex-1 border-b-2 border-neutral text-base-content font-light items-center justify-center py-3"
         >
-          Ficha Técnica
+          {LANGUAGE_DIFFS[language].productPage.recordTitle}
         </a>
       </div>
       <h2 className="text-secondary text-base text-center py-6">
-        Descripción del Producto
+      {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
       </h2>
       <article className="py-4 text-sm font-light text-secondary leading-6 lg:border-b border-base-200">
         {description}
@@ -100,19 +101,19 @@ export default function ProductDetails(
         />
       </div>
       <h2 className="text-secondary text-base text-center py-6" id="properties">
-        Ficha Técnica
+      {LANGUAGE_DIFFS[language].productPage.recordTitle}
       </h2> 
-      <span class="text-sm text-secondary flex lg:hidden py-2">Dimensiones del producto:</span>
+      <span class="text-sm text-secondary flex lg:hidden py-2">{LANGUAGE_DIFFS[language].productPage.dimensionsProduct}</span>
       <div className="flex flex-col px-2 min-h-60">
         <div role="tablist" class="tabs border-primary tabs-bordered">
-        <input type="text" disabled value="Dimensiones del producto:" class="tab !text-secondary !bg-transparent !border-0 text-sm px-0 lg:w-48 hidden lg:flex" />
-          <input type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:!border-primary" aria-label="con caja" />
+        <input type="text" disabled value={LANGUAGE_DIFFS[language].productPage.dimensionsProduct} class="tab !text-secondary !bg-transparent !border-0 text-sm px-0 lg:w-48 hidden lg:flex" />
+          <input type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:!border-primary" aria-label={LANGUAGE_DIFFS[language].productPage.dimensionsBox} />
           <div role="tabpanel" class="tab-content bg-base-100 rounded-box py-5">
             <DimensionsCards additionalProperty={dimensionsPropertiesWithBox}/>
           </div>
 
           <input
-            type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:!border-primary" aria-label="sin caja" checked={true} />
+            type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:!border-primary" aria-label={LANGUAGE_DIFFS[language].productPage.dimensions} checked={true} />
           <div role="tabpanel" class="tab-content bg-base-100  rounded-box p-6">
             <DimensionsCards additionalProperty={dimensionsProperties} />
           </div>

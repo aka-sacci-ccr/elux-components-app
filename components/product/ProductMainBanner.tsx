@@ -9,8 +9,6 @@ export default function ProductMainBanner({ product }: Props) {
   if (!product) return <></>;
   const { name, image, sku, brand } = product;
 
-  console.log(product);
-
   const mainBannerMobile = image?.find((image) =>
     image.additionalType === "MAIN_BANNER_MOBILE"
   );
