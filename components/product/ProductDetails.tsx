@@ -28,7 +28,80 @@ export default function ProductDetails(
   const tableProperties = additionalProperty?.filter((property) =>
     property.propertyID === "OTHER"
   );
-console.log("aditional ", additionalProperty)
+  const DimensionsCards = () => {
+    return (
+      <ul
+        className={`${dimensionsProperties && dimensionsProperties.length <= 3
+          ? "flex items-center"
+          : "grid grid-cols-2 grid-rows-2"
+          } w-full my-4 text-secondary lg:flex lg:items-center`}
+      >
+        {dimensionsProperties?.map((dimension) => {
+          const propertyIcon = () => {
+            switch (dimension.propertyID) {
+              case "WIDTH":
+                return "width-property";
+              case "HEIGHT":
+                return "height-property";
+              case "WEIGHT":
+                return "weight-property";
+              default:
+                return "depth-property";
+            }
+          };
+
+          return (
+            <li
+              className="flex flex-col gap-1 items-center flex-1 h-28"
+              key={dimension["@id"]}
+            >
+              <Icon id={propertyIcon()} className="text-primary" size={24} />
+              <span className="mt-1">{dimension.value}</span>
+              <span className="font-light text-sm">{dimension.name}</span>
+            </li>
+          );
+        })}
+      </ul>
+    )
+  }
+
+  const DimensionsCardsWithBox = () => {
+    return (
+      <ul
+        className={`${dimensionsPropertiesWithBox && dimensionsPropertiesWithBox.length <= 3
+          ? "flex items-center"
+          : "grid grid-cols-2 grid-rows-2"
+          } w-full my-4 text-secondary lg:flex lg:items-center`}
+      >
+        {dimensionsProperties?.map((dimension) => {
+          const propertyIcon = () => {
+            switch (dimension.propertyID) {
+              case "WIDTH":
+                return "width-property";
+              case "HEIGHT":
+                return "height-property";
+              case "WEIGHT":
+                return "weight-property";
+              default:
+                return "depth-property";
+            }
+          };
+
+          return (
+            <li
+              className="flex flex-col gap-1 items-center flex-1 h-28"
+              key={dimension["@id"]}
+            >
+              <Icon id={propertyIcon()} className="text-primary" size={24} />
+              <span className="mt-1">{dimension.value}</span>
+              <span className="font-light text-sm">{dimension.name}</span>
+            </li>
+          );
+        })}
+      </ul>
+    )
+  }
+
   return (
     <div className="w-full max-w-[65rem] mx-auto px-5 lg:px-0">
       <div class="hidden lg:flex w-full mt-4 mb-10">
@@ -61,56 +134,19 @@ console.log("aditional ", additionalProperty)
       </h2>
 
       <div className="flex flex-col px-2">
-        <div className="flex flex-col md:flex-row gap-2">
-          <span className="text-secondary text-sm">
-            Dimensiones del producto:
-          </span>
-          <div className="flex gap-2">
-            <a
-              href="#"
-              className="text-xs text-base-content font-light underline"
-            >
-              con caja
-            </a>
-            <span className="text-base-200 mb-2">|</span>
-            <a href="#" className="text-xs text-primary font-light underline">
-              sin caja
-            </a>
+        <div role="tablist" class="tabs border-primary tabs-bordered">
+        <input type="text" disabled value="Dimensiones del producto:" class="tab !text-secondary !bg-transparent text-sm px-0 lg:w-48" />
+          <input type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:border-primary" aria-label="con caja" />
+          <div role="tabpanel" class="tab-content bg-base-100 rounded-box p-6">
+            <DimensionsCardsWithBox />
+          </div>
+
+          <input
+            type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:border-primary" aria-label="sin caja" checked={true} />
+          <div role="tabpanel" class="tab-content bg-base-100  rounded-box p-6">
+            <DimensionsCards />
           </div>
         </div>
-        <ul
-          className={`${
-            dimensionsProperties && dimensionsProperties.length <= 3
-              ? "flex items-center"
-              : "grid grid-cols-2 grid-rows-2"
-          } w-full my-4 text-secondary lg:flex lg:items-center`}
-        >
-          {dimensionsProperties?.map((dimension) => {
-            const propertyIcon = () => {
-              switch (dimension.propertyID) {
-                case "WIDTH":
-                  return "width-property";
-                case "HEIGHT":
-                  return "height-property";
-                case "WEIGHT":
-                  return "weight-property";
-                default:
-                  return "depth-property";
-              }
-            };
-
-            return (
-              <li
-                className="flex flex-col gap-1 items-center flex-1 h-28"
-                key={dimension["@id"]}
-              >
-                <Icon id={propertyIcon()} className="text-primary" size={24} />
-                <span className="mt-1">{dimension.value}</span>
-                <span className="font-light text-sm">{dimension.name}</span>
-              </li>
-            );
-          })}
-        </ul>
       </div>
       {tableProperties && (
         <div className="w-full">
