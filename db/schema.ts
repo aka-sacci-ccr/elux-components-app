@@ -35,13 +35,7 @@ export const categories = sqliteTable("categories", {
   subjectOf: text("subjectOf").references((): AnySQLiteColumn =>
     categories.identifier
   ),
-});
-
-//Define where the categories are avaliable
-export const categoryAvaliableIn = sqliteTable("categoryAvaliableIn", {
-  identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
-  subjectOf: text("subjectOf").references(() => categories.identifier), // F.K
-  domain: text("domain").references(() => domains.identifier), // F.K
+  image: text("image"),
 });
 
 //Define categories of a product

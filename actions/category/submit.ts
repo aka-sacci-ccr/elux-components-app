@@ -1,14 +1,11 @@
 import { AppContext } from "apps/records/mod.ts";
-import { AvaliableIn, Category } from "../../utils/types.ts";
-import { categories } from "../../db/schema.ts";
+import { Category } from "../../utils/types.ts";
+
 import { logger } from "@deco/deco/o11y";
-import { categoryAvaliableIn } from "../../db/schema.ts";
-import { DEFAULT_DOMAINS } from "../../utils/constants.tsx";
+import { categories } from "../../db/schema.ts";
 
 export default async function submit(
-  { subjectOf, avaliablility, ...props }: Category & {
-    avaliablility: AvaliableIn[];
-  },
+  { subjectOf, ...props }: Category,
   _req: Request,
   ctx: AppContext,
 ) {
@@ -23,19 +20,6 @@ export default async function submit(
       additionalType,
       subjectOf,
     });
-    //Insert category avaliability
-    await records.insert(categoryAvaliableIn).values(
-      [
-        ...avaliablility.map(({ domain }) => ({
-          domain,
-          subjectOf: props.identifier,
-        })),
-        ...DEFAULT_DOMAINS.map((domain) => ({
-          domain,
-          subjectOf: props.identifier,
-        })),
-      ],
-    );
     return {
       additionalType,
       subjectOf,
