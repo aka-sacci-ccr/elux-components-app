@@ -246,7 +246,8 @@ export interface AdditionalProperty {
     | "BOX_HEIGHT"
     | "BOX_WIDTH"
     | "BOX_DEPTH"
-    | "BOX_WEIGHT";
+    | "BOX_WEIGHT"
+    | "BOX_OTHER";
   /**
    * @title Property Name
    */
