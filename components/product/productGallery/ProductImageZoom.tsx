@@ -77,45 +77,47 @@ function ProductImageZoom(
             </Slider.Item>
           ))}
         </Slider>
-        <div class="flex px-2 max-w-[80%] overflow-x-auto px-3 lg:px-0 lg:max-w-[687px] mx-auto gap-4 lg:gap-6 relative">
+        <div class="flex justify-center px-3 lg:px-0 w-full lg:max-w-[687px] mx-auto gap-4 lg:gap-6 relative">
           <Slider.PrevButton class="w-6" disabled={false}>
             <Icon
               id="chevron-right"
               class="rotate-180 text-primary absolute left-0 bottom-4 lg:static"
             />
           </Slider.PrevButton>
-          {images.map((img, index) => (
-            <li class="carousel-item w-14 h-14 relative">
-              <Slider.Dot
-                index={index}
-                className="border-2 border-transparent disabled:border-primary rounded overflow-hidden"
-              >
-                {img["@type"] === "ImageObject"
-                  ? (
-                    <Image
-                      style={{ aspectRatio: "1 / 1" }}
-                      class="object-cover w-14 h-14"
-                      width={56}
-                      height={56}
-                      src={img.url!}
-                      alt={img.alternateName}
-                    />
-                  )
-                  : (
-                    <div class="w-14 h-14 relative overflow-hidden">
+          <ul class="flex px-4 overflow-x-auto w-full mx-auto gap-1 justify-center lg:gap-4">
+            {images.map((img, index) => (
+              <li class="carousel-item w-14 h-14 relative">
+                <Slider.Dot
+                  index={index}
+                  className="border-2 border-transparent disabled:border-primary rounded overflow-hidden"
+                >
+                  {img["@type"] === "ImageObject"
+                    ? (
                       <Image
                         style={{ aspectRatio: "1 / 1" }}
-                        class="object-cover w-full h-full"
+                        class="object-cover w-14 h-14"
                         width={56}
                         height={56}
-                        src={img.thumbnailUrl!}
+                        src={img.url!}
                         alt={img.alternateName}
                       />
-                    </div>
-                  )}
-              </Slider.Dot>
-            </li>
-          ))}
+                    )
+                    : (
+                      <div class="w-14 h-14 relative overflow-hidden">
+                        <Image
+                          style={{ aspectRatio: "1 / 1" }}
+                          class="object-cover w-full h-full"
+                          width={56}
+                          height={56}
+                          src={img.thumbnailUrl!}
+                          alt={img.alternateName}
+                        />
+                      </div>
+                    )}
+                </Slider.Dot>
+              </li>
+            ))}
+          </ul>
           <Slider.NextButton class="w-6" disabled={false}>
             <Icon
               id="chevron-right"
