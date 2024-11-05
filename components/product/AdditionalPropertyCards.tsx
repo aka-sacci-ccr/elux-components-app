@@ -134,7 +134,7 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
           </div>
         )
         : (
-          <div className="w-full max-w-[65rem] mx-auto hidden lg:grid lg:grid-cols-[520px_520px] my-6">
+          <div className="w-full max-w-[65rem] mx-auto hidden lg:grid">
             {PropertyCards.map((card, index) => {
               const isLastAndOdd = index === PropertyCards.length - 1 &&
                 (index + 1) % 2 !== 0;
@@ -158,10 +158,10 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
                         />
                       </div>
                     )}
-                    <div className="flex flex-col flex-1 gap-2 text-secondary text-sm pt-6">
+                    <div className="flex flex-col flex-1 gap-2 text-secondary text-sm self-center py-4">
                       <span>{card.name}</span>
                       <article
-                        className="font-light max-w-[500px] pb-4"
+                        className="font-light max-w-[500px]"
                         dangerouslySetInnerHTML={{ __html: card.value! }}
                       />
                     </div>

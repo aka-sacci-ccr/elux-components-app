@@ -22,7 +22,6 @@ export default function ProductDetails(
     property.propertyID === "BOX_DEPTH" || property.propertyID === "BOX_WEIGHT"
   );
 
-  console.log("with box ", dimensionsPropertiesWithBox);
   const PropertyCards = additionalProperty?.filter((property) =>
     property.propertyID === "DESCRIPTION"
   );
@@ -78,88 +77,103 @@ export default function ProductDetails(
   };
 
   return (
-    <div className="w-full max-w-[65rem] mx-auto px-5 lg:px-0">
-      <div class="hidden lg:flex w-full mt-4 mb-10">
-        <a
-          href="#description"
-          class="flex flex-1 border-b-2 border-primary text-primary  items-center justify-center py-3"
-        >
-          {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
-        </a>
-        <a
-          href="#properties"
-          class="flex flex-1 border-b-2 border-neutral text-base-content font-light items-center justify-center py-3"
-        >
-          {LANGUAGE_DIFFS[language].productPage.recordTitle}
-        </a>
-      </div>
-      <h2 className="text-secondary text-base text-center py-6">
-        {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
-      </h2>
-      <article className="py-4 text-sm font-light text-secondary leading-6 lg:border-b border-base-200">
-        {description}
-      </article>
-      <div>
-        <AdditionalPropertyCards
-          PropertyCards={PropertyCards}
-        />
-      </div>
-      <h2 className="text-secondary text-base text-center py-6" id="properties">
-        {LANGUAGE_DIFFS[language].productPage.recordTitle}
-      </h2>
-      <span class="text-sm text-secondary flex lg:hidden py-2">
-        {LANGUAGE_DIFFS[language].productPage.dimensionsProduct}
-      </span>
-      <div className="flex flex-col px-2 min-h-60">
-        <div role="tablist" class="tabs border-primary tabs-bordered">
-          <input
-            type="text"
-            disabled
-            value={LANGUAGE_DIFFS[language].productPage.dimensionsProduct}
-            class="tab !text-secondary !bg-transparent !border-0 text-sm px-0 lg:w-48 hidden lg:flex"
-          />
-          <input
-            type="radio"
-            name="my_tabs_2"
-            role="tab"
-            class="tab text-xs text-primary font-light checked:!border-primary"
-            aria-label={LANGUAGE_DIFFS[language].productPage.dimensionsBox}
-          />
-          <div role="tabpanel" class="tab-content bg-base-100 rounded-box py-5">
-            <DimensionsCards additionalProperty={dimensionsPropertiesWithBox} />
+    <div class="w-full pb-6">
+      <div className="w-full max-w-[65rem] mx-auto px-5 lg:px-0">
+        <div class="hidden lg:flex w-full pb-6">
+          <a
+            href="#description"
+            class="flex flex-1 border-b-2 border-primary text-primary  items-center justify-center py-3"
+          >
+            {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
+          </a>
+          <a
+            href="#properties"
+            class="flex flex-1 border-b-2 border-neutral text-base-content font-light items-center justify-center py-3"
+          >
+            {LANGUAGE_DIFFS[language].productPage.recordTitle}
+          </a>
+        </div>
+        <div class="bg-white lg:p-6">
+          <h2 className="text-secondary text-base text-center pb-6">
+            {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
+          </h2>
+          <article className="py-4 text-sm font-light text-secondary leading-6 lg:border-b border-base-200">
+            {description}
+          </article>
+          <div>
+            <AdditionalPropertyCards
+              PropertyCards={PropertyCards}
+            />
           </div>
+          <h2
+            className="text-secondary text-base text-center py-6"
+            id="properties"
+          >
+            {LANGUAGE_DIFFS[language].productPage.recordTitle}
+          </h2>
+          <span class="text-sm text-secondary flex lg:hidden py-2">
+            {LANGUAGE_DIFFS[language].productPage.dimensionsProduct}
+          </span>
+          <div className="flex flex-col px-2 min-h-60">
+            <div role="tablist" class="tabs border-primary tabs-bordered">
+              <input
+                type="text"
+                disabled
+                value={LANGUAGE_DIFFS[language].productPage.dimensionsProduct}
+                class="tab !text-secondary !bg-transparent !border-0 text-sm px-0 lg:w-48 hidden lg:flex"
+              />
+              <input
+                type="radio"
+                name="my_tabs_2"
+                role="tab"
+                class="tab text-xs text-primary font-light checked:!border-primary"
+                aria-label={LANGUAGE_DIFFS[language].productPage.dimensionsBox}
+              />
+              <div
+                role="tabpanel"
+                class="tab-content bg-base-100 rounded-box py-5"
+              >
+                <DimensionsCards
+                  additionalProperty={dimensionsPropertiesWithBox}
+                />
+              </div>
 
-          <input
-            type="radio"
-            name="my_tabs_2"
-            role="tab"
-            class="tab text-xs text-primary font-light checked:!border-primary"
-            aria-label={LANGUAGE_DIFFS[language].productPage.dimensions}
-            checked={true}
-          />
-          <div role="tabpanel" class="tab-content bg-base-100  rounded-box p-6">
-            <DimensionsCards additionalProperty={dimensionsProperties} />
+              <input
+                type="radio"
+                name="my_tabs_2"
+                role="tab"
+                class="tab text-xs text-primary font-light checked:!border-primary"
+                aria-label={LANGUAGE_DIFFS[language].productPage.dimensions}
+                checked={true}
+              />
+              <div
+                role="tabpanel"
+                class="tab-content bg-base-100  rounded-box p-6"
+              >
+                <DimensionsCards additionalProperty={dimensionsProperties} />
+              </div>
+            </div>
           </div>
+          {tableProperties && (
+            <div className="w-full">
+              <ul>
+                {tableProperties.map((item) => {
+                  return (
+                    <li className="even:bg-base-300 flex justify-between items-center p-2 text-sm">
+                      <span className="text-secondary">
+                        {item.name}
+                      </span>
+                      <span className="text-base-content font-light">
+                        {item.value}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
-      {tableProperties && (
-        <div className="w-full">
-          <ul>
-            {tableProperties.map((item) => {
-              return (
-                <li className="even:bg-base-300 flex justify-between items-center p-2 text-sm">
-                  <span className="text-secondary">
-                    {item.name}
-                  </span>
-                  <span className="text-base-content font-light">
-                    {item.value}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
     </div>
   );
 }

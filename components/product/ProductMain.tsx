@@ -22,7 +22,7 @@ export default function ProductMain({ page, productMain }: Props) {
   const { sku, name, url } = product;
   const { buyButton: { isDisable } } = productMain;
   return (
-    <div className="container flex flex-col lg:flex-row gap-4 my-6 px-5 lg:p-0 lg:mb-28">
+    <div className="container flex flex-col lg:flex-row gap-4 my-6 px-5 lg:p-0 lg:mb-8">
       {/* Galeria do produto */}
       <div className="w-full lg:w-2/4">
         <GallerySlider
