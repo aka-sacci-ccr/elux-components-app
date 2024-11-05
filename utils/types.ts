@@ -183,6 +183,11 @@ export interface Category {
    * @options elux-components-app/loaders/product/avaliableCategories.ts
    */
   subjectOf?: string;
+  /**
+   * @title Image
+   * @format image-uri
+   */
+  image?: string;
 }
 
 export interface ProductCategory {
