@@ -135,10 +135,14 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
         )
         : (
           <div className="w-full max-w-[65rem] mx-auto hidden lg:grid lg:grid-cols-[520px_520px] my-6">
-            {PropertyCards.map((card) => (
+            {PropertyCards.map((card, index) =>{ 
+              const isLastAndOdd = index === PropertyCards.length - 1 && (index + 1) % 2 !== 0;
+
+              return(
+              <>
               <div
                 key={card["@id"]}
-                className="w-full max-w-[520px] lg:max-h-[231px] overflow-hidden flex flex-col lg:flex-row-reverse lg:border-b border-base-200"
+                className={`w-full max-w-[520px] lg:max-h-[231px] overflow-hidden flex flex-col lg:flex-row-reverse ${!isLastAndOdd && 'lg:border-b'} border-base-200`}
               >
                 {card.image?.[0]?.url && (
                   <div className="w-full lg:max-w-[240px] h-[240px] flex justify-center overflow-hidden">
@@ -158,8 +162,13 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
                     dangerouslySetInnerHTML={{ __html: card.value! }}
                   />
                 </div>
+   
               </div>
-            ))}
+              { isLastAndOdd && (
+                <div class="h-[1px] bg-base-200 hidden lg:grid col-span-2"></div>
+              )}
+              </>
+            )})}
           </div>
         )}
     </>
