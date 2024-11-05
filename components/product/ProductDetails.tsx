@@ -101,11 +101,11 @@ export default function ProductDetails(
       </div>
       <h2 className="text-secondary text-base text-center py-6" id="properties">
         Ficha Técnica
-      </h2>
-
+      </h2> 
+      <span class="text-sm text-secondary flex lg:hidden py-2">Dimensiones del producto:</span>
       <div className="flex flex-col px-2">
         <div role="tablist" class="tabs border-primary tabs-bordered">
-        <input type="text" disabled value="Dimensiones del producto:" class="tab !text-secondary !bg-transparent !border-0 text-sm px-0 lg:w-48" />
+        <input type="text" disabled value="Dimensiones del producto:" class="tab !text-secondary !bg-transparent !border-0 text-sm px-0 lg:w-48 hidden lg:flex" />
           <input type="radio" name="my_tabs_2" role="tab" class="tab text-xs text-primary font-light checked:!border-primary" aria-label="con caja" />
           <div role="tabpanel" class="tab-content bg-base-100 rounded-box py-5">
             <DimensionsCards additionalProperty={dimensionsPropertiesWithBox}/>
