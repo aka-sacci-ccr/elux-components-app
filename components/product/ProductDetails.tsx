@@ -1,7 +1,12 @@
 import { PropertyValue } from "apps/commerce/types.ts";
 import AdditionalPropertyCards from "./AdditionalPropertyCards.tsx";
 import Icon, { AvailableIcons } from "../ui/Icon.tsx";
-import { BG_COLORS, LANGUAGE_DIFFS } from "../../utils/constants.tsx";
+import {
+  BG_COLORS,
+  BORDER_COLORS,
+  LANGUAGE_DIFFS,
+  TEXT_COLORS,
+} from "../../utils/constants.tsx";
 import { clx } from "../../utils/clx.ts";
 import { ProductMainProps } from "../../sections/Product/ProductDetails/ProductPage.tsx";
 
@@ -15,6 +20,7 @@ interface Props {
 export default function ProductDetails(
   { additionalProperty, description, language, productMain }: Props,
 ) {
+  const { tabs } = productMain;
   const dimensionsProperties = additionalProperty?.filter((property) =>
     property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" ||
     property.propertyID === "DEPTH" || property.propertyID === "WEIGHT"
@@ -87,36 +93,62 @@ export default function ProductDetails(
         <div class="hidden lg:flex w-full pb-6">
           <a
             href="#description"
-            class="flex flex-1 border-b-2 border-primary text-primary  items-center justify-center py-3"
+            class={clx(
+              "flex flex-1 border-b-2 items-center justify-center py-3",
+              TEXT_COLORS[tabs?.enabledTab?.fontColor ?? "primary"],
+              tabs?.enabledTab?.fontSize,
+              tabs?.enabledTab?.fontWeight,
+              BORDER_COLORS[tabs?.enabledTab?.underlineColor ?? "primary"],
+            )}
           >
             {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
           </a>
           <a
             href="#properties"
-            class="flex flex-1 border-b-2 border-neutral text-base-content font-light items-center justify-center py-3"
+            class={clx(
+              "flex flex-1 border-b-2 items-center justify-center py-3",
+              TEXT_COLORS[tabs?.disabledTab?.fontColor ?? "base-content"],
+              tabs?.disabledTab?.fontSize,
+              tabs?.disabledTab?.fontWeight ?? "font-light",
+              BORDER_COLORS[tabs?.disabledTab?.underlineColor ?? "neutral"],
+            )}
           >
             {LANGUAGE_DIFFS[language].productPage.recordTitle}
           </a>
         </div>
-        <div>
+        <div class="flex flex-col lg:gap-12">
           <div
             class={clx(
-              "bg-white lg:py-6 max-lg:my-6 max-lg:pt-6",
+              "bg-white lg:pt-6 max-lg:my-6 max-lg:pt-6",
               productMain?.bgColor === "white" || !productMain?.bgColor
                 ? ""
                 : "lg:px-6 max-lg:px-4",
             )}
           >
-            <h2 className="text-secondary text-base text-left">
+            <h2
+              className={clx(
+                "text-left",
+                TEXT_COLORS[tabs?.titles?.fontColor ?? "secondary"],
+                tabs?.titles?.fontSize ?? "text-base",
+                tabs?.titles?.fontWeight,
+              )}
+            >
               {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
             </h2>
-            <article className="py-4 text-sm font-light text-secondary leading-6 lg:border-b border-base-200 max-sm:hidden">
+            <article
+              class={clx(
+                "py-4 font-light text-secondary",
+                "lg:border-b border-base-200 max-sm:hidden",
+                tabs?.productDescription?.descriptionSize ?? "text-sm",
+              )}
+            >
               {description}
             </article>
             <div>
               <AdditionalPropertyCards
                 propertyCards={propertyCards}
                 mergeQuantity={productMain.mergeQuantity}
+                productDescription={tabs?.productDescription}
               />
             </div>
           </div>
@@ -129,7 +161,12 @@ export default function ProductDetails(
             )}
           >
             <h2
-              className="text-secondary text-base pb-6"
+              className={clx(
+                "pb-6",
+                TEXT_COLORS[tabs?.titles?.fontColor ?? "secondary"],
+                tabs?.titles?.fontSize ?? "text-base",
+                tabs?.titles?.fontWeight,
+              )}
               id="properties"
             >
               {LANGUAGE_DIFFS[language].productPage.recordTitle}

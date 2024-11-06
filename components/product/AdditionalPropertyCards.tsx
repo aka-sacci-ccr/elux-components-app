@@ -5,14 +5,17 @@ import { clx } from "../../utils/clx.ts";
 import { useDevice } from "@deco/deco/hooks";
 import { useId } from "../../sdk/useId.ts";
 import { chunkArray } from "../../utils/utils.ts";
+import { ProductDescription } from "../../sections/Product/ProductDetails/ProductPage.tsx";
+import { TEXT_COLORS } from "../../utils/constants.tsx";
 
 interface Props {
   propertyCards: PropertyValue[] | undefined;
   mergeQuantity?: number;
+  productDescription?: ProductDescription;
 }
 
 export default function AdditionalPropertyCards(
-  { propertyCards, mergeQuantity }: Props,
+  { propertyCards, mergeQuantity, productDescription }: Props,
 ) {
   if (!propertyCards) return <></>;
 
@@ -93,10 +96,28 @@ export default function AdditionalPropertyCards(
                           </div>
                         )}
                         <div className="flex flex-col flex-1 gap-2 text-secondary text-sm px-1">
-                          {item.name && <span>{item.name}</span>}
+                          {item.name && (
+                            <span
+                              class={clx(
+                                productDescription?.title?.fontWeight,
+                                productDescription?.title?.fontSize ??
+                                  "text-sm",
+                                TEXT_COLORS[
+                                  productDescription?.title?.fontColor ??
+                                    "secondary"
+                                ],
+                              )}
+                            >
+                              {item.name}
+                            </span>
+                          )}
                           {item.value && (
                             <article
-                              className="font-light"
+                              className={clx(
+                                "font-light max-w-[500px] text-secondary",
+                                productDescription?.descriptionSize ??
+                                  "text-sm",
+                              )}
                               dangerouslySetInnerHTML={{ __html: item.value }}
                             />
                           )}
@@ -151,7 +172,7 @@ export default function AdditionalPropertyCards(
                     className={clx(
                       `w-full overflow-hidden flex flex-col`,
                       !isLastAndOdd && "lg:border-b",
-                      "lg:flex-row-reverse lg:gap-2",
+                      "lg:flex-row-reverse",
                       "border-base-200",
                       isOdd ? "pr-2.5" : "pl-2.5",
                     )}
@@ -167,10 +188,23 @@ export default function AdditionalPropertyCards(
                         />
                       </div>
                     )}
-                    <div className="flex flex-col flex-1 gap-2 text-secondary text-sm self-center py-4">
-                      <span>{card.name}</span>
+                    <div className="flex flex-col flex-1 gap-2 self-center py-4">
+                      <span
+                        class={clx(
+                          productDescription?.title?.fontWeight,
+                          productDescription?.title?.fontSize ?? "text-sm",
+                          TEXT_COLORS[
+                            productDescription?.title?.fontColor ?? "secondary"
+                          ],
+                        )}
+                      >
+                        {card.name}
+                      </span>
                       <article
-                        className="font-light max-w-[500px]"
+                        className={clx(
+                          "font-light max-w-[500px] text-secondary",
+                          productDescription?.descriptionSize ?? "text-sm",
+                        )}
                         dangerouslySetInnerHTML={{ __html: card.value! }}
                       />
                     </div>
