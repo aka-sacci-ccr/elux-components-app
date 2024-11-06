@@ -172,7 +172,7 @@ export default function ProductDetails(
                 />
                 <div
                   role="tabpanel"
-                  class="tab-content bg-base-100  rounded-box p-6"
+                  class="tab-content bg-base-100  rounded-box py-5"
                 >
                   <DimensionsCards additionalProperty={dimensionsProperties} />
                 </div>
