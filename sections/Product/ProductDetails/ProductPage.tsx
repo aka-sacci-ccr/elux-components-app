@@ -63,6 +63,11 @@ interface PDPBreadcrumbProps extends
   maxItems?: number;
   /** @description Hide product name in breadcrumb */
   hideProductName?: boolean;
+  /** @description Override first item of breadcrumb */
+  overrideFirst?: {
+    item: string;
+    url: string;
+  };
 }
 
 export const loader = (
@@ -144,7 +149,16 @@ const getBreadcrumbItems = (
   product: Product,
 ) => {
   const orderedBreadcrumbList = sortAndFilterBreadcrumbItems(
-    breadcrumbList.itemListElement,
+    [
+      ...breadcrumbList.itemListElement,
+      ...breadcrumbProps.overrideFirst
+        ? [{
+          "@type": "ListItem" as const,
+          position: 0,
+          ...breadcrumbProps.overrideFirst,
+        }]
+        : [],
+    ],
   ).slice(
     0,
     (breadcrumbProps.maxItems ?? 3) -
