@@ -4,17 +4,21 @@ import Slider from "../ui/Slider.tsx";
 import { clx } from "../../utils/clx.ts";
 import { useDevice } from "@deco/deco/hooks";
 import { useId } from "../../sdk/useId.ts";
+import { chunkArray } from "../../utils/utils.ts";
 
 interface Props {
-  PropertyCards: PropertyValue[] | undefined;
+  propertyCards: PropertyValue[] | undefined;
+  mergeQuantity?: number;
 }
 
-export default function AdditionalPropertyCards({ PropertyCards }: Props) {
-  if (!PropertyCards) return <></>;
+export default function AdditionalPropertyCards(
+  { propertyCards, mergeQuantity }: Props,
+) {
+  if (!propertyCards) return <></>;
 
   const id = useId();
 
-  const sortedPropertyCardsMobile = PropertyCards.sort((a, b) => {
+  const sortedPropertyCardsMobile = propertyCards.sort((a, b) => {
     const hasUrlA = a.image?.[0]?.url !== undefined;
     const hasUrlB = b.image?.[0]?.url !== undefined;
 
@@ -23,31 +27,31 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
     return 0;
   });
 
-  // Função que calcula a estrutura de itens para renderizar com base no array completo
-  const getItemsToRender = (cards: PropertyValue[]) => {
-    const alreadyRenderedIndices = new Set();
-    const itemsToRender = cards.map((card, index) => {
-      if (alreadyRenderedIndices.has(index)) return null;
-
-      const noImage = !card.image?.[0]?.url;
-      const itemsGroup = noImage
-        ? [card, cards[index + 1], cards[index + 2]]
-          .filter((item, idx) =>
-            item && !alreadyRenderedIndices.has(index + idx)
-          )
-        : [card];
-
-      // Marcar os índices já processados
-      if (noImage) {
-        itemsGroup.forEach((_, idx) => alreadyRenderedIndices.add(index + idx));
+  const getItemsToRender = () => {
+    const splittedCards = sortedPropertyCardsMobile.reduce<
+      { image: PropertyValue[][]; noImage: PropertyValue[] }
+    >((acc, card) => {
+      const hasImage = !!card.image?.[0]?.url;
+      if (hasImage) {
+        return {
+          image: [...acc.image, [card]],
+          noImage: acc.noImage,
+        };
       }
-      return itemsGroup;
-    });
 
-    return itemsToRender.filter((group) => group !== null) as PropertyValue[][];
+      return {
+        image: acc.image,
+        noImage: [...acc.noImage, card],
+      };
+    }, { image: [], noImage: [] });
+
+    return [
+      ...splittedCards.image,
+      ...chunkArray(splittedCards.noImage, mergeQuantity ?? 2),
+    ];
   };
 
-  const itemsGroups = getItemsToRender(sortedPropertyCardsMobile);
+  const itemsGroups = getItemsToRender();
   const device = useDevice();
 
   return (
@@ -55,7 +59,7 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
       {device === "mobile"
         ? (
           <div
-            className="w-full max-w-[65rem] mx-auto flex flex-col lg:hidden my-6 gap-6"
+            className="w-full max-w-[65rem] mx-auto flex flex-col lg:hidden py-6 gap-6"
             id={id}
           >
             <Slider class="carousel carousel-center sm:carousel-end gap-5 sm:gap-10 w-full">
@@ -63,10 +67,10 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
                 <Slider.Item
                   key={index}
                   index={index}
-                  className="carousel-item"
+                  className="carousel-item w-full"
                 >
                   <div
-                    className={`w-[90vw] overflow-hidden flex ${
+                    className={`overflow-hidden flex ${
                       itemsGroup.length > 1
                         ? "flex-col gap-4"
                         : "flex-col lg:flex-row-reverse"
@@ -135,8 +139,8 @@ export default function AdditionalPropertyCards({ PropertyCards }: Props) {
         )
         : (
           <div className="w-full max-w-[65rem] mx-auto hidden lg:grid">
-            {PropertyCards.map((card, index) => {
-              const isLastAndOdd = index === PropertyCards.length - 1 &&
+            {propertyCards.map((card, index) => {
+              const isLastAndOdd = index === propertyCards.length - 1 &&
                 (index + 1) % 2 !== 0;
 
               return (

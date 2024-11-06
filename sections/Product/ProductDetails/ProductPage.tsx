@@ -14,7 +14,7 @@ import Container, { SpacingConfig } from "../../container/Container.tsx";
 import Breadcrumb, {
   Props as BreadcrumbProps,
 } from "../../Content/Breadcrumb.tsx";
-import { Colors } from "../../../utils/types.ts";
+import { Colors, RoundedOptions } from "../../../utils/types.ts";
 import { AppContext } from "../../../mod.ts";
 
 interface ProductPageProps {
@@ -25,17 +25,29 @@ interface ProductPageProps {
   breadcrumbProps: PDPBreadcrumbProps;
   /** @description Define alternating banners colors */
   bannersProps: BannerColors[];
-  productMain: {
-    buyButton: {
-      /** @description Button background color */
-      background: string;
-      /** @description Button text color */
-      textColor: string;
-      /** @description Prop to disable the CTA */
-      isDisable: boolean;
-    };
-  };
+  /** @description Product main colors */
+  productMain: ProductMainProps;
+  /** @description Spacing config */
   spacing?: SpacingConfig;
+}
+
+export interface ProductMainProps {
+  /** @description Buy button */
+  buyButton: BuyButtonProps;
+  /** @description Background color */
+  bgColor?: Colors;
+  /** @title Quantity of no image descriptions */
+  /** @description Merge description with no image in mobile */
+  mergeQuantity?: number;
+}
+
+interface BuyButtonProps {
+  /** @description Is button disabled */
+  isDisabled: boolean;
+  /** @description Redirect to */
+  redirectTo: string;
+  /** @description Rounded */
+  rounded: RoundedOptions;
 }
 
 interface PDPBreadcrumbProps extends
@@ -102,11 +114,13 @@ export default function ProductPage(
       <ProductMain
         page={page}
         productMain={productMain}
+        language={language}
       />
       <ProductDetails
         additionalProperty={additionalProperty}
         description={description}
         language={language}
+        productMain={productMain}
       />
     </Container>
   );

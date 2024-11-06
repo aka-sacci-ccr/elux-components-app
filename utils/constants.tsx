@@ -483,6 +483,18 @@ export const GRID_COL_SPAN_DESKTOP = {
   "4": "md:col-span-4",
 };
 
+export const ROUNDED_OPTIONS = {
+  "none": "rounded-none",
+  "sm": "rounded-sm",
+  "regular": "rounded",
+  "md": "rounded-md",
+  "lg": "rounded-lg",
+  "xl": "rounded-xl",
+  "2xl": "rounded-2xl",
+  "3xl": "rounded-3xl",
+  "full": "rounded-full",
+} as const;
+
 export const TOAST_ID = "toast-cart";
 
 export const LANGUAGE_DIFFS = {
@@ -529,9 +541,10 @@ export const LANGUAGE_DIFFS = {
     productPage: {
       descriptionTitle: "Description",
       recordTitle: "Technical sheet",
-      dimensionsProduct: "product dimensions",
+      dimensionsProduct: "Product dimensions",
       dimensions: "without box",
       dimensionsBox: "with box",
+      buttonText: "Where to buy",
     },
   },
   ES: {
@@ -580,6 +593,7 @@ export const LANGUAGE_DIFFS = {
       dimensionsProduct: "Dimensiones del producto:",
       dimensions: "con caja",
       dimensionsBox: "sin caja",
+      buttonText: "Donde comprar",
     },
   },
 };
