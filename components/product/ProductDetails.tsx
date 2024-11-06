@@ -1,9 +1,11 @@
 import { PropertyValue } from "apps/commerce/types.ts";
 import AdditionalPropertyCards from "./AdditionalPropertyCards.tsx";
-import Icon, { AvailableIcons } from "../ui/Icon.tsx";
+import Icon from "../ui/Icon.tsx";
 import {
   BG_COLORS,
   BORDER_COLORS,
+  DEFAULT_TECH_SHEET_CONFIG,
+  iconMap,
   LANGUAGE_DIFFS,
   TEXT_COLORS,
 } from "../../utils/constants.tsx";
@@ -38,16 +40,13 @@ export default function ProductDetails(
   const tableProperties = additionalProperty?.filter((property) =>
     property.propertyID === "OTHER"
   );
-  const iconMap: Record<string, AvailableIcons> = {
-    WIDTH: "width-property",
-    HEIGHT: "height-property",
-    WEIGHT: "weight-property",
-    DEPTH: "depth-property",
-    BOX_WIDTH: "width-property",
-    BOX_HEIGHT: "height-property",
-    BOX_WEIGHT: "weight-property",
-    BOX_DEPTH: "depth-property",
-  };
+
+  const techSheetConfig =
+    !tabs?.techSheet?.length || tabs?.techSheet?.length < 2
+      ? DEFAULT_TECH_SHEET_CONFIG
+      : tabs?.techSheet;
+
+  const techSheetConfigSize = techSheetConfig.length;
 
   const getIconId = (propertyID: string) => {
     if (iconMap[propertyID]) return iconMap[propertyID];
@@ -218,13 +217,30 @@ export default function ProductDetails(
             {tableProperties && (
               <div className="w-full">
                 <ul>
-                  {tableProperties.map((item) => {
+                  {tableProperties.map((item, index) => {
+                    const { bgColor, descriptionProps, valueProps } =
+                      techSheetConfig[index % techSheetConfigSize];
                     return (
-                      <li className="even:bg-base-300 flex justify-between items-center p-2 text-sm">
-                        <span className="text-secondary">
+                      <li
+                        className={clx(
+                          "flex justify-between items-center p-2 text-sm",
+                          BG_COLORS[bgColor],
+                        )}
+                      >
+                        <span
+                          className={clx(
+                            descriptionProps.fontWeight,
+                            TEXT_COLORS[descriptionProps.fontColor],
+                          )}
+                        >
                           {item.name}
                         </span>
-                        <span className="text-base-content font-light">
+                        <span
+                          className={clx(
+                            valueProps.fontWeight,
+                            TEXT_COLORS[valueProps.fontColor],
+                          )}
+                        >
                           {item.value}
                         </span>
                       </li>

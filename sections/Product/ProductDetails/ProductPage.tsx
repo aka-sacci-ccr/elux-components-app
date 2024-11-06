@@ -25,7 +25,6 @@ import { AppContext } from "../../../mod.ts";
 interface ProductPageProps {
   /** @description product loader of the page */
   page: ProductDetailsPage | null;
-
   /** @description Props of PDP breadcrumb */
   breadcrumbProps: PDPBreadcrumbProps;
   /** @description Define alternating banners colors */
@@ -96,14 +95,25 @@ interface TabProps {
   /** @description Styling of the titles of each section */
   titles?: Omit<TextProps, "text">;
   /** @title Styling of the tabs content */
-  productDescription?: ProductDescription;
+  productDescription?: ProductDescriptionProps;
+  /** @title Styling of the tech sheet table */
+  techSheet?: TechSheetProps[];
 }
 
-export interface ProductDescription {
+export interface ProductDescriptionProps {
   /** @description Styling of the title of each grid */
   title?: Omit<TextProps, "text">;
   /** @description Size of the descriptions */
   descriptionSize?: FontSize;
+}
+
+export interface TechSheetProps {
+  /** @description Background color */
+  bgColor: Colors;
+  /** @description Description color and weight */
+  descriptionProps: Omit<TextProps, "text" | "fontSize">;
+  /** @description Value color and weight */
+  valueProps: Omit<TextProps, "text" | "fontSize">;
 }
 
 export const loader = (

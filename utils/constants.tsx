@@ -1,3 +1,6 @@
+import { AvailableIcons } from "../components/ui/Icon.tsx";
+import { TechSheetProps } from "../sections/Product/ProductDetails/ProductPage.tsx";
+
 export const MINICART_FORM_ID = "minicart-form";
 export const MINICART_DRAWER_ID = "minicart-drawer";
 
@@ -682,3 +685,39 @@ export const PADDING_SIZES = {
 };
 
 export const DEFAULT_DOMAINS = ["deno.dev", "decocdn.com", "localhost"];
+
+export const DEFAULT_TECH_SHEET_CONFIG: TechSheetProps[] = [
+  {
+    bgColor: "white",
+    descriptionProps: {
+      fontColor: "secondary",
+      fontWeight: "font-medium",
+    },
+    valueProps: {
+      fontColor: "info",
+      fontWeight: "font-light",
+    },
+  },
+  {
+    bgColor: "base-300",
+    descriptionProps: {
+      fontColor: "secondary",
+      fontWeight: "font-medium",
+    },
+    valueProps: {
+      fontColor: "info",
+      fontWeight: "font-light",
+    },
+  },
+];
+
+export const iconMap: Record<string, AvailableIcons> = {
+  WIDTH: "width-property",
+  HEIGHT: "height-property",
+  WEIGHT: "weight-property",
+  DEPTH: "depth-property",
+  BOX_WIDTH: "width-property",
+  BOX_HEIGHT: "height-property",
+  BOX_WEIGHT: "weight-property",
+  BOX_DEPTH: "depth-property",
+};

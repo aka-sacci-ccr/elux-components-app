@@ -5,13 +5,13 @@ import { clx } from "../../utils/clx.ts";
 import { useDevice } from "@deco/deco/hooks";
 import { useId } from "../../sdk/useId.ts";
 import { chunkArray } from "../../utils/utils.ts";
-import { ProductDescription } from "../../sections/Product/ProductDetails/ProductPage.tsx";
+import { ProductDescriptionProps } from "../../sections/Product/ProductDetails/ProductPage.tsx";
 import { TEXT_COLORS } from "../../utils/constants.tsx";
 
 interface Props {
   propertyCards: PropertyValue[] | undefined;
   mergeQuantity?: number;
-  productDescription?: ProductDescription;
+  productDescription?: ProductDescriptionProps;
 }
 
 export default function AdditionalPropertyCards(
