@@ -14,7 +14,7 @@ import Container, { SpacingConfig } from "../../container/Container.tsx";
 import Breadcrumb, {
   Props as BreadcrumbProps,
 } from "../../Content/Breadcrumb.tsx";
-import { Colors, RoundedOptions } from "../../../utils/types.ts";
+import { Colors, RoundedOptions, TextProps } from "../../../utils/types.ts";
 import { AppContext } from "../../../mod.ts";
 
 interface ProductPageProps {
@@ -34,6 +34,8 @@ interface ProductPageProps {
 export interface ProductMainProps {
   /** @description Buy button */
   buyButton: BuyButtonProps;
+  /** @description Product name section */
+  productName?: ProductNameProps;
   /** @description Background color */
   bgColor?: Colors;
   /** @title Quantity of no image descriptions */
@@ -48,6 +50,12 @@ interface BuyButtonProps {
   redirectTo: string;
   /** @description Rounded */
   rounded: RoundedOptions;
+}
+
+interface ProductNameProps {
+  position?: "1" | "2";
+  title?: Omit<TextProps, "text">;
+  sku?: Omit<TextProps, "text">;
 }
 
 interface PDPBreadcrumbProps extends

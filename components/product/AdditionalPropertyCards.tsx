@@ -140,16 +140,21 @@ export default function AdditionalPropertyCards(
         : (
           <div className="w-full max-w-[65rem] mx-auto hidden lg:grid">
             {propertyCards.map((card, index) => {
+              const isOdd = (index + 1) % 2 !== 0;
               const isLastAndOdd = index === propertyCards.length - 1 &&
-                (index + 1) % 2 !== 0;
+                isOdd;
 
               return (
                 <>
                   <div
                     key={card["@id"]}
-                    className={`w-full max-w-[520px] lg:max-h-[231px] overflow-hidden flex flex-col lg:flex-row-reverse ${
-                      !isLastAndOdd && "lg:border-b"
-                    } border-base-200`}
+                    className={clx(
+                      `w-full overflow-hidden flex flex-col`,
+                      !isLastAndOdd && "lg:border-b",
+                      "lg:flex-row-reverse lg:gap-2",
+                      "border-base-200",
+                      isOdd ? "pr-2.5" : "pl-2.5",
+                    )}
                   >
                     {card.image?.[0]?.url && (
                       <div className="w-full lg:max-w-[240px] h-[240px] flex justify-center overflow-hidden">
