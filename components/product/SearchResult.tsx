@@ -6,8 +6,16 @@ import Icon from "../ui/Icon.tsx";
 import Sort from "./Sort.tsx";
 import Filters from "./Filters.tsx";
 import { ListingMainProps } from "../../sections/Product/ProductListing/ProductListingPage.tsx";
-import { TEXT_COLORS } from "../../utils/constants.tsx";
+import {
+  BG_COLORS,
+  BORDER_CLASSES,
+  BORDER_COLORS,
+  HOVER_BG_COLORS_WITH_BORDER,
+  ROUNDED_OPTIONS,
+  TEXT_COLORS,
+} from "../../utils/constants.tsx";
 import ProductCard from "./ProductCard.tsx";
+import { ButtonProps, RoundedOptions } from "../../utils/types.ts";
 
 export interface Props {
   page: ProductListingPage;
@@ -23,6 +31,13 @@ export interface Layout {
    * @description Format of the pagination
    */
   pagination?: "show-more" | "pagination";
+  /**
+   * @title Show more button props
+   */
+  buttonProps?: ButtonProps & {
+    /** @description Rounded */
+    rounded: RoundedOptions;
+  };
 }
 
 const useUrlRebased = (overrides: string | undefined, base: string) => {
@@ -134,7 +149,20 @@ function Result(props: Props) {
     href: nextPageUrl,
     props: { partial: "hideLess" },
   });
+  const buttonProps = listingMain?.layout?.buttonProps;
   const infinite = listingMain?.layout?.pagination !== "pagination";
+  const buttonClass = clx(
+    TEXT_COLORS[buttonProps?.fontColor ?? "white"],
+    BG_COLORS[buttonProps?.color ?? "primary"],
+    buttonProps?.borderColor ? BORDER_COLORS[buttonProps.borderColor] : "",
+    buttonProps?.borderWidth && buttonProps.borderWidth !== "0"
+      ? BORDER_CLASSES.full[buttonProps.borderWidth]
+      : "",
+    buttonProps?.hoverColor
+      ? HOVER_BG_COLORS_WITH_BORDER[buttonProps.hoverColor]
+      : "",
+    ROUNDED_OPTIONS[buttonProps?.rounded ?? "none"],
+  );
 
   return (
     <div class="grid grid-flow-row grid-cols-1 place-items-center">
@@ -182,15 +210,17 @@ function Result(props: Props) {
               <a
                 rel="next"
                 class={clx(
-                  "btn btn-ghost",
+                  "btn btn-ghost px-4 min-h-10 max-h-10 md:mt-6",
+                  "font-semibold",
                   (!nextPageUrl || partial === "hideMore") &&
                     "hidden",
+                  buttonClass,
                 )}
                 hx-swap="outerHTML show:parent:top"
                 hx-get={partialNext}
               >
                 <span class="inline [.htmx-request_&]:hidden">
-                  Show More
+                  {buttonProps?.text}
                 </span>
                 <span class="loading loading-spinner hidden [.htmx-request_&]:block" />
               </a>

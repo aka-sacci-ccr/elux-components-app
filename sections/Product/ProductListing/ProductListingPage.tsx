@@ -22,13 +22,13 @@ export interface Props {
 }
 
 export interface ListingMainProps {
-  layout?: Layout;
-  /** @description 0 for ?page=0 as your first page */
-  startingPage?: 0 | 1;
   /** @description Font color for filters */
   filtersFontColor?: Colors;
   /** @description Card styling config */
   cardStyling: CardStyling;
+  layout?: Layout;
+  /** @description 0 for ?page=0 as your first page */
+  startingPage?: 0 | 1;
 }
 
 interface PLPBreadcrumbProps extends

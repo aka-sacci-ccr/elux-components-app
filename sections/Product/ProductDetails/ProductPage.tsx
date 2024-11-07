@@ -36,14 +36,17 @@ interface ProductPageProps {
 }
 
 export interface ProductMainProps {
-  /** @description Buy button */
-  buyButton: BuyButtonProps;
   /** @description Product name section */
   productName?: ProductNameProps;
+  /** @description Buy button */
+  buyButton: BuyButtonProps;
+  /**
+   * @title Product extra data
+   * @description Product description data
+   */
+  tabs?: TabProps;
   /** @description Background color */
   bgColor?: Colors;
-  /** @description Product description tabs */
-  tabs?: TabProps;
   /** @title Quantity of no image descriptions */
   /** @description Merge description with no image in mobile */
   mergeQuantity?: number;
@@ -59,12 +62,12 @@ interface BuyButtonProps {
 }
 
 interface ProductNameProps {
-  /** @description Position of SKU/Name */
-  position?: "1" | "2";
   /** @title Product name props */
   title?: Omit<TextProps, "text">;
   /** @title SKU props */
   sku?: Omit<TextProps, "text">;
+  /** @description Position of SKU/Name */
+  position?: "1" | "2";
 }
 
 interface PDPBreadcrumbProps extends
@@ -88,13 +91,13 @@ interface PDPBreadcrumbProps extends
 }
 
 interface TabProps {
+  /** @description Styling of the titles of each section */
+  titles?: Omit<TextProps, "text">;
   /** @description Styling of the enabled tab */
   enabledTab?: Omit<TextProps, "text"> & { underlineColor?: Colors };
   /** @description Styling of the disabled tab */
   disabledTab?: Omit<TextProps, "text"> & { underlineColor?: Colors };
-  /** @description Styling of the titles of each section */
-  titles?: Omit<TextProps, "text">;
-  /** @title Styling of the tabs content */
+  /** @title Styling of the description grid */
   productDescription?: ProductDescriptionProps;
   /** @title Styling of the tech sheet table */
   techSheet?: TechSheetProps[];
