@@ -1,3 +1,6 @@
+import { AvailableIcons } from "../components/ui/Icon.tsx";
+import { TechSheetProps } from "../sections/Product/ProductDetails/ProductPage.tsx";
+
 export const MINICART_FORM_ID = "minicart-form";
 export const MINICART_DRAWER_ID = "minicart-drawer";
 
@@ -483,6 +486,18 @@ export const GRID_COL_SPAN_DESKTOP = {
   "4": "md:col-span-4",
 };
 
+export const ROUNDED_OPTIONS = {
+  "none": "rounded-none",
+  "sm": "rounded-sm",
+  "regular": "rounded",
+  "md": "rounded-md",
+  "lg": "rounded-lg",
+  "xl": "rounded-xl",
+  "2xl": "rounded-2xl",
+  "3xl": "rounded-3xl",
+  "full": "rounded-full",
+} as const;
+
 export const TOAST_ID = "toast-cart";
 
 export const LANGUAGE_DIFFS = {
@@ -526,6 +541,14 @@ export const LANGUAGE_DIFFS = {
         placeholder: "Insert your contact phone number",
       },
     },
+    productPage: {
+      descriptionTitle: "Description",
+      recordTitle: "Technical sheet",
+      dimensionsProduct: "Product dimensions",
+      dimensions: "without box",
+      dimensionsBox: "with box",
+      buttonText: "Where to buy",
+    },
   },
   ES: {
     contactForm: {
@@ -566,6 +589,14 @@ export const LANGUAGE_DIFFS = {
         label: "Número de teléfono de contacto",
         placeholder: "Inserta tu número de teléfono de contacto",
       },
+    },
+    productPage: {
+      descriptionTitle: "Descripción",
+      recordTitle: "Ficha Técnica",
+      dimensionsProduct: "Dimensiones del producto:",
+      dimensions: "con caja",
+      dimensionsBox: "sin caja",
+      buttonText: "Donde comprar",
     },
   },
 };
@@ -654,3 +685,39 @@ export const PADDING_SIZES = {
 };
 
 export const DEFAULT_DOMAINS = ["deno.dev", "decocdn.com", "localhost"];
+
+export const DEFAULT_TECH_SHEET_CONFIG: TechSheetProps[] = [
+  {
+    bgColor: "white",
+    descriptionProps: {
+      fontColor: "secondary",
+      fontWeight: "font-medium",
+    },
+    valueProps: {
+      fontColor: "info",
+      fontWeight: "font-light",
+    },
+  },
+  {
+    bgColor: "base-300",
+    descriptionProps: {
+      fontColor: "secondary",
+      fontWeight: "font-medium",
+    },
+    valueProps: {
+      fontColor: "info",
+      fontWeight: "font-light",
+    },
+  },
+];
+
+export const iconMap: Record<string, AvailableIcons> = {
+  WIDTH: "width-property",
+  HEIGHT: "height-property",
+  WEIGHT: "weight-property",
+  DEPTH: "depth-property",
+  BOX_WIDTH: "width-property",
+  BOX_HEIGHT: "height-property",
+  BOX_WEIGHT: "weight-property",
+  BOX_DEPTH: "depth-property",
+};

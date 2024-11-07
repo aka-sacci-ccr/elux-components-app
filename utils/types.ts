@@ -115,6 +115,17 @@ export interface ButtonProps {
   fontColor: Colors;
 }
 
+export type RoundedOptions =
+  | "none"
+  | "sm"
+  | "regular"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "full";
+
 export interface WidthAndHeight {
   width?: number;
   height?: number;
@@ -246,7 +257,8 @@ export interface AdditionalProperty {
     | "BOX_HEIGHT"
     | "BOX_WIDTH"
     | "BOX_DEPTH"
-    | "BOX_WEIGHT";
+    | "BOX_WEIGHT"
+    | "BOX_OTHER";
   /**
    * @title Property Name
    */

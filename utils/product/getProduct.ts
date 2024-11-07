@@ -285,9 +285,6 @@ export async function getProductBySlug(
     url.hostname.endsWith(identifier)
   );
 
-  console.log(url.hostname);
-  console.log(isAvaliable);
-
   return isAvaliable
     ? productsObject(
       {
