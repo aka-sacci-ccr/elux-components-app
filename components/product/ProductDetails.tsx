@@ -70,7 +70,12 @@ export default function ProductDetails(
               key={dimension["@id"]}
             >
               <Icon id={iconId} className="text-primary" size={24} />
+              <div class="flex gap-1 items-end">
               <span className="mt-1">{dimension.value}</span>
+              {
+                dimension.unitCode && (<span>{dimension.unitCode}</span>)
+              }
+              </div>
               <span className="font-light text-sm">{dimension.name}</span>
             </li>
           );
@@ -187,8 +192,9 @@ export default function ProductDetails(
                         <span className="text-secondary">
                           {item.name}
                         </span>
-                        <span className="text-base-content font-light">
-                          {item.value}
+                        <span className="text-base-content font-light flex gap-1">
+                          {`${item.value} `}
+                          {item.unitCode && (item.unitCode)}
                         </span>
                       </li>
                     );
