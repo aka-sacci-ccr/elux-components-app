@@ -59,25 +59,36 @@ export default function ProductDetails(
   const DimensionsCards: React.FC<Pick<Props, "additionalProperty">> = (
     { additionalProperty: dimensions },
   ) => {
+    const isGrid = dimensions && dimensions.length > 3;
     return (
       <ul
-        className={`${
-          dimensions && dimensions.length <= 3
-            ? "flex items-center"
-            : "grid grid-cols-2 grid-rows-2"
-        } w-full my-4 text-secondary lg:flex lg:items-center`}
+        className={clx(
+          !isGrid
+            ? "flex flex-row items-center"
+            : "grid grid-cols-2 lg:flex lg:items-center",
+          "w-full text-secondary",
+        )}
       >
-        {dimensions?.map((dimension) => {
+        {dimensions?.map((dimension, index) => {
           const iconId = getIconId(dimension.propertyID ?? "");
           return (
-            <li
-              className="flex flex-col gap-1 items-center flex-1 h-28"
-              key={dimension["@id"]}
-            >
-              <Icon id={iconId} className="text-primary" size={24} />
-              <span className="mt-1">{dimension.value}</span>
-              <span className="font-light text-sm">{dimension.name}</span>
-            </li>
+            <>
+              <li
+                className={clx(
+                  "flex flex-col gap-1 items-center justify-center flex-1 py-1.5 my-2",
+                  "border-l border-base-200 first:border-0",
+                  index % 2 === 0 && isGrid && "max-lg:!border-0",
+                )}
+                key={dimension["@id"]}
+              >
+                <Icon id={iconId} className="text-primary" size={24} />
+                <span className="mt-1 font-medium">{dimension.value}</span>
+                <span className="font-light text-sm">{dimension.name}</span>
+              </li>
+              {index === 1 && isGrid && (
+                <div className="lg:hidden block h-px bg-base-200 col-span-2" />
+              )}
+            </>
           );
         })}
       </ul>
@@ -173,7 +184,7 @@ export default function ProductDetails(
             <span class="text-sm text-secondary flex lg:hidden py-2">
               {LANGUAGE_DIFFS[language].productPage.dimensionsProduct}
             </span>
-            <div className="flex flex-col px-2 min-h-60">
+            <div className="flex flex-col px-2">
               <div role="tablist" class="tabs border-primary tabs-bordered">
                 <input
                   type="text"
@@ -194,7 +205,7 @@ export default function ProductDetails(
                   class="tab-content bg-base-100 rounded-box py-5"
                 >
                   <DimensionsCards
-                    additionalProperty={dimensionsPropertiesWithBox}
+                    additionalProperty={dimensionsProperties?.splice(0, 3)}
                   />
                 </div>
 
@@ -210,7 +221,9 @@ export default function ProductDetails(
                   role="tabpanel"
                   class="tab-content bg-base-100  rounded-box py-5"
                 >
-                  <DimensionsCards additionalProperty={dimensionsProperties} />
+                  <DimensionsCards
+                    additionalProperty={dimensionsPropertiesWithBox}
+                  />
                 </div>
               </div>
             </div>
