@@ -208,7 +208,7 @@ export default function ProductDetails(
                   class="tab-content bg-base-100 rounded-box py-5"
                 >
                   <DimensionsCards
-                    additionalProperty={dimensionsProperties?.splice(0, 3)}
+                    additionalProperty={dimensionsProperties}
                   />
                 </div>
 
