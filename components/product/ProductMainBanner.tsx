@@ -24,7 +24,7 @@ export default function ProductMainBanner({ product }: Props) {
           src={mainBannerMobile?.url ?? ""}
           width={400}
           height={600}
-          class=" object-contain w-full"
+          class="object-contain w-full"
         />
       </div>
       <div className="hidden lg:flex">
@@ -33,7 +33,7 @@ export default function ProductMainBanner({ product }: Props) {
           src={mainBannerDesktop?.url ?? ""}
           width={1280}
           height={600}
-          class=" object-contain w-full"
+          class="object-contain w-full"
         />
       </div>
       <div class="absolute z-10 w-full h-full top-0 bg-black opacity-40"></div>

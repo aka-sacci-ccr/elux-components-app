@@ -149,7 +149,7 @@ export default function ProductPage(
 
   return (
     <Container class="flex flex-col" spacing={spacing}>
-      <div class="my-6 sm:mt-6 sm:mb-8 max-w-[1280px] sm:w-[1280px] sm:pl-10 mx-auto">
+      <div class="my-6 max-w-[1280px] sm:w-[1280px] sm:pl-10 mx-auto">
         <Breadcrumb
           {...breadcrumbProps}
           items={breadcrumbItems}
