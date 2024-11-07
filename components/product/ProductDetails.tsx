@@ -82,7 +82,10 @@ export default function ProductDetails(
                 key={dimension["@id"]}
               >
                 <Icon id={iconId} className="text-primary" size={24} />
-                <span className="mt-1 font-medium">{dimension.value}</span>
+                <div class="flex gap-1 items-end font-medium">
+                  <span className="mt-1">{dimension.value}</span>
+                  {dimension.unitCode && <span>{dimension.unitCode}</span>}
+                </div>
                 <span className="font-light text-sm">{dimension.name}</span>
               </li>
               {index === 1 && isGrid && (
@@ -246,7 +249,8 @@ export default function ProductDetails(
                             TEXT_COLORS[descriptionProps.fontColor],
                           )}
                         >
-                          {item.name}
+                          {`${item.name} `}
+                          {item.unitCode && (`(${item.unitCode})`)}
                         </span>
                         <span
                           className={clx(
@@ -254,7 +258,7 @@ export default function ProductDetails(
                             TEXT_COLORS[valueProps.fontColor],
                           )}
                         >
-                          {item.value}
+                          {`${item.value} `}
                         </span>
                       </li>
                     );
