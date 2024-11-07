@@ -2,7 +2,11 @@ import { ProductDetailsPage } from "apps/commerce/types.ts";
 import GallerySlider from "./productGallery/Gallery.tsx";
 import { ProductMainProps } from "../../sections/Product/ProductDetails/ProductPage.tsx";
 import { clx } from "../../utils/clx.ts";
-import { LANGUAGE_DIFFS, ROUNDED_OPTIONS } from "../../utils/constants.tsx";
+import {
+  LANGUAGE_DIFFS,
+  ROUNDED_OPTIONS,
+  TEXT_COLORS,
+} from "../../utils/constants.tsx";
 
 export interface Props {
   /** @title Integration */
@@ -15,7 +19,33 @@ export default function ProductMain({ page, productMain, language }: Props) {
   if (!page) return <></>;
   const { product } = page;
   const { sku, name } = product;
-  const { buyButton } = productMain;
+  const { buyButton, productName } = productMain;
+
+  const SkuSpan = () => (
+    <span
+      className={clx(
+        "uppercase",
+        TEXT_COLORS[productName?.sku?.fontColor ?? "info"],
+        productName?.sku?.fontWeight ?? "font-light",
+        productName?.sku?.fontSize ?? "text-sm",
+      )}
+    >
+      {sku}
+    </span>
+  );
+
+  const TitleSpan = () => (
+    <h2
+      className={clx(
+        TEXT_COLORS[productName?.title?.fontColor ?? "secondary"],
+        productName?.title?.fontWeight ?? "font-base",
+        productName?.title?.fontSize ?? "text-xl",
+      )}
+    >
+      {name}
+    </h2>
+  );
+
   return (
     <div className="container flex flex-col lg:flex-row gap-4 mt-6 mb-4 px-5 lg:p-0 lg:mb-8">
       {/* Galeria do produto */}
@@ -25,12 +55,19 @@ export default function ProductMain({ page, productMain, language }: Props) {
         />
       </div>
       <div className="flex flex-col gap-2  w-full lg:w-2/4 mt-6 lg:mt-12 lg:ml-6">
-        <span className="text-sm text-info uppercase font-light">
-          {sku}
-        </span>
-        <h2 className="text-xl text-secondary">
-          {name}
-        </h2>
+        {productName?.position === "1"
+          ? (
+            <>
+              <TitleSpan />
+              <SkuSpan />
+            </>
+          )
+          : (
+            <>
+              <SkuSpan />
+              <TitleSpan />
+            </>
+          )}
         {!buyButton.isDisabled && (
           <a
             className={clx(

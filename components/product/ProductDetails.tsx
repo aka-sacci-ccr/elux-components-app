@@ -1,7 +1,14 @@
 import { PropertyValue } from "apps/commerce/types.ts";
 import AdditionalPropertyCards from "./AdditionalPropertyCards.tsx";
-import Icon, { AvailableIcons } from "../ui/Icon.tsx";
-import { BG_COLORS, LANGUAGE_DIFFS } from "../../utils/constants.tsx";
+import Icon from "../ui/Icon.tsx";
+import {
+  BG_COLORS,
+  BORDER_COLORS,
+  DEFAULT_TECH_SHEET_CONFIG,
+  iconMap,
+  LANGUAGE_DIFFS,
+  TEXT_COLORS,
+} from "../../utils/constants.tsx";
 import { clx } from "../../utils/clx.ts";
 import { ProductMainProps } from "../../sections/Product/ProductDetails/ProductPage.tsx";
 
@@ -15,6 +22,7 @@ interface Props {
 export default function ProductDetails(
   { additionalProperty, description, language, productMain }: Props,
 ) {
+  const { tabs } = productMain;
   const dimensionsProperties = additionalProperty?.filter((property) =>
     property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" ||
     property.propertyID === "DEPTH" || property.propertyID === "WEIGHT"
@@ -32,16 +40,13 @@ export default function ProductDetails(
   const tableProperties = additionalProperty?.filter((property) =>
     property.propertyID === "OTHER"
   );
-  const iconMap: Record<string, AvailableIcons> = {
-    WIDTH: "width-property",
-    HEIGHT: "height-property",
-    WEIGHT: "weight-property",
-    DEPTH: "depth-property",
-    BOX_WIDTH: "width-property",
-    BOX_HEIGHT: "height-property",
-    BOX_WEIGHT: "weight-property",
-    BOX_DEPTH: "depth-property",
-  };
+
+  const techSheetConfig =
+    !tabs?.techSheet?.length || tabs?.techSheet?.length < 2
+      ? DEFAULT_TECH_SHEET_CONFIG
+      : tabs?.techSheet;
+
+  const techSheetConfigSize = techSheetConfig.length;
 
   const getIconId = (propertyID: string) => {
     if (iconMap[propertyID]) return iconMap[propertyID];
@@ -54,30 +59,39 @@ export default function ProductDetails(
   const DimensionsCards: React.FC<Pick<Props, "additionalProperty">> = (
     { additionalProperty: dimensions },
   ) => {
+    const isGrid = dimensions && dimensions.length > 3;
     return (
       <ul
-        className={`${
-          dimensions && dimensions.length <= 3
-            ? "flex items-center"
-            : "grid grid-cols-2 grid-rows-2"
-        } w-full my-4 text-secondary lg:flex lg:items-center`}
+        className={clx(
+          !isGrid
+            ? "flex flex-row items-center"
+            : "grid grid-cols-2 lg:flex lg:items-center",
+          "w-full text-secondary",
+        )}
       >
-        {dimensions?.map((dimension) => {
+        {dimensions?.map((dimension, index) => {
           const iconId = getIconId(dimension.propertyID ?? "");
           return (
-            <li
-              className="flex flex-col gap-1 items-center flex-1 h-28"
-              key={dimension["@id"]}
-            >
-              <Icon id={iconId} className="text-primary" size={24} />
-              <div class="flex gap-1 items-end">
-              <span className="mt-1">{dimension.value}</span>
-              {
-                dimension.unitCode && (<span>{dimension.unitCode}</span>)
-              }
-              </div>
-              <span className="font-light text-sm">{dimension.name}</span>
-            </li>
+            <>
+              <li
+                className={clx(
+                  "flex flex-col gap-1 items-center justify-center flex-1 py-1.5 my-2",
+                  "border-l border-base-200 first:border-0",
+                  index % 2 === 0 && isGrid && "max-lg:!border-0",
+                )}
+                key={dimension["@id"]}
+              >
+                <Icon id={iconId} className="text-primary" size={24} />
+                <div class="flex gap-1 items-end font-medium">
+                  <span className="mt-1">{dimension.value}</span>
+                  {dimension.unitCode && <span>{dimension.unitCode}</span>}
+                </div>
+                <span className="font-light text-sm">{dimension.name}</span>
+              </li>
+              {index === 1 && isGrid && (
+                <div className="lg:hidden block h-px bg-base-200 col-span-2" />
+              )}
+            </>
           );
         })}
       </ul>
@@ -92,36 +106,62 @@ export default function ProductDetails(
         <div class="hidden lg:flex w-full pb-6">
           <a
             href="#description"
-            class="flex flex-1 border-b-2 border-primary text-primary  items-center justify-center py-3"
+            class={clx(
+              "flex flex-1 border-b-2 items-center justify-center py-3",
+              TEXT_COLORS[tabs?.enabledTab?.fontColor ?? "primary"],
+              tabs?.enabledTab?.fontSize,
+              tabs?.enabledTab?.fontWeight,
+              BORDER_COLORS[tabs?.enabledTab?.underlineColor ?? "primary"],
+            )}
           >
             {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
           </a>
           <a
             href="#properties"
-            class="flex flex-1 border-b-2 border-neutral text-base-content font-light items-center justify-center py-3"
+            class={clx(
+              "flex flex-1 border-b-2 items-center justify-center py-3",
+              TEXT_COLORS[tabs?.disabledTab?.fontColor ?? "base-content"],
+              tabs?.disabledTab?.fontSize,
+              tabs?.disabledTab?.fontWeight ?? "font-light",
+              BORDER_COLORS[tabs?.disabledTab?.underlineColor ?? "neutral"],
+            )}
           >
             {LANGUAGE_DIFFS[language].productPage.recordTitle}
           </a>
         </div>
-        <div>
+        <div class="flex flex-col lg:gap-12">
           <div
             class={clx(
-              "bg-white lg:py-6 max-lg:my-6 max-lg:pt-6",
+              "bg-white lg:pt-6 max-lg:my-6 max-lg:pt-6",
               productMain?.bgColor === "white" || !productMain?.bgColor
                 ? ""
                 : "lg:px-6 max-lg:px-4",
             )}
           >
-            <h2 className="text-secondary text-base text-left">
+            <h2
+              className={clx(
+                "text-left",
+                TEXT_COLORS[tabs?.titles?.fontColor ?? "secondary"],
+                tabs?.titles?.fontSize ?? "text-base",
+                tabs?.titles?.fontWeight,
+              )}
+            >
               {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
             </h2>
-            <article className="py-4 text-sm font-light text-secondary leading-6 lg:border-b border-base-200 max-sm:hidden">
+            <article
+              class={clx(
+                "py-4 font-light text-secondary",
+                "lg:border-b border-base-200 max-sm:hidden",
+                tabs?.productDescription?.descriptionSize ?? "text-sm",
+              )}
+            >
               {description}
             </article>
             <div>
               <AdditionalPropertyCards
                 propertyCards={propertyCards}
                 mergeQuantity={productMain.mergeQuantity}
+                productDescription={tabs?.productDescription}
               />
             </div>
           </div>
@@ -134,7 +174,12 @@ export default function ProductDetails(
             )}
           >
             <h2
-              className="text-secondary text-base pb-6"
+              className={clx(
+                "pb-6",
+                TEXT_COLORS[tabs?.titles?.fontColor ?? "secondary"],
+                tabs?.titles?.fontSize ?? "text-base",
+                tabs?.titles?.fontWeight,
+              )}
               id="properties"
             >
               {LANGUAGE_DIFFS[language].productPage.recordTitle}
@@ -142,7 +187,7 @@ export default function ProductDetails(
             <span class="text-sm text-secondary flex lg:hidden py-2">
               {LANGUAGE_DIFFS[language].productPage.dimensionsProduct}
             </span>
-            <div className="flex flex-col px-2 min-h-60">
+            <div className="flex flex-col px-2">
               <div role="tablist" class="tabs border-primary tabs-bordered">
                 <input
                   type="text"
@@ -163,7 +208,7 @@ export default function ProductDetails(
                   class="tab-content bg-base-100 rounded-box py-5"
                 >
                   <DimensionsCards
-                    additionalProperty={dimensionsPropertiesWithBox}
+                    additionalProperty={dimensionsProperties}
                   />
                 </div>
 
@@ -179,22 +224,41 @@ export default function ProductDetails(
                   role="tabpanel"
                   class="tab-content bg-base-100  rounded-box py-5"
                 >
-                  <DimensionsCards additionalProperty={dimensionsProperties} />
+                  <DimensionsCards
+                    additionalProperty={dimensionsPropertiesWithBox}
+                  />
                 </div>
               </div>
             </div>
             {tableProperties && (
               <div className="w-full">
                 <ul>
-                  {tableProperties.map((item) => {
+                  {tableProperties.map((item, index) => {
+                    const { bgColor, descriptionProps, valueProps } =
+                      techSheetConfig[index % techSheetConfigSize];
                     return (
-                      <li className="even:bg-base-300 flex justify-between items-center p-2 text-sm">
-                        <span className="text-secondary">
-                          {item.name}
+                      <li
+                        className={clx(
+                          "flex justify-between items-center p-2 text-sm",
+                          BG_COLORS[bgColor],
+                        )}
+                      >
+                        <span
+                          className={clx(
+                            descriptionProps.fontWeight,
+                            TEXT_COLORS[descriptionProps.fontColor],
+                          )}
+                        >
+                          {`${item.name} `}
+                          {item.unitCode && (`(${item.unitCode})`)}
                         </span>
-                        <span className="text-base-content font-light flex gap-1">
+                        <span
+                          className={clx(
+                            valueProps.fontWeight,
+                            TEXT_COLORS[valueProps.fontColor],
+                          )}
+                        >
                           {`${item.value} `}
-                          {item.unitCode && (item.unitCode)}
                         </span>
                       </li>
                     );

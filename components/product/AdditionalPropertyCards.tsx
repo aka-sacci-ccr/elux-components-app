@@ -5,14 +5,17 @@ import { clx } from "../../utils/clx.ts";
 import { useDevice } from "@deco/deco/hooks";
 import { useId } from "../../sdk/useId.ts";
 import { chunkArray } from "../../utils/utils.ts";
+import { ProductDescriptionProps } from "../../sections/Product/ProductDetails/ProductPage.tsx";
+import { TEXT_COLORS } from "../../utils/constants.tsx";
 
 interface Props {
   propertyCards: PropertyValue[] | undefined;
   mergeQuantity?: number;
+  productDescription?: ProductDescriptionProps;
 }
 
 export default function AdditionalPropertyCards(
-  { propertyCards, mergeQuantity }: Props,
+  { propertyCards, mergeQuantity, productDescription }: Props,
 ) {
   if (!propertyCards) return <></>;
 
@@ -93,10 +96,28 @@ export default function AdditionalPropertyCards(
                           </div>
                         )}
                         <div className="flex flex-col flex-1 gap-2 text-secondary text-sm px-1">
-                          {item.name && <span>{item.name}</span>}
+                          {item.name && (
+                            <span
+                              class={clx(
+                                productDescription?.title?.fontWeight,
+                                productDescription?.title?.fontSize ??
+                                  "text-sm",
+                                TEXT_COLORS[
+                                  productDescription?.title?.fontColor ??
+                                    "secondary"
+                                ],
+                              )}
+                            >
+                              {item.name}
+                            </span>
+                          )}
                           {item.value && (
                             <article
-                              className="font-light"
+                              className={clx(
+                                "font-light max-w-[500px] text-secondary",
+                                productDescription?.descriptionSize ??
+                                  "text-sm",
+                              )}
                               dangerouslySetInnerHTML={{ __html: item.value }}
                             />
                           )}
@@ -140,16 +161,21 @@ export default function AdditionalPropertyCards(
         : (
           <div className="w-full max-w-[65rem] mx-auto hidden lg:grid">
             {propertyCards.map((card, index) => {
+              const isOdd = (index + 1) % 2 !== 0;
               const isLastAndOdd = index === propertyCards.length - 1 &&
-                (index + 1) % 2 !== 0;
+                isOdd;
 
               return (
                 <>
                   <div
                     key={card["@id"]}
-                    className={`w-full max-w-[520px] lg:max-h-[231px] overflow-hidden flex flex-col lg:flex-row-reverse ${
-                      !isLastAndOdd && "lg:border-b"
-                    } border-base-200`}
+                    className={clx(
+                      `w-full overflow-hidden flex flex-col`,
+                      !isLastAndOdd && "lg:border-b",
+                      "lg:flex-row-reverse",
+                      "border-base-200",
+                      isOdd ? "pr-2.5" : "pl-2.5",
+                    )}
                   >
                     {card.image?.[0]?.url && (
                       <div className="w-full lg:max-w-[240px] h-[240px] flex justify-center overflow-hidden">
@@ -162,10 +188,23 @@ export default function AdditionalPropertyCards(
                         />
                       </div>
                     )}
-                    <div className="flex flex-col flex-1 gap-2 text-secondary text-sm self-center py-4">
-                      <span>{card.name}</span>
+                    <div className="flex flex-col flex-1 gap-2 self-center py-4">
+                      <span
+                        class={clx(
+                          productDescription?.title?.fontWeight,
+                          productDescription?.title?.fontSize ?? "text-sm",
+                          TEXT_COLORS[
+                            productDescription?.title?.fontColor ?? "secondary"
+                          ],
+                        )}
+                      >
+                        {card.name}
+                      </span>
                       <article
-                        className="font-light max-w-[500px]"
+                        className={clx(
+                          "font-light max-w-[500px] text-secondary",
+                          productDescription?.descriptionSize ?? "text-sm",
+                        )}
                         dangerouslySetInnerHTML={{ __html: card.value! }}
                       />
                     </div>

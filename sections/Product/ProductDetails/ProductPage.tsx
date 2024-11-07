@@ -14,13 +14,17 @@ import Container, { SpacingConfig } from "../../container/Container.tsx";
 import Breadcrumb, {
   Props as BreadcrumbProps,
 } from "../../Content/Breadcrumb.tsx";
-import { Colors, RoundedOptions } from "../../../utils/types.ts";
+import {
+  Colors,
+  FontSize,
+  RoundedOptions,
+  TextProps,
+} from "../../../utils/types.ts";
 import { AppContext } from "../../../mod.ts";
 
 interface ProductPageProps {
   /** @description product loader of the page */
   page: ProductDetailsPage | null;
-
   /** @description Props of PDP breadcrumb */
   breadcrumbProps: PDPBreadcrumbProps;
   /** @description Define alternating banners colors */
@@ -34,8 +38,12 @@ interface ProductPageProps {
 export interface ProductMainProps {
   /** @description Buy button */
   buyButton: BuyButtonProps;
+  /** @description Product name section */
+  productName?: ProductNameProps;
   /** @description Background color */
   bgColor?: Colors;
+  /** @description Product description tabs */
+  tabs?: TabProps;
   /** @title Quantity of no image descriptions */
   /** @description Merge description with no image in mobile */
   mergeQuantity?: number;
@@ -48,6 +56,15 @@ interface BuyButtonProps {
   redirectTo: string;
   /** @description Rounded */
   rounded: RoundedOptions;
+}
+
+interface ProductNameProps {
+  /** @description Position of SKU/Name */
+  position?: "1" | "2";
+  /** @title Product name props */
+  title?: Omit<TextProps, "text">;
+  /** @title SKU props */
+  sku?: Omit<TextProps, "text">;
 }
 
 interface PDPBreadcrumbProps extends
@@ -68,6 +85,35 @@ interface PDPBreadcrumbProps extends
     item: string;
     url: string;
   };
+}
+
+interface TabProps {
+  /** @description Styling of the enabled tab */
+  enabledTab?: Omit<TextProps, "text"> & { underlineColor?: Colors };
+  /** @description Styling of the disabled tab */
+  disabledTab?: Omit<TextProps, "text"> & { underlineColor?: Colors };
+  /** @description Styling of the titles of each section */
+  titles?: Omit<TextProps, "text">;
+  /** @title Styling of the tabs content */
+  productDescription?: ProductDescriptionProps;
+  /** @title Styling of the tech sheet table */
+  techSheet?: TechSheetProps[];
+}
+
+export interface ProductDescriptionProps {
+  /** @description Styling of the title of each grid */
+  title?: Omit<TextProps, "text">;
+  /** @description Size of the descriptions */
+  descriptionSize?: FontSize;
+}
+
+export interface TechSheetProps {
+  /** @description Background color */
+  bgColor: Colors;
+  /** @description Description color and weight */
+  descriptionProps: Omit<TextProps, "text" | "fontSize">;
+  /** @description Value color and weight */
+  valueProps: Omit<TextProps, "text" | "fontSize">;
 }
 
 export const loader = (

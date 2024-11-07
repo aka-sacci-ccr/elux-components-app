@@ -59,7 +59,10 @@ export default function ProductInfoBanners(
               <div class="sm:w-2/4 flex items-center">
                 <div className="w-full h-full flex flex-col  text-left justify-center gap-4 p-0 mx-6 my-10 sm:max-w-[400px] sm:gap-6 sm:mx-auto">
                   <span
-                    className={clx("text-xl", TEXT_COLORS[titleColor])}
+                    className={clx(
+                      "text-xl font-medium",
+                      TEXT_COLORS[titleColor],
+                    )}
                   >
                     {banner.name}
                   </span>
