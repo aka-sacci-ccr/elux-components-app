@@ -62,8 +62,10 @@
   "exclude": [
     "static",
     "README.md",
-    "**/README.md"
+    "**/README.md",
+    "node_modules"
   ],
+  "nodeModulesDir": true,
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
