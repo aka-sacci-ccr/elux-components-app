@@ -26,7 +26,6 @@ import * as $$$$$$7 from "./sections/Header/Header.tsx";
 import * as $$$$$$8 from "./sections/Institutional/Policy.tsx";
 import * as $$$$$$9 from "./sections/Institutional/Support.tsx";
 import * as $$$$$$10 from "./sections/Institutional/WhereToBuy.tsx";
-import * as $$$$$$15 from "./sections/mySection.tsx";
 import * as $$$$$$11 from "./sections/Product/ProductDetails/ProductPage.tsx";
 import * as $$$$$$12 from "./sections/Product/ProductListing/ProductListingPage.tsx";
 import * as $$$$$$13 from "./sections/Social/ContactForm.tsx";
@@ -54,7 +53,6 @@ const manifest = {
     "elux-components-app/sections/Institutional/Policy.tsx": $$$$$$8,
     "elux-components-app/sections/Institutional/Support.tsx": $$$$$$9,
     "elux-components-app/sections/Institutional/WhereToBuy.tsx": $$$$$$10,
-    "elux-components-app/sections/mySection.tsx": $$$$$$15,
     "elux-components-app/sections/Product/ProductDetails/ProductPage.tsx":
       $$$$$$11,
     "elux-components-app/sections/Product/ProductListing/ProductListingPage.tsx":

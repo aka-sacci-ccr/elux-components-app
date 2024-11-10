@@ -8,6 +8,7 @@ export type AppContext = FnContext<State, Manifest>;
 
 export interface Props {
   language: "EN" | "ES";
+  siteTemplate: "elux" | "frigidaire";
   originSite?: string;
 }
 
@@ -15,10 +16,10 @@ export interface State extends Omit<Props, "token"> {
 }
 
 /**
- * @title App Template
- * @description This is an template of an app to be used as a reference.
- * @category Tools
- * @logo https://
+ * @title Elux Global Sections
+ * @description This app allows you to add global sections to your Elux site.
+ * @category Sections
+ * @logo https://ozksgdmyrqcxcwhnbepg.supabase.co/storage/v1/object/public/assets/12041/b91971a8-b00c-4e0c-9997-14fa3834413a
  */
 export default function App(props: Props): App<Manifest, State> {
   const state = props;
