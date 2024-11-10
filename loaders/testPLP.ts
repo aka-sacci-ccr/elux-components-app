@@ -9,7 +9,7 @@ export default function loader(): ProductListingPage | null {
     "@type": "ProductListingPage",
     breadcrumb: {
       "@type": "BreadcrumbList",
-      numberOfItems: 2,
+      numberOfItems: 1,
       itemListElement: [{
         "@type": "ListItem",
         position: 1,
@@ -156,6 +156,7 @@ const products: Product[] = [
     name: 'Estufa de Gas Doble Horno de 30" Acero Inoxidable',
     sku: "FRQU40E3HTS",
     productID: "estufa-de-gas-doble-horno-de-30-acero-inoxidable",
+    url: "/nevecon-elux-french-door/p",
     image: [{
       "@type": "ImageObject",
       url:
@@ -168,6 +169,7 @@ const products: Product[] = [
     name: "Refrigerador Multi Door 4 puertas 16.2 Cu. Ft Gris",
     sku: "FRQU40E3HTS",
     productID: "refrigerador-multi-door-4-puertas-16-2-cu-ft-gris",
+    url: "/nevecon-elux-french-door/p",
     image: [{
       "@type": "ImageObject",
       url:
@@ -180,6 +182,7 @@ const products: Product[] = [
     name: "Microondas 1.1 Cu. Ft. Color Acero",
     sku: "FRQU40E3HTS",
     productID: "microondas-1-1-cu-ft-color-acero",
+    url: "/nevecon-elux-french-door/p",
     image: [{
       "@type": "ImageObject",
       url:
@@ -192,6 +195,7 @@ const products: Product[] = [
     name: 'Parrilla de mesa eléctrica de 30" - color negro',
     sku: "FRQU40E3HTS",
     productID: "parrilla-de-mesa-electrica-de-30-color-negro",
+    url: "/nevecon-elux-french-door/p",
     image: [{
       "@type": "ImageObject",
       url:
@@ -205,6 +209,7 @@ const products: Product[] = [
     sku: "FRQU40E3HTS",
     productID:
       "frigidaire-lavadora-compacta-de-2-4-cu-ft-de-carga-frontal-blanca",
+    url: "/nevecon-elux-french-door/p",
     image: [{
       "@type": "ImageObject",
       url:
