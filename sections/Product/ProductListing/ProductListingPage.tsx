@@ -100,13 +100,15 @@ export default function ProductListingPage(
 
   return (
     <Container class="flex flex-col" spacing={spacing}>
-      <div class="my-6 max-w-[1280px] sm:pl-10">
-        <Breadcrumb
-          {...breadcrumbProps}
-          items={breadcrumbItems}
-          fontColor={breadcrumbProps.iconColor}
-          disableContainer={true}
-        />
+      <div class="w-full flex flex-row justify-center">
+        <div class="my-6 w-[1280px] sm:pl-10">
+          <Breadcrumb
+            {...breadcrumbProps}
+            items={breadcrumbItems}
+            fontColor={breadcrumbProps.iconColor}
+            disableContainer={true}
+          />
+        </div>
       </div>
       <ListingPageBanner
         image="https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-latam/c35db32c-304c-4e57-a09a-c5b395dae644/072ae6028195b95f090be37ca0be5b9b.png"

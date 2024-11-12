@@ -263,7 +263,8 @@ const SubmenuAside = (
             <span class="text-secondary font-medium">{label}</span>
           </div>
 
-          {/* <label
+          {
+            /* <label
             htmlFor={id}
             class="h-9 flex gap-2 items-center justify-between"
           >
@@ -271,7 +272,8 @@ const SubmenuAside = (
               id="chevron-right"
               class="text-primary rotate-180"
             />
-          </label> */}
+          </label> */
+          }
         </div>
         <ul class="flex flex-col items-start justify-start pt-2 px-4 gap-2 h-full overflow-scroll max-h-[calc(100vh_-_52px)]">
           {values.map(({ label, value, selected }) => (
