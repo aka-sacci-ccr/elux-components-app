@@ -19,6 +19,8 @@ const ELUX_DEFAULT = {
   } as PLPBreadcrumbProps,
   listingMain: {
     filtersFontColor: "neutral-content",
+    filterIconUrl:
+      "https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-latam/69b170d1-d7e1-460e-877e-2b11c8ffbe47/Vector.png",
     cardStyling: {
       skuStyle: {
         fontColor: "success-content",
@@ -32,7 +34,6 @@ const ELUX_DEFAULT = {
       },
     },
     layout: {
-      pagination: "show-more",
       buttonProps: {
         text: "Show more",
         color: "white",
@@ -62,6 +63,8 @@ const FRIGIDAIRE_DEFAULT = {
   } as PLPBreadcrumbProps,
   listingMain: {
     filtersFontColor: "neutral-content",
+    filterIconUrl:
+      "https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-latam/69b170d1-d7e1-460e-877e-2b11c8ffbe47/Vector.png",
     cardStyling: {
       skuStyle: {
         fontColor: "success-content",
@@ -75,7 +78,6 @@ const FRIGIDAIRE_DEFAULT = {
       },
     },
     layout: {
-      pagination: "show-more",
       buttonProps: {
         text: "Show more",
         color: "white",
@@ -105,6 +107,10 @@ export const productListingStylingDiffs = {
         hoverUnderline: true,
         icon: "dots-frigidaire",
       } as PLPBreadcrumbProps,
+      listingMain: {
+        ...ELUX_DEFAULT.listingMain,
+        filtersFontColor: "primary",
+      } as ListingMainProps,
     },
   },
   frigidaire: { desktop: FRIGIDAIRE_DEFAULT, mobile: FRIGIDAIRE_DEFAULT },

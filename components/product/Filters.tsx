@@ -10,23 +10,37 @@ import Icon from "../ui/Icon.tsx";
 
 interface Props {
   filters: ProductListingPage["filters"];
+  siteTemplate: "elux" | "frigidaire";
 }
 
 const isToggle = (filter: Filter): filter is FilterToggle =>
   filter["@type"] === "FilterToggle";
 
-function ValueItem({ selected, label }: FilterToggleValue) {
+function ValueItem(
+  { selected, label, siteTemplate }: FilterToggleValue & {
+    siteTemplate: "elux" | "frigidaire";
+  },
+) {
   return (
     <div class="flex items-center gap-2">
       <label class="flex items-center gap-2 cursor-pointer">
-        <input type="checkbox" checked={selected} />
+        <input
+          type="checkbox"
+          checked={selected}
+          class={clx(
+            "w-4 h-4 appearance-none border rounded-sm cursor-pointer flex justify-center [&:checked::before]:self-center",
+            siteTemplate === "elux"
+              ? "checked:bg-white border-warning [&:checked::before]:content-[url('https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-latam/53221bfd-3f69-4050-9677-6c6d4d767c50/check.png')] [&:checked::before]:-mt-[2px]"
+              : "checked:border-none checked:bg-primary border-base-300 [&:checked::before]:content-[url('https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-nola-us/453ebc96-5d1f-403a-a5c6-92f48dd206c0/check.png')]",
+          )}
+        />
         <span class="text-sm">{label}</span>
       </label>
     </div>
   );
 }
 
-function Filters({ filters }: Props) {
+function Filters({ filters, siteTemplate }: Props) {
   return (
     <>
       <style
@@ -37,12 +51,12 @@ function Filters({ filters }: Props) {
                     `,
         }}
       />
-      <ul class="flex flex-col gap-5 p-4 sm:p-0">
+      <ul class="flex flex-col gap-5 p-0">
         {filters
           .filter(isToggle)
           .map((filter) => (
             <li class="flex flex-col gap-4">
-              <CollapseFilters {...filter} />
+              <CollapseFilters {...filter} siteTemplate={siteTemplate} />
             </li>
           ))}
       </ul>
@@ -50,7 +64,9 @@ function Filters({ filters }: Props) {
   );
 }
 
-function CollapseFilters(props: FilterToggle) {
+function CollapseFilters(
+  props: FilterToggle & { siteTemplate: "elux" | "frigidaire" },
+) {
   const id = useId();
 
   return (
@@ -77,7 +93,7 @@ function CollapseFilters(props: FilterToggle) {
       <div class="collapse-content !p-0">
         <div class="flex flex-col gap-6 py-6">
           {props.values.map((item) => {
-            return <ValueItem {...item} />;
+            return <ValueItem {...item} siteTemplate={props.siteTemplate} />;
           })}
         </div>
       </div>

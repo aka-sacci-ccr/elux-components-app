@@ -38,8 +38,8 @@ function Sort({ sortOptions, url }: Props) {
       <select
         name="sort"
         class={clx(
-          "select w-full rounded border-xs border-neutral text-base font-medium",
-          "focus:border-neutral",
+          "select w-full rounded border-xs border-warning text-base font-medium text-warning-content",
+          "focus:border-warning",
         )}
         hx-on:change={useScript(() => {
           const select = event!.currentTarget as HTMLSelectElement;

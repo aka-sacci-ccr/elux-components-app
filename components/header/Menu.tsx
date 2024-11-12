@@ -47,7 +47,7 @@ const MenuMobile = ({ links, extraLinks, mobile, menuText }: MenuProps) => {
       <aside
         class={clx(
           "-translate-x-full group-has-[#open-menu:checked]/header:translate-x-0 transition-all",
-          "z-50 w-screen h-screen absolute top-0",
+          "z-50 w-screen h-screen top-0 overflow-y-auto fixed",
         )}
       >
         <div class="h-[52px] bg-primary w-full p-2 flex items-center justify-between pl-4">

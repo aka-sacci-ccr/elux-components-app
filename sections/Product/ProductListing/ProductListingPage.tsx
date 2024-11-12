@@ -13,11 +13,14 @@ import SearchResult, {
 import { CardStyling } from "../../../components/product/ProductCard.tsx";
 import { productListingStylingDiffs } from "../../../utils/styling/product/productListing/stylingDiff.ts";
 import { useDevice } from "@deco/deco/hooks";
+import { LANGUAGE_DIFFS } from "../../../utils/constants.tsx";
 
 export interface Props {
   page: PLP | null;
   /** @description Spacing config */
   spacing?: SpacingConfig;
+  /** @hide true */
+  partial?: "hideMore" | "hideLess";
 }
 
 export interface ListingMainProps {
@@ -28,6 +31,7 @@ export interface ListingMainProps {
   layout?: Layout;
   /** @description 0 for ?page=0 as your first page */
   startingPage?: 0 | 1;
+  filterIconUrl: string;
 }
 
 export interface PLPBreadcrumbProps extends
@@ -64,11 +68,11 @@ export const loader = (
 };
 
 export default function ProductListingPage(
-  { spacing, page, url, siteTemplate }: ReturnType<
+  { spacing, page, url, siteTemplate, partial, language }: ReturnType<
     typeof loader
   >,
 ) {
-  if (!page) return <NotFound />;
+  if (!page) return <NotFound language={language} />;
 
   const device = useDevice();
   const { breadcrumbProps, listingMain } =
@@ -80,6 +84,19 @@ export default function ProductListingPage(
     page.breadcrumb.itemListElement,
     breadcrumbProps,
   );
+
+  if (partial) {
+    return (
+      <SearchResult
+        page={page}
+        url={url}
+        listingMain={listingMain}
+        partial={partial}
+        language={language}
+        siteTemplate={siteTemplate}
+      />
+    );
+  }
 
   return (
     <Container class="flex flex-col" spacing={spacing}>
@@ -99,15 +116,18 @@ export default function ProductListingPage(
         page={page}
         url={url}
         listingMain={listingMain}
+        partial={partial}
+        language={language}
+        siteTemplate={siteTemplate}
       />
     </Container>
   );
 }
 
-function NotFound() {
+function NotFound({ language }: { language: "EN" | "ES" }) {
   return (
     <div class="w-full flex justify-center items-center py-10">
-      <span>Not Found!</span>
+      <span>{LANGUAGE_DIFFS[language].listingPage.notFound}</span>
     </div>
   );
 }

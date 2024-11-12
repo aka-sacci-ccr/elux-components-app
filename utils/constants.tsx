@@ -549,6 +549,15 @@ export const LANGUAGE_DIFFS = {
       dimensionsBox: "with box",
       buttonText: "Where to buy",
     },
+    listingPage: {
+      notFound: "Not Found!",
+      filters: "Filters",
+      productCount: "products",
+      sort: "Sort by",
+      filter: "Filter by",
+      showMore: "Show more",
+      showLess: "Show less",
+    },
   },
   ES: {
     contactForm: {
@@ -597,6 +606,15 @@ export const LANGUAGE_DIFFS = {
       dimensions: "con caja",
       dimensionsBox: "sin caja",
       buttonText: "Donde comprar",
+    },
+    listingPage: {
+      notFound: "No encontrado!",
+      filters: "Filtros",
+      productCount: "productos",
+      sort: "Ordenar por",
+      filter: "Filtrar por",
+      showMore: "Mostrar más",
+      showLess: "Mostrar menos",
     },
   },
 };
