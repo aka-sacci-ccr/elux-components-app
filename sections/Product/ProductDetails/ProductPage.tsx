@@ -136,7 +136,7 @@ export default function ProductPage(
       typeof loader
     >,
 ) {
-  if (!page) return <></>;
+  if (!page) return <NotFound />;
   const { product, breadcrumbList } = page;
   const { image, additionalProperty, description } = product;
 
@@ -229,3 +229,11 @@ const getBreadcrumbItems = (
 
   return breadcrumbItems;
 };
+
+function NotFound() {
+  return (
+    <div class="w-full flex justify-center items-center py-10">
+      <span>Not Found!</span>
+    </div>
+  );
+}
