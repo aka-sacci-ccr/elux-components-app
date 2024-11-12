@@ -110,9 +110,13 @@ const FrigidareMenuItems = (
               )}
               {...onClickEvent}
             >
-              <span class="flex items-center gap-2 h-full text-neutral-content">
-                {filter.label}
-              </span>
+              <div class="text-neutral-content flex flex-row gap-1 items-center">
+                <span>{filter.label}</span>
+                <ApplicableFilters.Counter
+                  categoryKey={filter.key}
+                  class="w-7 h-6 min-w-7 min-h-6 rounded-[100px] bg-primary text-white text-xs flex items-center justify-center font-medium"
+                />
+              </div>
               <p>
                 <Icon
                   class="text-primary"
@@ -167,9 +171,23 @@ const EluxMenuItems = (
                         "flex items-center justify-between h-full w-full",
                       )}
                     >
-                      <p class="font-light">
-                        {filter.label}
-                      </p>
+                      <div class="font-light flex flex-row gap-1 items-center">
+                        <span>{filter.label}</span>
+                        <ApplicableFilters.Counter
+                          categoryKey={filter.key}
+                          class="w-7 h-6 min-w-7 min-h-6 rounded-[100px] bg-primary text-white text-xs flex items-center justify-center font-medium"
+                        />
+                        <ApplicableFilters.ClearBtn
+                          specificCategoryKey={filter.key}
+                          rel="next"
+                          class={clx(
+                            "btn btn-ghost px-4 [.hidden~&]:hidden",
+                            "px-4 min-h-6 max-h-6 bg-primary text-white rounded font-medium text-xs",
+                          )}
+                        >
+                          {LANGUAGE_DIFFS["ES"].listingPage.clear}
+                        </ApplicableFilters.ClearBtn>
+                      </div>
                       <Icon
                         id="chevron-right"
                         class="ml-auto text-primary arrow pointer-events-none rotate-90"
@@ -273,6 +291,7 @@ const SubmenuAside = (
         <FilterButtons
           language={language}
           siteTemplate="frigidaire"
+          categoryKey={key}
         />
       </div>
     </aside>
@@ -282,13 +301,16 @@ const SubmenuAside = (
 const FilterButtons = ({
   language,
   siteTemplate,
+  categoryKey,
 }: {
   language: "EN" | "ES";
   siteTemplate: "elux" | "frigidaire";
+  categoryKey?: string;
 }) => {
   return (
     <div class="pt-2 pb-3.5 grid grid-cols-2 gap-1.5 px-4">
       <ApplicableFilters.ClearBtn
+        specificCategoryKey={categoryKey}
         rel="next"
         class={clx(
           "btn btn-ghost px-4 w-full",
@@ -313,14 +335,14 @@ const FilterButtons = ({
 const buttonDiff = {
   "elux": {
     "apply":
-      "btn btn-ghost px-4 min-h-10 max-h-10 w-full bg-primary text-white rounded font-medium",
+      "px-4 min-h-10 max-h-10 w-full bg-primary text-white rounded font-medium",
     "clear":
-      "btn btn-ghost px-4 min-h-10 max-h-10 w-full bg-white text-primary rounded font-medium",
+      "px-4 min-h-10 max-h-10 w-full bg-white text-primary rounded font-medium",
   },
   "frigidaire": {
     "apply":
-      "btn btn-ghost px-4 min-h-9 max-h-9 w-full font-medium bg-primary text-white rounded-[50px]",
+      "px-4 min-h-9 max-h-9 w-full font-medium bg-primary text-white rounded-[50px]",
     "clear":
-      "btn btn-ghost px-4 min-h-9 max-h-9 w-full font-medium bg-white text-primary rounded-[50px]",
+      "px-4 min-h-9 max-h-9 w-full font-medium bg-white text-primary rounded-[50px]",
   },
 };
