@@ -7,6 +7,7 @@ import type {
 import { clx } from "../../utils/clx.ts";
 import { useId } from "../../sdk/useId.ts";
 import Icon from "../ui/Icon.tsx";
+import ApplicableFilters from "../ui/ApplicableFilters.tsx";
 
 interface Props {
   filters: ProductListingPage["filters"];
@@ -17,15 +18,17 @@ const isToggle = (filter: Filter): filter is FilterToggle =>
   filter["@type"] === "FilterToggle";
 
 function ValueItem(
-  { selected, label, siteTemplate }: FilterToggleValue & {
+  { selected, label, siteTemplate, value, categoryKey }: FilterToggleValue & {
     siteTemplate: "elux" | "frigidaire";
+    categoryKey: string;
   },
 ) {
   return (
-    <div class="flex items-center gap-2">
+    <li class="flex items-center gap-2">
       <label class="flex items-center gap-2 cursor-pointer">
-        <input
-          type="checkbox"
+        <ApplicableFilters.Input
+          categoryKey={categoryKey}
+          filterValue={value}
           checked={selected}
           class={clx(
             "w-4 h-4 appearance-none border rounded-sm cursor-pointer flex justify-center [&:checked::before]:self-center",
@@ -36,30 +39,54 @@ function ValueItem(
         />
         <span class="text-sm">{label}</span>
       </label>
-    </div>
+    </li>
   );
 }
 
 function Filters({ filters, siteTemplate }: Props) {
+  const id = useId();
   return (
     <>
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
+      <ApplicableFilters class="w-full flex flex-col gap-5" id={id}>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
                     input:checked ~ label .arrow { transform: rotate(270deg); transition: transform 0.4s ease; }
                     input:not(:checked) ~ label .arrow { transform: rotate(90deg); transition: transform 0.4s ease; }
                     `,
-        }}
-      />
-      <ul class="flex flex-col gap-5 p-0">
-        {filters
-          .filter(isToggle)
-          .map((filter) => (
-            <li class="flex flex-col gap-4">
-              <CollapseFilters {...filter} siteTemplate={siteTemplate} />
-            </li>
-          ))}
-      </ul>
+          }}
+        />
+        <ul class="flex flex-col gap-5 p-0">
+          {filters
+            .filter(isToggle)
+            .map((filter) => (
+              <li class="flex flex-col gap-4">
+                <CollapseFilters {...filter} siteTemplate={siteTemplate} />
+              </li>
+            ))}
+        </ul>
+        <div class="flex flex-col gap-2">
+          <ApplicableFilters.Apply
+            rel="next"
+            class={clx(
+              "btn btn-ghost px-4 min-h-10 max-h-10",
+              "font-semibold bg-primary text-white",
+            )}
+          >
+            Aplicar
+          </ApplicableFilters.Apply>
+          <ApplicableFilters.Clear
+            rel="next"
+            class={clx(
+              "btn btn-ghost px-4 min-h-10 max-h-10",
+              "font-semibold bg-primary text-white",
+            )}
+          >
+            Limpar
+          </ApplicableFilters.Clear>
+        </div>
+      </ApplicableFilters>
+      <ApplicableFilters.JS rootId={id} />
     </>
   );
 }
@@ -91,11 +118,17 @@ function CollapseFilters(
       </label>
 
       <div class="collapse-content !p-0">
-        <div class="flex flex-col gap-6 py-6">
+        <ul class="flex flex-col gap-6 py-6">
           {props.values.map((item) => {
-            return <ValueItem {...item} siteTemplate={props.siteTemplate} />;
+            return (
+              <ValueItem
+                {...item}
+                siteTemplate={props.siteTemplate}
+                categoryKey={props.key}
+              />
+            );
           })}
-        </div>
+        </ul>
       </div>
     </div>
   );
