@@ -557,6 +557,8 @@ export const LANGUAGE_DIFFS = {
       filter: "Filter by",
       showMore: "Show more",
       showLess: "Show less",
+      clear: "Clear",
+      apply: "Apply",
     },
   },
   ES: {
@@ -615,6 +617,8 @@ export const LANGUAGE_DIFFS = {
       filter: "Filtrar por",
       showMore: "Mostrar más",
       showLess: "Mostrar menos",
+      clear: "Limpiar",
+      apply: "Aplicar",
     },
   },
 };

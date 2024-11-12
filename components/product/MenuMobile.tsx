@@ -4,6 +4,7 @@ import Icon from "../ui/Icon.tsx";
 import { useId } from "../../sdk/useId.ts";
 import { useScript } from "@deco/deco/hooks";
 import { LANGUAGE_DIFFS } from "../../utils/constants.tsx";
+import ApplicableFilters from "../ui/ApplicableFilters.tsx";
 
 interface MenuProps {
   filters: FilterToggle[];
@@ -24,6 +25,7 @@ export function MenuMobile(
   const [menuItems, titleColor] = siteTemplate === "frigidaire"
     ? [FrigidareMenuItems({ filters, language }), "text-secondary"]
     : [EluxMenuItems({ filters }), "text-neutral-content"];
+  const id = useId();
   return (
     <div
       class={clx(
@@ -42,7 +44,11 @@ export function MenuMobile(
           "w-screen h-screen top-0 overflow-y-auto overflow-x-hidden fixed",
         )}
       >
-        <div class="w-[90%] h-full float-right bg-white !opacity-100">
+        <ApplicableFilters
+          class="w-[90%] h-full float-right bg-white !opacity-100 flex flex-col justify-between"
+          id={id}
+        >
+          {/** Header */}
           <div class="h-[44px] bg-white w-full pt-2 px-2 flex flex-row items-center justify-between pl-4">
             <span
               class={clx(
@@ -59,12 +65,19 @@ export function MenuMobile(
               <Icon id="close" class="text-primary" />
             </label>
           </div>
+          {/** Menu Items */}
           <div class="flex flex-col gap-3.5 h-full w-full bg-white pt-2 px-4 text-secondary">
             <div>
               {menuItems}
             </div>
           </div>
-        </div>
+          {/** Footer */}
+          <FilterButtons
+            language={language}
+            siteTemplate={siteTemplate}
+          />
+        </ApplicableFilters>
+        <ApplicableFilters.JS rootId={id} />
       </aside>
     </div>
   );
@@ -168,19 +181,21 @@ const EluxMenuItems = (
 
                 <div class="collapse-content !p-0">
                   <ul class="flex flex-col">
-                    {filter.values.map((item) => {
+                    {filter.values.map(({ label, value, selected }) => {
                       return (
                         <li class="h-[54px] flex items-center w-full border-t border-base-200 ml-4 first:mt-2 first:ml-0 first:pl-4">
                           <label class="flex items-center gap-1 cursor-pointer w-full">
-                            <input
-                              type="checkbox"
+                            <ApplicableFilters.Input
+                              categoryKey={filter.key}
+                              filterValue={value}
+                              checked={selected}
                               class={clx(
                                 "w-4 h-4 appearance-none border rounded-sm cursor-pointer flex justify-center [&:checked::before]:self-center",
                                 "checked:bg-white border-warning [&:checked::before]:content-[url('https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-latam/53221bfd-3f69-4050-9677-6c6d4d767c50/check.png')] [&:checked::before]:-mt-[2px]",
                               )}
                             />
                             <span class="text-base">
-                              {item.label}
+                              {label}
                             </span>
                           </label>
                         </li>
@@ -198,10 +213,11 @@ const EluxMenuItems = (
 };
 
 const SubmenuAside = (
-  { id, label, values, language }: {
+  { id, label, values, language, key }: {
     id: string;
     label: string;
     values: FilterToggleValue[];
+    key: string;
     language: "EN" | "ES";
   },
 ) => {
@@ -212,41 +228,99 @@ const SubmenuAside = (
         "z-50 w-[90%] h-screen absolute top-0 right-0 bg-white text-secondary",
       )}
     >
-      <div class="h-[44px] bg-white w-full pt-2 px-2 flex flex-row items-center justify-between pl-4">
-        <span class="font-normal text-info">
-          {LANGUAGE_DIFFS[language].listingPage.filter}&nbsp;
-          <span class="text-secondary font-medium">{label}</span>
-        </span>
+      <div class="flex flex-col justify-between h-full">
+        <div class="h-[44px] bg-white w-full pt-2 px-2 flex flex-row items-center justify-between pl-4">
+          <div class="font-normal text-info flex flex-row gap-1.5 items-center">
+            <span>{LANGUAGE_DIFFS[language].listingPage.filter}</span>
+            <Icon
+              id="chevron-right"
+              class="text-primary"
+            />
+            <span class="text-secondary font-medium">{label}</span>
+          </div>
 
-        <label
-          htmlFor={id}
-          class="h-9 flex gap-2 items-center justify-between"
-        >
-          <Icon
-            id="chevron-right"
-            class="text-primary rotate-180"
-          />
-        </label>
+          <label
+            htmlFor={id}
+            class="h-9 flex gap-2 items-center justify-between"
+          >
+            <Icon
+              id="chevron-right"
+              class="text-primary rotate-180"
+            />
+          </label>
+        </div>
+        <ul class="flex flex-col items-start justify-start pt-2 px-4 gap-2 h-full overflow-scroll max-h-[calc(100vh_-_52px)]">
+          {values.map(({ label, value, selected }) => (
+            <li class="group border-b border-base-200 first:border-t w-full">
+              <div class="flex items-center gap-2 text-base font-normal leading-none h-[54px] justify-between">
+                <label class="flex items-center gap-2 cursor-pointer w-full">
+                  <ApplicableFilters.Input
+                    categoryKey={key}
+                    filterValue={value}
+                    checked={selected}
+                    class={clx(
+                      "w-4 h-4 border-base-300 appearance-none border checked:border-none rounded-sm cursor-pointer checked:bg-primary flex justify-center",
+                      "[&:checked::before]:content-[url('https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-nola-us/453ebc96-5d1f-403a-a5c6-92f48dd206c0/check.png')]",
+                      "[&:checked::before]:-mt-[1px]",
+                    )}
+                  />
+                  <span class="text-base">{label}</span>
+                </label>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <FilterButtons
+          language={language}
+          siteTemplate="frigidaire"
+        />
       </div>
-      <ul class="flex flex-col items-start justify-start pt-2 px-4 gap-2 h-full overflow-scroll max-h-[calc(100vh_-_52px)]">
-        {values.map((value) => (
-          <li class="group border-b border-base-200 first:border-t w-full">
-            <div class="flex items-center gap-2 text-base font-normal leading-none h-[54px] justify-between">
-              <label class="flex items-center gap-2 cursor-pointer w-full">
-                <input
-                  type="checkbox"
-                  class={clx(
-                    "w-4 h-4 border-base-300 appearance-none border checked:border-none rounded-sm cursor-pointer checked:bg-primary flex justify-center",
-                    "[&:checked::before]:content-[url('https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-nola-us/453ebc96-5d1f-403a-a5c6-92f48dd206c0/check.png')]",
-                    "[&:checked::before]:-mt-[1px]",
-                  )}
-                />
-                <span class="text-base">{value.label}</span>
-              </label>
-            </div>
-          </li>
-        ))}
-      </ul>
     </aside>
   );
+};
+
+const FilterButtons = ({
+  language,
+  siteTemplate,
+}: {
+  language: "EN" | "ES";
+  siteTemplate: "elux" | "frigidaire";
+}) => {
+  return (
+    <div class="pt-2 pb-3.5 grid grid-cols-2 gap-1.5 px-4">
+      <ApplicableFilters.ClearBtn
+        rel="next"
+        class={clx(
+          "btn btn-ghost px-4 w-full",
+          buttonDiff[siteTemplate].clear,
+        )}
+      >
+        {LANGUAGE_DIFFS[language].listingPage.clear}
+      </ApplicableFilters.ClearBtn>
+      <ApplicableFilters.ApplyBtn
+        rel="next"
+        class={clx(
+          "btn btn-ghost w-full px-4",
+          buttonDiff[siteTemplate].apply,
+        )}
+      >
+        {LANGUAGE_DIFFS[language].listingPage.apply}
+      </ApplicableFilters.ApplyBtn>
+    </div>
+  );
+};
+
+const buttonDiff = {
+  "elux": {
+    "apply":
+      "btn btn-ghost px-4 min-h-10 max-h-10 w-full bg-primary text-white rounded font-medium",
+    "clear":
+      "btn btn-ghost px-4 min-h-10 max-h-10 w-full bg-white text-primary rounded font-medium",
+  },
+  "frigidaire": {
+    "apply":
+      "btn btn-ghost px-4 min-h-9 max-h-9 w-full font-medium bg-primary text-white rounded-[50px]",
+    "clear":
+      "btn btn-ghost px-4 min-h-9 max-h-9 w-full font-medium bg-white text-primary rounded-[50px]",
+  },
 };

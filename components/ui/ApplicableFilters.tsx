@@ -46,10 +46,10 @@ export interface Props {
 const onLoad = ({ rootId }: Props) => {
   function init() {
     const root = document.getElementById(rootId);
-    const clearBtn = root?.querySelector<HTMLButtonElement>(
+    const clearBtns = root?.querySelectorAll<HTMLButtonElement>(
       "[data-clear-filters]",
     );
-    const applyBtn = root?.querySelector<HTMLButtonElement>(
+    const applyBtns = root?.querySelectorAll<HTMLButtonElement>(
       "[data-apply-filters]",
     );
     const inputs = root?.querySelectorAll<HTMLInputElement>(
@@ -100,8 +100,13 @@ const onLoad = ({ rootId }: Props) => {
       });
     };
 
-    applyBtn?.addEventListener("click", handleApplyFilters);
-    clearBtn?.addEventListener("click", handleClearFilters);
+    applyBtns?.forEach((btn) => {
+      btn.addEventListener("click", handleApplyFilters);
+    });
+
+    clearBtns?.forEach((btn) => {
+      btn.addEventListener("click", handleClearFilters);
+    });
   }
 
   if (document.readyState === "complete") {
@@ -112,7 +117,7 @@ const onLoad = ({ rootId }: Props) => {
 };
 
 ApplicableFilters.Input = FilterInput;
-ApplicableFilters.Clear = ClearFiltersButton;
-ApplicableFilters.Apply = ApplyFiltersButton;
+ApplicableFilters.ClearBtn = ClearFiltersButton;
+ApplicableFilters.ApplyBtn = ApplyFiltersButton;
 ApplicableFilters.JS = JS;
 export default ApplicableFilters;

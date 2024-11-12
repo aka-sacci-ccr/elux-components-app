@@ -66,7 +66,7 @@ function Filters({ filters, siteTemplate }: Props) {
             ))}
         </ul>
         <div class="flex flex-col gap-2">
-          <ApplicableFilters.Apply
+          <ApplicableFilters.ApplyBtn
             rel="next"
             class={clx(
               "btn btn-ghost px-4 min-h-10 max-h-10",
@@ -74,8 +74,8 @@ function Filters({ filters, siteTemplate }: Props) {
             )}
           >
             Aplicar
-          </ApplicableFilters.Apply>
-          <ApplicableFilters.Clear
+          </ApplicableFilters.ApplyBtn>
+          <ApplicableFilters.ClearBtn
             rel="next"
             class={clx(
               "btn btn-ghost px-4 min-h-10 max-h-10",
@@ -83,7 +83,7 @@ function Filters({ filters, siteTemplate }: Props) {
             )}
           >
             Limpar
-          </ApplicableFilters.Clear>
+          </ApplicableFilters.ClearBtn>
         </div>
       </ApplicableFilters>
       <ApplicableFilters.JS rootId={id} />
