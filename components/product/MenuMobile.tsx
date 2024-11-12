@@ -66,7 +66,7 @@ export function MenuMobile(
             </label>
           </div>
           {/** Menu Items */}
-          <div class="flex flex-col gap-3.5 h-full w-full bg-white pt-2 px-4 text-secondary">
+          <div class="flex flex-col gap-3.5 h-full w-full bg-white pt-2 px-4 text-secondary overflow-y-auto">
             <div>
               {menuItems}
             </div>
@@ -194,6 +194,10 @@ const EluxMenuItems = (
                         stroke="#19191a"
                       />
                     </div>
+                    <ApplicableFilters.List
+                      categoryKey={filter.key}
+                      class="text-xs text-primary font-light mt-1"
+                    />
                   </div>
                 </label>
 
@@ -249,7 +253,9 @@ const SubmenuAside = (
       <div class="flex flex-col justify-between h-full">
         <div class="h-[44px] bg-white w-full pt-2 px-2 flex flex-row items-center justify-between pl-4">
           <div class="font-normal text-info flex flex-row gap-1.5 items-center">
-            <span>{LANGUAGE_DIFFS[language].listingPage.filter}</span>
+            <label htmlFor={id}>
+              {LANGUAGE_DIFFS[language].listingPage.filter}
+            </label>
             <Icon
               id="chevron-right"
               class="text-primary"
@@ -257,7 +263,7 @@ const SubmenuAside = (
             <span class="text-secondary font-medium">{label}</span>
           </div>
 
-          <label
+          {/* <label
             htmlFor={id}
             class="h-9 flex gap-2 items-center justify-between"
           >
@@ -265,7 +271,7 @@ const SubmenuAside = (
               id="chevron-right"
               class="text-primary rotate-180"
             />
-          </label>
+          </label> */}
         </div>
         <ul class="flex flex-col items-start justify-start pt-2 px-4 gap-2 h-full overflow-scroll max-h-[calc(100vh_-_52px)]">
           {values.map(({ label, value, selected }) => (

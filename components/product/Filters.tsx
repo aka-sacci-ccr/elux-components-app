@@ -100,7 +100,7 @@ function CollapseFilters(
     <div class="collapse collapse-plus rounded-none border-b border-base-200">
       <input class="hidden peer" type="checkbox" id={id} />
 
-      <label htmlFor={id} class="pb-2 peer-checked:pb-0">
+      <label htmlFor={id} class="pb-2 peer-checked:pb-0 cursor-pointer">
         <div class="collapse-title min-h-0 p-0">
           <div
             class={clx(
