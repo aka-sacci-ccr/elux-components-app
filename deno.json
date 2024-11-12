@@ -39,7 +39,7 @@
     "drizzle-orm": "https://esm.sh/drizzle-orm@0.30.10",
     "drizzle-orm/": "https://esm.sh/drizzle-orm@0.30.10/",
     "https://esm.sh/*preact-render-to-string@6.3.1": "npm:preact-render-to-string@6.4.2",
-    "@deco/dev": "jsr:@deco/dev@1.106.3"
+    "@deco/dev": "jsr:@deco/dev@1.107.0"
   },
   "lock": false,
   "tasks": {
