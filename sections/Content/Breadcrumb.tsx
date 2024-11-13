@@ -35,13 +35,14 @@ export interface Props {
    * @title GAP between items
    */
   gap?: GapSizes;
+  disableContainer?: boolean;
   /**
    * @title Spacing config
    */
   spacing?: SpacingConfig;
 }
 
-interface Items {
+export interface Items {
   /**
    * @title Label
    */
@@ -61,11 +62,23 @@ interface Items {
 }
 
 export default function Breadcrumb(
-  { icon, fontColor, fontSize, spacing, iconSize = 16, items, fontWeight, gap }:
-    Props,
+  {
+    icon,
+    fontColor,
+    fontSize,
+    spacing,
+    iconSize = 16,
+    items,
+    fontWeight,
+    gap,
+    disableContainer,
+  }: Props,
 ) {
   return (
-    <Container spacing={spacing} class="container px-4 lg:px-0">
+    <Container
+      spacing={spacing}
+      class={clx("px-4 lg:px-0", !disableContainer && "container")}
+    >
       <div
         class={clx(
           "flex flex-row items-center",
@@ -90,7 +103,7 @@ export default function Breadcrumb(
               size={16}
               width={16}
               height={16}
-              class="text-accent"
+              class="text-accent min-w-4"
             />
           </>
         )}
@@ -99,6 +112,7 @@ export default function Breadcrumb(
             <a
               href={href}
               class={clx(
+                "last:line-clamp-1",
                 overrideFontColor && TEXT_COLORS[overrideFontColor],
                 hoverUnderline && "border-b-2 border-primary mt-0.5",
               )}
@@ -111,7 +125,7 @@ export default function Breadcrumb(
                 size={16}
                 width={16}
                 height={16}
-                class="text-accent"
+                class="text-accent min-w-4"
               />
             )}
           </>
