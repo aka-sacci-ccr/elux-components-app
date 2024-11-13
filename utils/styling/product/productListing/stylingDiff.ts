@@ -51,41 +51,38 @@ const ELUX_DEFAULT = {
 const FRIGIDAIRE_DEFAULT = {
   breadcrumbProps: {
     iconColor: "primary",
-    breadcrumbColor: "secondary",
-    overrideFirst: {
-      item: "Home",
-      url: "/",
-    },
+    breadcrumbColor: "primary",
     iconSize: 16,
-    fontSize: "text-sm",
+    fontSize: "text-xs",
     fontWeight: "font-normal",
-    gap: "1",
+    gap: "2",
+    icon: "home-frigidaire",
   } as PLPBreadcrumbProps,
   listingMain: {
-    filtersFontColor: "neutral-content",
+    filtersFontColor: "secondary",
     filterIconUrl:
-      "https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-latam/69b170d1-d7e1-460e-877e-2b11c8ffbe47/Vector.png",
+      "https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-nola-us/fdfe8229-be9e-49ad-97de-6767bcff9c2c/Vector.png",
     cardStyling: {
       skuStyle: {
-        fontColor: "success-content",
-        fontSize: "text-sm",
-        fontWeight: "font-normal",
+        fontColor: "warning-content",
+        fontSize: "text-xxs",
+        fontWeight: "font-light",
       },
       nameStyle: {
-        fontColor: "primary",
-        fontSize: "text-base",
+        fontColor: "secondary",
+        fontSize: "text-sm",
         fontWeight: "font-medium",
       },
     },
     layout: {
       buttonProps: {
-        text: "Show more",
+        text: "Ver más productos",
         color: "white",
         hoverColor: "white",
         borderColor: "primary",
-        borderWidth: "1",
+        borderWidth: "2",
         fontColor: "primary",
-        rounded: "regular",
+        rounded: "3xl",
       },
     },
     startingPage: 1,

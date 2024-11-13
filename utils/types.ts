@@ -41,6 +41,7 @@ export type FontWeight =
   | "font-black";
 
 export type FontSize =
+  | "text-xxs"
   | "text-xs"
   | "text-sm"
   | "text-base"

@@ -66,7 +66,11 @@ export default function SearchResult(
   const _offset = zeroIndexedOffsetPage * perPage;
 
   const sortBy = sortOptions.length > 0 && (
-    <Sort sortOptions={sortOptions} url={url} />
+    <Sort
+      sortOptions={sortOptions}
+      url={url}
+      siteTemplate={props.siteTemplate}
+    />
   );
 
   const titleSpan = (
@@ -99,12 +103,17 @@ export default function SearchResult(
                             "primary"
                         ],
                       )}
+                      style={{
+                        boxShadow: props.siteTemplate === "frigidaire"
+                          ? "0px 2px 4px 0px #56697326"
+                          : "",
+                      }}
                     >
                       {titleSpan}
                       <span class="text-base font-semibold flex">
                         {LANGUAGE_DIFFS[props.language].listingPage.filters}
                       </span>
-                      <hr class="border-t border-info-content" />
+                      <hr class="border-t border-base-200" />
                       <Filters
                         filters={filters}
                         siteTemplate={props.siteTemplate}
@@ -122,7 +131,14 @@ export default function SearchResult(
                           ],
                         )}
                       >
-                        <div class="flex flex-col">
+                        <div
+                          class={clx(
+                            "flex",
+                            props.siteTemplate === "frigidaire"
+                              ? "flex-row gap-2 items-center"
+                              : "flex-col",
+                          )}
+                        >
                           {titleSpan}
                           <span class="text-xxs font-light text-secondary">
                             ({page.pageInfo.records}{" "}
@@ -137,8 +153,11 @@ export default function SearchResult(
                             <label
                               for="open-filters"
                               class={clx(
-                                "select w-full rounded border-xs border-warning text-base font-medium text-warning-content",
+                                "select w-full rounded border-xs border-warning text-warning-content",
                                 "focus:border-warning items-center",
+                                props.siteTemplate === "elux"
+                                  ? "text-base font-medium"
+                                  : "text-sm font-light pt-1",
                               )}
                               style={{
                                 backgroundImage:

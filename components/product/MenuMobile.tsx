@@ -285,12 +285,12 @@ const SubmenuAside = (
                     filterValue={value}
                     checked={selected}
                     class={clx(
-                      "w-4 h-4 border-base-300 appearance-none border checked:border-none rounded-sm cursor-pointer checked:bg-primary flex justify-center",
+                      "w-4 h-4 border-neutral appearance-none border checked:border-none rounded-sm cursor-pointer checked:bg-primary flex justify-center",
                       "[&:checked::before]:content-[url('https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-nola-us/453ebc96-5d1f-403a-a5c6-92f48dd206c0/check.png')]",
                       "[&:checked::before]:-mt-[1px]",
                     )}
                   />
-                  <span class="text-base">{label}</span>
+                  <span class="text-base font-light">{label}</span>
                 </label>
               </div>
             </li>

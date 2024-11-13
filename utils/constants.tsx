@@ -615,7 +615,7 @@ export const LANGUAGE_DIFFS = {
       productCount: "productos",
       sort: "Ordenar por",
       filter: "Filtrar por",
-      showMore: "Mostrar más",
+      showMore: "Ver más productos",
       showLess: "Mostrar menos",
       clear: "Limpiar",
       apply: "Aplicar",

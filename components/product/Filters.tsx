@@ -34,7 +34,7 @@ function ValueItem(
             "w-4 h-4 appearance-none border rounded-sm cursor-pointer flex justify-center [&:checked::before]:self-center",
             siteTemplate === "elux"
               ? "checked:bg-white border-warning [&:checked::before]:content-[url('https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-latam/53221bfd-3f69-4050-9677-6c6d4d767c50/check.png')] [&:checked::before]:-mt-[2px]"
-              : "checked:border-none checked:bg-primary border-base-300 [&:checked::before]:content-[url('https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-nola-us/453ebc96-5d1f-403a-a5c6-92f48dd206c0/check.png')]",
+              : "checked:border-none checked:bg-primary border-neutral [&:checked::before]:content-[url('https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-nola-us/453ebc96-5d1f-403a-a5c6-92f48dd206c0/check.png')]",
           )}
         />
         <span class="text-sm">{label}</span>
@@ -107,7 +107,7 @@ function CollapseFilters(
               "flex items-center justify-between h-full w-full",
             )}
           >
-            <p class="font-light">{props.label}</p>
+            <p class="font-normal">{props.label}</p>
             <Icon
               id="chevron-right"
               class="ml-auto text-primary arrow pointer-events-none rotate-90"
@@ -117,8 +117,8 @@ function CollapseFilters(
         </div>
       </label>
 
-      <div class="collapse-content !p-0">
-        <ul class="flex flex-col gap-6 py-6">
+      <div class="collapse-content !p-0 font-light">
+        <ul class="flex flex-col gap-2 py-2">
           {props.values.map((item) => {
             return (
               <ValueItem
