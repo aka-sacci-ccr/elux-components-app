@@ -19,7 +19,9 @@ export interface Props {
   page: PLP | null;
   /** @description Spacing config */
   spacing?: SpacingConfig;
-  /** @hide true */
+  /**
+   * @ignore
+   */
   partial?: "hideMore" | "hideLess";
 }
 

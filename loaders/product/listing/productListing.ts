@@ -23,8 +23,35 @@ export default async function loader(
     console.log("path is wrong");
     return null;
   }
+  const validCategory = categories.find(({ identifier }) =>
+    identifier === paths[paths.length - 1]
+  );
+
+  const categoriesToBeReturned = validCategory?.additionalType === "1"
+    ? categories.map(({ identifier }) => identifier)
+    : getCategoriesToBeReturned(categories, validCategory!);
+
+  console.log(categoriesToBeReturned);
+
   return null;
 }
+
+const getCategoriesToBeReturned = (
+  categories: ExtendedCategory[],
+  validCategory: ExtendedCategory,
+): string[] => {
+  const getChildIdentifiers = (parentIds: string[]): string[] =>
+    parentIds.length === 0 ? [] : [
+      ...parentIds,
+      ...getChildIdentifiers(
+        categories
+          .filter((cat) => parentIds.includes(cat.subjectOf ?? ""))
+          .map((cat) => cat.identifier),
+      ),
+    ];
+
+  return getChildIdentifiers([validCategory.identifier]);
+};
 
 //Get category father hierarchy
 const getCategories = async (
