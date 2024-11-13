@@ -264,9 +264,25 @@ export interface AdditionalProperty {
    * @title Property Name
    */
   name: string;
+  /**
+   * @title Property Value
+   */
   value: string;
+  /**
+   * @title Unit Code
+   * @description kg, cm, etc.
+   */
   unitCode?: string;
+  /**
+   * @title Unit Text
+   * @description Kilogram, Centimeter, etc.
+   */
   unitText?: string;
+  /**
+   * @title Filterable
+   * @description If true, the property will be displayed in the product filters.
+   */
+  additionalType?: boolean;
 }
 
 export interface Description {

@@ -73,6 +73,7 @@ export const additionalProperties = sqliteTable("additionalProperties", {
   value: text("value").notNull(),
   unitCode: text("unitCode"),
   unitText: text("unitText"),
+  additionalType: text("additionalType"),
 });
 
 //Define product extra descriptions
