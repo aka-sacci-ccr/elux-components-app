@@ -57,7 +57,7 @@ function Filters({ filters, siteTemplate }: Props) {
           {filters
             .filter(isToggle)
             .map((filter) => (
-              <li class="flex flex-col gap-4">
+              <li class="flex flex-col gap-4 border-b border-base-200 last:border-b-0">
                 <CollapseFilters {...filter} siteTemplate={siteTemplate} />
               </li>
             ))}
@@ -73,7 +73,7 @@ function CollapseFilters(
   const id = useId();
 
   return (
-    <div class="collapse collapse-plus rounded-none border-b border-base-200">
+    <div class="collapse collapse-plus rounded-none">
       <input class="hidden peer" type="checkbox" id={id} />
 
       <label htmlFor={id} class="pb-2 peer-checked:pb-0 cursor-pointer">
