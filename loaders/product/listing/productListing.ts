@@ -1,8 +1,21 @@
-import { ProductListingPage } from "apps/commerce/types.ts";
+import {
+  BreadcrumbList,
+  Product,
+  ProductListingPage,
+} from "apps/commerce/types.ts";
 import { AppContext } from "apps/records/mod.ts";
-import { sql } from "drizzle-orm";
-import { Category } from "../../../utils/types.ts";
+import { and, eq, inArray, sql } from "drizzle-orm";
+import { AdditionalProperty, Category } from "../../../utils/types.ts";
 import { LibSQLDatabase } from "apps/records/deps.ts";
+import {
+  additionalProperties,
+  avaliableIn,
+  brands,
+  images,
+  productCategories,
+  products,
+} from "../../../db/schema.ts";
+import { filterValues } from "../../testPLP.ts";
 
 interface ExtendedCategory extends Category {
   additionalType?: string;
@@ -17,29 +30,183 @@ export default async function loader(
   const records = await ctx.invoke.records.loaders.drizzle();
   const paths = url.pathname.split("/").splice(1);
   const fatherCategoryPath = paths[0];
-  const categories = await getCategories(records, fatherCategoryPath);
+  const categoryTree = await getCategoryTree(records, fatherCategoryPath);
 
-  if (!isPathRight(paths, categories)) {
+  if (!checkPath(paths, categoryTree)) {
     console.log("path is wrong");
     return null;
   }
-  const validCategory = categories.find(({ identifier }) =>
+  const validCategory = categoryTree.find(({ identifier }) =>
     identifier === paths[paths.length - 1]
   );
 
-  const categoriesToBeReturned = validCategory?.additionalType === "1"
-    ? categories.map(({ identifier }) => identifier)
-    : getCategoriesToBeReturned(categories, validCategory!);
+  const categoryBranch = validCategory?.additionalType === "1"
+    ? categoryTree.map(({ identifier, value }) => ({ identifier, value }))
+    : getCategoryBranch(categoryTree, validCategory!);
 
-  console.log(categoriesToBeReturned);
+  const skusToGet = await records.select({
+    product: productCategories.product,
+  }).from(productCategories)
+    .where(
+      inArray(
+        productCategories.subjectOf,
+        categoryBranch.map((c) => c.identifier),
+      ),
+    )
+    .groupBy(productCategories.product);
 
-  return null;
+  if (!skusToGet.length || !skusToGet[0].product) return null;
+
+  const { productData } = await getProductData(
+    records,
+    skusToGet,
+    url,
+  );
+
+  return {
+    "@type": "ProductListingPage",
+    breadcrumb: getBreadcrumbList(paths, categoryTree, url),
+    products: productData,
+    filters: filterValues,
+    pageInfo: {
+      currentPage: 1,
+      nextPage: "?page=2",
+      previousPage: undefined,
+      records: 25,
+    },
+    sortOptions: [
+      { value: "name-asc", label: "Nome: A-Z" },
+      { value: "name-desc", label: "Nome: Z-A" },
+    ],
+    seo: {
+      title: validCategory?.value ?? "",
+      description: validCategory?.description ?? "",
+      canonical: new URL(url.pathname, url.origin).href,
+    },
+  };
 }
 
-const getCategoriesToBeReturned = (
+const getBreadcrumbList = (
+  pathnames: string[],
+  categoryTree: ExtendedCategory[],
+  url: URL,
+): BreadcrumbList => {
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: pathnames.map((pathname, index) => {
+      const category = categoryTree.find(({ identifier }) =>
+        identifier === pathname
+      );
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        item: category?.value ?? "",
+        url: new URL(pathnames.slice(0, index + 1).join("/"), url.origin).href,
+        image: category?.image
+          ? [{
+            "@type": "ImageObject",
+            url: category.image,
+          }]
+          : undefined,
+      };
+    }),
+    numberOfItems: pathnames.length,
+  };
+};
+
+const getProductData = async (
+  records: LibSQLDatabase<Record<string, never>>,
+  skusToGet: {
+    product: string | null;
+  }[],
+  url: URL,
+): Promise<{
+  productData: Product[];
+  productProperties: AdditionalProperty[];
+}> => {
+  const baseProductData = await records.select({
+    name: products.name,
+    productID: products.productID,
+    sku: products.sku,
+    gtin: products.gtin,
+    brand_name: brands.name,
+    brand_id: brands.identifier,
+  })
+    .from(products)
+    .innerJoin(brands, eq(products.brand, brands.identifier))
+    .innerJoin(avaliableIn, eq(products.sku, avaliableIn.subjectOf))
+    .where(
+      and(
+        inArray(
+          products.sku,
+          skusToGet.map((sku) => sku.product!),
+        ),
+        sql`${url.hostname} LIKE '%' || ${avaliableIn.domain}`,
+      ),
+    )
+    .groupBy(products.sku);
+
+  const [productImages, productProperties] = await Promise.all([
+    records
+      .select()
+      .from(images)
+      .where(
+        and(
+          inArray(images.subjectOf, baseProductData.map((p) => p.sku)),
+          eq(images.additionalType, "PRODUCT_IMAGE"),
+        ),
+      )
+      .all(),
+    records
+      .select()
+      .from(additionalProperties)
+      .where(
+        inArray(
+          additionalProperties.subjectOf,
+          baseProductData.map((p) => p.sku),
+        ),
+      )
+      .all(),
+  ]);
+
+  return {
+    productData: baseProductData.map((p) => ({
+      "@type": "Product",
+      name: p.name,
+      sku: p.sku,
+      productID: p.productID ?? "",
+      gtin: p.gtin ?? undefined,
+      url: new URL(
+        `${p.productID}/p`,
+        url.origin,
+      ).href,
+      brand: {
+        "@type": "Brand",
+        name: p.brand_name,
+        identifier: p.brand_id,
+      },
+      images: productImages.filter((i) => i.subjectOf === p.sku).map((i) => ({
+        "@type": "ImageObject" as const,
+        ...i,
+        name: i.name ?? undefined,
+        description: i.description ?? undefined,
+        disambiguatingDescription: i.disambiguatingDescription ?? undefined,
+        subjectOf: i.subjectOf ?? undefined,
+        identifier: String(i.identifier),
+        additionalType: i.additionalType ?? undefined,
+      })),
+    })),
+    productProperties: productProperties as unknown as AdditionalProperty[],
+  };
+};
+
+const getCategoryBranch = (
   categories: ExtendedCategory[],
   validCategory: ExtendedCategory,
-): string[] => {
+): {
+  identifier: string;
+  value: string;
+}[] => {
   const getChildIdentifiers = (parentIds: string[]): string[] =>
     parentIds.length === 0 ? [] : [
       ...parentIds,
@@ -50,11 +217,13 @@ const getCategoriesToBeReturned = (
       ),
     ];
 
-  return getChildIdentifiers([validCategory.identifier]);
+  return getChildIdentifiers([validCategory.identifier]).map((identifier) => ({
+    identifier,
+    value: categories.find((cat) => cat.identifier === identifier)!.value,
+  }));
 };
 
-//Get category father hierarchy
-const getCategories = async (
+const getCategoryTree = async (
   records: LibSQLDatabase<Record<string, never>>,
   fatherCategoryPath: string,
 ) =>
@@ -90,8 +259,7 @@ const getCategories = async (
     CategoryTree;
     `).then((result) => result.rows) as unknown as ExtendedCategory[];
 
-//Checks if the URL follows the right hierarchy
-const isPathRight = (paths: string[], categories: ExtendedCategory[]) =>
+const checkPath = (paths: string[], categories: ExtendedCategory[]) =>
   paths.reduce(
     (acc, p, index) => {
       if (acc === false) {
