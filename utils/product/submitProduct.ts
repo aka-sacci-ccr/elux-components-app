@@ -142,12 +142,23 @@ export async function insertProduct(
     ctx,
   }: SubmitProductProps & { ctx: AppContext },
 ) {
+  if (
+    categories.length === 0 || additionalProperties.length === 0 ||
+    images.length === 0
+  ) {
+    throw new Error("Invalid product data");
+  }
+
   await insertBaseData(product, ctx);
   await insertCategories(categories, product.sku, ctx);
   await insertAdditionalProperties(additionalProperties, product.sku, ctx);
-  await insertAvaliability(avaliableIn, product.sku, ctx);
-  await insertDescriptions(descriptions, product.sku, ctx);
   await insertImages(images, product.sku, ctx);
+  if (avaliableIn && avaliableIn.length > 0) {
+    await insertAvaliability(avaliableIn, product.sku, ctx);
+  }
+  if (descriptions && descriptions.length > 0) {
+    await insertDescriptions(descriptions, product.sku, ctx);
+  }
   if (videos && videos.length > 0) {
     await insertVideos(videos, product.sku, ctx);
   }

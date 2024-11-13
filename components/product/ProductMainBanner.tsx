@@ -6,7 +6,6 @@ interface Props {
 }
 
 export default function ProductMainBanner({ product }: Props) {
-  if (!product) return <></>;
   const { name, image, sku, brand } = product;
 
   const mainBannerMobile = image?.find((image) =>
@@ -15,6 +14,8 @@ export default function ProductMainBanner({ product }: Props) {
   const mainBannerDesktop = image?.find((image) =>
     image.additionalType === "MAIN_BANNER"
   );
+
+  if (!mainBannerMobile || !mainBannerDesktop) return <></>;
 
   return (
     <div className="w-full relative overflow-hidden mx-auto">

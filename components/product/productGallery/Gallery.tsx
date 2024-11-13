@@ -37,8 +37,7 @@ export default function GallerySlider(props: Props) {
 
   const { page: { product: { name, isVariantOf, image: pImages } } } = props;
   const { page: { product } } = props;
-  // Filter images when image's alt text matches product name
-  // More info at: https://community.shopify.com/c/shopify-discussions/i-can-not-add-multiple-pictures-for-my-variants/m-p/2416533
+
   const groupImages = isVariantOf?.image ?? pImages ?? [];
   const filtered = groupImages.filter((img) =>
     name?.includes(img.alternateName || "")
@@ -50,9 +49,8 @@ export default function GallerySlider(props: Props) {
     images: ImageObject[],
     product: { video: VideoObject[] },
   ) {
-    // TROCAR PARA A TIPAGEM CORRETA
     const filteredImages = images.filter((image) =>
-      image.additionalType === "INFO_BANNER"
+      image.additionalType === "PRODUCT_IMAGE"
     );
 
     const videos = product.video.length > 0 ? product.video : [];

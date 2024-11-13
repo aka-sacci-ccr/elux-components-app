@@ -36,7 +36,7 @@ export default function loader(): ProductListingPage | null {
   };
 }
 
-const filterValues: FilterToggle[] = [{
+export const filterValues: FilterToggle[] = [{
   "@type": "FilterToggle",
   label: "Tecnologia",
   key: "tech",
