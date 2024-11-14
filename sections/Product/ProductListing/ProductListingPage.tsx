@@ -119,7 +119,7 @@ export default function ProductListingPage(
       <SearchResult
         page={page}
         url={url}
-        listingMain={listingMain}
+        listingMain={listingMain} 
         partial={partial}
         language={language}
         siteTemplate={siteTemplate}
@@ -130,8 +130,14 @@ export default function ProductListingPage(
 
 function NotFound({ language }: { language: "EN" | "ES" }) {
   return (
-    <div class="w-full flex justify-center items-center py-10">
+    <div class="w-full flex flex-col justify-center items-center py-10 text-primary font-bold text-2xl h-[50vh]">
       <span>{LANGUAGE_DIFFS[language].listingPage.notFound}</span>
+      <a
+        href="javascript:history.back()"
+        class="mt-4 text-base underline cursor-pointer hover:opacity-75"
+      >
+        {LANGUAGE_DIFFS[language].listingPage.goBack || "Go back"}
+      </a>
     </div>
   );
 }

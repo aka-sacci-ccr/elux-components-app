@@ -559,6 +559,7 @@ export const LANGUAGE_DIFFS = {
       showLess: "Show less",
       clear: "Clear",
       apply: "Apply",
+      goBack: "Go back",
     },
   },
   ES: {
@@ -619,6 +620,7 @@ export const LANGUAGE_DIFFS = {
       showLess: "Mostrar menos",
       clear: "Limpiar",
       apply: "Aplicar",
+      goBack: "Volver atrás",
     },
   },
 };

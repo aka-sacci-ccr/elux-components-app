@@ -21,6 +21,7 @@ import {
   TextProps,
 } from "../../../utils/types.ts";
 import { AppContext } from "../../../mod.ts";
+import { LANGUAGE_DIFFS } from "../../../utils/constants.tsx";
 
 interface ProductPageProps {
   /** @description product loader of the page */
@@ -136,7 +137,7 @@ export default function ProductPage(
       typeof loader
     >,
 ) {
-  if (!page) return <NotFound />;
+  if (!page) return <NotFound language={language} />;
   const { product, breadcrumbList } = page;
   const { image, additionalProperty, description } = product;
 
@@ -232,10 +233,16 @@ const getBreadcrumbItems = (
   return breadcrumbItems;
 };
 
-function NotFound() {
+function NotFound({ language }: { language: "EN" | "ES" }) {
   return (
-    <div class="w-full flex justify-center items-center py-10">
-      <span>Not Found!</span>
+    <div class="w-full flex flex-col justify-center items-center py-10 text-primary font-bold text-2xl h-[50vh]">
+      <span>{LANGUAGE_DIFFS[language].listingPage.notFound}</span>
+      <a
+        href="javascript:history.back()"
+        class="mt-4 text-base underline cursor-pointer hover:opacity-75"
+      >
+        {LANGUAGE_DIFFS[language].listingPage.goBack || "Go back"}
+      </a>
     </div>
   );
 }

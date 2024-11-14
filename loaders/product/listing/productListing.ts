@@ -170,7 +170,7 @@ const getProductData = async (
   ]);
 
   return {
-    productData: baseProductData.map((p) => ({
+    productData: baseProductData.map<Product>((p) => ({
       "@type": "Product",
       name: p.name,
       sku: p.sku,
@@ -185,7 +185,7 @@ const getProductData = async (
         name: p.brand_name,
         identifier: p.brand_id,
       },
-      images: productImages.filter((i) => i.subjectOf === p.sku).map((i) => ({
+      image: productImages.filter((i) => i.subjectOf === p.sku).map((i) => ({
         "@type": "ImageObject" as const,
         ...i,
         name: i.name ?? undefined,
