@@ -1,5 +1,4 @@
-import { ImageWidget } from "apps/admin/widgets.ts";
-import Icon, { AvailableIcons } from "../../components/ui/Icon.tsx";
+import Icon from "../../components/ui/Icon.tsx";
 import {
   BORDER_CLASSES,
   BORDER_COLORS,
@@ -18,92 +17,43 @@ import {
   FontSize,
   FontWeight,
   GapSizes,
-  TextProps,
   WidthAndHeight,
 } from "../../utils/types.ts";
 import Container, { SpacingConfig } from "../container/Container.tsx";
 import { Props as ContentProps } from "../../components/social/WhereToBuyContent.tsx";
 import { useComponent } from "../Component.tsx";
+import { AppContext } from "../../mod.ts";
+import stylingDiff from "../../utils/styling/institucional/WhereToBuy/stylingDiff.ts";
+import { useDevice } from "@deco/deco/hooks";
+import { CountryCardContent } from "../../loaders/whereToBuy.ts";
+
+export function loader(props: Props, _req: Request, ctx: AppContext) {
+  return {
+    ...props,
+    siteTemplate: ctx.siteTemplate,
+  };
+}
 
 export interface Props {
   /**
    * @title Title props
    */
-  title: TextProps;
+  titleText: string;
   /**
    * @title Description props
    */
-  description?: TextProps;
+  descriptionText?: string;
   /**
    * @title Cards
    */
-  countryCards: CountryCardsProps;
+  countries: CountryCardContent[] | undefined;
   /**
    * @title Spacing config
    */
   spacing?: SpacingConfig;
 }
 
-interface CountryCardsProps {
-  /**
-   * @title Global Country card style
-   * @description All country cards styling options
-   */
-  countryCardStyle: CountryCardStyle;
-  /**
-   * @title Global Store card style
-   * @description All store cards styling options
-   */
-  storeCardStyle: StoreCardStyle;
-  /**
-   * @title Countries
-   */
-  countries: CountryCardContent[];
-}
-
-interface CountryCardContent {
-  /**
-   * @title Country name
-   */
-  label: string;
-  /**
-   * @title Country flag
-   */
-  icon?: AvailableIcons;
-  /**
-   * @title Country avaliable stores
-   */
-  countryStores?: CountryStores[];
-}
-
-export interface CountryStores {
-  /**
-   * @title Desktop store image
-   */
-  desktopImage: ImageWidget;
-  /**
-   * @title Mobile store image
-   */
-  mobileImage: ImageWidget;
-  /**
-   * @title Title
-   */
-  title: string;
-  /**
-   * @title Description
-   */
-  description: string;
-  /**
-   * @title Href
-   */
-  href?: string;
-  /**
-   * @title Disable Card Border
-   */
-  disableBorder?: boolean;
-}
-
-interface CountryCardStyle {
+export interface CountryCardStyle {
   /**
    * @title Font color
    */
@@ -191,9 +141,13 @@ const Content = import.meta.resolve(
 );
 
 export default function Support(
-  { title, description, spacing, countryCards }: Props,
+  { titleText, descriptionText, spacing, countries, siteTemplate }: ReturnType<
+    typeof loader
+  >,
 ) {
-  const { storeCardStyle, countries, countryCardStyle } = countryCards;
+  const styling = stylingDiff[siteTemplate];
+  const device = useDevice() === "desktop" ? "desktop" : "mobile";
+  const { title, description, countryCardStyle } = styling[device];
   return (
     <Container
       spacing={spacing}
@@ -209,10 +163,10 @@ export default function Support(
           title.fontSize,
         )}
       >
-        {title.text}
+        {titleText}
       </h1>
       {/** Description */}
-      {description && (
+      {descriptionText && (
         <div
           class={clx(
             "mt-4 lg:mt-6",
@@ -221,7 +175,7 @@ export default function Support(
             description.fontWeight ?? "font-light",
           )}
         >
-          <span>{description.text}</span>
+          <span>{descriptionText}</span>
         </div>
       )}
       {/** Country Cards */}
@@ -263,7 +217,8 @@ export default function Support(
                 hx-swap="innerHTML"
                 hx-select="section>*"
                 hx-post={useComponent<ContentProps>(Content, {
-                  cardStyle: storeCardStyle,
+                  siteTemplate,
+                  device,
                   stores: countryStores,
                 })}
               >
