@@ -6,20 +6,23 @@ import {
   TEXT_COLORS,
 } from "../../utils/constants.tsx";
 import { clx } from "../../utils/clx.ts";
-import {
-  CountryStores,
-  StoreCardStyle,
-} from "../../sections/Institutional/WhereToBuy.tsx";
+import stylingDiff from "../../utils/styling/institucional/WhereToBuy/stylingDiff.ts";
+import { CountryStores } from "../../loaders/whereToBuy.ts";
 
 export interface Props {
-  cardStyle: StoreCardStyle;
+  siteTemplate: "frigidaire" | "elux";
+  device: "desktop" | "mobile";
   stores?: CountryStores[];
 }
 
-export default function WhereToBuyContent({ cardStyle, stores }: Props) {
+export default function WhereToBuyContent(
+  { stores, siteTemplate, device }: Props,
+) {
   if (!stores || stores.length === 0) {
-    return <></>;
+    return <div class="h-[300px]"></div>;
   }
+  const styling = stylingDiff[siteTemplate];
+
   const {
     grid,
     gap,
@@ -28,7 +31,9 @@ export default function WhereToBuyContent({ cardStyle, stores }: Props) {
     descriptionFontSize,
     imagesSizes,
     colorBorder,
-  } = cardStyle;
+    fontWeight,
+    descriptionFontColor,
+  } = styling[device].storeCardStyle;
 
   return (
     <div
@@ -72,7 +77,7 @@ export default function WhereToBuyContent({ cardStyle, stores }: Props) {
               class={clx(
                 titleFontSize,
                 TEXT_COLORS[fontColor],
-                cardStyle.fontWeight,
+                fontWeight,
               )}
             >
               {store.title}
@@ -82,7 +87,7 @@ export default function WhereToBuyContent({ cardStyle, stores }: Props) {
               class={clx(
                 descriptionFontSize,
                 "font-light underline",
-                TEXT_COLORS[cardStyle.descriptionFontColor ?? fontColor],
+                TEXT_COLORS[descriptionFontColor ?? fontColor],
               )}
             >
               {store.description}

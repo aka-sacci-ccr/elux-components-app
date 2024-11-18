@@ -1,16 +1,10 @@
-import { ImageWidget } from "apps/admin/widgets.ts";
-import Icon, { AvailableIcons } from "../../components/ui/Icon.tsx";
+import Icon from "../../components/ui/Icon.tsx";
 import {
-  BORDER_CLASSES,
+  BG_COLORS,
   BORDER_COLORS,
-  HOVER_BG_COLORS,
-  HOVER_BORDER_COLORS,
-  HOVER_TEXT_COLORS,
-  PEER_CHECKED_BG_COLORS,
-  PEER_CHECKED_BORDER_COLORS,
-  PEER_CHECKED_TEXT_COLORS,
+  FOCUS_TEXT_COLORS,
+  ROUNDED_OPTIONS,
   TEXT_COLORS,
-  WHERE_TO_BUY_CONTENT_ID,
 } from "../../utils/constants.tsx";
 import { clx } from "../../utils/clx.ts";
 import {
@@ -18,125 +12,63 @@ import {
   FontSize,
   FontWeight,
   GapSizes,
-  TextProps,
+  RoundedOptions,
   WidthAndHeight,
 } from "../../utils/types.ts";
 import Container, { SpacingConfig } from "../container/Container.tsx";
-import { Props as ContentProps } from "../../components/social/WhereToBuyContent.tsx";
-import { useComponent } from "../Component.tsx";
+import { AppContext } from "../../mod.ts";
+import stylingDiff from "../../utils/styling/institucional/WhereToBuy/stylingDiff.ts";
+import { useDevice } from "@deco/deco/hooks";
+import { CountryCardContent } from "../../loaders/whereToBuy.ts";
+import Content from "../../components/social/WhereToBuyContent.tsx";
+import { HOVER_BG_COLORS } from "../../utils/constants.tsx";
+import { HOVER_TEXT_COLORS } from "../../utils/constants.tsx";
+
+export function loader(props: Props, req: Request, ctx: AppContext) {
+  const url = new URL(req.url);
+  const countryId = url.searchParams.get("country");
+  const countryContent = countryId
+    ? props?.countries?.find(({ id }) => id === countryId)
+    : undefined;
+  return {
+    ...props,
+    countryContent,
+    siteTemplate: ctx.siteTemplate,
+    url,
+  };
+}
 
 export interface Props {
   /**
    * @title Title props
    */
-  title: TextProps;
+  titleText: string;
   /**
    * @title Description props
    */
-  description?: TextProps;
+  descriptionText?: string;
+  /**
+   * @title Empty content text
+   * @description Text to show when there are no country or city selected
+   */
+  emptyContent: string;
   /**
    * @title Cards
    */
-  countryCards: CountryCardsProps;
+  countries: CountryCardContent[] | undefined;
   /**
    * @title Spacing config
    */
   spacing?: SpacingConfig;
 }
 
-interface CountryCardsProps {
-  /**
-   * @title Global Country card style
-   * @description All country cards styling options
-   */
-  countryCardStyle: CountryCardStyle;
-  /**
-   * @title Global Store card style
-   * @description All store cards styling options
-   */
-  storeCardStyle: StoreCardStyle;
-  /**
-   * @title Countries
-   */
-  countries: CountryCardContent[];
-}
-
-interface CountryCardContent {
-  /**
-   * @title Country name
-   */
-  label: string;
-  /**
-   * @title Country flag
-   */
-  icon?: AvailableIcons;
-  /**
-   * @title Country avaliable stores
-   */
-  countryStores?: CountryStores[];
-}
-
-export interface CountryStores {
-  /**
-   * @title Desktop store image
-   */
-  desktopImage: ImageWidget;
-  /**
-   * @title Mobile store image
-   */
-  mobileImage: ImageWidget;
-  /**
-   * @title Title
-   */
-  title: string;
-  /**
-   * @title Description
-   */
-  description: string;
-  /**
-   * @title Href
-   */
-  href?: string;
-  /**
-   * @title Disable Card Border
-   */
-  disableBorder?: boolean;
-}
-
-interface CountryCardStyle {
-  /**
-   * @title Font color
-   */
-  fontColor: Colors;
-  /**
-   * @title Title Font size
-   * @description text-xs: 12px, text-sm: 14px, text-base: 16px, text-lg: 18px, text-xl: 20px, text-2xl: 24px, text-3xl: 30px
-   */
-  fontSize: FontSize;
-  /**
-   * @title Border color
-   * @description Default border color
-   */
-  colorBorder?: Colors;
-  /**
-   * @title Border width
-   */
-  borderWidth?: "1" | "2";
-  /**
-   * @title Hover Font color
-   * @description Font color when hover country card
-   */
-  hoverFontColor?: Colors;
-  /**
-   * @title Hover color
-   * @description Bg color when hover country card
-   */
+export interface CountrySelectStyle {
+  borderColor: Colors;
+  rounded: RoundedOptions;
+  selectColor: Colors;
+  optionsColor: Colors;
   hoverColor: Colors;
-  /**
-   * @title Hover Border color
-   * @description Border color when select country card
-   */
-  hoverColorBorder: Colors;
+  hoverFontColor: Colors;
 }
 
 export interface StoreCardStyle {
@@ -186,14 +118,23 @@ interface ImageSizes {
   desktop: WidthAndHeight;
 }
 
-const Content = import.meta.resolve(
-  "../../components/social/WhereToBuyContent.tsx",
-);
-
 export default function Support(
-  { title, description, spacing, countryCards }: Props,
+  {
+    titleText,
+    descriptionText,
+    spacing,
+    countries,
+    siteTemplate,
+    countryContent,
+    url,
+    emptyContent,
+  }: ReturnType<
+    typeof loader
+  >,
 ) {
-  const { storeCardStyle, countries, countryCardStyle } = countryCards;
+  const styling = stylingDiff[siteTemplate];
+  const device = useDevice() === "desktop" ? "desktop" : "mobile";
+  const { title, description, countrySelectStyle } = styling[device];
   return (
     <Container
       spacing={spacing}
@@ -209,10 +150,10 @@ export default function Support(
           title.fontSize,
         )}
       >
-        {title.text}
+        {titleText}
       </h1>
       {/** Description */}
-      {description && (
+      {descriptionText && (
         <div
           class={clx(
             "mt-4 lg:mt-6",
@@ -221,66 +162,95 @@ export default function Support(
             description.fontWeight ?? "font-light",
           )}
         >
-          <span>{description.text}</span>
+          <span>{descriptionText}</span>
         </div>
       )}
       {/** Country Cards */}
       <div class="flex flex-row flex-wrap pt-6 gap-4">
-        {countries?.map(({ label, icon, countryStores }, index) => {
-          const id = `country-${index}`;
-          return (
-            <div>
-              <input
-                type="radio"
-                class="peer hidden"
-                name="country-group"
-                id={id}
-              />
-              <label
-                class={clx(
-                  "flex flex-col gap-1 font-light rounded-sm cursor-pointer peer-checked:font-medium hover:font-medium peer-checked:pointer-events-none",
-                  TEXT_COLORS[countryCardStyle.fontColor],
-                  countryCardStyle.fontSize,
-                  HOVER_BG_COLORS[countryCardStyle.hoverColor],
-                  HOVER_BORDER_COLORS[countryCardStyle.hoverColorBorder],
-                  PEER_CHECKED_BG_COLORS[countryCardStyle.hoverColor],
-                  PEER_CHECKED_BORDER_COLORS[countryCardStyle.hoverColorBorder],
-                  BORDER_COLORS[countryCardStyle?.colorBorder ?? "neutral"],
-                  BORDER_CLASSES.full[countryCardStyle.borderWidth ?? "1"],
-                  HOVER_TEXT_COLORS[
-                    countryCardStyle.hoverFontColor ??
-                      countryCardStyle.fontColor
-                  ],
-                  PEER_CHECKED_TEXT_COLORS[
-                    countryCardStyle.hoverFontColor ??
-                      countryCardStyle.fontColor
-                  ],
-                  icon ? "px-4 pb-2.5 pt-3.5" : "px-6 py-3.5",
-                )}
-                for={id}
-                hx-trigger="click"
-                hx-target={`#${WHERE_TO_BUY_CONTENT_ID}`}
-                hx-swap="innerHTML"
-                hx-select="section>*"
-                hx-post={useComponent<ContentProps>(Content, {
-                  cardStyle: storeCardStyle,
-                  stores: countryStores,
-                })}
-              >
-                {icon && <Icon id={icon} width={20} height={15} />}
-                <div class="relative">
-                  <span class="invisible font-medium">{label}</span>
-                  <span class="absolute left-0 top-0">
-                    {label}
-                  </span>
-                </div>
-              </label>
-            </div>
-          );
-        })}
+        <div
+          name="country"
+          class="dropdown"
+        >
+          <div
+            tabIndex={0}
+            role="button"
+            class={clx(
+              "w-[327px] h-12 border-xs text-base font-normal px-4 items-center flex flex-row justify-between group bg-white",
+              ROUNDED_OPTIONS[countrySelectStyle.rounded],
+              TEXT_COLORS[countrySelectStyle.optionsColor],
+              BORDER_COLORS[countrySelectStyle.borderColor],
+              siteTemplate === "elux" &&
+                "focus:!border-b-transparent focus:rounded-b-none",
+              FOCUS_TEXT_COLORS[countrySelectStyle.selectColor],
+            )}
+          >
+            <span class="flex flex-row gap-2.5 items-center">
+              {countryContent
+                ? (
+                  <>
+                    {countryContent.icon && (
+                      <Icon id={countryContent.icon} width={20} height={15} />
+                    )}
+                    {countryContent.label}
+                  </>
+                )
+                : emptyContent}
+            </span>
+            <Icon
+              id="chevron-right"
+              width={24}
+              height={24}
+              class="text-primary rotate-90 group-focus:-rotate-90 duration-150 ease-in-out"
+            />
+          </div>
+          <ul
+            tabIndex={0}
+            class={clx(
+              "dropdown-content menu bg-white z-[1] w-[327px] shadow text-base !px-0 !py-1",
+              BORDER_COLORS[countrySelectStyle.borderColor],
+              TEXT_COLORS[countrySelectStyle.optionsColor],
+              siteTemplate === "frigidaire"
+                ? "!rounded mt-1 border-xs"
+                : "border-x border-b !rounded-b-[1px]",
+            )}
+            style={{
+              boxShadow: "0px 8px 16px 0px #56697326",
+            }}
+          >
+            {countries?.map(({ label, icon, id }) => {
+              const href = new URL(url);
+              href.searchParams.set("country", id);
+              return (
+                <li class="h-[38px] items-center w-full cursor-pointer">
+                  <a
+                    class={clx(
+                      "w-full h-full flex flex-row gap-2.5 px-4 rounded-none",
+                      HOVER_TEXT_COLORS[countrySelectStyle.hoverFontColor],
+                      HOVER_BG_COLORS[countrySelectStyle.hoverColor],
+                      countryContent?.id === id && clx(
+                        TEXT_COLORS[countrySelectStyle.hoverFontColor],
+                        BG_COLORS[countrySelectStyle.hoverColor],
+                      ),
+                    )}
+                    href={href.href}
+                  >
+                    <span class="p-0 ">
+                      {icon && <Icon id={icon} width={20} height={15} />}
+                    </span>
+                    <span class="p-0 hover:!bg-transparent">{label}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
       {/** Store Cards */}
-      <div id={WHERE_TO_BUY_CONTENT_ID}></div>
+      <Content
+        siteTemplate={siteTemplate}
+        device={device}
+        stores={countryContent?.countryStores}
+      />
     </Container>
   );
 }
