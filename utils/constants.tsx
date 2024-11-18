@@ -549,6 +549,7 @@ export const LANGUAGE_DIFFS = {
       dimensionsBox: "with box",
       buttonText: "Where to buy",
     },
+    whereToBuy: "Select the country",
   },
   ES: {
     contactForm: {
@@ -598,6 +599,7 @@ export const LANGUAGE_DIFFS = {
       dimensionsBox: "sin caja",
       buttonText: "Donde comprar",
     },
+    whereToBuy: "Selecciona el país",
   },
 };
 

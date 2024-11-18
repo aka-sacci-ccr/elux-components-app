@@ -7,10 +7,6 @@ export interface Props {
    * @title Countries
    */
   countries: CountryCardContent[];
-  /**
-   * @ignore
-   */
-  fromIndex?: number;
 }
 
 export interface CountryCardContent {
@@ -18,6 +14,10 @@ export interface CountryCardContent {
    * @title Country name
    */
   label: string;
+  /**
+   * @title Country id
+   */
+  id: string;
   /**
    * @title Country flag
    */
@@ -56,17 +56,12 @@ export interface CountryStores {
 }
 
 export default function loader(
-  { countries, fromIndex }: Props,
+  { countries }: Props,
   _req: Request,
   _ctx: AppContext,
 ): CountryCardContent[] | undefined {
   if (!countries || countries.length === 0) {
     return undefined;
   }
-
-  if (fromIndex) {
-    return [countries[fromIndex]];
-  }
-
   return countries;
 }
