@@ -19,7 +19,7 @@ export default function WhereToBuyContent(
   { stores, siteTemplate, device }: Props,
 ) {
   if (!stores || stores.length === 0) {
-    return <></>;
+    return <div class="h-[300px]"></div>;
   }
   const styling = stylingDiff[siteTemplate];
 

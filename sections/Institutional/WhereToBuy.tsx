@@ -1,5 +1,6 @@
 import Icon from "../../components/ui/Icon.tsx";
 import {
+  BG_COLORS,
   BORDER_COLORS,
   LANGUAGE_DIFFS,
   ROUNDED_OPTIONS,
@@ -20,6 +21,8 @@ import stylingDiff from "../../utils/styling/institucional/WhereToBuy/stylingDif
 import { useDevice } from "@deco/deco/hooks";
 import { CountryCardContent } from "../../loaders/whereToBuy.ts";
 import Content from "../../components/social/WhereToBuyContent.tsx";
+import { HOVER_BG_COLORS } from "../../utils/constants.tsx";
+import { HOVER_TEXT_COLORS } from "../../utils/constants.tsx";
 
 export function loader(props: Props, req: Request, ctx: AppContext) {
   const url = new URL(req.url);
@@ -60,6 +63,8 @@ export interface CountrySelectStyle {
   rounded: RoundedOptions;
   selectColor: Colors;
   optionsColor: Colors;
+  hoverColor: Colors;
+  hoverFontColor: Colors;
 }
 
 export interface StoreCardStyle {
@@ -174,7 +179,18 @@ export default function Support(
                 "focus:border-b-0 focus:rounded-b-none",
             )}
           >
-            <span>{LANGUAGE_DIFFS[language].whereToBuy}</span>
+            <span class="flex flex-row gap-2.5 items-center">
+              {countryContent
+                ? (
+                  <>
+                    {countryContent.icon && (
+                      <Icon id={countryContent.icon} width={20} height={15} />
+                    )}
+                    {countryContent.label}
+                  </>
+                )
+                : LANGUAGE_DIFFS[language].whereToBuy}
+            </span>
             <Icon
               id="chevron-right"
               width={24}
@@ -185,7 +201,7 @@ export default function Support(
           <ul
             tabIndex={0}
             class={clx(
-              "dropdown-content menu bg-white z-[1] w-[327px] p-2 shadow text-base",
+              "dropdown-content menu bg-white z-[1] w-[327px] shadow text-base !px-0 !py-1",
               BORDER_COLORS[countrySelectStyle.borderColor],
               TEXT_COLORS[countrySelectStyle.optionsColor],
               siteTemplate === "frigidaire"
@@ -202,7 +218,15 @@ export default function Support(
               return (
                 <li class="h-[38px] items-center w-full cursor-pointer">
                   <a
-                    class="w-full h-full flex flex-row gap-2.5 px-4"
+                    class={clx(
+                      "w-full h-full flex flex-row gap-2.5 px-4 rounded-none",
+                      HOVER_TEXT_COLORS[countrySelectStyle.hoverFontColor],
+                      HOVER_BG_COLORS[countrySelectStyle.hoverColor],
+                      countryContent?.id === id && clx(
+                        TEXT_COLORS[countrySelectStyle.hoverFontColor],
+                        BG_COLORS[countrySelectStyle.hoverColor],
+                      ),
+                    )}
                     href={href.href}
                   >
                     <span class="p-0 ">

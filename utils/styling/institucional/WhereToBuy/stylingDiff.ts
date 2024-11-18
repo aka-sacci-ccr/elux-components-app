@@ -93,6 +93,8 @@ const FRIGIDAIRE_COUNTRY_SELECT = {
   rounded: "regular",
   selectColor: "info",
   optionsColor: "info",
+  hoverColor: "error-content",
+  hoverFontColor: "secondary",
 } as CountrySelectStyle;
 
 const ELUX_COUNTRY_SELECT = {
@@ -100,6 +102,8 @@ const ELUX_COUNTRY_SELECT = {
   rounded: "sm",
   selectColor: "info",
   optionsColor: "info",
+  hoverColor: "error-content",
+  hoverFontColor: "secondary",
 } as CountrySelectStyle;
 
 const FRIGIDAIRE_MOBILE = {
