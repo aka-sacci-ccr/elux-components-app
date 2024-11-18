@@ -179,6 +179,33 @@ export const HOVER_TEXT_COLORS = {
   "transparent": "hover:!text-transparent",
 };
 
+export const FOCUS_TEXT_COLORS = {
+  "base-100": "focus:!text-base-100",
+  "primary": "focus:!text-primary",
+  "secondary": "focus:!text-secondary",
+  "accent": "focus:!text-accent",
+  "neutral": "focus:!text-neutral",
+  "success": "focus:!text-success",
+  "warning": "focus:!text-warning",
+  "error": "focus:!text-error",
+  "info": "focus:!text-info",
+  "base-200": "focus:!text-base-200",
+  "base-300": "focus:!text-base-300",
+  "base-400": "focus:!text-base-400",
+  "base-content": "focus:!text-base-content",
+  "primary-content": "focus:!text-primary-content",
+  "secondary-content": "focus:!text-secondary-content",
+  "accent-content": "focus:!text-accent-content",
+  "neutral-content": "focus:!text-neutral-content",
+  "success-content": "focus:!text-success-content",
+  "warning-content": "focus:!text-warning-content",
+  "error-content": "focus:!text-error-content",
+  "info-content": "focus:!text-info-content",
+  "black": "focus:!text-black",
+  "white": "focus:!text-white",
+  "transparent": "focus:!text-transparent",
+};
+
 export const PEER_CHECKED_TEXT_COLORS = {
   "base-100": "peer-checked:!text-base-100",
   "primary": "peer-checked:!text-primary",
@@ -549,7 +576,6 @@ export const LANGUAGE_DIFFS = {
       dimensionsBox: "with box",
       buttonText: "Where to buy",
     },
-    whereToBuy: "Select the country",
   },
   ES: {
     contactForm: {
@@ -599,7 +625,6 @@ export const LANGUAGE_DIFFS = {
       dimensionsBox: "sin caja",
       buttonText: "Donde comprar",
     },
-    whereToBuy: "Selecciona el país",
   },
 };
 

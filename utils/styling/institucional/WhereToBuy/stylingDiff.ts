@@ -100,9 +100,9 @@ const FRIGIDAIRE_COUNTRY_SELECT = {
 const ELUX_COUNTRY_SELECT = {
   borderColor: "primary",
   rounded: "sm",
-  selectColor: "info",
-  optionsColor: "info",
-  hoverColor: "error-content",
+  selectColor: "neutral",
+  optionsColor: "secondary",
+  hoverColor: "base-content",
   hoverFontColor: "secondary",
 } as CountrySelectStyle;
 

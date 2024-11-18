@@ -2,7 +2,7 @@ import Icon from "../../components/ui/Icon.tsx";
 import {
   BG_COLORS,
   BORDER_COLORS,
-  LANGUAGE_DIFFS,
+  FOCUS_TEXT_COLORS,
   ROUNDED_OPTIONS,
   TEXT_COLORS,
 } from "../../utils/constants.tsx";
@@ -34,7 +34,6 @@ export function loader(props: Props, req: Request, ctx: AppContext) {
     ...props,
     countryContent,
     siteTemplate: ctx.siteTemplate,
-    language: ctx.language,
     url,
   };
 }
@@ -48,6 +47,11 @@ export interface Props {
    * @title Description props
    */
   descriptionText?: string;
+  /**
+   * @title Empty content text
+   * @description Text to show when there are no country or city selected
+   */
+  emptyContent: string;
   /**
    * @title Cards
    */
@@ -122,8 +126,8 @@ export default function Support(
     countries,
     siteTemplate,
     countryContent,
-    language,
     url,
+    emptyContent,
   }: ReturnType<
     typeof loader
   >,
@@ -173,10 +177,11 @@ export default function Support(
             class={clx(
               "w-[327px] h-12 border-xs text-base font-normal px-4 items-center flex flex-row justify-between group bg-white",
               ROUNDED_OPTIONS[countrySelectStyle.rounded],
-              TEXT_COLORS[countrySelectStyle.selectColor],
+              TEXT_COLORS[countrySelectStyle.optionsColor],
               BORDER_COLORS[countrySelectStyle.borderColor],
               siteTemplate === "elux" &&
-                "focus:border-b-0 focus:rounded-b-none",
+                "focus:!border-b-transparent focus:rounded-b-none",
+              FOCUS_TEXT_COLORS[countrySelectStyle.selectColor],
             )}
           >
             <span class="flex flex-row gap-2.5 items-center">
@@ -189,7 +194,7 @@ export default function Support(
                     {countryContent.label}
                   </>
                 )
-                : LANGUAGE_DIFFS[language].whereToBuy}
+                : emptyContent}
             </span>
             <Icon
               id="chevron-right"
