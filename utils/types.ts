@@ -226,10 +226,6 @@ export interface Product {
   brand?: string;
   description?: string;
   gtin?: string;
-  /**
-   * @format datetime
-   */
-  releaseDate?: string;
 }
 
 export interface Brand {
@@ -245,44 +241,69 @@ export interface Brand {
   logo?: string;
 }
 
-export interface AdditionalProperty {
+export interface FiltersGroups {
+  /**
+   * @title Filter Slug
+   */
+  identifier: string;
+  /**
+   * @title Spanish name
+   */
+  name: string;
+  /**
+   * @title English name
+   */
+  alternateName: string;
+}
+
+export interface ProductMeasurements {
   /**
    * @title Property Identificator
    */
   propertyID:
-    | "OTHER"
     | "HEIGHT"
     | "WIDTH"
     | "DEPTH"
-    | "WEIGHT"
-    | "BOX_HEIGHT"
-    | "BOX_WIDTH"
-    | "BOX_DEPTH"
-    | "BOX_WEIGHT"
-    | "BOX_OTHER";
+    | "WEIGHT";
   /**
-   * @title Property Name
+   * @title Unit Code
+   * @description cm, mm, kg, etc.
+   */
+  unitCode: string;
+  /**
+   * @title Value without box
+   */
+  minValue: number;
+  /**
+   * @title Value with box
+   */
+  maxValue: number;
+}
+
+export interface AdditionalProperty {
+  /**
+   * @title Filter Group
+   * @description To use this property as a filter, you need to select a filter group.
+   * @format dynamic-options
+   * @options elux-components-app/loaders/product/avaliableFiltersGroups.ts
+   */
+  additionalType?: string;
+  /**
+   * @title Spanish Name
    */
   name: string;
   /**
-   * @title Property Value
+   * @title English Name
+   */
+  alternateName: string;
+  /**
+   * @title Value
    */
   value: string;
   /**
-   * @title Unit Code
-   * @description kg, cm, etc.
-   */
-  unitCode?: string;
-  /**
    * @title Unit Text
-   * @description Kilogram, Centimeter, etc.
    */
   unitText?: string;
-  /**
-   * @title Filterable
-   * @description If true, the property will be displayed in the product filters.
-   */
-  additionalType?: boolean;
 }
 
 export interface Description {

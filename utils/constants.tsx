@@ -697,6 +697,16 @@ export const LANGUAGE_DIFFS = {
       nameAsc: "Name: A-Z",
       nameDesc: "Name: Z-A",
     },
+    pdpLoader: {
+      WIDTH: "Width",
+      HEIGHT: "Height",
+      DEPTH: "Depth",
+      WEIGHT: "Weight",
+      "BOX_WIDTH": "Width",
+      "BOX_HEIGHT": "Height",
+      "BOX_DEPTH": "Depth",
+      "BOX_WEIGHT": "Weight",
+    },
   },
   ES: {
     contactForm: {
@@ -759,6 +769,16 @@ export const LANGUAGE_DIFFS = {
       goBack: "Volver atrás",
       nameAsc: "Nombre: A-Z",
       nameDesc: "Nombre: Z-A",
+    },
+    pdpLoader: {
+      WIDTH: "Ancho",
+      HEIGHT: "Altura",
+      DEPTH: "Profundidad",
+      WEIGHT: "Peso",
+      "BOX_WIDTH": "Ancho",
+      "BOX_HEIGHT": "Altura",
+      "BOX_DEPTH": "Profundidad",
+      "BOX_WEIGHT": "Peso",
     },
   },
 };

@@ -5,10 +5,7 @@ import {
   ProductDetailsPage,
   PropertyValue,
 } from "apps/commerce/types.ts";
-import {
-  getProductBySku,
-  getProductBySlug,
-} from "../../../utils/product/getProduct.ts";
+import { getProduct } from "../../../utils/product/getProduct.ts";
 export interface Props {
   /**
    * @title SLUG from URL
@@ -26,9 +23,7 @@ export default async function loader(
   ctx: AppContext,
 ): Promise<ProductDetailsPage | null> {
   const url = new URL(req.url);
-  const product = useSkuAsSlug
-    ? await getProductBySku(slug, ctx, url)
-    : await getProductBySlug(slug, ctx, url);
+  const product = await getProduct(slug, ctx, url, useSkuAsSlug);
 
   if (!product) {
     return null;

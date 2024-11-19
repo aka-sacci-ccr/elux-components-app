@@ -204,6 +204,7 @@ export default function ProductDetails(
                   class="tab text-xs text-primary font-light checked:!border-primary"
                   aria-label={LANGUAGE_DIFFS[language].productPage
                     .dimensionsBox}
+                  checked={true}
                 />
                 <div
                   role="tabpanel"
@@ -220,7 +221,6 @@ export default function ProductDetails(
                   role="tab"
                   class="tab text-xs text-primary font-light checked:!border-primary"
                   aria-label={LANGUAGE_DIFFS[language].productPage.dimensions}
-                  checked={true}
                 />
                 <div
                   role="tabpanel"

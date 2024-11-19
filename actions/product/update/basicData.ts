@@ -2,7 +2,7 @@ import { AppContext } from "apps/records/mod.ts";
 import { updateBaseData } from "../../../utils/product/submitProduct.ts";
 import { Product as DatabaseProduct } from "../../../utils/types.ts";
 import { logger } from "@deco/deco/o11y";
-import { getProductBySku } from "../../../utils/product/getProduct.ts";
+import { getProduct } from "../../../utils/product/getProduct.ts";
 import { Product } from "apps/commerce/types.ts";
 
 export interface Props extends Partial<DatabaseProduct> {
@@ -30,7 +30,7 @@ export default async function basicData(
       brand: productBrand ? productBrand[0] ?? undefined : undefined,
     }, ctx);
 
-    const product = await getProductBySku(props.sku, ctx, url);
+    const product = await getProduct(props.sku, ctx, url, true);
     if (!product) {
       throw new Error("Product not found");
     }
@@ -39,7 +39,7 @@ export default async function basicData(
     logger.error(e);
     return {
       success: false,
-      message: e.message,
+      message: e instanceof Error ? e.message : "Unknown error",
     };
   }
 }

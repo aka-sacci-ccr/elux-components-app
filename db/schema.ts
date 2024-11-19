@@ -1,6 +1,7 @@
 import {
   AnySQLiteColumn,
   integer,
+  real,
   sqliteTable,
   text,
 } from "drizzle-orm/sqlite-core";
@@ -64,16 +65,34 @@ export const brands = sqliteTable("brands", {
   logo: text("logo"),
 });
 
+//Define product measurements
+export const productMeasurements = sqliteTable("productMeasurements", {
+  identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
+  subjectOf: text("subjectOf").references(() => products.sku), // F.K
+  propertyID: text("propertyID").notNull(), // Width, Height, Depth, Weight, etc.
+  unitCode: text("unitCode"), // cm, mm, kg, etc.
+  maxValue: real("maxValue"), // With box
+  minValue: real("minValue"), // Without box
+});
+
+//Define filters groups
+export const filtersGroups = sqliteTable("filtersGroups", {
+  identifier: text("identifier").primaryKey(), // P.K
+  name: text("name").notNull(), // In Spanish
+  alternateName: text("alternateName"), // In English
+});
+
 //Define product additionalProperties
 export const additionalProperties = sqliteTable("additionalProperties", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
-  propertyID: text("propertyID").notNull(),
-  name: text("name").notNull(),
+  additionalType: text("additionalType").references(() =>
+    filtersGroups.identifier
+  ), // F.K
+  name: text("name").notNull(), // In Spanish
+  alternateName: text("alternateName"), // In English
   value: text("value").notNull(),
-  unitCode: text("unitCode"),
   unitText: text("unitText"),
-  additionalType: text("additionalType"),
 });
 
 //Define product extra descriptions
