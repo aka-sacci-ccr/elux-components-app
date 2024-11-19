@@ -1,4 +1,3 @@
-import { AvailableIcons } from "../components/ui/Icon.tsx";
 import { TechSheetProps } from "../sections/Product/ProductDetails/ProductPage.tsx";
 
 export const MINICART_FORM_ID = "minicart-form";
@@ -527,131 +526,6 @@ export const ROUNDED_OPTIONS = {
 
 export const TOAST_ID = "toast-cart";
 
-export const LANGUAGE_DIFFS = {
-  EN: {
-    contactForm: {
-      country: {
-        label: "Country*",
-        placeholder: "Select the country",
-      },
-      productCode: {
-        label: "Product code / Model number",
-        placeholder: "Insert the product code/model number",
-      },
-      subject: {
-        label: "Subject",
-        placeholder: "Select the subject",
-      },
-      message: {
-        label: "Message",
-        placeholder: "Insert the message",
-      },
-      label: "Personal data",
-      name: {
-        label: "Name*",
-        placeholder: "Insert your name",
-      },
-      surnames: {
-        label: "Surnames*",
-        placeholder: "Insert your surnames",
-      },
-      email: {
-        label: "Email*",
-        placeholder: "Insert your email",
-      },
-      confirmEmail: {
-        label: "Confirm email*",
-        placeholder: "Confirm email",
-      },
-      phone: {
-        label: "Contact phone number",
-        placeholder: "Insert your contact phone number",
-      },
-    },
-    productPage: {
-      descriptionTitle: "Description",
-      recordTitle: "Technical sheet",
-      dimensionsProduct: "Product dimensions",
-      dimensions: "without box",
-      dimensionsBox: "with box",
-      buttonText: "Where to buy",
-    },
-    listingPage: {
-      notFound: "Not Found!",
-      filters: "Filters",
-      productCount: "products",
-      sort: "Sort by",
-      filter: "Filter by",
-      showMore: "Show more",
-      showLess: "Show less",
-      clear: "Clear",
-      apply: "Apply",
-      goBack: "Go back",
-    },
-  },
-  ES: {
-    contactForm: {
-      country: {
-        label: "País*",
-        placeholder: "Selecciona el pais",
-      },
-      productCode: {
-        label: "Código de producto/número de modelo",
-        placeholder: "Inserte el código de producto/modelo",
-      },
-      subject: {
-        label: "Asunto",
-        placeholder: "Selecciona el asunto",
-      },
-      message: {
-        label: "Mensaje",
-        placeholder: "Insertar el mensaje",
-      },
-      label: "Datos personales",
-      name: {
-        label: "Nombre*",
-        placeholder: "Inserta tu nombre",
-      },
-      surnames: {
-        label: "Apellidos*",
-        placeholder: "Inserta tus apellidos",
-      },
-      email: {
-        label: "Email*",
-        placeholder: "Inserta tu email",
-      },
-      confirmEmail: {
-        label: "Confirmar email*",
-        placeholder: "Confirma tu email",
-      },
-      phone: {
-        label: "Número de teléfono de contacto",
-        placeholder: "Inserta tu número de teléfono de contacto",
-      },
-    },
-    productPage: {
-      descriptionTitle: "Descripción",
-      recordTitle: "Ficha Técnica",
-      dimensionsProduct: "Dimensiones del producto:",
-      dimensions: "con caja",
-      dimensionsBox: "sin caja",
-      buttonText: "Donde comprar",
-    },
-    listingPage: {
-      notFound: "No encontrado!",
-      filters: "Filtros",
-      productCount: "productos",
-      sort: "Ordenar por",
-      filter: "Filtrar por",
-      showMore: "Ver más productos",
-      showLess: "Mostrar menos",
-      clear: "Limpiar",
-      apply: "Aplicar",
-      goBack: "Volver atrás",
-    },
-  },
-};
-
 export const PADDING_SIZES = {
   full: {
     "0": "p-0",
@@ -735,8 +609,6 @@ export const PADDING_SIZES = {
   },
 };
 
-export const DEFAULT_DOMAINS = ["deno.dev", "decocdn.com", "localhost"];
-
 export const DEFAULT_TECH_SHEET_CONFIG: TechSheetProps[] = [
   {
     bgColor: "white",
@@ -762,13 +634,131 @@ export const DEFAULT_TECH_SHEET_CONFIG: TechSheetProps[] = [
   },
 ];
 
-export const iconMap: Record<string, AvailableIcons> = {
-  WIDTH: "width-property",
-  HEIGHT: "height-property",
-  WEIGHT: "weight-property",
-  DEPTH: "depth-property",
-  BOX_WIDTH: "width-property",
-  BOX_HEIGHT: "height-property",
-  BOX_WEIGHT: "weight-property",
-  BOX_DEPTH: "depth-property",
+export const LANGUAGE_DIFFS = {
+  EN: {
+    contactForm: {
+      country: {
+        label: "Country*",
+        placeholder: "Select the country",
+      },
+      productCode: {
+        label: "Product code / Model number",
+        placeholder: "Insert the product code/model number",
+      },
+      subject: {
+        label: "Subject",
+        placeholder: "Select the subject",
+      },
+      message: {
+        label: "Message",
+        placeholder: "Insert the message",
+      },
+      label: "Personal data",
+      name: {
+        label: "Name*",
+        placeholder: "Insert your name",
+      },
+      surnames: {
+        label: "Surnames*",
+        placeholder: "Insert your surnames",
+      },
+      email: {
+        label: "Email*",
+        placeholder: "Insert your email",
+      },
+      confirmEmail: {
+        label: "Confirm email*",
+        placeholder: "Confirm email",
+      },
+      phone: {
+        label: "Contact phone number",
+        placeholder: "Insert your contact phone number",
+      },
+    },
+    productPage: {
+      descriptionTitle: "Description",
+      recordTitle: "Technical sheet",
+      dimensionsProduct: "Product dimensions",
+      dimensions: "without box",
+      dimensionsBox: "with box",
+      buttonText: "Where to buy",
+    },
+    listingPage: {
+      notFound: "Not Found!",
+      filters: "Filters",
+      productCount: "products",
+      sort: "Sort by",
+      filter: "Filter by",
+      showMore: "Show more",
+      showLess: "Show less",
+      clear: "Clear",
+      apply: "Apply",
+      goBack: "Go back",
+      nameAsc: "Name: A-Z",
+      nameDesc: "Name: Z-A",
+    },
+  },
+  ES: {
+    contactForm: {
+      country: {
+        label: "País*",
+        placeholder: "Selecciona el pais",
+      },
+      productCode: {
+        label: "Código de producto/número de modelo",
+        placeholder: "Inserte el código de producto/modelo",
+      },
+      subject: {
+        label: "Asunto",
+        placeholder: "Selecciona el asunto",
+      },
+      message: {
+        label: "Mensaje",
+        placeholder: "Insertar el mensaje",
+      },
+      label: "Datos personales",
+      name: {
+        label: "Nombre*",
+        placeholder: "Inserta tu nombre",
+      },
+      surnames: {
+        label: "Apellidos*",
+        placeholder: "Inserta tus apellidos",
+      },
+      email: {
+        label: "Email*",
+        placeholder: "Inserta tu email",
+      },
+      confirmEmail: {
+        label: "Confirmar email*",
+        placeholder: "Confirma tu email",
+      },
+      phone: {
+        label: "Número de teléfono de contacto",
+        placeholder: "Inserta tu número de teléfono de contacto",
+      },
+    },
+    productPage: {
+      descriptionTitle: "Descripción",
+      recordTitle: "Ficha Técnica",
+      dimensionsProduct: "Dimensiones del producto:",
+      dimensions: "con caja",
+      dimensionsBox: "sin caja",
+      buttonText: "Donde comprar",
+    },
+    listingPage: {
+      notFound: "No encontrado!",
+      filters: "Filtros",
+      productCount: "productos",
+      sort: "Ordenar por",
+      filter: "Filtrar por",
+      showMore: "Ver más productos",
+      showLess: "Mostrar menos",
+      clear: "Limpiar",
+      apply: "Aplicar",
+      goBack: "Volver atrás",
+      nameAsc: "Nombre: A-Z",
+      nameDesc: "Nombre: Z-A",
+    },
+  },
 };

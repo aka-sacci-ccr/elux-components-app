@@ -56,14 +56,9 @@ export default function SearchResult(
   { page, ...props }: Props,
 ) {
   const container = useId();
-  const _controls = useId();
   const device = useDevice();
   const { listingMain, url, partial } = props;
-  const { products, filters, pageInfo, sortOptions } = page;
-  const perPage = pageInfo?.recordPerPage || products.length;
-  const zeroIndexedOffsetPage = pageInfo.currentPage -
-    (listingMain?.startingPage ?? 0);
-  const _offset = zeroIndexedOffsetPage * perPage;
+  const { filters, sortOptions } = page;
 
   const sortBy = sortOptions.length > 0 && (
     <Sort
@@ -229,10 +224,6 @@ function Result(props: Props) {
   const { listingMain, url, partial } = props;
   const page = props.page!;
   const { products, pageInfo } = page;
-  const perPage = pageInfo?.recordPerPage || products.length;
-  const zeroIndexedOffsetPage = pageInfo.currentPage -
-    (listingMain?.startingPage ?? 0);
-  const _offset = zeroIndexedOffsetPage * perPage;
   const nextPageUrl = useUrlRebased(pageInfo.nextPage, url);
   const prevPageUrl = useUrlRebased(pageInfo.previousPage, url);
   const partialPrev = useSection({
@@ -261,13 +252,17 @@ function Result(props: Props) {
     <div class="grid grid-flow-row grid-cols-1 place-items-center">
       <div
         class={clx(
-          "pb-2 sm:pb-10",
+          "pb-2 sm:pb-5",
           (!prevPageUrl || partial === "hideLess") && "hidden",
         )}
       >
         <a
           rel="prev"
-          class="btn btn-ghost"
+          class={clx(
+            "btn btn-ghost px-4 min-h-10 max-h-10 md:mt-6",
+            "font-semibold",
+            buttonClass,
+          )}
           hx-swap="outerHTML show:parent:top"
           hx-get={partialPrev}
         >
@@ -295,15 +290,19 @@ function Result(props: Props) {
           />
         ))}
       </div>
-      <div class="pt-2 sm:pt-5 w-full">
+      <div
+        class={clx(
+          "pt-2 sm:pt-5 w-full",
+          (!nextPageUrl || partial === "hideMore") &&
+            "hidden",
+        )}
+      >
         <div class="flex justify-center [&_section]:contents">
           <a
             rel="next"
             class={clx(
               "btn btn-ghost px-4 min-h-10 max-h-10 md:mt-6",
               "font-semibold",
-              (!nextPageUrl || partial === "hideMore") &&
-                "hidden",
               buttonClass,
             )}
             hx-swap="outerHTML show:parent:top"

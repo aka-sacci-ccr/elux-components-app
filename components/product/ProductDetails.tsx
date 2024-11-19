@@ -5,12 +5,12 @@ import {
   BG_COLORS,
   BORDER_COLORS,
   DEFAULT_TECH_SHEET_CONFIG,
-  iconMap,
   LANGUAGE_DIFFS,
   TEXT_COLORS,
 } from "../../utils/constants.tsx";
 import { clx } from "../../utils/clx.ts";
 import { ProductMainProps } from "../../sections/Product/ProductDetails/ProductPage.tsx";
+import { iconMap } from "../../utils/product/constants.ts";
 
 interface Props {
   additionalProperty: PropertyValue[] | undefined;

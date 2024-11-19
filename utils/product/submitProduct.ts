@@ -19,7 +19,7 @@ import {
 import { Props as SubmitProductProps } from "../../actions/product/submit.ts";
 import { Description } from "../types.ts";
 import { eq } from "drizzle-orm";
-import { DEFAULT_DOMAINS } from "../constants.tsx";
+import { DEFAULT_DOMAINS } from "./constants.ts";
 
 export async function insertBaseData(product: Product, ctx: AppContext) {
   const records = await ctx.invoke.records.loaders.drizzle();
@@ -54,6 +54,7 @@ export async function insertAdditionalProperties(
 ) {
   const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(additionalProperties).values(
+    //@ts-ignore boolean to string conversion in the schema
     productProps.map((props) => {
       return {
         ...props,

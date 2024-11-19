@@ -119,7 +119,7 @@ export default function ProductListingPage(
       <SearchResult
         page={page}
         url={url}
-        listingMain={listingMain} 
+        listingMain={listingMain}
         partial={partial}
         language={language}
         siteTemplate={siteTemplate}

@@ -4,7 +4,7 @@ import {
   ProductListingPage,
 } from "apps/commerce/types.ts";
 import { AppContext } from "apps/records/mod.ts";
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 import { AdditionalProperty, Category } from "../../../utils/types.ts";
 import { LibSQLDatabase } from "apps/records/deps.ts";
 import {
@@ -16,24 +16,37 @@ import {
   products,
 } from "../../../db/schema.ts";
 import { filterValues } from "../../testPLP.ts";
+import { logger } from "@deco/deco/o11y";
+import {
+  getSortOptions,
+  SortOptions,
+} from "../../../utils/product/constants.ts";
 
 interface ExtendedCategory extends Category {
   additionalType?: string;
 }
 
+export interface Props {
+  recordsPerPage: number;
+  page?: number;
+  sort?: SortOptions;
+}
+
 export default async function loader(
-  _props: unknown,
+  { recordsPerPage, page, sort }: Props,
   req: Request,
   ctx: AppContext,
 ): Promise<ProductListingPage | null> {
   const url = new URL(req.url);
+  const pageNumber = page ?? url.searchParams.get("page") ?? 1;
+  const sortOption = sort ?? url.searchParams.get("sort") ?? "name-asc";
   const records = await ctx.invoke.records.loaders.drizzle();
   const paths = url.pathname.split("/").splice(1);
   const fatherCategoryPath = paths[0];
   const categoryTree = await getCategoryTree(records, fatherCategoryPath);
 
   if (!checkPath(paths, categoryTree)) {
-    console.log("path is wrong");
+    logger.error("path is wrong");
     return null;
   }
   const validCategory = categoryTree.find(({ identifier }) =>
@@ -57,27 +70,41 @@ export default async function loader(
 
   if (!skusToGet.length || !skusToGet[0].product) return null;
 
-  const { productData } = await getProductData(
+  //@ts-ignore Actually, ctx.language exists
+  const sortOptions = getSortOptions(ctx.language);
+
+  const products = await getProductData(
     records,
     skusToGet,
     url,
+    Number(pageNumber),
+    recordsPerPage,
+    sortOptions.map((opt) => opt.value).includes(sortOption)
+      ? sortOption as SortOptions
+      : "name-asc",
   );
+
+  if (!products) return null;
+
+  const totalProducts = skusToGet.length;
+  const totalPages = Math.ceil(totalProducts / recordsPerPage);
+  const currentPage = Number(pageNumber);
 
   return {
     "@type": "ProductListingPage",
     breadcrumb: getBreadcrumbList(paths, categoryTree, url),
-    products: productData,
+    products: products.productData,
     filters: filterValues,
     pageInfo: {
-      currentPage: 1,
-      nextPage: "?page=2",
-      previousPage: undefined,
-      records: 25,
+      currentPage,
+      nextPage: currentPage < totalPages
+        ? `?page=${currentPage + 1}`
+        : undefined,
+      previousPage: currentPage > 1 ? `?page=${currentPage - 1}` : undefined,
+      records: totalProducts,
+      recordPerPage: recordsPerPage,
     },
-    sortOptions: [
-      { value: "name-asc", label: "Nome: A-Z" },
-      { value: "name-desc", label: "Nome: Z-A" },
-    ],
+    sortOptions,
     seo: {
       title: validCategory?.value ?? "",
       description: validCategory?.description ?? "",
@@ -120,10 +147,16 @@ const getProductData = async (
     product: string | null;
   }[],
   url: URL,
-): Promise<{
-  productData: Product[];
-  productProperties: AdditionalProperty[];
-}> => {
+  page: number = 1,
+  recordsPerPage: number = 20,
+  sortBy: SortOptions,
+): Promise<
+  {
+    productData: Product[];
+    productProperties: AdditionalProperty[];
+  } | null
+> => {
+  const offset = (page - 1) * recordsPerPage;
   const baseProductData = await records.select({
     name: products.name,
     productID: products.productID,
@@ -144,7 +177,12 @@ const getProductData = async (
         sql`${url.hostname} LIKE '%' || ${avaliableIn.domain}`,
       ),
     )
-    .groupBy(products.sku);
+    .groupBy(products.sku)
+    .orderBy(sortBy === "name-asc" ? asc(products.name) : desc(products.name))
+    .limit(recordsPerPage)
+    .offset(offset);
+
+  if (!baseProductData.length) return null;
 
   const [productImages, productProperties] = await Promise.all([
     records
