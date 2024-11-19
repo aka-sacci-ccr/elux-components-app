@@ -135,6 +135,7 @@ const getBreadcrumbList = (
             url: category.image,
           }]
           : undefined,
+        description: category?.description,
       };
     }),
     numberOfItems: pathnames.length,

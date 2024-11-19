@@ -1,4 +1,8 @@
-import { FilterToggle, ProductListingPage } from "apps/commerce/types.ts";
+import {
+  FilterToggle,
+  ListItem,
+  ProductListingPage,
+} from "apps/commerce/types.ts";
 import { useId } from "../../sdk/useId.ts";
 import { useDevice, useSection } from "@deco/deco/hooks";
 import { clx } from "../../utils/clx.ts";
@@ -21,6 +25,7 @@ import { MenuMobile } from "./MenuMobile.tsx";
 export interface Props {
   page: ProductListingPage;
   listingMain?: ListingMainProps;
+  mainBreadcrumbItem?: ListItem<string>;
   /** @hidden */
   partial?: "hideMore" | "hideLess";
   url: string;
@@ -57,7 +62,7 @@ export default function SearchResult(
 ) {
   const container = useId();
   const device = useDevice();
-  const { listingMain, url, partial } = props;
+  const { listingMain, url, partial, mainBreadcrumbItem } = props;
   const { filters, sortOptions } = page;
 
   const sortBy = sortOptions.length > 0 && (
@@ -70,7 +75,7 @@ export default function SearchResult(
 
   const titleSpan = (
     <span class="text-sm font-semibold flex lg:text-xl">
-      Geladeiras / Refrigeradores
+      {mainBreadcrumbItem?.item}
     </span>
   );
 
@@ -92,7 +97,7 @@ export default function SearchResult(
                   ? (
                     <aside
                       class={clx(
-                        "place-self-start flex flex-col gap-4 p-4",
+                        "place-self-start flex flex-col gap-4 p-4 w-full",
                         TEXT_COLORS[
                           listingMain?.filtersFontColor ??
                             "primary"

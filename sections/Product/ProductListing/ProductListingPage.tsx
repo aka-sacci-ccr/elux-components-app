@@ -82,11 +82,6 @@ export default function ProductListingPage(
       device === "desktop" ? "desktop" : "mobile"
     ];
 
-  const breadcrumbItems = getBreadcrumbItems(
-    page.breadcrumb.itemListElement,
-    breadcrumbProps,
-  );
-
   if (partial) {
     return (
       <SearchResult
@@ -99,6 +94,16 @@ export default function ProductListingPage(
       />
     );
   }
+
+  const breadcrumbItems = getBreadcrumbItems(
+    page.breadcrumb.itemListElement,
+    breadcrumbProps,
+  );
+
+  const mainBreadcrumbItem = page.breadcrumb.itemListElement.reduce((
+    highest,
+    current,
+  ) => (current.position > highest.position) ? current : highest);
 
   return (
     <Container class="flex flex-col" spacing={spacing}>
@@ -113,8 +118,8 @@ export default function ProductListingPage(
         </div>
       </div>
       <ListingPageBanner
-        image="https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-latam/c35db32c-304c-4e57-a09a-c5b395dae644/072ae6028195b95f090be37ca0be5b9b.png"
-        description="New Electrolux products"
+        image={mainBreadcrumbItem?.image?.[0]?.url}
+        description={mainBreadcrumbItem?.description}
       />
       <SearchResult
         page={page}
@@ -123,6 +128,7 @@ export default function ProductListingPage(
         partial={partial}
         language={language}
         siteTemplate={siteTemplate}
+        mainBreadcrumbItem={mainBreadcrumbItem}
       />
     </Container>
   );

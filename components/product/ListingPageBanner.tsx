@@ -1,11 +1,12 @@
 import { Picture, Source } from "apps/website/components/Picture.tsx";
 
 export interface Props {
-  image: string;
+  image?: string;
   description?: string;
 }
 
 export default function ListingPageBanner({ image, description }: Props) {
+  if (!image) return <></>;
   return (
     <div className="w-full relative overflow-hidden mx-auto">
       <div className="flex">
