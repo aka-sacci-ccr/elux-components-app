@@ -91,7 +91,7 @@ export default function SearchResult(
           ? <Result {...props} page={page} />
           : (
             <div class="container flex flex-col gap-4 sm:gap-5 w-full py-4 sm:py-5 px-5 sm:px-0">
-              <div class="grid place-items-center grid-cols-1 sm:grid-cols-[245px_1fr] sm:gap-5 group">
+              <div class="grid grid-cols-1 sm:grid-cols-[245px_1fr] sm:gap-5 group">
                 {/** Return the filters aside in desktop and the filters drawer in mobile */}
                 {device === "desktop"
                   ? (
