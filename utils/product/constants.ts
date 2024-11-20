@@ -25,3 +25,5 @@ export const getSortOptions = (language: "EN" | "ES") => {
     },
   ];
 };
+
+export const DEFAULT_URL_PARAMS_TO_EXCLUDE = ["sort", "page"];

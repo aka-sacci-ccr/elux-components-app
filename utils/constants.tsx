@@ -707,6 +707,13 @@ export const LANGUAGE_DIFFS = {
       "BOX_DEPTH": "Depth",
       "BOX_WEIGHT": "Weight",
     },
+    plpLoader: {
+      WIDTH: "Width",
+      HEIGHT: "Height",
+      DEPTH: "Depth",
+      WEIGHT: "Weight",
+      category: "Category",
+    },
   },
   ES: {
     contactForm: {
@@ -779,6 +786,13 @@ export const LANGUAGE_DIFFS = {
       "BOX_HEIGHT": "Altura",
       "BOX_DEPTH": "Profundidad",
       "BOX_WEIGHT": "Peso",
+    },
+    plpLoader: {
+      WIDTH: "Ancho",
+      HEIGHT: "Altura",
+      DEPTH: "Profundidad",
+      WEIGHT: "Peso",
+      category: "Categoría",
     },
   },
 };

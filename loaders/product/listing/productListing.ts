@@ -1,29 +1,42 @@
 import {
   BreadcrumbList,
+  FilterToggle,
   Product,
   ProductListingPage,
 } from "apps/commerce/types.ts";
 import { AppContext } from "apps/records/mod.ts";
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
-import { AdditionalProperty, Category } from "../../../utils/types.ts";
+import { Category, ProductMeasurements } from "../../../utils/types.ts";
 import { LibSQLDatabase } from "apps/records/deps.ts";
 import {
   additionalProperties,
   avaliableIn,
   brands,
+  filtersGroups,
   images,
   productCategories,
+  productMeasurements,
   products,
 } from "../../../db/schema.ts";
-import { filterValues } from "../../testPLP.ts";
 import { logger } from "@deco/deco/o11y";
 import {
   getSortOptions,
   SortOptions,
 } from "../../../utils/product/constants.ts";
+import { AppContext as ModContext } from "../../../mod.ts";
+import { LANGUAGE_DIFFS } from "../../../utils/constants.tsx";
+import { getUrlFilter } from "../../../utils/utils.ts";
 
 interface ExtendedCategory extends Category {
   additionalType?: string;
+}
+
+interface AdditionalPropertiesFilters {
+  identifier: string;
+  name: string;
+  alternateName: string | null;
+  value: string;
+  unitText: string | null;
 }
 
 export interface Props {
@@ -35,27 +48,32 @@ export interface Props {
 export default async function loader(
   { recordsPerPage, page, sort }: Props,
   req: Request,
-  ctx: AppContext,
+  ctx: AppContext | ModContext,
 ): Promise<ProductListingPage | null> {
   const url = new URL(req.url);
   const pageNumber = page ?? url.searchParams.get("page") ?? 1;
   const sortOption = sort ?? url.searchParams.get("sort") ?? "name-asc";
-  const records = await ctx.invoke.records.loaders.drizzle();
+  const ctxRecords = ctx as AppContext;
+  const { language } = ctx as ModContext;
+  const records = await ctxRecords.invoke.records.loaders.drizzle();
   const paths = url.pathname.split("/").splice(1);
-  const fatherCategoryPath = paths[0];
-  const categoryTree = await getCategoryTree(records, fatherCategoryPath);
+  const categoryTree = await getCategoryTree(records, paths[0]);
 
   if (!checkPath(paths, categoryTree)) {
-    logger.error("path is wrong");
+    logger.error("PLP path is wrong or malformed");
     return null;
   }
-  const validCategory = categoryTree.find(({ identifier }) =>
+  const searchedCategory = categoryTree.find(({ identifier }) =>
     identifier === paths[paths.length - 1]
   );
 
-  const categoryBranch = validCategory?.additionalType === "1"
-    ? categoryTree.map(({ identifier, value }) => ({ identifier, value }))
-    : getCategoryBranch(categoryTree, validCategory!);
+  const categoryBranch = searchedCategory?.additionalType === "1"
+    ? categoryTree.map(({ identifier, value, additionalType }) => ({
+      identifier,
+      value,
+      additionalType,
+    }))
+    : getCategoryBranch(categoryTree, searchedCategory!);
 
   const skusToGet = await records.select({
     product: productCategories.product,
@@ -70,8 +88,7 @@ export default async function loader(
 
   if (!skusToGet.length || !skusToGet[0].product) return null;
 
-  //@ts-ignore Actually, ctx.language exists
-  const sortOptions = getSortOptions(ctx.language);
+  const sortOptions = getSortOptions(language);
 
   const products = await getProductData(
     records,
@@ -94,7 +111,20 @@ export default async function loader(
     "@type": "ProductListingPage",
     breadcrumb: getBreadcrumbList(paths, categoryTree, url),
     products: products.productData,
-    filters: filterValues,
+    filters: [
+      ...(getCategoryFilters(
+        categoryBranch,
+        language,
+        searchedCategory!,
+        url,
+      ) ?? []),
+      ...getMeasurementsFilters(products.measurements, language, url),
+      ...getProductPropertiesFilters(
+        products.productProperties,
+        language,
+        url,
+      ),
+    ],
     pageInfo: {
       currentPage,
       nextPage: currentPage < totalPages
@@ -106,12 +136,171 @@ export default async function loader(
     },
     sortOptions,
     seo: {
-      title: validCategory?.value ?? "",
-      description: validCategory?.description ?? "",
+      title: searchedCategory?.value ?? "",
+      description: searchedCategory?.description ?? "",
       canonical: new URL(url.pathname, url.origin).href,
     },
   };
 }
+
+const getProductPropertiesFilters = (
+  productProperties: AdditionalPropertiesFilters[],
+  language: "EN" | "ES",
+  url: URL,
+): FilterToggle[] => {
+  const groupedProperties = productProperties.reduce((acc, prop) => {
+    const values = acc[prop.identifier] || { items: [], counts: {} };
+    if (!values.items.find((v) => v.value === prop.value)) {
+      values.items.push({
+        name: prop.name,
+        alternateName: prop.alternateName,
+        value: prop.value,
+        unitText: prop.unitText,
+      });
+    }
+    values.counts[prop.value] = (values.counts[prop.value] || 0) + 1;
+    return { ...acc, [prop.identifier]: values };
+  }, {} as Record<string, {
+    items: Omit<AdditionalPropertiesFilters, "identifier">[];
+    counts: Record<string, number>;
+  }>);
+
+  return Object.entries(groupedProperties).map(
+    ([identifier, { items, counts }]) => {
+      const filterKey = identifier.toLowerCase();
+      const filterFromUrl = url.searchParams.get(filterKey);
+      const propertyName = language === "EN"
+        ? items[0].alternateName || items[0].name
+        : items[0].name;
+
+      const filterValues = items.map(({ value, unitText }) => {
+        const { urlWithFilter, selected } = getUrlFilter(
+          value,
+          url,
+          filterKey,
+          filterFromUrl ?? undefined,
+        );
+
+        return {
+          label: unitText ? `${value} ${unitText}` : value,
+          value,
+          quantity: counts[value],
+          selected,
+          url: urlWithFilter,
+        };
+      });
+
+      return {
+        "@type": "FilterToggle",
+        label: propertyName,
+        key: filterKey,
+        values: filterValues,
+        quantity: filterValues.length,
+      };
+    },
+  );
+};
+
+const getCategoryFilters = (
+  categoryBranch: ExtendedCategory[],
+  language: "EN" | "ES",
+  searchedCategory: ExtendedCategory,
+  url: URL,
+): FilterToggle[] | null => {
+  const categoryLevelToGet = (Number(searchedCategory.additionalType) + 1)
+    .toString();
+
+  const categoryValues = categoryBranch
+    .filter((c) => c.additionalType === categoryLevelToGet)
+    .map((c) => ({
+      label: c.value,
+      value: c.identifier,
+      quantity: 0,
+      selected: false,
+      url: new URL(`${url.pathname}/${c.identifier}`, url.origin).href,
+    }));
+
+  if (categoryValues.length === 0) {
+    return null;
+  }
+
+  return [
+    {
+      "@type": "FilterToggle",
+      label: LANGUAGE_DIFFS[language].plpLoader.category,
+      key: "categoria",
+      values: categoryValues,
+      quantity: categoryValues.length,
+    },
+  ];
+};
+
+const getMeasurementsFilters = (
+  measurements: ProductMeasurements[],
+  language: "EN" | "ES",
+  url: URL,
+): FilterToggle[] => {
+  const groupedByProperty = measurements.reduce(
+    (acc, { propertyID, minValue, unitCode }) => ({
+      ...acc,
+      [propertyID]: [...(acc[propertyID] || []), { minValue, unitCode }],
+    }),
+    {} as Record<string, { minValue: number; unitCode: string }[]>,
+  );
+  const propertyLabels = LANGUAGE_DIFFS[language].plpLoader;
+
+  return Object.entries(groupedByProperty).map(([propertyID, values]) => {
+    const min = Math.min(...values.map((v) => v.minValue));
+    const max = Math.max(...values.map((v) => v.minValue));
+    const filterKey = propertyID.toLowerCase();
+    const filterFromUrl = url.searchParams.get(filterKey);
+    const unitCode = values[0]?.unitCode ?? "";
+    const rangeSize = 10;
+    const ranges: { start: number; end: number }[] = [];
+    const startRange = Math.floor((min - 1) / rangeSize) * rangeSize;
+    const endRange = Math.ceil(max / rangeSize) * rangeSize;
+    for (let start = startRange; start < endRange; start += rangeSize) {
+      ranges.push({
+        start: start + 1,
+        end: start + rangeSize,
+      });
+    }
+
+    const rangeValues = ranges
+      .map(({ start, end }) => {
+        const quantity = values.filter((v) =>
+          v.minValue >= start && v.minValue <= (end + 0.99)
+        ).length;
+        if (quantity === 0) {
+          return null;
+        }
+        const value = `${start}-${end}`;
+        const { urlWithFilter, selected } = getUrlFilter(
+          value,
+          url,
+          filterKey,
+          filterFromUrl ?? undefined,
+        );
+
+        return {
+          label: `${value} ${unitCode}`,
+          value,
+          quantity,
+          selected,
+          url: urlWithFilter,
+        };
+      })
+      .filter((value): value is NonNullable<typeof value> => Boolean(value));
+
+    return {
+      "@type": "FilterToggle",
+      label: propertyLabels[propertyID as keyof typeof propertyLabels],
+      key: filterKey,
+      values: rangeValues,
+      quantity: rangeValues.length,
+    };
+  });
+};
 
 const getBreadcrumbList = (
   pathnames: string[],
@@ -154,7 +343,8 @@ const getProductData = async (
 ): Promise<
   {
     productData: Product[];
-    productProperties: AdditionalProperty[];
+    productProperties: AdditionalPropertiesFilters[];
+    measurements: ProductMeasurements[];
   } | null
 > => {
   const offset = (page - 1) * recordsPerPage;
@@ -185,28 +375,49 @@ const getProductData = async (
 
   if (!baseProductData.length) return null;
 
-  const [productImages, productProperties] = await Promise.all([
-    records
-      .select()
-      .from(images)
-      .where(
-        and(
-          inArray(images.subjectOf, baseProductData.map((p) => p.sku)),
-          eq(images.additionalType, "PRODUCT_IMAGE"),
-        ),
-      )
-      .all(),
-    records
-      .select()
-      .from(additionalProperties)
-      .where(
-        inArray(
-          additionalProperties.subjectOf,
-          baseProductData.map((p) => p.sku),
-        ),
-      )
-      .all(),
-  ]);
+  const [productImages, productProperties, measurements] = await Promise
+    .all([
+      records
+        .select()
+        .from(images)
+        .where(
+          and(
+            inArray(images.subjectOf, baseProductData.map((p) => p.sku)),
+            eq(images.additionalType, "PRODUCT_IMAGE"),
+          ),
+        )
+        .all(),
+      records
+        .select({
+          identifier: filtersGroups.identifier,
+          name: filtersGroups.name,
+          alternateName: filtersGroups.alternateName,
+          value: additionalProperties.value,
+          unitText: additionalProperties.unitText,
+        })
+        .from(additionalProperties)
+        .innerJoin(
+          filtersGroups,
+          eq(additionalProperties.additionalType, filtersGroups.identifier),
+        )
+        .where(
+          inArray(
+            additionalProperties.subjectOf,
+            baseProductData.map((p) => p.sku),
+          ),
+        )
+        .all(),
+      records
+        .select()
+        .from(productMeasurements)
+        .where(
+          inArray(
+            productMeasurements.subjectOf,
+            baseProductData.map((p) => p.sku),
+          ),
+        )
+        .all(),
+    ]);
 
   return {
     productData: baseProductData.map<Product>((p) => ({
@@ -235,16 +446,18 @@ const getProductData = async (
         additionalType: i.additionalType ?? undefined,
       })),
     })),
-    productProperties: productProperties as unknown as AdditionalProperty[],
+    productProperties,
+    measurements: measurements as unknown as ProductMeasurements[],
   };
 };
 
 const getCategoryBranch = (
   categories: ExtendedCategory[],
-  validCategory: ExtendedCategory,
+  searchedCategory: ExtendedCategory,
 ): {
   identifier: string;
   value: string;
+  additionalType?: string;
 }[] => {
   const getChildIdentifiers = (parentIds: string[]): string[] =>
     parentIds.length === 0 ? [] : [
@@ -256,12 +469,17 @@ const getCategoryBranch = (
       ),
     ];
 
-  return getChildIdentifiers([validCategory.identifier]).map((identifier) => ({
-    identifier,
-    value: categories.find((cat) => cat.identifier === identifier)!.value,
-  }));
+  return getChildIdentifiers([searchedCategory.identifier]).map((identifier) => {
+    const { value, additionalType } = categories.find((cat) =>
+      cat.identifier === identifier
+    )!;
+    return {
+      identifier,
+      value,
+      additionalType,
+    };
+  });
 };
-
 const getCategoryTree = async (
   records: LibSQLDatabase<Record<string, never>>,
   fatherCategoryPath: string,

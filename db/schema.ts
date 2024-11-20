@@ -70,9 +70,9 @@ export const productMeasurements = sqliteTable("productMeasurements", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
   propertyID: text("propertyID").notNull(), // Width, Height, Depth, Weight, etc.
-  unitCode: text("unitCode"), // cm, mm, kg, etc.
-  maxValue: real("maxValue"), // With box
-  minValue: real("minValue"), // Without box
+  unitCode: text("unitCode").notNull(), // cm, mm, kg, etc.
+  maxValue: real("maxValue").notNull(), // With box
+  minValue: real("minValue").notNull(), // Without box
 });
 
 //Define filters groups

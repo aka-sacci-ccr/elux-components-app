@@ -17,7 +17,7 @@ const isToggle = (filter: Filter): filter is FilterToggle =>
   filter["@type"] === "FilterToggle";
 
 function ValueItem(
-  { selected, label, siteTemplate, url }: FilterToggleValue & {
+  { selected, label, siteTemplate, url, quantity }: FilterToggleValue & {
     siteTemplate: "elux" | "frigidaire";
   },
 ) {
@@ -35,7 +35,7 @@ function ValueItem(
           )}
           hx-on:click={`window.location.href = "${url}"`}
         />
-        <span class="text-sm">{label}</span>
+        <span class="text-sm">{label} {quantity > 0 && `(${quantity})`}</span>
       </label>
     </li>
   );
