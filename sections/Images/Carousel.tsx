@@ -6,6 +6,8 @@ import { useId } from "../../sdk/useId.ts";
 import { useDevice } from "@deco/deco/hooks";
 import { clx } from "../../utils/clx.ts";
 import Video from "apps/website/components/Video.tsx";
+import { AppContext } from "../../mod.ts";
+
 /**
  * @titleBy alt
  */
@@ -19,18 +21,18 @@ export interface Banner {
   /**
     @title Banner content
     */
-  bannerType?: "video" | "imagem";
+  bannerType?: "image" | "video";
   action?: {
     /** @description when user clicks on the image, go to this link */
     href: string;
   };
 }
 export interface BannerItem {
+  /** @title Image*/
+  image?: ImageWidget;
   /** @description if you are using GIFs, prefer using videos */
   /** @title Video*/
   video?: VideoWidget;
-  /** @title Image*/
-  image?: ImageWidget;
   /** @title Width*/
   width?: number;
   /** @title Height*/
@@ -47,7 +49,32 @@ export interface Props {
    * @description Time (in seconds) to start the autoplay of the carousel
    */
   interval?: number;
+  fullWidth?: boolean;
 }
+
+const FRIGIDAIRE_STYLE = {
+  borderColor: "border-base-300",
+  dotsColor: "bg-base-200",
+  prevNextStyle: "bg-white",
+  iconColor: "text-primary",
+  buttonShadow: "shadow-[0px_2px_4px_0px_#56697326]",
+};
+
+const ELUX_STYLE = {
+  borderColor: "border-[#DEE7EA]",
+  dotsColor: "bg-[#DEE7EA]",
+  prevNextStyle: "bg-black bg-opacity-20",
+  iconColor: "text-white",
+  buttonShadow: "",
+};
+
+export function loader(props: Props, _req: Request, ctx: AppContext) {
+  return {
+    ...props,
+    siteTemplate: ctx.siteTemplate,
+  };
+}
+
 function BannerItem({ image, lcp, isDesktop }: {
   image: Banner;
   lcp?: boolean;
@@ -103,19 +130,24 @@ function BannerItem({ image, lcp, isDesktop }: {
   );
 }
 function Carousel(
-  { images = [], preload, interval }: Props,
+  { images = [], preload, interval, siteTemplate, fullWidth }: ReturnType<
+    typeof loader
+  >,
 ) {
+  const { borderColor, dotsColor, prevNextStyle, iconColor, buttonShadow } =
+    siteTemplate === "frigidaire" ? FRIGIDAIRE_STYLE : ELUX_STYLE;
+
   const id = useId();
   const device = useDevice();
   return (
     <div
       id={id}
       class={clx(
-        "grid",
-        "grid-rows-[1fr_80px_1fr_40px]",
+        "grid w-ful",
+        "grid-rows-[1fr_40px_1fr_20px]",
         "grid-cols-[32px_1fr_32px]",
-        "sm:grid-cols-[60px_1fr_60px] min-h-min",
-        "w-full",
+        "sm:grid-cols-[160px_1fr_160px] min-h-min",
+        !fullWidth && "max-w-[1280px] mx-auto",
       )}
     >
       <div class="col-span-full row-span-full">
@@ -134,30 +166,41 @@ function Carousel(
 
       {images.length > 1 && (
         <>
-          <div class="hidden sm:flex items-end justify-center z-10 col-start-1 row-start-2">
+          <div class="hidden sm:flex items-end justify-end z-10 col-start-1 row-start-2">
             <Slider.PrevButton
-              class="hidden sm:flex disabled:invisible btn btn-lsm btn-circle no-animation btn-arrow-shadow !bg-white"
+              class={clx(
+                "hidden sm:flex disabled:invisible btn-circle !h-10 !w-10 !min-h-10 !min-w-10 no-animation justify-center items-center",
+                prevNextStyle,
+                buttonShadow,
+              )}
               disabled={false}
             >
               <Icon
-                width={8}
-                height={14}
+                width={24}
+                height={24}
                 id="chevron-right"
-                class="rotate-180 text-primary"
+                class={clx(
+                  "rotate-180",
+                  iconColor,
+                )}
               />
             </Slider.PrevButton>
           </div>
 
-          <div class="hidden sm:flex items-end justify-center z-10 col-start-3 row-start-2">
+          <div class="hidden sm:flex items-end justify-start z-10 col-start-3 row-start-2">
             <Slider.NextButton
-              class="hidden sm:flex disabled:invisible btn btn-lsm btn-circle no-animation btn-arrow-shadow !bg-white"
+              class={clx(
+                "hidden sm:flex disabled:invisible btn-circle !h-10 !w-10 !min-h-10 !min-w-10 no-animation justify-center items-center",
+                prevNextStyle,
+                buttonShadow,
+              )}
               disabled={false}
             >
               <Icon
                 id="chevron-right"
-                class="text-primary"
-                width={8}
-                height={14}
+                class={iconColor}
+                width={24}
+                height={24}
               />
             </Slider.NextButton>
           </div>
@@ -168,18 +211,16 @@ function Carousel(
         <div
           class={clx(
             "col-span-full row-start-4 z-10",
-            "carousel justify-center gap-3 h-11",
+            "carousel justify-center h-6",
           )}
         >
           <ul
             class={clx(
-              "carousel carousel-center justify-center gap-3 px-5",
+              "carousel carousel-center justify-center gap-3 px-5 h-6",
               "rounded-full",
-              "border-[1px] border-slate-200",
-              "flex",
-              "h-6 mx-auto",
-              "overflow-x-auto",
-              "sm:overflow-y-auto",
+              "border-[1px]",
+              borderColor,
+              "flex bg-white",
             )}
           >
             {images.map((_, index) => (
@@ -189,7 +230,10 @@ function Carousel(
               >
                 <Slider.Dot
                   index={index}
-                  className="disabled:bg-primary flex w-2.5 h-2.5 rounded-full bg-base-200"
+                  className={clx(
+                    "disabled:bg-primary flex w-2.5 h-2.5 rounded-full",
+                    dotsColor,
+                  )}
                 >
                 </Slider.Dot>
               </li>
@@ -202,4 +246,5 @@ function Carousel(
     </div>
   );
 }
+
 export default Carousel;
