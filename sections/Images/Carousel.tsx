@@ -58,6 +58,7 @@ const FRIGIDAIRE_STYLE = {
   prevNextStyle: "bg-white",
   iconColor: "text-primary",
   buttonShadow: "shadow-[0px_2px_4px_0px_#56697326]",
+  bgColor: "bg-base-300",
 };
 
 const ELUX_STYLE = {
@@ -66,6 +67,7 @@ const ELUX_STYLE = {
   prevNextStyle: "bg-black bg-opacity-20",
   iconColor: "text-white",
   buttonShadow: "",
+  bgColor: "bg-[#DEE7EA]",
 };
 
 export function loader(props: Props, _req: Request, ctx: AppContext) {
@@ -148,6 +150,9 @@ function Carousel(
         "grid-cols-[32px_1fr_32px]",
         "sm:grid-cols-[160px_1fr_160px] min-h-min",
         !fullWidth && "max-w-[1280px] mx-auto",
+        siteTemplate === "frigidaire"
+          ? FRIGIDAIRE_STYLE.bgColor
+          : ELUX_STYLE.bgColor,
       )}
     >
       <div class="col-span-full row-span-full">
