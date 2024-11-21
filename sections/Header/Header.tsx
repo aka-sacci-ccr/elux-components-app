@@ -14,6 +14,7 @@ import NavItem from "../../components/header/NavItem.tsx";
 import Menu from "../../components/header/Menu.tsx";
 import { Colors } from "../../utils/types.ts";
 import { clx } from "../../utils/clx.ts";
+import { AppContext } from "../../mod.ts";
 export interface Logo {
   src: ImageWidget;
   alt: string;
@@ -27,12 +28,24 @@ export interface SectionProps {
   backgroundColor?: Colors;
 }
 
+export const loader = (props: SectionProps, _req: Request, ctx: AppContext) => {
+  return {
+    ...props,
+    siteTemplate: ctx.siteTemplate,
+  };
+};
+
 type Props = SectionProps;
-const Desktop = ({ logo, menu }: Props) => {
+const Desktop = ({ logo, menu, siteTemplate }: ReturnType<typeof loader>) => {
   const hideSecondaryMenu = menu.hideSecondaryMenu;
   return (
     <>
-      <div class="flex flex-col gap-4  max-w-[1280px] mx-auto h-[70px]">
+      <div
+        class={clx(
+          "flex flex-col gap-4  max-w-[1280px] mx-auto h-[70px]",
+          siteTemplate === "elux" && "shadow-[0px_1px_3px_0px_#00000033]",
+        )}
+      >
         <div class="flex justify-between items-center h-full px-13.5 text-secondary">
           <a href="/" aria-label="Store logo">
             <Image
@@ -67,7 +80,7 @@ const Desktop = ({ logo, menu }: Props) => {
         </div>
       </div>
       {!hideSecondaryMenu && (
-        <div class="bg-base-200 h-[72px]">
+        <div class="bg-base-200 h-[72px] shadow-[0px_1px_4px_0px_#56697326]">
           <ul class="flex justify-start h-full max-w-[1280px] mx-auto text-sm text-secondary font-medium">
             <li class="relative w-[182px]">
               <label
@@ -138,7 +151,7 @@ function Header({
   },
   backgroundColor,
   ...props
-}: Props) {
+}: ReturnType<typeof loader>) {
   const device = useDevice();
   const hideSecondaryMenu = props.menu.hideSecondaryMenu;
   return (
