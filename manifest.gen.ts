@@ -7,15 +7,14 @@ import * as $$$$$$$$$1 from "./actions/contact/submit.ts";
 import * as $$$$$$$$$2 from "./actions/domains/submit.ts";
 import * as $$$$$$$$$3 from "./actions/product/submit.ts";
 import * as $$$$$$$$$4 from "./actions/product/update/basicData.ts";
-import * as $$$0 from "./loaders/availableIcons.ts";
-import * as $$$1 from "./loaders/menu.ts";
-import * as $$$2 from "./loaders/product/avaliableBrands.ts";
-import * as $$$3 from "./loaders/product/avaliableCategories.ts";
-import * as $$$4 from "./loaders/product/avaliableSites.ts";
-import * as $$$5 from "./loaders/product/avaliableSkus.ts";
-import * as $$$6 from "./loaders/product/details/productDetails.ts";
-import * as $$$7 from "./loaders/testPLP.ts";
-import * as $$$8 from "./loaders/whereToBuy.ts";
+import * as $$$0 from "./loaders/menu.ts";
+import * as $$$1 from "./loaders/product/avaliableBrands.ts";
+import * as $$$2 from "./loaders/product/avaliableCategories.ts";
+import * as $$$3 from "./loaders/product/avaliableSites.ts";
+import * as $$$4 from "./loaders/product/avaliableSkus.ts";
+import * as $$$5 from "./loaders/product/details/productDetails.ts";
+import * as $$$6 from "./loaders/testPLP.ts";
+import * as $$$7 from "./loaders/whereToBuy.ts";
 import * as $$$$$$0 from "./sections/Component.tsx";
 import * as $$$$$$17 from "./sections/container/Container.tsx";
 import * as $$$$$$1 from "./sections/Content/Banner.tsx";
@@ -37,15 +36,14 @@ import * as $$$$$$16 from "./sections/Social/ContactForm.tsx";
 
 const manifest = {
   "loaders": {
-    "elux-components-app/loaders/availableIcons.ts": $$$0,
-    "elux-components-app/loaders/menu.ts": $$$1,
-    "elux-components-app/loaders/product/avaliableBrands.ts": $$$2,
-    "elux-components-app/loaders/product/avaliableCategories.ts": $$$3,
-    "elux-components-app/loaders/product/avaliableSites.ts": $$$4,
-    "elux-components-app/loaders/product/avaliableSkus.ts": $$$5,
-    "elux-components-app/loaders/product/details/productDetails.ts": $$$6,
-    "elux-components-app/loaders/testPLP.ts": $$$7,
-    "elux-components-app/loaders/whereToBuy.ts": $$$8,
+    "elux-components-app/loaders/menu.ts": $$$0,
+    "elux-components-app/loaders/product/avaliableBrands.ts": $$$1,
+    "elux-components-app/loaders/product/avaliableCategories.ts": $$$2,
+    "elux-components-app/loaders/product/avaliableSites.ts": $$$3,
+    "elux-components-app/loaders/product/avaliableSkus.ts": $$$4,
+    "elux-components-app/loaders/product/details/productDetails.ts": $$$5,
+    "elux-components-app/loaders/testPLP.ts": $$$6,
+    "elux-components-app/loaders/whereToBuy.ts": $$$7,
   },
   "sections": {
     "elux-components-app/sections/Component.tsx": $$$$$$0,

@@ -12,7 +12,7 @@ export interface HelpCard {
   /**
    * @title Icon
    * @format icon-select
-   * @options elux-components-app/loaders/availableIcons.ts
+   * @options site/loaders/availableIcons.ts
    */
   icon: AvailableIcons;
   title: string;
