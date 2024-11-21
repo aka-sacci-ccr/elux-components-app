@@ -19,7 +19,9 @@ export interface CountryCardContent {
    */
   id: string;
   /**
-   * @title Country flag
+   * @title Icon
+   * @format icon-select
+   * @options site/loaders/availableIcons.ts
    */
   icon?: AvailableIcons;
   /**

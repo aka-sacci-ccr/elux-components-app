@@ -46,6 +46,8 @@ interface CardContent {
 interface CardItem {
   /**
    * @title Icon
+   * @format icon-select
+   * @options site/loaders/availableIcons.ts
    */
   icon: AvailableIcons;
   /**

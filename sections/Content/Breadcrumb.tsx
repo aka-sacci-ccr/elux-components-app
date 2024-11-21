@@ -9,6 +9,8 @@ import { GapSizes } from "../../utils/types.ts";
 export interface Props {
   /**
    * @title Icon
+   * @format icon-select
+   * @options site/loaders/availableIcons.ts
    */
   icon?: AvailableIcons;
   /**
