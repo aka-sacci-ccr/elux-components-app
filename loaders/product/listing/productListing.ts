@@ -78,10 +78,14 @@ export default async function loader(
   const skusToGet = await records.select({
     product: productCategories.product,
   }).from(productCategories)
+    .innerJoin(avaliableIn, eq(productCategories.product, avaliableIn.subjectOf))
     .where(
-      inArray(
-        productCategories.subjectOf,
-        categoryBranch.map((c) => c.identifier),
+      and(
+        inArray(
+          productCategories.subjectOf,
+          categoryBranch.map((c) => c.identifier),
+        ),
+        sql`${url.hostname} LIKE '%' || ${avaliableIn.domain}`,
       ),
     )
     .groupBy(productCategories.product);
@@ -358,14 +362,10 @@ const getProductData = async (
   })
     .from(products)
     .innerJoin(brands, eq(products.brand, brands.identifier))
-    .innerJoin(avaliableIn, eq(products.sku, avaliableIn.subjectOf))
     .where(
-      and(
-        inArray(
-          products.sku,
-          skusToGet.map((sku) => sku.product!),
-        ),
-        sql`${url.hostname} LIKE '%' || ${avaliableIn.domain}`,
+      inArray(
+        products.sku,
+        skusToGet.map((sku) => sku.product!),
       ),
     )
     .groupBy(products.sku)
