@@ -43,7 +43,11 @@ export interface Layout {
   };
 }
 
-const useUrlRebased = (overrides: string | undefined, base: string) => {
+const useUrlRebased = (
+  overrides: string | undefined,
+  base: string,
+  returnOnlyProducts: boolean,
+) => {
   let url: string | undefined = undefined;
   if (overrides) {
     const temp = new URL(overrides, base);
@@ -51,6 +55,9 @@ const useUrlRebased = (overrides: string | undefined, base: string) => {
     final.pathname = temp.pathname;
     for (const [key, value] of temp.searchParams.entries()) {
       final.searchParams.set(key, value);
+    }
+    if (returnOnlyProducts) {
+      final.searchParams.set("onlyProducts", "true");
     }
     url = final.href;
   }
@@ -229,8 +236,8 @@ function Result(props: Props) {
   const { listingMain, url, partial } = props;
   const page = props.page!;
   const { products, pageInfo } = page;
-  const nextPageUrl = useUrlRebased(pageInfo.nextPage, url);
-  const prevPageUrl = useUrlRebased(pageInfo.previousPage, url);
+  const nextPageUrl = useUrlRebased(pageInfo.nextPage, url, true);
+  const prevPageUrl = useUrlRebased(pageInfo.previousPage, url, true);
   const partialPrev = useSection({
     href: prevPageUrl,
     props: { partial: "hideMore" },

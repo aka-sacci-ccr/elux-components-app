@@ -43,16 +43,19 @@ export interface Props {
   recordsPerPage: number;
   page?: number;
   sort?: SortOptions;
+  returnOnlyProducts?: boolean;
 }
 
 export default async function loader(
-  { recordsPerPage, page, sort }: Props,
+  { recordsPerPage, page, sort, returnOnlyProducts }: Props,
   req: Request,
   ctx: AppContext | ModContext,
 ): Promise<ProductListingPage | null> {
   const url = new URL(req.url);
   const pageNumber = page ?? url.searchParams.get("page") ?? 1;
   const sortOption = sort ?? url.searchParams.get("sort") ?? "name-asc";
+  const onlyProducts = returnOnlyProducts ??
+    url.searchParams.get("onlyProducts") === "true";
   const ctxRecords = ctx as AppContext;
   const { language } = ctx as ModContext;
   const records = await ctxRecords.invoke.records.loaders.drizzle();
@@ -78,7 +81,10 @@ export default async function loader(
   const skusToGet = await records.select({
     product: productCategories.product,
   }).from(productCategories)
-    .innerJoin(avaliableIn, eq(productCategories.product, avaliableIn.subjectOf))
+    .innerJoin(
+      avaliableIn,
+      eq(productCategories.product, avaliableIn.subjectOf),
+    )
     .where(
       and(
         inArray(
@@ -103,6 +109,7 @@ export default async function loader(
     sortOptions.map((opt) => opt.value).includes(sortOption)
       ? sortOption as SortOptions
       : "name-asc",
+    onlyProducts,
   );
 
   if (!products) return null;
@@ -115,19 +122,23 @@ export default async function loader(
     "@type": "ProductListingPage",
     breadcrumb: getBreadcrumbList(paths, categoryTree, url),
     products: products.productData,
-    filters: [
+    filters: onlyProducts ? [] : [
       ...(getCategoryFilters(
         categoryBranch,
         language,
         searchedCategory!,
         url,
       ) ?? []),
-      ...getMeasurementsFilters(products.measurements, language, url),
-      ...getProductPropertiesFilters(
-        products.productProperties,
-        language,
-        url,
-      ),
+      ...(products.measurements
+        ? getMeasurementsFilters(products.measurements, language, url)
+        : []),
+      ...(products.productProperties
+        ? getProductPropertiesFilters(
+          products.productProperties,
+          language,
+          url,
+        )
+        : []),
     ],
     pageInfo: {
       currentPage,
@@ -344,11 +355,12 @@ const getProductData = async (
   page: number = 1,
   recordsPerPage: number = 20,
   sortBy: SortOptions,
+  onlyProducts: boolean = false,
 ): Promise<
   {
     productData: Product[];
-    productProperties: AdditionalPropertiesFilters[];
-    measurements: ProductMeasurements[];
+    productProperties?: AdditionalPropertiesFilters[];
+    measurements?: ProductMeasurements[];
   } | null
 > => {
   const offset = (page - 1) * recordsPerPage;
@@ -387,36 +399,40 @@ const getProductData = async (
           ),
         )
         .all(),
-      records //Get productProperties filters from ALL products
-        .select({
-          identifier: filtersGroups.identifier,
-          name: filtersGroups.name,
-          alternateName: filtersGroups.alternateName,
-          value: additionalProperties.value,
-          unitText: additionalProperties.unitText,
-        })
-        .from(additionalProperties)
-        .innerJoin(
-          filtersGroups,
-          eq(additionalProperties.additionalType, filtersGroups.identifier),
-        )
-        .where(
-          inArray(
-            additionalProperties.subjectOf,
-            skusToGet.map((p) => p.product!),
-          ),
-        )
-        .all(),
-      records //Get measurements from ALL products
-        .select()
-        .from(productMeasurements)
-        .where(
-          inArray(
-            productMeasurements.subjectOf,
-            skusToGet.map((p) => p.product!),
-          ),
-        )
-        .all(),
+      !onlyProducts
+        ? records //Get productProperties filters from ALL products
+          .select({
+            identifier: filtersGroups.identifier,
+            name: filtersGroups.name,
+            alternateName: filtersGroups.alternateName,
+            value: additionalProperties.value,
+            unitText: additionalProperties.unitText,
+          })
+          .from(additionalProperties)
+          .innerJoin(
+            filtersGroups,
+            eq(additionalProperties.additionalType, filtersGroups.identifier),
+          )
+          .where(
+            inArray(
+              additionalProperties.subjectOf,
+              skusToGet.map((p) => p.product!),
+            ),
+          )
+          .all()
+        : undefined,
+      !onlyProducts
+        ? records //Get measurements from ALL products
+          .select()
+          .from(productMeasurements)
+          .where(
+            inArray(
+              productMeasurements.subjectOf,
+              skusToGet.map((p) => p.product!),
+            ),
+          )
+          .all()
+        : undefined,
     ]);
 
   return {
@@ -447,7 +463,7 @@ const getProductData = async (
       })),
     })),
     productProperties,
-    measurements: measurements as unknown as ProductMeasurements[],
+    measurements: measurements as unknown as ProductMeasurements[] | undefined,
   };
 };
 
@@ -469,16 +485,18 @@ const getCategoryBranch = (
       ),
     ];
 
-  return getChildIdentifiers([searchedCategory.identifier]).map((identifier) => {
-    const { value, additionalType } = categories.find((cat) =>
-      cat.identifier === identifier
-    )!;
-    return {
-      identifier,
-      value,
-      additionalType,
-    };
-  });
+  return getChildIdentifiers([searchedCategory.identifier]).map(
+    (identifier) => {
+      const { value, additionalType } = categories.find((cat) =>
+        cat.identifier === identifier
+      )!;
+      return {
+        identifier,
+        value,
+        additionalType,
+      };
+    },
+  );
 };
 const getCategoryTree = async (
   records: LibSQLDatabase<Record<string, never>>,
