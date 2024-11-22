@@ -145,7 +145,7 @@ const onLoad = ({ rootId }: Props) => {
             listSpan.classList.remove("hidden");
             listSpan.classList.add("inline");
             listSpan.textContent = checkedInputs.map((input) => {
-              const label = input.closest("label");
+              const label = input.closest("span");
               return label?.textContent?.trim() ||
                 input.getAttribute("data-filter-value");
             }).join(", ");

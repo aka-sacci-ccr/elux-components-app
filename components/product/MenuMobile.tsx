@@ -218,7 +218,10 @@ const EluxMenuItems = (
                                 )}
                               />
                               <span class="text-base">
-                                {label} {quantity && `(${quantity})`}
+                                {label}
+                              </span>
+                              <span class="text-base">
+                                {quantity > 0 && `(${quantity})`}
                               </span>
                             </label>
                           </li>
@@ -293,9 +296,12 @@ const SubmenuAside = (
                     )}
                   />
                   <span class="text-base font-light">
-                    {label} {quantity && `(${quantity})`}
+                    {label}
                   </span>
                 </label>
+                <span class="text-base font-light">
+                  {quantity > 0 && `(${quantity})`}
+                </span>
               </div>
             </li>
           ))}
