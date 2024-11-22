@@ -7,6 +7,7 @@ import type {
 import { clx } from "../../utils/clx.ts";
 import { useId } from "../../sdk/useId.ts";
 import Icon from "../ui/Icon.tsx";
+import { VNode } from "preact";
 
 interface Props {
   filters: ProductListingPage["filters"];
@@ -71,10 +72,22 @@ function CollapseFilters(
   props: FilterToggle & { siteTemplate: "elux" | "frigidaire" },
 ) {
   const id = useId();
+  const { items, hasChecked } = props.values.reduce((acc, item) => {
+    return {
+      items: [
+        ...acc.items,
+        <ValueItem
+          {...item}
+          siteTemplate={props.siteTemplate}
+        />,
+      ],
+      hasChecked: acc.hasChecked || item.selected,
+    };
+  }, { items: [] as VNode[], hasChecked: false });
 
   return (
     <div class="collapse collapse-plus rounded-none">
-      <input class="hidden peer" type="checkbox" id={id} />
+      <input class="hidden peer" type="checkbox" id={id} checked={hasChecked} />
 
       <label htmlFor={id} class="pb-2 peer-checked:pb-0 cursor-pointer">
         <div class="collapse-title min-h-0 p-0">
@@ -95,14 +108,7 @@ function CollapseFilters(
 
       <div class="collapse-content !p-0 font-light">
         <ul class="flex flex-col gap-2 py-2">
-          {props.values.map((item) => {
-            return (
-              <ValueItem
-                {...item}
-                siteTemplate={props.siteTemplate}
-              />
-            );
-          })}
+          {items}
         </ul>
       </div>
     </div>

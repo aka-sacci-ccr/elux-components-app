@@ -377,7 +377,7 @@ const getProductData = async (
 
   const [productImages, productProperties, measurements] = await Promise
     .all([
-      records
+      records //Get product images ONLY from products that will be shown in the page
         .select()
         .from(images)
         .where(
@@ -387,7 +387,7 @@ const getProductData = async (
           ),
         )
         .all(),
-      records
+      records //Get productProperties filters from ALL products
         .select({
           identifier: filtersGroups.identifier,
           name: filtersGroups.name,
@@ -403,17 +403,17 @@ const getProductData = async (
         .where(
           inArray(
             additionalProperties.subjectOf,
-            baseProductData.map((p) => p.sku),
+            skusToGet.map((p) => p.product!),
           ),
         )
         .all(),
-      records
+      records //Get measurements from ALL products
         .select()
         .from(productMeasurements)
         .where(
           inArray(
             productMeasurements.subjectOf,
-            baseProductData.map((p) => p.sku),
+            skusToGet.map((p) => p.product!),
           ),
         )
         .all(),

@@ -186,7 +186,13 @@ const onLoad = ({ rootId }: Props) => {
         globalThis.location.origin,
       );
       selectedFilters.forEach((values, key) => {
-        newUrl.searchParams.set(key, values.join("_"));
+        if (key === "categoria") {
+          newUrl.pathname =
+            globalThis.location.pathname +
+            "/" + values[0];
+        } else {
+          newUrl.searchParams.set(key, values.join("_"));
+        }
       });
 
       globalThis.location.href = newUrl.toString();
