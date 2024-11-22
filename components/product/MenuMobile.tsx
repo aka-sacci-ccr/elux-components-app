@@ -45,7 +45,7 @@ export function MenuMobile(
         )}
       >
         <ApplicableFilters
-          class="w-[90%] h-full float-right bg-white !opacity-100 flex flex-col justify-between"
+          class="w-[90%] h-[100dvh] float-right bg-white !opacity-100 flex flex-col justify-between"
           id={id}
         >
           {/** Header */}
@@ -203,26 +203,28 @@ const EluxMenuItems = (
 
                 <div class="collapse-content !p-0">
                   <ul class="flex flex-col">
-                    {filter.values.map(({ label, value, selected }) => {
-                      return (
-                        <li class="h-[54px] flex items-center w-full border-t border-base-200 ml-4 first:mt-2 first:ml-0 first:pl-4">
-                          <label class="flex items-center gap-1 cursor-pointer w-full">
-                            <ApplicableFilters.Input
-                              categoryKey={filter.key}
-                              filterValue={value}
-                              checked={selected}
-                              class={clx(
-                                "w-4 h-4 appearance-none border rounded-sm cursor-pointer flex justify-center [&:checked::before]:self-center",
-                                "checked:bg-white border-warning [&:checked::before]:content-[url('https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-latam/53221bfd-3f69-4050-9677-6c6d4d767c50/check.png')] [&:checked::before]:-mt-[2px]",
-                              )}
-                            />
-                            <span class="text-base">
-                              {label}
-                            </span>
-                          </label>
-                        </li>
-                      );
-                    })}
+                    {filter.values.map(
+                      ({ label, value, selected, quantity }) => {
+                        return (
+                          <li class="h-[54px] flex items-center w-full border-t border-base-200 ml-4 first:mt-2 first:ml-0 first:pl-4">
+                            <label class="flex items-center gap-1 cursor-pointer w-full">
+                              <ApplicableFilters.Input
+                                categoryKey={filter.key}
+                                filterValue={value}
+                                checked={selected}
+                                class={clx(
+                                  "w-4 h-4 appearance-none border rounded-sm cursor-pointer flex justify-center [&:checked::before]:self-center",
+                                  "checked:bg-white border-warning [&:checked::before]:content-[url('https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-latam/53221bfd-3f69-4050-9677-6c6d4d767c50/check.png')] [&:checked::before]:-mt-[2px]",
+                                )}
+                              />
+                              <span class="text-base">
+                                {label} {quantity && `(${quantity})`}
+                              </span>
+                            </label>
+                          </li>
+                        );
+                      },
+                    )}
                   </ul>
                 </div>
               </div>
@@ -247,7 +249,7 @@ const SubmenuAside = (
     <aside
       class={clx(
         "translate-x-full peer-checked:-translate-x-0 transition-all",
-        "z-50 w-[90%] h-screen absolute top-0 right-0 bg-white text-secondary",
+        "z-50 w-[90%] h-[100dvh] absolute top-0 right-0 bg-white text-secondary flex flex-col",
       )}
     >
       <div class="flex flex-col justify-between h-full">
@@ -276,7 +278,7 @@ const SubmenuAside = (
           }
         </div>
         <ul class="flex flex-col items-start justify-start pt-2 px-4 gap-2 h-full overflow-scroll max-h-[calc(100vh_-_52px)]">
-          {values.map(({ label, value, selected }) => (
+          {values.map(({ label, value, selected, quantity }) => (
             <li class="group border-b border-base-200 first:border-t w-full">
               <div class="flex items-center gap-2 text-base font-normal leading-none h-[54px] justify-between">
                 <label class="flex items-center gap-2 cursor-pointer w-full">
@@ -290,7 +292,9 @@ const SubmenuAside = (
                       "[&:checked::before]:-mt-[1px]",
                     )}
                   />
-                  <span class="text-base font-light">{label}</span>
+                  <span class="text-base font-light">
+                    {label} {quantity && `(${quantity})`}
+                  </span>
                 </label>
               </div>
             </li>
