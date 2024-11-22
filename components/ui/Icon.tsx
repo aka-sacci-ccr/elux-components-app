@@ -55,7 +55,10 @@ export type AvailableIcons =
   | "height-property"
   | "width-property"
   | "depth-property"
-  | "weight-property";
+  | "weight-property"
+  | "water-purifier"
+  | "air-fryer-frigidaire"
+  | "pan-frigidaire";
 
 interface Props extends JSX.SVGAttributes<SVGSVGElement> {
   /**
