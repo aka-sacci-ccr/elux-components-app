@@ -25,7 +25,7 @@ import {
 } from "../../../utils/product/constants.ts";
 import { AppContext as ModContext } from "../../../mod.ts";
 import { LANGUAGE_DIFFS } from "../../../utils/constants.tsx";
-import { getUrlFilter } from "../../../utils/utils.ts";
+import { getFiltersFromUrl, getUrlFilter } from "../../../utils/utils.ts";
 
 interface ExtendedCategory extends Category {
   additionalType?: string;
@@ -56,6 +56,7 @@ export default async function loader(
   const sortOption = sort ?? url.searchParams.get("sort") ?? "name-asc";
   const onlyProducts = returnOnlyProducts ??
     url.searchParams.get("onlyProducts") === "true";
+  const { filtersFromUrl } = getFiltersFromUrl(url);
   const ctxRecords = ctx as AppContext;
   const { language } = ctx as ModContext;
   const records = await ctxRecords.invoke.records.loaders.drizzle();
@@ -81,9 +82,13 @@ export default async function loader(
   const skusToGet = await records.select({
     product: productCategories.product,
   }).from(productCategories)
-    .innerJoin(
+    .leftJoin(
       avaliableIn,
       eq(productCategories.product, avaliableIn.subjectOf),
+    )
+    .leftJoin(
+      additionalProperties,
+      eq(productCategories.product, additionalProperties.subjectOf),
     )
     .where(
       and(
@@ -92,6 +97,12 @@ export default async function loader(
           categoryBranch.map((c) => c.identifier),
         ),
         sql`${url.hostname} LIKE '%' || ${avaliableIn.domain}`,
+        ...Array.from(filtersFromUrl.entries()).map(([key, values]) =>
+          and(
+            eq(additionalProperties.additionalType, key),
+            inArray(additionalProperties.value, values),
+          )
+        ),
       ),
     )
     .groupBy(productCategories.product);

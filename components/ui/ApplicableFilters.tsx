@@ -187,9 +187,7 @@ const onLoad = ({ rootId }: Props) => {
       );
       selectedFilters.forEach((values, key) => {
         if (key === "categoria") {
-          newUrl.pathname =
-            globalThis.location.pathname +
-            "/" + values[0];
+          newUrl.pathname = `${globalThis.location.pathname}/${values[0]}`;
         } else {
           newUrl.searchParams.set(key, values.join("_"));
         }

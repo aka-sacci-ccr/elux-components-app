@@ -27,3 +27,16 @@ export const getSortOptions = (language: "EN" | "ES") => {
 };
 
 export const DEFAULT_URL_PARAMS_TO_EXCLUDE = ["sort", "page"];
+
+export const EXTENDED_URL_PARAMS_TO_EXCLUDE = [
+  ...DEFAULT_URL_PARAMS_TO_EXCLUDE,
+  "onlyProducts",
+  "__cb",
+  "__decoFBT",
+  "__d",
+  "path",
+  "pathTemplate",
+  "deviceHint",
+];
+
+export const MEASUREMENTS_KEYS = ["height", "width", "depth", "weight"];

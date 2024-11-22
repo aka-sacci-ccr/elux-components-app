@@ -1,4 +1,8 @@
-import { DEFAULT_URL_PARAMS_TO_EXCLUDE } from "./product/constants.ts";
+import {
+  DEFAULT_URL_PARAMS_TO_EXCLUDE,
+  EXTENDED_URL_PARAMS_TO_EXCLUDE,
+  MEASUREMENTS_KEYS,
+} from "./product/constants.ts";
 
 export function chunkArray<T>(array: T[], size: number): T[][] {
   const chunks: T[][] = [];
@@ -31,4 +35,22 @@ export function getUrlFilter(
     : urlWithFilter.searchParams.delete(filterKey);
 
   return { urlWithFilter: urlWithFilter.href, selected };
+}
+
+export function getFiltersFromUrl(url: URL) {
+  const urlParams = new URLSearchParams(url.searchParams);
+  EXTENDED_URL_PARAMS_TO_EXCLUDE.forEach((param) => urlParams.delete(param));
+
+  const filtersFromUrl = new Map<string, string[]>();
+  const measurementsFromUrl = new Map<string, string[]>();
+
+  urlParams.forEach((value, key) => {
+    if (MEASUREMENTS_KEYS.includes(key)) {
+      measurementsFromUrl.set(key, value.split("_"));
+    } else {
+      filtersFromUrl.set(key, value.split("_"));
+    }
+  });
+
+  return { filtersFromUrl, measurementsFromUrl };
 }
