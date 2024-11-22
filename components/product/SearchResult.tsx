@@ -195,6 +195,15 @@ export default function SearchResult(
                         type="checkbox"
                         class="hidden peer"
                       />
+                      <style
+                        dangerouslySetInnerHTML={{
+                          __html: `
+            html:has(#open-filters:checked) {
+              overflow-y: hidden;
+            }
+          `,
+                        }}
+                      />
                     </>
                   )}
                 {/** Return the results */}
