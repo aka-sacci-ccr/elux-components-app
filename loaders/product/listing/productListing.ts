@@ -5,7 +5,7 @@ import {
   ProductListingPage,
 } from "apps/commerce/types.ts";
 import { AppContext } from "apps/records/mod.ts";
-import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, or, sql } from "drizzle-orm";
 import { Category, ProductMeasurements } from "../../../utils/types.ts";
 import { LibSQLDatabase } from "apps/records/deps.ts";
 import {
@@ -56,21 +56,27 @@ export default async function loader(
   const sortOption = sort ?? url.searchParams.get("sort") ?? "name-asc";
   const onlyProducts = returnOnlyProducts ??
     url.searchParams.get("onlyProducts") === "true";
-  const { filtersFromUrl } = getFiltersFromUrl(url);
+  const { filtersFromUrl, measurementsFromUrl } = getFiltersFromUrl(url);
   const ctxRecords = ctx as AppContext;
   const { language } = ctx as ModContext;
   const records = await ctxRecords.invoke.records.loaders.drizzle();
   const paths = url.pathname.split("/").splice(1);
+
+  //This is the category tree that will be used to get the SKUs
   const categoryTree = await getCategoryTree(records, paths[0]);
 
   if (!checkPath(paths, categoryTree)) {
+    //If the path is wrong or malformed, return null
     logger.error("PLP path is wrong or malformed");
     return null;
   }
+
+  //This is the searched category
   const searchedCategory = categoryTree.find(({ identifier }) =>
     identifier === paths[paths.length - 1]
   );
 
+  //This is the category branch that will be used to get the SKUs
   const categoryBranch = searchedCategory?.additionalType === "1"
     ? categoryTree.map(({ identifier, value, additionalType }) => ({
       identifier,
@@ -79,6 +85,7 @@ export default async function loader(
     }))
     : getCategoryBranch(categoryTree, searchedCategory!);
 
+  //This extensive query get all the SKUs that match the category, domain, filters and measurements
   const skusToGet = await records.select({
     product: productCategories.product,
   }).from(productCategories)
@@ -90,6 +97,10 @@ export default async function loader(
       additionalProperties,
       eq(productCategories.product, additionalProperties.subjectOf),
     )
+    .leftJoin(
+      productMeasurements,
+      eq(productCategories.product, productMeasurements.subjectOf),
+    )
     .where(
       and(
         inArray(
@@ -100,15 +111,31 @@ export default async function loader(
       ),
     )
     .having(
-      filtersFromUrl
-        ? and(
-          ...Array.from(filtersFromUrl.entries()).map(([key, values]) => {
-            return sql`SUM(CASE WHEN ${additionalProperties.additionalType} = ${key} AND ${
-              inArray(additionalProperties.value, values)
-            } THEN 1 ELSE 0 END) > 0`;
-          }),
-        )
-        : undefined,
+      and(
+        filtersFromUrl //This is the query to get the SKUs that match the filters
+          ? and(
+            ...Array.from(filtersFromUrl.entries()).map(([key, values]) => {
+              return sql`SUM(CASE WHEN ${additionalProperties.additionalType} = ${key} AND ${
+                inArray(additionalProperties.value, values)
+              } THEN 1 ELSE 0 END) > 0`;
+            }),
+          )
+          : undefined,
+        measurementsFromUrl //This is the query to get the SKUs that match the measurements
+          ? and(
+            ...Array.from(measurementsFromUrl.entries()).map(([key, ranges]) => {
+              return sql`SUM(CASE WHEN ${productMeasurements.propertyID} = ${key.toUpperCase()} AND ${
+                or(
+                  ...ranges.map((range) => {
+                    const [min, max] = range.split("-").map(Number);
+                    return sql`(${productMeasurements.minValue} >= ${min} AND ${productMeasurements.minValue} <= ${max + 0.99})`;
+                  })
+                )
+              } THEN 1 ELSE 0 END) > 0`;
+            }),
+          )
+          : undefined,
+      ),
     )
     .groupBy(productCategories.product);
 

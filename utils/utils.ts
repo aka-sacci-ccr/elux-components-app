@@ -54,6 +54,6 @@ export function getFiltersFromUrl(url: URL) {
 
   return {
     filtersFromUrl: filtersFromUrl.size > 0 ? filtersFromUrl : null,
-    measurementsFromUrl,
+    measurementsFromUrl: measurementsFromUrl.size > 0 ? measurementsFromUrl : null,
   };
 }
