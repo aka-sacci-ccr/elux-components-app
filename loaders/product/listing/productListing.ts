@@ -97,13 +97,18 @@ export default async function loader(
           categoryBranch.map((c) => c.identifier),
         ),
         sql`${url.hostname} LIKE '%' || ${avaliableIn.domain}`,
-        ...Array.from(filtersFromUrl.entries()).map(([key, values]) =>
-          and(
-            eq(additionalProperties.additionalType, key),
-            inArray(additionalProperties.value, values),
-          )
-        ),
       ),
+    )
+    .having(
+      filtersFromUrl
+        ? and(
+          ...Array.from(filtersFromUrl.entries()).map(([key, values]) => {
+            return sql`SUM(CASE WHEN ${additionalProperties.additionalType} = ${key} AND ${
+              inArray(additionalProperties.value, values)
+            } THEN 1 ELSE 0 END) > 0`;
+          }),
+        )
+        : undefined,
     )
     .groupBy(productCategories.product);
 

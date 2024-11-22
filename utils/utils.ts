@@ -52,5 +52,8 @@ export function getFiltersFromUrl(url: URL) {
     }
   });
 
-  return { filtersFromUrl, measurementsFromUrl };
+  return {
+    filtersFromUrl: filtersFromUrl.size > 0 ? filtersFromUrl : null,
+    measurementsFromUrl,
+  };
 }
