@@ -16,7 +16,9 @@ export interface ItemText {
 /** @titleBy icon */
 export interface ItemSocial {
   /**
-   * @title Ícone
+   * @title Icon
+   * @format icon-select
+   * @options site/loaders/availableIcons.ts
    */
   icon: AvailableIcons;
   link: string;

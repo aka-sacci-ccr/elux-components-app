@@ -170,6 +170,11 @@ export interface ImageProps {
 }
 
 export interface IconProps {
+  /**
+   * @title Icon
+   * @format icon-select
+   * @options site/loaders/availableIcons.ts
+   */
   icon?: AvailableIcons;
   color?: Colors;
   size?: number;

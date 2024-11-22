@@ -20,6 +20,8 @@ export interface NavItem {
 export interface Category {
   /**
    * @title Icon
+   * @format icon-select
+   * @options site/loaders/availableIcons.ts
    */
   icon?: AvailableIcons;
   /** @title Title */
@@ -44,7 +46,9 @@ export interface Column {
 /** @titleBy title */
 export interface Department {
   /**
-   * @title Ícone
+   * @title Icon
+   * @format icon-select
+   * @options site/loaders/availableIcons.ts
    */
   icon?: AvailableIcons;
   /** @title Title */
@@ -63,7 +67,9 @@ export interface Department {
 /** @titleBy title */
 export interface ExtraLink {
   /**
-   * @title Ícone
+   * @title Icon
+   * @format icon-select
+   * @options site/loaders/availableIcons.ts
    */
   icon?: AvailableIcons;
   /** @title Title */
@@ -83,6 +89,8 @@ export interface ExtraLink {
 export interface ExtraMenu {
   /**
    * @title Icon
+   * @format icon-select
+   * @options site/loaders/availableIcons.ts
    */
   icon?: AvailableIcons;
   /** @title Title */
