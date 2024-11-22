@@ -73,3 +73,9 @@ function getBreadcrumbList(
     };
   });
 }
+
+export const cache = "stale-while-revalidate";
+
+export const cacheKey = (props: Props) => {
+  return `product-details-${props.slug}`;
+};

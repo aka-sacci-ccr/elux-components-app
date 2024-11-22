@@ -44,16 +44,24 @@ export function getFiltersFromUrl(url: URL) {
   const filtersFromUrl = new Map<string, string[]>();
   const measurementsFromUrl = new Map<string, string[]>();
 
-  urlParams.forEach((value, key) => {
+  const sortedEntries = Array.from(urlParams.entries()).sort(([keyA], [keyB]) =>
+    keyA.localeCompare(keyB)
+  );
+
+  for (const [key, value] of sortedEntries) {
+    const sortedValues = value.split("_").sort((a, b) => a.localeCompare(b));
+
     if (MEASUREMENTS_KEYS.includes(key)) {
-      measurementsFromUrl.set(key, value.split("_"));
+      measurementsFromUrl.set(key, sortedValues);
     } else {
-      filtersFromUrl.set(key, value.split("_"));
+      filtersFromUrl.set(key, sortedValues);
     }
-  });
+  }
 
   return {
     filtersFromUrl: filtersFromUrl.size > 0 ? filtersFromUrl : null,
-    measurementsFromUrl: measurementsFromUrl.size > 0 ? measurementsFromUrl : null,
+    measurementsFromUrl: measurementsFromUrl.size > 0
+      ? measurementsFromUrl
+      : null,
   };
 }

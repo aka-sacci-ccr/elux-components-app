@@ -43,16 +43,19 @@ export interface Props {
   recordsPerPage: number;
   page?: number;
   sort?: SortOptions;
+  /**
+   * @ignore
+   */
   returnOnlyProducts?: boolean;
 }
 
 export default async function loader(
-  { recordsPerPage, page, sort, returnOnlyProducts }: Props,
+  { recordsPerPage = 20, page, sort, returnOnlyProducts }: Props,
   req: Request,
   ctx: AppContext | ModContext,
 ): Promise<ProductListingPage | null> {
   const url = new URL(req.url);
-  const pageNumber = page ?? url.searchParams.get("page") ?? 1;
+  const pageNumber = page ?? Number(url.searchParams.get("page") ?? 1);
   const sortOption = sort ?? url.searchParams.get("sort") ?? "name-asc";
   const onlyProducts = returnOnlyProducts ??
     url.searchParams.get("onlyProducts") === "true";
@@ -123,16 +126,20 @@ export default async function loader(
           : undefined,
         measurementsFromUrl //This is the query to get the SKUs that match the measurements
           ? and(
-            ...Array.from(measurementsFromUrl.entries()).map(([key, ranges]) => {
-              return sql`SUM(CASE WHEN ${productMeasurements.propertyID} = ${key.toUpperCase()} AND ${
-                or(
-                  ...ranges.map((range) => {
-                    const [min, max] = range.split("-").map(Number);
-                    return sql`(${productMeasurements.minValue} >= ${min} AND ${productMeasurements.minValue} <= ${max + 0.99})`;
-                  })
-                )
-              } THEN 1 ELSE 0 END) > 0`;
-            }),
+            ...Array.from(measurementsFromUrl.entries()).map(
+              ([key, ranges]) => {
+                return sql`SUM(CASE WHEN ${productMeasurements.propertyID} = ${key.toUpperCase()} AND ${
+                  or(
+                    ...ranges.map((range) => {
+                      const [min, max] = range.split("-").map(Number);
+                      return sql`(${productMeasurements.minValue} >= ${min} AND ${productMeasurements.minValue} <= ${
+                        max + 0.99
+                      })`;
+                    }),
+                  )
+                } THEN 1 ELSE 0 END) > 0`;
+              },
+            ),
           )
           : undefined,
       ),
@@ -147,7 +154,7 @@ export default async function loader(
     records,
     skusToGet,
     url,
-    Number(pageNumber),
+    pageNumber,
     recordsPerPage,
     sortOptions.map((opt) => opt.value).includes(sortOption)
       ? sortOption as SortOptions
@@ -595,3 +602,36 @@ const checkPath = (paths: string[], categories: ExtendedCategory[]) =>
     },
     true,
   );
+
+export const cache = "stale-while-revalidate";
+
+export const cacheKey = (
+  { page, sort, recordsPerPage = 20, returnOnlyProducts }: Props,
+  req: Request,
+) => {
+  const url = new URL(req.url);
+  const cacheKey = new URL(url.pathname, url.origin);
+  const pageNumber = page ?? Number(url.searchParams.get("page") ?? 1);
+  const sortOption = sort ?? url.searchParams.get("sort") ?? "name-asc";
+  const onlyProducts = returnOnlyProducts ??
+    url.searchParams.get("onlyProducts") === "true";
+
+  cacheKey.searchParams.set("page", pageNumber.toString());
+  cacheKey.searchParams.set("sort", sortOption);
+  cacheKey.searchParams.set("recordsPerPage", recordsPerPage.toString());
+  cacheKey.searchParams.set("onlyProducts", onlyProducts.toString());
+
+  const { filtersFromUrl, measurementsFromUrl } = getFiltersFromUrl(url);
+
+  if (filtersFromUrl) {
+    filtersFromUrl.forEach((values, key) => {
+      cacheKey.searchParams.set(key.toLowerCase(), values.join("_"));
+    });
+  }
+  if (measurementsFromUrl) {
+    measurementsFromUrl.forEach((ranges, key) => {
+      cacheKey.searchParams.set(key.toLowerCase(), ranges.join("_"));
+    });
+  }
+  return cacheKey.href;
+};
