@@ -236,7 +236,7 @@ function Carousel(
                 <Slider.Dot
                   index={index}
                   className={clx(
-                    "disabled:bg-primary flex w-2.5 h-2.5 rounded-full",
+                    "disabled:bg-primary disabled:border-primary flex w-2.5 h-2.5 rounded-full border border-white",
                     dotsColor,
                   )}
                 >

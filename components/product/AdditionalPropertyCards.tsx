@@ -149,7 +149,7 @@ export default function AdditionalPropertyCards(
                 >
                   <Slider.Dot
                     index={index}
-                    className="disabled:bg-primary flex w-2.5 h-2.5 rounded-full bg-base-200"
+                    className="disabled:bg-primary disabled:border-primary flex w-2.5 h-2.5 rounded-full bg-base-200 border border-white"
                   >
                   </Slider.Dot>
                 </li>
