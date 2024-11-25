@@ -1,6 +1,6 @@
 import type { JSX } from "preact";
-import { clx } from "../../utils/clx.ts";
 import { useScript } from "@deco/deco/hooks";
+import { clx } from "../../utils/clx.ts";
 function Dot({ index, ...props }: {
   index: number;
 } & JSX.IntrinsicElements["button"]) {
@@ -9,7 +9,12 @@ function Dot({ index, ...props }: {
       {...props}
       data-dot={index}
       aria-label={`go to slider item ${index}`}
-      class={clx("focus:outline-none group", props.class?.toString())}
+      class={clx(
+        "focus:outline-none group",
+        "bg-base-300 h-2.5 w-2.5 no-animation rounded-full",
+        "disabled:bg-primary",
+        props.class?.toString(),
+      )}
     />
   );
 }
@@ -46,12 +51,15 @@ export interface Props {
   scroll?: "smooth" | "auto";
   interval?: number;
   infinite?: boolean;
+  goToDisabled?: boolean;
 }
-const onLoad = ({ rootId, scroll, interval, infinite }: Props) => {
+const onLoad = (
+  { rootId, scroll, interval, infinite, goToDisabled }: Props,
+) => {
   function init() {
     // Percentage of the item that has to be inside the container
     // for it it be considered as inside the container
-    const THRESHOLD = 0.6;
+    const THRESHOLD = 0.75;
     const intersectionX = (element: DOMRect, container: DOMRect): number => {
       const delta = container.width / 1000;
       if (element.right < container.left - delta) {
@@ -78,7 +86,9 @@ const onLoad = ({ rootId, scroll, interval, infinite }: Props) => {
     const prev = root?.querySelector<HTMLElement>('[data-slide="prev"]');
     const next = root?.querySelector<HTMLElement>('[data-slide="next"]');
     const dots = root?.querySelectorAll<HTMLElement>("[data-dot]");
+    const dotsDiv = root?.querySelector<HTMLElement>("[data-dots]");
     const counter = root?.querySelector<HTMLElement>("[data-slider-counter]");
+    let observer: IntersectionObserver;
     if (!root || !slider || !items || items.length === 0) {
       console.warn(
         "Missing necessary slider attributes. It will not work as intended. Necessary elements:",
@@ -99,8 +109,18 @@ const onLoad = ({ rootId, scroll, interval, infinite }: Props) => {
       }
       return indices;
     };
-    const goToItem = (to: number) => {
+    const getDisabledItems = () =>
+      Array.from(items).reduce((acc, i) => {
+        if (i.getAttribute("disabled") != undefined) {
+          return [...acc, Number(i.getAttribute("data-slider-item")) ?? 0];
+        }
+        return acc;
+      }, [] as Array<number>);
+    const goToItem = (to: number, click?: boolean) => {
       const item = items.item(to);
+      if (click) {
+        item.click();
+      }
       if (!isHTMLElement(item)) {
         console.warn(
           `Element at index ${to} is not an html element. Skipping carousel`,
@@ -110,7 +130,7 @@ const onLoad = ({ rootId, scroll, interval, infinite }: Props) => {
       slider.scrollTo({
         top: 0,
         behavior: scroll,
-        left: item.offsetLeft - slider.offsetLeft,
+        left: item.offsetLeft - slider.offsetLeft - 6,
       });
     };
     const onClickPrev = () => {
@@ -131,53 +151,103 @@ const onLoad = ({ rootId, scroll, interval, infinite }: Props) => {
       const itemsPerPage = indices.length;
       const isShowingLast = indices[indices.length - 1] === items.length - 1;
       const pageIndex = Math.floor(indices[0] / itemsPerPage);
-      goToItem(isShowingLast ? 0 : (pageIndex + 1) * itemsPerPage);
+      goToItem(
+        isShowingLast ? 0 : (pageIndex + 1) * itemsPerPage,
+      );
     };
     const updateCounter = (index: number) => {
       if (counter) {
         counter.innerHTML = `${index + 1}/${items.length}`;
       }
     };
-
-    const observer = new IntersectionObserver(
-      (elements) =>
-        elements.forEach((e) => {
-          const item = e.target.getAttribute("data-slider-item");
-          const index = Number(item) || 0;
-          const dot = dots?.item(index);
-          if (e.isIntersecting) {
-            dot?.setAttribute("disabled", "");
-            updateCounter(index);
-          } else {
-            dot?.removeAttribute("disabled");
-          }
-          if (!infinite) {
-            if (index === 0) {
-              if (e.isIntersecting) {
-                prev?.setAttribute("disabled", "");
-              } else {
-                prev?.removeAttribute("disabled");
+    const debounce = (func: () => void, delay: number) => {
+      let timeoutId: ReturnType<typeof setTimeout>;
+      return () => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func(), delay);
+      };
+    };
+    //Observe Intersection
+    const createIntersectionObserver = () => {
+      if (observer) {
+        observer.disconnect();
+      }
+      observer = new IntersectionObserver(
+        (elements) =>
+          elements.forEach((e) => {
+            const item = e.target.getAttribute("data-slider-item");
+            const index = Number(item) || 0;
+            const dot = dots?.item(index);
+            if (e.isIntersecting) {
+              if (!dot?.classList.contains("hidden")) {
+                dots?.forEach((d) => {
+                  d?.removeAttribute("disabled");
+                  updateCounter(index);
+                });
+                dot?.setAttribute("disabled", "");
               }
             }
-            if (index === items.length - 1) {
-              if (e.isIntersecting) {
-                next?.setAttribute("disabled", "");
-              } else {
-                next?.removeAttribute("disabled");
+            if (!infinite) {
+              if (index === 0) {
+                if (e.isIntersecting) {
+                  prev?.setAttribute("disabled", "");
+                } else {
+                  prev?.removeAttribute("disabled");
+                }
+              }
+              if (index === items.length - 1) {
+                if (e.isIntersecting) {
+                  next?.setAttribute("disabled", "");
+                } else {
+                  next?.removeAttribute("disabled");
+                }
               }
             }
-          }
-        }),
-      { threshold: THRESHOLD, root: slider },
-    );
-    items.forEach((item) => observer.observe(item));
-    for (let it = 0; it < (dots?.length ?? 0); it++) {
-      dots?.item(it).addEventListener("click", () => goToItem(it));
-    }
+          }),
+        { threshold: THRESHOLD, root: slider },
+      );
+      items.forEach((item) => observer.observe(item));
+    };
+    //Observe Intersection
+    const handleIntersectionObserver = () => {
+      const itemsPerPage = getElementsInsideContainer().length;
+      //Handle dots div and Prev Next
+      if (itemsPerPage === dots?.length) {
+        dotsDiv?.classList.add("hidden");
+        next?.classList.add("hidden");
+        prev?.classList.add("hidden");
+      } else {
+        dotsDiv?.classList.remove("hidden");
+        next?.classList.remove("hidden");
+        prev?.classList.remove("hidden");
+      }
+      //Handle dots
+      for (let it = 0; it < (dots?.length ?? 0); it++) {
+        if (it % itemsPerPage !== 0) {
+          dots?.item(it).classList.add("hidden");
+        } else {
+          dots?.item(it).classList.remove("hidden");
+          dots?.item(it).addEventListener("click", () => goToItem(it));
+        }
+      }
+      createIntersectionObserver();
+    };
     prev?.addEventListener("click", onClickPrev);
     next?.addEventListener("click", onClickNext);
+
+    //Use Intersection Observer
+    handleIntersectionObserver();
+    const debouncedHandleDots = debounce(handleIntersectionObserver, 100);
+    globalThis.addEventListener("resize", debouncedHandleDots);
+
+    //Interval
     if (interval) {
       setInterval(onClickNext, interval);
+    }
+    //Go to disabled item onload
+    if (goToDisabled) {
+      const disabledItems = getDisabledItems();
+      goToItem(disabledItems[0]);
     }
   }
   if (document.readyState === "complete") {
@@ -186,12 +256,26 @@ const onLoad = ({ rootId, scroll, interval, infinite }: Props) => {
     document.addEventListener("DOMContentLoaded", init);
   }
 };
-function JS({ rootId, scroll = "smooth", interval, infinite = false }: Props) {
+function JS(
+  {
+    rootId,
+    scroll = "smooth",
+    interval,
+    infinite = false,
+    goToDisabled = false,
+  }: Props,
+) {
   return (
     <script
       type="module"
       dangerouslySetInnerHTML={{
-        __html: useScript(onLoad, { rootId, scroll, interval, infinite }),
+        __html: useScript(onLoad, {
+          rootId,
+          scroll,
+          interval,
+          infinite,
+          goToDisabled,
+        }),
       }}
     />
   );
