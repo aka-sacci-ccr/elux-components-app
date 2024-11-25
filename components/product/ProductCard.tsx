@@ -19,11 +19,12 @@ const ASPECT_RATIO = `${WIDTH} / ${HEIGHT}`;
 
 export default function ProductCard({ product, skuStyle, nameStyle }: Props) {
   return (
-    <div
+    <a
       class="w-full p-4 flex flex-col gap-4 h-full"
       style={{
         boxShadow: "0px 4px 8px 0px #56697326, 0px 0px 1px 0px #56697326",
       }}
+      href={product.url ?? "#"}
     >
       <div class="w-full px-6 py-4">
         {product?.image?.[0]?.url && (
@@ -66,6 +67,6 @@ export default function ProductCard({ product, skuStyle, nameStyle }: Props) {
         </span>
         <div class="flex-grow" />
       </div>
-    </div>
+    </a>
   );
 }

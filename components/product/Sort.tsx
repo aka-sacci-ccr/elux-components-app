@@ -5,6 +5,7 @@ const SORT_QUERY_PARAM = "sort";
 const PAGE_QUERY_PARAM = "page";
 export type Props = Pick<ProductListingPage, "sortOptions"> & {
   url: string;
+  siteTemplate: "elux" | "frigidaire";
 };
 const getUrl = (href: string, value: string) => {
   const url = new URL(href);
@@ -22,7 +23,7 @@ const labels: Record<string, string> = {
   "release:desc": "Lançamento",
   "discount:desc": "Maior desconto",
 };
-function Sort({ sortOptions, url }: Props) {
+function Sort({ sortOptions, url, siteTemplate }: Props) {
   const current = getUrl(
     url,
     new URL(url).searchParams.get(SORT_QUERY_PARAM) ?? "",
@@ -38,8 +39,11 @@ function Sort({ sortOptions, url }: Props) {
       <select
         name="sort"
         class={clx(
-          "select w-full rounded border-xs border-neutral text-base font-medium",
-          "focus:border-neutral",
+          "select w-full rounded border-xs border-warning text-warning-content",
+          "focus:border-warning",
+          siteTemplate === "elux"
+            ? "text-base font-medium"
+            : "text-sm font-light pt-1",
         )}
         hx-on:change={useScript(() => {
           const select = event!.currentTarget as HTMLSelectElement;

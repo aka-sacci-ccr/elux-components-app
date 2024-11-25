@@ -1,4 +1,6 @@
-import { AppContext } from "apps/records/mod.ts";
+import { type AppContext } from "apps/records/mod.ts";
+
+import { AppContext as ModContext } from "../../mod.ts";
 import {
   additionalProperties,
   avaliableIn,
@@ -6,11 +8,13 @@ import {
   descriptions,
   domains,
   images,
+  productMeasurements,
   products,
   videos,
 } from "../../db/schema.ts";
 import { eq, sql } from "drizzle-orm";
-import { Product } from "apps/commerce/types.ts";
+import { Product, PropertyValue } from "apps/commerce/types.ts";
+import { LANGUAGE_DIFFS } from "../../utils/constants.tsx";
 
 interface ProductBase {
   sku: string;
@@ -24,12 +28,10 @@ interface ProductBase {
 }
 
 interface AdditionalProperty {
+  additionalType: string | null;
   name: string;
+  alternateName: string | null;
   value: string;
-  identifier: number;
-  subjectOf: string | null;
-  propertyID: string;
-  unitCode: string | null;
   unitText: string | null;
 }
 
@@ -71,127 +73,23 @@ interface Avaliability {
   description: string;
 }
 
-export async function getProductBySku(
-  sku: string,
-  ctx: AppContext,
-  url: URL,
-): Promise<Product | null> {
-  const records = await ctx.invoke.records.loaders.drizzle();
-  const productBase = await records
-    .select({
-      name: products.name,
-      productID: products.productID,
-      description: products.description,
-      gtin: products.gtin,
-      releaseDate: products.releaseDate,
-      brand_name: brands.name,
-      brand_id: brands.identifier,
-    })
-    .from(products)
-    .innerJoin(brands, eq(products.brand, brands.identifier))
-    .where(eq(products.sku, sku))
-    .get();
-
-  if (!productBase) {
-    return null;
-  }
-
-  const [
-    additionalProperty,
-    description,
-    image,
-    video,
-    category,
-    avaliability,
-  ] = await Promise.all([
-    records
-      .select()
-      .from(additionalProperties)
-      .where(eq(additionalProperties.subjectOf, sku))
-      .all(),
-
-    records
-      .select()
-      .from(descriptions)
-      .where(eq(descriptions.subjectOf, sku))
-      .all(),
-
-    records
-      .select()
-      .from(images)
-      .where(eq(images.subjectOf, sku))
-      .all(),
-
-    records
-      .select()
-      .from(videos)
-      .where(eq(videos.subjectOf, sku))
-      .all(),
-
-    records.run(sql`
-        WITH RECURSIVE CategoryHierarchy AS (
-          SELECT
-            c.identifier,
-            c.value,
-            c.subjectOf
-          FROM
-            productCategories AS pc
-            INNER JOIN categories AS c ON pc.subjectOf = c.identifier
-          WHERE
-            pc.product = ${sku}
-          UNION
-          SELECT
-            parent.identifier,
-            parent.value,
-            parent.subjectOf
-          FROM
-            categories AS parent
-            INNER JOIN CategoryHierarchy AS child ON child.subjectOf = parent.identifier
-        )
-        SELECT
-          *
-        FROM
-          CategoryHierarchy
-        `),
-
-    records
-      .select({
-        identifier: domains.identifier,
-        description: domains.description,
-      })
-      .from(avaliableIn)
-      .innerJoin(domains, eq(avaliableIn.domain, domains.identifier))
-      .where(eq(avaliableIn.subjectOf, sku))
-      .all(),
-  ]);
-
-  const isAvaliable = avaliability.some(({ identifier }) =>
-    url.hostname.endsWith(identifier)
-  );
-
-  return isAvaliable
-    ? productsObject(
-      {
-        productBase: { ...productBase, sku },
-        additionalProperty,
-        description,
-        image,
-        video,
-        category: category.rows as unknown as Category[],
-        avaliability,
-        url,
-        skuAsSlug: true,
-      },
-    )
-    : null;
+interface Measurement {
+  identifier: number;
+  subjectOf: string | null;
+  propertyID: string;
+  unitCode: string | null;
+  maxValue: number | null;
+  minValue: number | null;
 }
 
-export async function getProductBySlug(
-  slug: string,
-  ctx: AppContext,
+export async function getProduct(
+  identifier: string,
+  ctx: AppContext | ModContext,
   url: URL,
+  useSkuAsSlug = false,
 ): Promise<Product | null> {
-  const records = await ctx.invoke.records.loaders.drizzle();
+  const recordsCtx = ctx as AppContext;
+  const records = await recordsCtx.invoke.records.loaders.drizzle();
   const productBase = await records
     .select({
       sku: products.sku,
@@ -205,7 +103,7 @@ export async function getProductBySlug(
     })
     .from(products)
     .innerJoin(brands, eq(products.brand, brands.identifier))
-    .where(eq(products.productID, slug))
+    .where(eq(useSkuAsSlug ? products.sku : products.productID, identifier))
     .get();
 
   if (!productBase) {
@@ -219,6 +117,7 @@ export async function getProductBySlug(
     video,
     category,
     avaliability,
+    measurements,
   ] = await Promise.all([
     records
       .select()
@@ -279,6 +178,12 @@ export async function getProductBySlug(
       .innerJoin(domains, eq(avaliableIn.domain, domains.identifier))
       .where(eq(avaliableIn.subjectOf, productBase.sku))
       .all(),
+
+    records
+      .select()
+      .from(productMeasurements)
+      .where(eq(productMeasurements.subjectOf, productBase.sku))
+      .all(),
   ]);
 
   const isAvaliable = avaliability.some(({ identifier }) =>
@@ -296,6 +201,8 @@ export async function getProductBySlug(
         category: category.rows as unknown as Category[],
         avaliability,
         url,
+        measurements,
+        ctx: ctx as ModContext,
       },
     )
     : null;
@@ -312,6 +219,8 @@ function productsObject(
     video,
     url,
     skuAsSlug,
+    measurements,
+    ctx,
   }: {
     productBase: ProductBase;
     additionalProperty: AdditionalProperty[];
@@ -322,12 +231,15 @@ function productsObject(
     video: Video[];
     url: URL;
     skuAsSlug?: boolean;
+    measurements: Measurement[];
+    ctx: ModContext;
   },
 ): Product {
   const productUrl = new URL(
     skuAsSlug ? `${productBase.sku}/p` : `${productBase.productID}/p`,
     url.origin,
   );
+  const language = ctx.language;
 
   return {
     "@type": "Product",
@@ -344,13 +256,36 @@ function productsObject(
       identifier: productBase.brand_id,
     },
     additionalProperty: [
+      ...measurements.reduce<PropertyValue[]>(
+        (acc, { propertyID, maxValue, minValue, unitCode }) => {
+          return [
+            ...acc,
+            {
+              "@type": "PropertyValue" as const,
+              propertyID,
+              value: minValue?.toString(),
+              unitCode: unitCode ?? undefined,
+              //@ts-ignore Is an keyof
+              name: LANGUAGE_DIFFS[language].pdpLoader[propertyID],
+            },
+            {
+              "@type": "PropertyValue" as const,
+              propertyID: `BOX_${propertyID}`,
+              value: maxValue?.toString(),
+              unitCode: unitCode ?? undefined,
+              //@ts-ignore Is an keyof
+              name: LANGUAGE_DIFFS[language].pdpLoader[`BOX_${propertyID}`],
+            },
+          ];
+        },
+        [] as PropertyValue[],
+      ),
       ...additionalProperty.map((prop) => ({
         "@type": "PropertyValue" as const,
-        ...prop,
-        subjectOf: prop.subjectOf ?? undefined,
-        unitCode: prop.unitCode ?? undefined,
+        propertyID: "OTHER",
+        name: language === "ES" ? prop.name : prop.alternateName ?? prop.name,
+        value: prop.value,
         unitText: prop.unitText ?? undefined,
-        identifier: String(prop.identifier),
       })),
       ...description.map(({ name, value, image }) => (
         {

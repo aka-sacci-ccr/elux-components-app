@@ -1,6 +1,7 @@
-import { ProductListingPage as PLP } from "apps/commerce/types.ts";
+import { ListItem, ProductListingPage as PLP } from "apps/commerce/types.ts";
 import { Colors } from "../../../utils/types.ts";
 import Breadcrumb, {
+  Items,
   Props as BreadcrumbProps,
 } from "../../Content/Breadcrumb.tsx";
 import { AppContext } from "../../../mod.ts";
@@ -10,15 +11,18 @@ import SearchResult, {
   Layout,
 } from "../../../components/product/SearchResult.tsx";
 import { CardStyling } from "../../../components/product/ProductCard.tsx";
+import { productListingStylingDiffs } from "../../../utils/styling/product/productListing/stylingDiff.ts";
+import { useDevice } from "@deco/deco/hooks";
+import { LANGUAGE_DIFFS } from "../../../utils/constants.tsx";
 
 export interface Props {
   page: PLP | null;
-  /** @description Props of PDP breadcrumb */
-  breadcrumbProps: PLPBreadcrumbProps;
-  /** @description Product Listing main props */
-  listingMain?: ListingMainProps;
   /** @description Spacing config */
   spacing?: SpacingConfig;
+  /**
+   * @ignore
+   */
+  partial?: "hideMore" | "hideLess";
 }
 
 export interface ListingMainProps {
@@ -29,9 +33,10 @@ export interface ListingMainProps {
   layout?: Layout;
   /** @description 0 for ?page=0 as your first page */
   startingPage?: 0 | 1;
+  filterIconUrl: string;
 }
 
-interface PLPBreadcrumbProps extends
+export interface PLPBreadcrumbProps extends
   Omit<
     BreadcrumbProps,
     "items" | "fontColor" | "spacing" | "disableContainer"
@@ -45,6 +50,10 @@ interface PLPBreadcrumbProps extends
     item: string;
     url: string;
   };
+  /**
+   * @title Underline on hover
+   */
+  hoverUnderline?: boolean;
 }
 
 export const loader = (
@@ -55,45 +64,107 @@ export const loader = (
   return {
     language: ctx.language,
     url: req.url,
+    siteTemplate: ctx.siteTemplate,
     ...props,
   };
 };
 
 export default function ProductListingPage(
-  { breadcrumbProps, spacing, page, url, listingMain }: ReturnType<
+  { spacing, page, url, siteTemplate, partial, language }: ReturnType<
     typeof loader
   >,
 ) {
-  if (!page) return <NotFound />;
+  if (!page) return <NotFound language={language} />;
+
+  const device = useDevice();
+  const { breadcrumbProps, listingMain } =
+    productListingStylingDiffs[siteTemplate][
+      device === "desktop" ? "desktop" : "mobile"
+    ];
+
+  if (partial) {
+    return (
+      <SearchResult
+        page={page}
+        url={url}
+        listingMain={listingMain}
+        partial={partial}
+        language={language}
+        siteTemplate={siteTemplate}
+      />
+    );
+  }
+
+  const breadcrumbItems = getBreadcrumbItems(
+    page.breadcrumb.itemListElement,
+    breadcrumbProps,
+  );
+
+  const mainBreadcrumbItem = page.breadcrumb.itemListElement.reduce((
+    highest,
+    current,
+  ) => (current.position > highest.position) ? current : highest);
+
   return (
     <Container class="flex flex-col" spacing={spacing}>
-      <div class="my-6 max-w-[1280px] sm:w-[1280px] sm:pl-10 lg:mx-auto">
-        <Breadcrumb
-          {...breadcrumbProps}
-          items={[{
-            label: "Product Category",
-          }]}
-          fontColor={breadcrumbProps.iconColor}
-          disableContainer={true}
-        />
+      <div class="w-full flex flex-row justify-center">
+        <div class="my-6 w-[1280px] sm:pl-10">
+          <Breadcrumb
+            {...breadcrumbProps}
+            items={breadcrumbItems}
+            fontColor={breadcrumbProps.iconColor}
+            disableContainer={true}
+          />
+        </div>
       </div>
       <ListingPageBanner
-        image="https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-latam/c35db32c-304c-4e57-a09a-c5b395dae644/072ae6028195b95f090be37ca0be5b9b.png"
-        description="New Electrolux products"
+        image={mainBreadcrumbItem?.image?.[0]?.url}
+        description={mainBreadcrumbItem?.description}
       />
       <SearchResult
         page={page}
         url={url}
         listingMain={listingMain}
+        partial={partial}
+        language={language}
+        siteTemplate={siteTemplate}
+        mainBreadcrumbItem={mainBreadcrumbItem}
       />
     </Container>
   );
 }
 
-function NotFound() {
+function NotFound({ language }: { language: "EN" | "ES" }) {
   return (
-    <div class="w-full flex justify-center items-center py-10">
-      <span>Not Found!</span>
+    <div class="w-full flex flex-col justify-center items-center py-10 text-primary font-bold text-2xl h-[50vh]">
+      <span>{LANGUAGE_DIFFS[language].listingPage.notFound}</span>
+      <a
+        href="javascript:history.back()"
+        class="mt-4 text-base underline cursor-pointer hover:opacity-75"
+      >
+        {LANGUAGE_DIFFS[language].listingPage.goBack || "Go back"}
+      </a>
     </div>
   );
 }
+
+const getBreadcrumbItems = (
+  items: ListItem[],
+  props: PLPBreadcrumbProps,
+): Items[] => {
+  const breadcrumbItems: Items[] = items.map((item) => ({
+    label: item.item,
+    href: item.url,
+    hoverUnderline: props.hoverUnderline,
+    overrideFontColor: props.breadcrumbColor,
+  }));
+
+  if (props.overrideFirst) {
+    breadcrumbItems.unshift({
+      label: props.overrideFirst.item,
+      href: props.overrideFirst.url,
+    });
+  }
+
+  return breadcrumbItems;
+};

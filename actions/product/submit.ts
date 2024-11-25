@@ -5,6 +5,7 @@ import {
   ImageProduct,
   Product as BaseProduct,
   ProductCategory,
+  ProductMeasurements,
   Video,
 } from "../../utils/types.ts";
 import { AppContext } from "apps/records/mod.ts";
@@ -16,11 +17,33 @@ export interface Props {
    * @title Base info
    */
   product: BaseProduct;
+  /**
+   * @title Categories
+   */
   categories: ProductCategory[];
+  /**
+   * @title Measurements
+   */
+  measurements: ProductMeasurements[];
+  /**
+   * @title Additional Properties
+   */
   additionalProperties: AdditionalProperty[];
+  /**
+   * @title Descriptions
+   */
   descriptions: Description[];
+  /**
+   * @title Images
+   */
   images: ImageProduct[];
+  /**
+   * @title Videos
+   */
   videos?: Video[];
+  /**
+   * @title Avaliability
+   */
   avaliableIn: AvaliableIn[];
 }
 
@@ -38,7 +61,7 @@ export default async function submit(
     logger.error(e);
     return {
       success: false,
-      message: e.message,
+      message: e instanceof Error ? e.message : "Unknown error",
     };
   }
 }

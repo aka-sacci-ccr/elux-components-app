@@ -5,12 +5,12 @@ import {
   BG_COLORS,
   BORDER_COLORS,
   DEFAULT_TECH_SHEET_CONFIG,
-  iconMap,
   LANGUAGE_DIFFS,
   TEXT_COLORS,
 } from "../../utils/constants.tsx";
 import { clx } from "../../utils/clx.ts";
 import { ProductMainProps } from "../../sections/Product/ProductDetails/ProductPage.tsx";
+import { iconMap } from "../../utils/product/constants.ts";
 
 interface Props {
   additionalProperty: PropertyValue[] | undefined;
@@ -130,41 +130,43 @@ export default function ProductDetails(
           </a>
         </div>
         <div class="flex flex-col lg:gap-12">
-          <div
-            class={clx(
-              "bg-white lg:pt-6 max-lg:my-6 max-lg:pt-6",
-              productMain?.bgColor === "white" || !productMain?.bgColor
-                ? ""
-                : "lg:px-6 max-lg:px-4",
-            )}
-          >
-            <h2
-              className={clx(
-                "text-left",
-                TEXT_COLORS[tabs?.titles?.fontColor ?? "secondary"],
-                tabs?.titles?.fontSize ?? "text-base",
-                tabs?.titles?.fontWeight,
-              )}
-            >
-              {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
-            </h2>
-            <article
+          {description && propertyCards && propertyCards.length > 0 && (
+            <div
               class={clx(
-                "py-4 font-light text-secondary",
-                "lg:border-b border-base-200 max-sm:hidden",
-                tabs?.productDescription?.descriptionSize ?? "text-sm",
+                "bg-white lg:pt-6 max-lg:my-6 max-lg:pt-6",
+                productMain?.bgColor === "white" || !productMain?.bgColor
+                  ? ""
+                  : "lg:px-6 max-lg:px-4",
               )}
             >
-              {description}
-            </article>
-            <div>
-              <AdditionalPropertyCards
-                propertyCards={propertyCards}
-                mergeQuantity={productMain.mergeQuantity}
-                productDescription={tabs?.productDescription}
-              />
+              <h2
+                className={clx(
+                  "text-left",
+                  TEXT_COLORS[tabs?.titles?.fontColor ?? "secondary"],
+                  tabs?.titles?.fontSize ?? "text-base",
+                  tabs?.titles?.fontWeight,
+                )}
+              >
+                {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
+              </h2>
+              <article
+                class={clx(
+                  "py-4 font-light text-secondary",
+                  "lg:border-b border-base-200 max-sm:hidden",
+                  tabs?.productDescription?.descriptionSize ?? "text-sm",
+                )}
+              >
+                {description}
+              </article>
+              <div>
+                <AdditionalPropertyCards
+                  propertyCards={propertyCards}
+                  mergeQuantity={productMain.mergeQuantity}
+                  productDescription={tabs?.productDescription}
+                />
+              </div>
             </div>
-          </div>
+          )}
           <div
             class={clx(
               "max-lg:w-screen max-lg:-ml-5 max-lg:bg-white max-lg:px-6 max-lg:pt-4 bg-white lg:py-6",
@@ -202,6 +204,7 @@ export default function ProductDetails(
                   class="tab text-xs text-primary font-light checked:!border-primary"
                   aria-label={LANGUAGE_DIFFS[language].productPage
                     .dimensionsBox}
+                  checked={true}
                 />
                 <div
                   role="tabpanel"
@@ -218,7 +221,6 @@ export default function ProductDetails(
                   role="tab"
                   class="tab text-xs text-primary font-light checked:!border-primary"
                   aria-label={LANGUAGE_DIFFS[language].productPage.dimensions}
-                  checked={true}
                 />
                 <div
                   role="tabpanel"

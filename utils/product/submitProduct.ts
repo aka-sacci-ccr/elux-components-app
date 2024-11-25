@@ -5,6 +5,7 @@ import {
   ImageProduct,
   Product,
   ProductCategory,
+  ProductMeasurements,
   Video,
 } from "../types.ts";
 import {
@@ -13,13 +14,14 @@ import {
   descriptions,
   images,
   productCategories,
+  productMeasurements,
   products,
   videos,
 } from "../../db/schema.ts";
 import { Props as SubmitProductProps } from "../../actions/product/submit.ts";
 import { Description } from "../types.ts";
 import { eq } from "drizzle-orm";
-import { DEFAULT_DOMAINS } from "../constants.tsx";
+import { DEFAULT_DOMAINS } from "./constants.ts";
 
 export async function insertBaseData(product: Product, ctx: AppContext) {
   const records = await ctx.invoke.records.loaders.drizzle();
@@ -42,6 +44,22 @@ export async function insertCategories(
       return {
         subjectOf: category[0],
         product: sku,
+      };
+    }),
+  );
+}
+
+export async function insertMeasurements(
+  measurements: ProductMeasurements[],
+  sku: string,
+  ctx: AppContext,
+) {
+  const records = await ctx.invoke.records.loaders.drizzle();
+  await records.insert(productMeasurements).values(
+    measurements.map((props) => {
+      return {
+        ...props,
+        subjectOf: sku,
       };
     }),
   );
@@ -139,15 +157,28 @@ export async function insertProduct(
     descriptions,
     images,
     videos,
+    measurements,
     ctx,
   }: SubmitProductProps & { ctx: AppContext },
 ) {
+  if (
+    categories.length === 0 || additionalProperties.length === 0 ||
+    images.length === 0 || measurements.length === 0
+  ) {
+    throw new Error("Invalid product data");
+  }
+
   await insertBaseData(product, ctx);
   await insertCategories(categories, product.sku, ctx);
+  await insertMeasurements(measurements, product.sku, ctx);
   await insertAdditionalProperties(additionalProperties, product.sku, ctx);
-  await insertAvaliability(avaliableIn, product.sku, ctx);
-  await insertDescriptions(descriptions, product.sku, ctx);
   await insertImages(images, product.sku, ctx);
+  if (avaliableIn && avaliableIn.length > 0) {
+    await insertAvaliability(avaliableIn, product.sku, ctx);
+  }
+  if (descriptions && descriptions.length > 0) {
+    await insertDescriptions(descriptions, product.sku, ctx);
+  }
   if (videos && videos.length > 0) {
     await insertVideos(videos, product.sku, ctx);
   }

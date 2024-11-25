@@ -22,7 +22,7 @@ export default async function avaliableSites(
   }).from(categories);
 
   return allCategories.map(({ identifier, value, additionalType }) => ({
-    label: `${value} (Level ${additionalType})`,
+    label: `${value} (/${identifier}, Level ${additionalType})`,
     value: `${identifier}---${value}---${additionalType}`,
   }));
 }

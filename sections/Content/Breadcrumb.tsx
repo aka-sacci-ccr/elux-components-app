@@ -44,7 +44,7 @@ export interface Props {
   spacing?: SpacingConfig;
 }
 
-interface Items {
+export interface Items {
   /**
    * @title Label
    */
