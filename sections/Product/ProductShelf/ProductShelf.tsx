@@ -92,7 +92,9 @@ function goToItem(index: number) {
 }
 
 export default function ProductShelf(
-  { title, extraLink, products, spacingConfig }: Props,
+  { title, extraLink, products, spacingConfig, siteTemplate }: ReturnType<
+    typeof loader
+  >,
 ) {
   const id = useId();
   const isProductShelf = checkIsProductShelf(products);
@@ -103,7 +105,8 @@ export default function ProductShelf(
     titleFontStyle,
     borderColor,
     dotsColor,
-  } = FRIGIDAIRE_STYLE;
+    tabStyle,
+  } = siteTemplate === "frigidaire" ? FRIGIDAIRE_STYLE : ELUX_STYLE;
   return (
     <Container spacing={spacingConfig} class="container">
       {/* Main div */}
@@ -167,7 +170,17 @@ export default function ProductShelf(
               divId={id}
             />
           )
-          : <TabbedShelf products={products} divId={id} />}
+          : (
+            <TabbedShelf
+              products={products}
+              divId={id}
+              skuStyle={skuStyle}
+              nameStyle={nameStyle}
+              dotsColor={dotsColor}
+              borderColor={borderColor}
+              tabStyle={tabStyle}
+            />
+          )}
       </div>
     </Container>
   );
@@ -177,7 +190,14 @@ const checkIsProductShelf = (products: TabbedShelf[] | ProductShelf) =>
   "loader" in products;
 
 const TabbedShelf = (
-  { products, divId }: { products: TabbedShelf[]; divId: string },
+  { products, divId, skuStyle, nameStyle, dotsColor, borderColor, tabStyle }:
+    & {
+      products: TabbedShelf[];
+    }
+    & Omit<ProductSliderProps, "products" | "loader">
+    & {
+      tabStyle: string;
+    },
 ) => {
   return (
     <div class="flex flex-col">
@@ -211,11 +231,11 @@ const TabbedShelf = (
                 (useComponent<ProductSliderProps>(
                   ProductSliderShelf,
                   {
-                    skuStyle: FRIGIDAIRE_STYLE.skuStyle,
-                    nameStyle: FRIGIDAIRE_STYLE.nameStyle,
+                    skuStyle: skuStyle,
+                    nameStyle: nameStyle,
                     loader: asResolved(loader),
-                    dotsColor: FRIGIDAIRE_STYLE.dotsColor,
-                    borderColor: FRIGIDAIRE_STYLE.borderColor,
+                    dotsColor: dotsColor,
+                    borderColor: borderColor,
                     divId,
                   },
                 ))}
@@ -224,9 +244,7 @@ const TabbedShelf = (
             <span
               class={clx(
                 "block px-6 py-2 border-b-2 transition-colors whitespace-nowrap",
-                "peer-checked:border-b-primary peer-checked:text-secondary peer-checked:font-medium",
-                "border-b-transparent text-info font-light",
-                "hover:border-b-primary hover:text-secondary hover:font-medium",
+                tabStyle,
               )}
             >
               {title}
@@ -239,11 +257,11 @@ const TabbedShelf = (
         class="min-h-[280px]"
         hx-post={products[0].loader &&
           (useComponent<ProductSliderProps>(ProductSliderShelf, {
-            skuStyle: FRIGIDAIRE_STYLE.skuStyle,
-            nameStyle: FRIGIDAIRE_STYLE.nameStyle,
+            skuStyle: skuStyle,
+            nameStyle: nameStyle,
             loader: asResolved(products[0].loader),
-            dotsColor: FRIGIDAIRE_STYLE.dotsColor,
-            borderColor: FRIGIDAIRE_STYLE.borderColor,
+            dotsColor: dotsColor,
+            borderColor: borderColor,
             divId,
           }))}
         hx-trigger="load"
@@ -269,6 +287,32 @@ const FRIGIDAIRE_STYLE = {
   } as CardStyling["nameStyle"],
   borderColor: "border-base-300",
   dotsColor: "bg-base-200",
-  enabledTabStyle: "text-info font-light",
-  disabledTabStyle: "[&[disabled]]:text-secondary [&[disabled]]:font-medium",
+  tabStyle: clx(
+    "peer-checked:border-b-primary peer-checked:text-secondary peer-checked:font-medium",
+    "border-b-transparent text-info font-light",
+    "hover:border-b-primary hover:text-secondary hover:font-medium",
+  ),
+};
+
+const ELUX_STYLE = {
+  titleFontStyle: "text-xl text-primary content-center font-medium",
+  extraLinkFontStyle:
+    "text-warning-content text-xs font-light underline content-center",
+  skuStyle: {
+    fontColor: "success-content",
+    fontSize: "text-sm",
+    fontWeight: "font-normal",
+  } as CardStyling["skuStyle"],
+  nameStyle: {
+    fontColor: "primary",
+    fontSize: "text-base",
+    fontWeight: "font-medium",
+  } as CardStyling["nameStyle"],
+  borderColor: "border-[#DEE7EA]",
+  dotsColor: "bg-base-200",
+  tabStyle: clx(
+    "peer-checked:border-b-primary peer-checked:text-primary peer-checked:font-medium",
+    "border-b-transparent text-[#ADB4BD] font-light",
+    "hover:border-b-primary hover:text-primary hover:font-medium",
+  ),
 };
