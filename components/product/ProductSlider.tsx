@@ -45,7 +45,7 @@ export default function ProductSlider(
           {products?.map((p, index) => (
             <Slider.Item
               index={index}
-              class="w-[245px] min-w-[245px] pt-4 pb-4"
+              class="w-[245px] min-w-[245px] pt-4 pb-4 h-[376px] min-h-[376px]"
             >
               <ProductCard
                 product={p}
@@ -55,15 +55,16 @@ export default function ProductSlider(
             </Slider.Item>
           ))}
         </Slider>
-        <div class="flex justify-center max-md:hidden">
+        <div class="flex justify-center max-md:hidden h-6">
           <ul
             class={clx(
-              "carousel carousel-center justify-center gap-3 px-5 h-6",
+              "carousel carousel-center justify-center gap-3 px-5",
               "rounded-full w-min",
               "border-[1px]",
               borderColor,
               "flex bg-white",
             )}
+            data-dots
           >
             {products?.map((_, index) => (
               <li className="carousel-item w-3 h-full flex justify-center items-center has-[.hidden]:hidden group">
