@@ -316,3 +316,46 @@ const ELUX_STYLE = {
     "hover:border-b-primary hover:text-primary hover:font-medium",
   ),
 };
+
+export const LoadingFallback = ({ spacingConfig }: Partial<Props>) => (
+  <Container spacing={spacingConfig} class="container">
+    <div class="flex flex-row justify-between">
+      <div class="flex lg:flex-row lg:gap-6 flex-col gap-2 max-lg:px-6 items-center">
+        <div className="skeleton h-6 w-52"></div>
+        <div className="skeleton h-4 w-28"></div>
+      </div>
+      <div class="flex flex-row gap-2">
+        <div className="skeleton hidden md:flex disabled:invisible btn-circle !h-10 !w-10 !min-h-10 !min-w-10 rounded-full">
+        </div>
+        <div className="skeleton hidden md:flex disabled:invisible btn-circle !h-10 !w-10 !min-h-10 !min-w-10 rounded-full">
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-row justify-center items-center bg-white mt-3 mb-9 gap-2 sm:gap-8">
+      <div className="flex w-[245px] h-[376px] pt-7 flex-col gap-4">
+        <div className="skeleton h-56 w-full"></div>
+        <div className="skeleton h-4 w-28"></div>
+        <div className="skeleton h-4 w-full"></div>
+        <div className="skeleton h-4 w-full"></div>
+      </div>
+      <div className="flex w-[245px] h-[376px] pt-7 flex-col gap-4">
+        <div className="skeleton h-56 w-full"></div>
+        <div className="skeleton h-4 w-28"></div>
+        <div className="skeleton h-4 w-full"></div>
+        <div className="skeleton h-4 w-full"></div>
+      </div>
+      <div className="flex w-[245px] h-[376px] pt-7 flex-col gap-4">
+        <div className="skeleton h-56 w-full"></div>
+        <div className="skeleton h-4 w-28"></div>
+        <div className="skeleton h-4 w-full"></div>
+        <div className="skeleton h-4 w-full"></div>
+      </div>
+      <div className="flex w-[245px] h-[376px] pt-7 flex-col gap-4">
+        <div className="skeleton h-56 w-full"></div>
+        <div className="skeleton h-4 w-28"></div>
+        <div className="skeleton h-4 w-full"></div>
+        <div className="skeleton h-4 w-full"></div>
+      </div>
+    </div>
+  </Container>
+);
