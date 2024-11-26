@@ -15,6 +15,8 @@ import {
 import { eq, sql } from "drizzle-orm";
 import { Product, PropertyValue } from "apps/commerce/types.ts";
 import { LANGUAGE_DIFFS } from "../../utils/constants.tsx";
+import { LibSQLDatabase } from "apps/records/deps.ts";
+import { ExtendedCategory } from "../../loaders/product/listing/productListing.ts";
 
 interface ProductBase {
   sku: string;
@@ -207,6 +209,74 @@ export async function getProduct(
     )
     : null;
 }
+
+export const getCategoryTree = async (
+  records: LibSQLDatabase<Record<string, never>>,
+  fatherCategoryPath: string,
+) =>
+  await records.run(sql`
+    WITH RECURSIVE
+    CategoryTree AS (
+      SELECT
+        identifier,
+        value,
+        description,
+        additionalType,
+        subjectOf,
+        image
+      FROM
+        categories
+      WHERE
+        identifier = ${fatherCategoryPath}
+      UNION ALL
+      SELECT
+        c.identifier,
+        c.value,
+        c.description,
+        c.additionalType,
+        c.subjectOf,
+        c.image
+      FROM
+        categories c
+        INNER JOIN CategoryTree ct ON c.subjectOf = ct.identifier
+    )
+  SELECT
+    *
+  FROM
+    CategoryTree;
+    `).then((result) => result.rows) as unknown as ExtendedCategory[];
+
+export const getCategoryBranch = (
+  categories: ExtendedCategory[],
+  searchedCategory: ExtendedCategory,
+): {
+  identifier: string;
+  value: string;
+  additionalType?: string;
+}[] => {
+  const getChildIdentifiers = (parentIds: string[]): string[] =>
+    parentIds.length === 0 ? [] : [
+      ...parentIds,
+      ...getChildIdentifiers(
+        categories
+          .filter((cat) => parentIds.includes(cat.subjectOf ?? ""))
+          .map((cat) => cat.identifier),
+      ),
+    ];
+
+  return getChildIdentifiers([searchedCategory.identifier]).map(
+    (identifier) => {
+      const { value, additionalType } = categories.find((cat) =>
+        cat.identifier === identifier
+      )!;
+      return {
+        identifier,
+        value,
+        additionalType,
+      };
+    },
+  );
+};
 
 function productsObject(
   {
