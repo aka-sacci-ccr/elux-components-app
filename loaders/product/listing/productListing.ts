@@ -26,8 +26,12 @@ import {
 import { AppContext as ModContext } from "../../../mod.ts";
 import { LANGUAGE_DIFFS } from "../../../utils/constants.tsx";
 import { getFiltersFromUrl, getUrlFilter } from "../../../utils/utils.ts";
+import {
+  getCategoryBranch,
+  getCategoryTree,
+} from "../../../utils/product/getProduct.ts";
 
-interface ExtendedCategory extends Category {
+export interface ExtendedCategory extends Category {
   additionalType?: string;
 }
 
@@ -516,73 +520,6 @@ const getProductData = async (
     measurements: measurements as unknown as ProductMeasurements[] | undefined,
   };
 };
-
-const getCategoryBranch = (
-  categories: ExtendedCategory[],
-  searchedCategory: ExtendedCategory,
-): {
-  identifier: string;
-  value: string;
-  additionalType?: string;
-}[] => {
-  const getChildIdentifiers = (parentIds: string[]): string[] =>
-    parentIds.length === 0 ? [] : [
-      ...parentIds,
-      ...getChildIdentifiers(
-        categories
-          .filter((cat) => parentIds.includes(cat.subjectOf ?? ""))
-          .map((cat) => cat.identifier),
-      ),
-    ];
-
-  return getChildIdentifiers([searchedCategory.identifier]).map(
-    (identifier) => {
-      const { value, additionalType } = categories.find((cat) =>
-        cat.identifier === identifier
-      )!;
-      return {
-        identifier,
-        value,
-        additionalType,
-      };
-    },
-  );
-};
-const getCategoryTree = async (
-  records: LibSQLDatabase<Record<string, never>>,
-  fatherCategoryPath: string,
-) =>
-  await records.run(sql`
-    WITH RECURSIVE
-    CategoryTree AS (
-      SELECT
-        identifier,
-        value,
-        description,
-        additionalType,
-        subjectOf,
-        image
-      FROM
-        categories
-      WHERE
-        identifier = ${fatherCategoryPath}
-      UNION ALL
-      SELECT
-        c.identifier,
-        c.value,
-        c.description,
-        c.additionalType,
-        c.subjectOf,
-        c.image
-      FROM
-        categories c
-        INNER JOIN CategoryTree ct ON c.subjectOf = ct.identifier
-    )
-  SELECT
-    *
-  FROM
-    CategoryTree;
-    `).then((result) => result.rows) as unknown as ExtendedCategory[];
 
 const checkPath = (paths: string[], categories: ExtendedCategory[]) =>
   paths.reduce(

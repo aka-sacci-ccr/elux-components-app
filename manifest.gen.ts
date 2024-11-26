@@ -16,11 +16,12 @@ import * as $$$3 from "./loaders/product/avaliableFiltersGroups.ts";
 import * as $$$4 from "./loaders/product/avaliableSites.ts";
 import * as $$$5 from "./loaders/product/avaliableSkus.ts";
 import * as $$$6 from "./loaders/product/details/productDetails.ts";
-import * as $$$7 from "./loaders/product/listing/productListing.ts";
-import * as $$$8 from "./loaders/testPLP.ts";
-import * as $$$9 from "./loaders/whereToBuy.ts";
+import * as $$$7 from "./loaders/product/list/productList.ts";
+import * as $$$8 from "./loaders/product/listing/productListing.ts";
+import * as $$$9 from "./loaders/testShelf.ts";
+import * as $$$10 from "./loaders/whereToBuy.ts";
 import * as $$$$$$0 from "./sections/Component.tsx";
-import * as $$$$$$17 from "./sections/container/Container.tsx";
+import * as $$$$$$18 from "./sections/container/Container.tsx";
 import * as $$$$$$1 from "./sections/Content/Banner.tsx";
 import * as $$$$$$2 from "./sections/Content/Breadcrumb.tsx";
 import * as $$$$$$3 from "./sections/Content/Cards.tsx";
@@ -36,7 +37,8 @@ import * as $$$$$$12 from "./sections/Institutional/Support.tsx";
 import * as $$$$$$13 from "./sections/Institutional/WhereToBuy.tsx";
 import * as $$$$$$14 from "./sections/Product/ProductDetails/ProductPage.tsx";
 import * as $$$$$$15 from "./sections/Product/ProductListing/ProductListingPage.tsx";
-import * as $$$$$$16 from "./sections/Social/ContactForm.tsx";
+import * as $$$$$$16 from "./sections/Product/ProductShelf/ProductShelf.tsx";
+import * as $$$$$$17 from "./sections/Social/ContactForm.tsx";
 
 const manifest = {
   "loaders": {
@@ -47,13 +49,14 @@ const manifest = {
     "elux-components-app/loaders/product/avaliableSites.ts": $$$4,
     "elux-components-app/loaders/product/avaliableSkus.ts": $$$5,
     "elux-components-app/loaders/product/details/productDetails.ts": $$$6,
-    "elux-components-app/loaders/product/listing/productListing.ts": $$$7,
-    "elux-components-app/loaders/testPLP.ts": $$$8,
-    "elux-components-app/loaders/whereToBuy.ts": $$$9,
+    "elux-components-app/loaders/product/list/productList.ts": $$$7,
+    "elux-components-app/loaders/product/listing/productListing.ts": $$$8,
+    "elux-components-app/loaders/testShelf.ts": $$$9,
+    "elux-components-app/loaders/whereToBuy.ts": $$$10,
   },
   "sections": {
     "elux-components-app/sections/Component.tsx": $$$$$$0,
-    "elux-components-app/sections/container/Container.tsx": $$$$$$17,
+    "elux-components-app/sections/container/Container.tsx": $$$$$$18,
     "elux-components-app/sections/Content/Banner.tsx": $$$$$$1,
     "elux-components-app/sections/Content/Breadcrumb.tsx": $$$$$$2,
     "elux-components-app/sections/Content/Cards.tsx": $$$$$$3,
@@ -71,7 +74,9 @@ const manifest = {
       $$$$$$14,
     "elux-components-app/sections/Product/ProductListing/ProductListingPage.tsx":
       $$$$$$15,
-    "elux-components-app/sections/Social/ContactForm.tsx": $$$$$$16,
+    "elux-components-app/sections/Product/ProductShelf/ProductShelf.tsx":
+      $$$$$$16,
+    "elux-components-app/sections/Social/ContactForm.tsx": $$$$$$17,
   },
   "actions": {
     "elux-components-app/actions/category/submit.ts": $$$$$$$$$0,
