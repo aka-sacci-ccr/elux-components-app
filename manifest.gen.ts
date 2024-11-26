@@ -16,9 +16,10 @@ import * as $$$3 from "./loaders/product/avaliableFiltersGroups.ts";
 import * as $$$4 from "./loaders/product/avaliableSites.ts";
 import * as $$$5 from "./loaders/product/avaliableSkus.ts";
 import * as $$$6 from "./loaders/product/details/productDetails.ts";
-import * as $$$7 from "./loaders/product/listing/productListing.ts";
-import * as $$$8 from "./loaders/testShelf.ts";
-import * as $$$9 from "./loaders/whereToBuy.ts";
+import * as $$$7 from "./loaders/product/list/productList.ts";
+import * as $$$8 from "./loaders/product/listing/productListing.ts";
+import * as $$$9 from "./loaders/testShelf.ts";
+import * as $$$10 from "./loaders/whereToBuy.ts";
 import * as $$$$$$0 from "./sections/Component.tsx";
 import * as $$$$$$18 from "./sections/container/Container.tsx";
 import * as $$$$$$1 from "./sections/Content/Banner.tsx";
@@ -48,9 +49,10 @@ const manifest = {
     "elux-components-app/loaders/product/avaliableSites.ts": $$$4,
     "elux-components-app/loaders/product/avaliableSkus.ts": $$$5,
     "elux-components-app/loaders/product/details/productDetails.ts": $$$6,
-    "elux-components-app/loaders/product/listing/productListing.ts": $$$7,
-    "elux-components-app/loaders/testShelf.ts": $$$8,
-    "elux-components-app/loaders/whereToBuy.ts": $$$9,
+    "elux-components-app/loaders/product/list/productList.ts": $$$7,
+    "elux-components-app/loaders/product/listing/productListing.ts": $$$8,
+    "elux-components-app/loaders/testShelf.ts": $$$9,
+    "elux-components-app/loaders/whereToBuy.ts": $$$10,
   },
   "sections": {
     "elux-components-app/sections/Component.tsx": $$$$$$0,
