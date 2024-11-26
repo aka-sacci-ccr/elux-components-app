@@ -320,7 +320,7 @@ const ELUX_STYLE = {
 export const LoadingFallback = ({ spacingConfig }: Partial<Props>) => (
   <Container spacing={spacingConfig} class="container">
     <div class="flex flex-row justify-between">
-      <div class="flex lg:flex-row lg:gap-6 flex-col gap-2 max-lg:px-6 items-center">
+      <div class="flex lg:flex-row lg:gap-6 flex-col gap-2 max-lg:px-6 lg:items-center">
         <div className="skeleton h-6 w-52"></div>
         <div className="skeleton h-4 w-28"></div>
       </div>
@@ -331,26 +331,26 @@ export const LoadingFallback = ({ spacingConfig }: Partial<Props>) => (
         </div>
       </div>
     </div>
-    <div class="flex flex-row justify-center items-center bg-white mt-3 mb-9 gap-2 sm:gap-8">
-      <div className="flex w-[245px] h-[376px] pt-7 flex-col gap-4">
+    <div class="flex flex-row lg:justify-center lg:items-center bg-white mt-3 mb-6.5 lg:mb-9 gap-2 sm:gap-8 overflow-hidden max-lg:pl-6">
+      <div className="flex w-[245px] h-[376px] min-w-[245px] max-h-[376px] pt-7 flex-col gap-4">
         <div className="skeleton h-56 w-full"></div>
         <div className="skeleton h-4 w-28"></div>
         <div className="skeleton h-4 w-full"></div>
         <div className="skeleton h-4 w-full"></div>
       </div>
-      <div className="flex w-[245px] h-[376px] pt-7 flex-col gap-4">
+      <div className="flex w-[245px] h-[376px] min-w-[245px] max-h-[376px] pt-7 flex-col gap-4">
         <div className="skeleton h-56 w-full"></div>
         <div className="skeleton h-4 w-28"></div>
         <div className="skeleton h-4 w-full"></div>
         <div className="skeleton h-4 w-full"></div>
       </div>
-      <div className="flex w-[245px] h-[376px] pt-7 flex-col gap-4">
+      <div className="flex w-[245px] h-[376px] min-w-[245px] max-h-[376px] pt-7 flex-col gap-4">
         <div className="skeleton h-56 w-full"></div>
         <div className="skeleton h-4 w-28"></div>
         <div className="skeleton h-4 w-full"></div>
         <div className="skeleton h-4 w-full"></div>
       </div>
-      <div className="flex w-[245px] h-[376px] pt-7 flex-col gap-4">
+      <div className="flex w-[245px] h-[376px] min-w-[245px] max-h-[376px] pt-7 flex-col gap-4">
         <div className="skeleton h-56 w-full"></div>
         <div className="skeleton h-4 w-28"></div>
         <div className="skeleton h-4 w-full"></div>
