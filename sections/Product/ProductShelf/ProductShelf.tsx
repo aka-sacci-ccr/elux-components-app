@@ -1,5 +1,5 @@
 import { Product } from "apps/commerce/types.ts";
-import { type Resolved } from "@deco/deco";
+import { asResolved, type Resolved } from "@deco/deco";
 import Container, { SpacingConfig } from "../../container/Container.tsx";
 import { AppContext } from "../../../mod.ts";
 import { clx } from "../../../utils/clx.ts";
@@ -7,7 +7,15 @@ import { useId } from "../../../sdk/useId.ts";
 import Slider from "../../../components/ui/Slider.tsx";
 import Icon from "../../../components/ui/Icon.tsx";
 import { CardStyling } from "../../../components/product/ProductCard.tsx";
-import ProductSlider from "../../../components/product/ProductSlider.tsx";
+import ProductSlider, {
+  Props as ProductSliderProps,
+} from "../../../components/product/ProductSlider.tsx";
+import { useComponent } from "../../Component.tsx";
+import { useScript } from "@deco/deco/hooks";
+
+const ProductSliderShelf = import.meta.resolve(
+  "../../../components/product/ProductSlider.tsx",
+);
 
 export interface Props {
   /**
@@ -71,6 +79,18 @@ export const loader = (props: Props, req: Request, ctx: AppContext) => {
   };
 };
 
+function goToItem(index: number) {
+  const item = document.querySelector<HTMLLabelElement>(
+    `[data-tab-index="${index}"]`,
+  );
+  const slider = document.querySelector<HTMLDivElement>(`[data-tab-slider]`);
+  if (item && slider) {
+    slider.scrollTo({
+      left: item.offsetLeft - slider.offsetLeft,
+    });
+  }
+}
+
 export default function ProductShelf(
   { title, extraLink, products, spacingConfig }: Props,
 ) {
@@ -103,10 +123,10 @@ export default function ProductShelf(
             )}
           </div>
           {/* Slider buttons */}
-          <div class="hidden lg:flex flex-row gap-2">
+          <div class="hidden md:flex flex-row gap-2">
             <Slider.PrevButton
               class={clx(
-                "hidden lg:flex disabled:invisible btn-circle !h-10 !w-10 !min-h-10 !min-w-10 no-animation justify-center items-center",
+                "hidden md:flex disabled:invisible btn-circle !h-10 !w-10 !min-h-10 !min-w-10 no-animation justify-center items-center",
                 "bg-white shadow-[0px_2px_4px_0px_#56697326]",
               )}
               disabled={false}
@@ -120,7 +140,7 @@ export default function ProductShelf(
             </Slider.PrevButton>
             <Slider.NextButton
               class={clx(
-                "hidden lg:flex disabled:invisible btn-circle !h-10 !w-10 !min-h-10 !min-w-10 no-animation justify-center items-center",
+                "hidden md:flex disabled:invisible btn-circle !h-10 !w-10 !min-h-10 !min-w-10 no-animation justify-center items-center",
                 "bg-white shadow-[0px_2px_4px_0px_#56697326]",
               )}
               disabled={false}
@@ -136,24 +156,103 @@ export default function ProductShelf(
         </div>
         {/* TODO: Tabs */}
         {/* Slider */}
-        {isProductShelf &&
-          (
+        {isProductShelf
+          ? (
             <ProductSlider
               skuStyle={skuStyle}
               nameStyle={nameStyle}
               products={products.loader}
               dotsColor={dotsColor}
               borderColor={borderColor}
+              divId={id}
             />
-          )}
+          )
+          : <TabbedShelf products={products} divId={id} />}
       </div>
-      <Slider.JS rootId={id} infinite={true} />
     </Container>
   );
 }
 
 const checkIsProductShelf = (products: TabbedShelf[] | ProductShelf) =>
   "loader" in products;
+
+const TabbedShelf = (
+  { products, divId }: { products: TabbedShelf[]; divId: string },
+) => {
+  return (
+    <div class="flex flex-col">
+      <div
+        class="carousel flex gap-1"
+        role="tablist"
+        data-tab-slider
+      >
+        {products.map(({ title, loader }, index) => (
+          <label
+            key={index}
+            class={clx(
+              "carousel-item cursor-pointer",
+              "has-[:checked]:cursor-default has-[:checked]:pointer-events-none",
+              index === 0 && "max-lg:pl-6",
+              index === products.length - 1 && "max-lg:pr-6",
+            )}
+            data-tab-index={index}
+          >
+            <input
+              type="radio"
+              name="product-tabs"
+              defaultChecked={index === 0}
+              value={index}
+              class="peer hidden"
+              hx-trigger="change"
+              hx-target="#slot"
+              hx-swap="innerHTML"
+              hx-select="section>*"
+              hx-post={loader &&
+                (useComponent<ProductSliderProps>(
+                  ProductSliderShelf,
+                  {
+                    skuStyle: FRIGIDAIRE_STYLE.skuStyle,
+                    nameStyle: FRIGIDAIRE_STYLE.nameStyle,
+                    loader: asResolved(loader),
+                    dotsColor: FRIGIDAIRE_STYLE.dotsColor,
+                    borderColor: FRIGIDAIRE_STYLE.borderColor,
+                    divId,
+                  },
+                ))}
+              hx-on:click={useScript(goToItem, index)}
+            />
+            <span
+              class={clx(
+                "block px-6 py-2 border-b-2 transition-colors whitespace-nowrap",
+                "peer-checked:border-b-primary peer-checked:text-secondary peer-checked:font-medium",
+                "border-b-transparent text-info font-light",
+                "hover:border-b-primary hover:text-secondary hover:font-medium",
+              )}
+            >
+              {title}
+            </span>
+          </label>
+        ))}
+      </div>
+      <div
+        id="slot"
+        class="min-h-[280px]"
+        hx-post={products[0].loader &&
+          (useComponent<ProductSliderProps>(ProductSliderShelf, {
+            skuStyle: FRIGIDAIRE_STYLE.skuStyle,
+            nameStyle: FRIGIDAIRE_STYLE.nameStyle,
+            loader: asResolved(products[0].loader),
+            dotsColor: FRIGIDAIRE_STYLE.dotsColor,
+            borderColor: FRIGIDAIRE_STYLE.borderColor,
+            divId,
+          }))}
+        hx-trigger="load"
+        hx-select="section>*"
+      >
+      </div>
+    </div>
+  );
+};
 
 const FRIGIDAIRE_STYLE = {
   titleFontStyle: "text-xl text-secondary content-center",
@@ -170,4 +269,6 @@ const FRIGIDAIRE_STYLE = {
   } as CardStyling["nameStyle"],
   borderColor: "border-base-300",
   dotsColor: "bg-base-200",
+  enabledTabStyle: "text-info font-light",
+  disabledTabStyle: "[&[disabled]]:text-secondary [&[disabled]]:font-medium",
 };
