@@ -20,8 +20,9 @@ import * as $$$7 from "./loaders/product/list/productList.ts";
 import * as $$$8 from "./loaders/product/listing/productListing.ts";
 import * as $$$9 from "./loaders/testShelf.ts";
 import * as $$$10 from "./loaders/whereToBuy.ts";
+import * as $$$$$$18 from "./sections/blog/BlogShelf.tsx";
 import * as $$$$$$0 from "./sections/Component.tsx";
-import * as $$$$$$18 from "./sections/container/Container.tsx";
+import * as $$$$$$19 from "./sections/container/Container.tsx";
 import * as $$$$$$1 from "./sections/Content/Banner.tsx";
 import * as $$$$$$2 from "./sections/Content/Breadcrumb.tsx";
 import * as $$$$$$3 from "./sections/Content/Cards.tsx";
@@ -55,8 +56,9 @@ const manifest = {
     "elux-components-app/loaders/whereToBuy.ts": $$$10,
   },
   "sections": {
+    "elux-components-app/sections/blog/BlogShelf.tsx": $$$$$$18,
     "elux-components-app/sections/Component.tsx": $$$$$$0,
-    "elux-components-app/sections/container/Container.tsx": $$$$$$18,
+    "elux-components-app/sections/container/Container.tsx": $$$$$$19,
     "elux-components-app/sections/Content/Banner.tsx": $$$$$$1,
     "elux-components-app/sections/Content/Breadcrumb.tsx": $$$$$$2,
     "elux-components-app/sections/Content/Cards.tsx": $$$$$$3,
