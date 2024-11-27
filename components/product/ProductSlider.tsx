@@ -40,7 +40,8 @@ export default function ProductSlider(
 ) {
   return (
     <>
-      <div class="flex flex-col">
+      <span class="loading loading-spinner text-primary loading-lg hidden [.htmx-request_&]:block mx-auto lg:mt-[180px] lg:mb-[156px] mt-[168px] mb-0" />
+      <div class="flex flex-col [.htmx-request_&]:hidden">
         <Slider class="carousel carousel-center w-full gap-2 sm:gap-4 px-1.5 max-lg:px-6">
           {products?.map((p, index) => (
             <Slider.Item
@@ -55,32 +56,33 @@ export default function ProductSlider(
             </Slider.Item>
           ))}
         </Slider>
-        <div class="flex justify-center max-md:hidden h-6">
-          <ul
-            class={clx(
-              "carousel carousel-center justify-center gap-3 px-5",
-              "rounded-full w-min",
-              "border-[1px]",
-              borderColor,
-              "flex bg-white",
-            )}
-            data-dots
-          >
-            {products?.map((_, index) => (
-              <li className="carousel-item w-3 h-full flex justify-center items-center has-[.hidden]:hidden group">
-                <Slider.Dot
-                  index={index}
-                  className={clx(
-                    "disabled:bg-primary disabled:border-primary w-2.5 h-2.5 rounded-full border border-white hidden",
-                    dotsColor,
-                  )}
-                >
-                </Slider.Dot>
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
+      <div class="flex justify-center max-md:hidden h-6">
+        <ul
+          class={clx(
+            "carousel carousel-center justify-center gap-3 px-5",
+            "rounded-full w-min",
+            "border-[1px]",
+            borderColor,
+            "flex bg-white",
+          )}
+          data-dots
+        >
+          {products?.map((_, index) => (
+            <li className="carousel-item w-3 h-full flex justify-center items-center has-[.hidden]:hidden group">
+              <Slider.Dot
+                index={index}
+                className={clx(
+                  "disabled:bg-primary disabled:border-primary w-2.5 h-2.5 rounded-full border border-white hidden",
+                  dotsColor,
+                )}
+              >
+              </Slider.Dot>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <Slider.JS rootId={divId} infinite={true} />
     </>
   );
