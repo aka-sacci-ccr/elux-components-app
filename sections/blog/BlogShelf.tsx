@@ -65,12 +65,12 @@ const ELUX_STYLING = {
     bgColor: "bg-base-content",
     title: "text-2.5xl max-lg:text-2xl font-medium text-primary",
     description:
-        "font-light text-secondary [&_strong]:font-bold [&_a]:underline [&_a]:text-underline-offset-3",
+        "font-light text-secondary [&_strong]:font-bold [&_a]:underline [&_a]:underline-offset-4",
 };
 
 const FRIGIDAIRE_STYLING = {
     bgColor: "bg-base-300",
     title: "text-3xl max-lg:text-xl font-medium text-secondary",
     description:
-        "text-sm font-light text-secondary [&_a]:underline [&_a]:text-underline-offset-2",
+        "text-sm font-light text-secondary [&_a]:underline [&_a]:underline-offset-1",
 };
