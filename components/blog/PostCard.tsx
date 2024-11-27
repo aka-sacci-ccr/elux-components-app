@@ -46,11 +46,12 @@ export default function PostCard({ template, post, url }: Props) {
           class="w-full"
         />
       </Picture>
-      <div class={clx("flex flex-col gap-2 py-3 px-4 bg-white", borders)}>
+      <div class={clx("flex flex-col py-3 px-4 bg-white h-full", borders)}>
         <p class={clx(category)}>
           {post.categories[0].name}
         </p>
-        <p class={clx(title)}>{post.title}</p>
+        <p class={clx(title, "pt-2")}>{post.title}</p>
+        <div class="flex-grow" />
       </div>
     </a>
   );
