@@ -240,6 +240,7 @@ const TabbedShelf = (
                   },
                 ))}
               hx-on:click={useScript(goToItem, index)}
+              hx-indicator="#slot"
             />
             <span
               class={clx(
@@ -254,7 +255,7 @@ const TabbedShelf = (
       </div>
       <div
         id="slot"
-        class="min-h-[280px]"
+        class="min-h-[376px] lg:min-h-[400px]"
         hx-post={products[0].loader &&
           (useComponent<ProductSliderProps>(ProductSliderShelf, {
             skuStyle: skuStyle,
@@ -267,6 +268,7 @@ const TabbedShelf = (
         hx-trigger="load"
         hx-select="section>*"
       >
+        <span class="loading loading-spinner text-primary loading-lg hidden [.htmx-request_&]:block mx-auto lg:mt-[180px] mt-[168px]" />
       </div>
     </div>
   );
@@ -317,45 +319,63 @@ const ELUX_STYLE = {
   ),
 };
 
-export const LoadingFallback = ({ spacingConfig }: Partial<Props>) => (
-  <Container spacing={spacingConfig} class="container">
-    <div class="flex flex-row justify-between">
-      <div class="flex lg:flex-row lg:gap-6 flex-col gap-2 max-lg:px-6 lg:items-center">
-        <div className="skeleton h-6 w-52"></div>
-        <div className="skeleton h-4 w-28"></div>
-      </div>
-      <div class="flex flex-row gap-2">
-        <div className="skeleton hidden md:flex disabled:invisible btn-circle !h-10 !w-10 !min-h-10 !min-w-10 rounded-full">
+export const LoadingFallback = (
+  { spacingConfig, products, extraLink }: Partial<Props>,
+) => {
+  const hasProducts = products && !("loader" in products);
+  return (
+    <Container spacing={spacingConfig} class="container">
+      <div class="flex flex-row justify-between">
+        <div class="flex lg:flex-row lg:gap-6 flex-col gap-2 max-lg:px-6 lg:items-center">
+          <div className="skeleton h-6 w-52"></div>
+          {extraLink?.text && <div className="skeleton h-4 w-28"></div>}
         </div>
-        <div className="skeleton hidden md:flex disabled:invisible btn-circle !h-10 !w-10 !min-h-10 !min-w-10 rounded-full">
+        <div class="flex flex-row gap-2">
+          <div className="skeleton hidden md:flex disabled:invisible btn-circle !h-10 !w-10 !min-h-10 !min-w-10 rounded-full">
+          </div>
+          <div className="skeleton hidden md:flex disabled:invisible btn-circle !h-10 !w-10 !min-h-10 !min-w-10 rounded-full">
+          </div>
         </div>
       </div>
-    </div>
-    <div class="flex flex-row lg:justify-center lg:items-center bg-white mt-3 mb-6.5 lg:mb-9 gap-2 sm:gap-8 overflow-hidden max-lg:pl-6">
-      <div className="flex w-[245px] h-[376px] min-w-[245px] max-h-[376px] pt-7 flex-col gap-4">
-        <div className="skeleton h-56 w-full"></div>
-        <div className="skeleton h-4 w-28"></div>
-        <div className="skeleton h-4 w-full"></div>
-        <div className="skeleton h-4 w-full"></div>
+      {hasProducts && (
+        <div class="flex flex-row gap-6 mt-10 lg:mt-7 overflow-hidden max-lg:pl-6">
+          {products.map((_) => (
+            <div class="h-[24px] w-28 min-w-28 skeleton"></div>
+          ))}
+        </div>
+      )}
+      <div
+        class={clx(
+          "flex flex-row min-h-[376px] lg:min-h-[400px] lg:justify-center",
+          "bg-white mt-3 gap-2 sm:gap-4 overflow-hidden max-lg:pl-6",
+          !hasProducts && "mb-3",
+        )}
+      >
+        <div className="flex w-[245px] min-w-[245px] pt-7 flex-col gap-4">
+          <div className="skeleton h-56 w-full"></div>
+          <div className="skeleton h-4 w-28"></div>
+          <div className="skeleton h-4 w-full"></div>
+          <div className="skeleton h-4 w-full"></div>
+        </div>
+        <div className="flex w-[245px] min-w-[245px] pt-7 flex-col gap-4">
+          <div className="skeleton h-56 w-full"></div>
+          <div className="skeleton h-4 w-28"></div>
+          <div className="skeleton h-4 w-full"></div>
+          <div className="skeleton h-4 w-full"></div>
+        </div>
+        <div className="flex w-[245px] min-w-[245px] pt-7 flex-col gap-4">
+          <div className="skeleton h-56 w-full"></div>
+          <div className="skeleton h-4 w-28"></div>
+          <div className="skeleton h-4 w-full"></div>
+          <div className="skeleton h-4 w-full"></div>
+        </div>
+        <div className="flex w-[245px] min-w-[245px] pt-7 flex-col gap-4">
+          <div className="skeleton h-56 w-full"></div>
+          <div className="skeleton h-4 w-28"></div>
+          <div className="skeleton h-4 w-full"></div>
+          <div className="skeleton h-4 w-full"></div>
+        </div>
       </div>
-      <div className="flex w-[245px] h-[376px] min-w-[245px] max-h-[376px] pt-7 flex-col gap-4">
-        <div className="skeleton h-56 w-full"></div>
-        <div className="skeleton h-4 w-28"></div>
-        <div className="skeleton h-4 w-full"></div>
-        <div className="skeleton h-4 w-full"></div>
-      </div>
-      <div className="flex w-[245px] h-[376px] min-w-[245px] max-h-[376px] pt-7 flex-col gap-4">
-        <div className="skeleton h-56 w-full"></div>
-        <div className="skeleton h-4 w-28"></div>
-        <div className="skeleton h-4 w-full"></div>
-        <div className="skeleton h-4 w-full"></div>
-      </div>
-      <div className="flex w-[245px] h-[376px] min-w-[245px] max-h-[376px] pt-7 flex-col gap-4">
-        <div className="skeleton h-56 w-full"></div>
-        <div className="skeleton h-4 w-28"></div>
-        <div className="skeleton h-4 w-full"></div>
-        <div className="skeleton h-4 w-full"></div>
-      </div>
-    </div>
-  </Container>
-);
+    </Container>
+  );
+};
