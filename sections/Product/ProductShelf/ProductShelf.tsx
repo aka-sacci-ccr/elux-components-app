@@ -119,7 +119,7 @@ export default function ProductShelf(
             {extraLink && (
               <a
                 href={extraLink.href}
-                class={clx(extraLinkFontStyle)}
+                class={clx(extraLinkFontStyle, "underline-offset-[3px]")}
               >
                 {extraLink.text}
               </a>
@@ -157,7 +157,6 @@ export default function ProductShelf(
             </Slider.NextButton>
           </div>
         </div>
-        {/* TODO: Tabs */}
         {/* Slider */}
         {isProductShelf
           ? (

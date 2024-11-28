@@ -36,14 +36,13 @@ export const loader = (props: SectionProps, _req: Request, ctx: AppContext) => {
 };
 
 type Props = SectionProps;
-const Desktop = ({ logo, menu, siteTemplate }: ReturnType<typeof loader>) => {
+const Desktop = ({ logo, menu }: ReturnType<typeof loader>) => {
   const hideSecondaryMenu = menu.hideSecondaryMenu;
   return (
     <>
       <div
         class={clx(
-          "flex flex-col gap-4  max-w-[1280px] mx-auto h-[70px]",
-          siteTemplate === "elux" && "shadow-[0px_1px_3px_0px_#00000033]",
+          "flex flex-col gap-4 max-w-[1280px] mx-auto h-[70px]",
         )}
       >
         <div class="flex justify-between items-center h-full px-13.5 text-secondary">
@@ -168,6 +167,7 @@ function Header({
         class={clx(
           "group/header bg-base-100 fixed w-full z-40",
           BG_COLORS[backgroundColor ?? "white"],
+          props.siteTemplate === "elux" && "md:shadow-[0px_1px_3px_0px_#00000033]",
         )}
       >
         {device === "desktop"

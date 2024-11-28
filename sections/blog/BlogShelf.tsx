@@ -65,7 +65,7 @@ const ELUX_STYLING = {
   bgColor: "bg-base-content",
   title: "text-2.5xl max-lg:text-2xl font-medium text-primary",
   description:
-    "font-light text-secondary [&_strong]:font-bold [&_a]:underline [&_a]:underline-offset-4",
+    "font-light text-secondary [&_strong]:font-bold [&_a]:underline [&_a]:underline-offset-4 max-lg:leading-[21px] leading-[19.4px]",
 };
 
 const FRIGIDAIRE_STYLING = {

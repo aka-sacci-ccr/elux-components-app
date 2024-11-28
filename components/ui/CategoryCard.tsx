@@ -10,7 +10,7 @@ export default function CategoryCard({ title, icon, url }: Props) {
       class="flex flex-col gap-2 h-20 w-full md:h-[116px] pt-1 md:pt-5 bg-white rounded-sm border border-base-200 items-center"
     >
       <Icon id={icon} height={24} width={24} />
-      <span class="text-xs md:text-base text-center px-1 font-light">
+      <span class="text-xs leading-[14px] md:text-base md:leading-[19.2px] text-center px-1 font-light">
         {title}
       </span>
     </a>

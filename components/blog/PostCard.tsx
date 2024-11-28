@@ -59,12 +59,12 @@ export default function PostCard({ template, post, url }: Props) {
 
 const ELUX_STYLING = {
   category: "font-light text-sm text-neutral",
-  title: "text-secondary font-medium",
+  title: "text-secondary font-medium leading-[20px]",
   borders: "border-[#DEE7EA] border-b border-x",
 };
 
 const FRIGIDAIRE_STYLING = {
   category: "font-light text-sm text-info",
-  title: "text-secondary font-medium",
+  title: "text-secondary font-medium text-base",
   borders: "border-neutral border-b border-x",
 };

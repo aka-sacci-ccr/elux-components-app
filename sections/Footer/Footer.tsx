@@ -118,7 +118,7 @@ function Footer({
           >
             {/* Rich text */}
             <div
-              class="text-xxs text-info font-light"
+              class="text-xxs text-info font-light [&_strong]:font-bold"
               dangerouslySetInnerHTML={{ __html: richText }}
             />
             {/* Extra media */}
