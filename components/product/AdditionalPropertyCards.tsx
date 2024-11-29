@@ -159,7 +159,7 @@ export default function AdditionalPropertyCards(
           </div>
         )
         : (
-          <div className="w-full max-w-[65rem] mx-auto hidden lg:grid">
+          <div className="w-full max-w-[65rem] mx-auto hidden lg:grid lg:grid-cols-2">
             {propertyCards.map((card, index) => {
               const isOdd = (index + 1) % 2 !== 0;
               const isLastAndOdd = index === propertyCards.length - 1 &&
@@ -178,7 +178,7 @@ export default function AdditionalPropertyCards(
                     )}
                   >
                     {card.image?.[0]?.url && (
-                      <div className="w-full lg:max-w-[240px] h-[240px] flex justify-center overflow-hidden">
+                      <div className="w-full lg:max-w-[240px] h-[240px] flex justify-center overflow-hidden self-center">
                         <Image
                           alt={card.name}
                           src={card.image[0].url}

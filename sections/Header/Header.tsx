@@ -167,7 +167,8 @@ function Header({
         class={clx(
           "group/header bg-base-100 fixed w-full z-40",
           BG_COLORS[backgroundColor ?? "white"],
-          props.siteTemplate === "elux" && "md:shadow-[0px_1px_3px_0px_#00000033]",
+          props.siteTemplate === "elux" &&
+            "md:shadow-[0px_1px_3px_0px_#00000033]",
         )}
       >
         {device === "desktop"

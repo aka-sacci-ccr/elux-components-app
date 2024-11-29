@@ -387,6 +387,18 @@ export const HOVER_BORDER_COLORS = {
   "transparent": "hover:!border-transparent",
 };
 
+export const HOVER_FONT_WEIGHT = {
+  "font-thin": "hover:font-thin",
+  "font-extralight": "hover:font-extralight",
+  "font-light": "hover:font-light",
+  "font-normal": "hover:font-normal",
+  "font-medium": "hover:font-medium",
+  "font-semibold": "hover:font-semibold",
+  "font-bold": "hover:font-bold",
+  "font-extrabold": "hover:font-extrabold",
+  "font-black": "hover:font-black",
+};
+
 export const PEER_CHECKED_BG_COLORS = {
   "base-100": "peer-checked:!bg-base-100",
   "primary": "peer-checked:!bg-primary",

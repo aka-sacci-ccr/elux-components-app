@@ -5,6 +5,9 @@ import {
   BG_COLORS,
   BORDER_COLORS,
   DEFAULT_TECH_SHEET_CONFIG,
+  HOVER_BORDER_COLORS,
+  HOVER_FONT_WEIGHT,
+  HOVER_TEXT_COLORS,
   LANGUAGE_DIFFS,
   TEXT_COLORS,
 } from "../../utils/constants.tsx";
@@ -37,9 +40,20 @@ export default function ProductDetails(
     property.propertyID === "DESCRIPTION"
   );
 
-  const tableProperties = additionalProperty?.filter((property) =>
-    property.propertyID === "OTHER"
-  );
+  const tableProperties = additionalProperty
+    ?.filter((property) => property.propertyID === "OTHER")
+    .reduce((acc: PropertyValue[], current) => {
+      const existingProperty = acc.find((item) => item.name === current.name);
+
+      if (existingProperty) {
+        existingProperty.value = `${existingProperty.value}/${current.value}`;
+        return acc;
+      }
+
+      return [...acc, current];
+    }, []);
+
+  console.log(tableProperties);
 
   const techSheetConfig =
     !tabs?.techSheet?.length || tabs?.techSheet?.length < 2
@@ -103,15 +117,15 @@ export default function ProductDetails(
       class={clx("w-full lg:pb-6", BG_COLORS[productMain.bgColor ?? "white"])}
     >
       <div className="w-full max-w-[65rem] mx-auto px-5 lg:px-0">
-        <div class="hidden lg:flex w-full pb-6">
+        <div class="hidden lg:flex w-full pb-6 gap-1">
           <a
             href="#description"
             class={clx(
-              "flex flex-1 border-b-2 items-center justify-center py-3",
-              TEXT_COLORS[tabs?.enabledTab?.fontColor ?? "primary"],
+              "flex flex-1 border-b-2 items-center justify-center pb-3 pt-4",
+              TEXT_COLORS[tabs?.enabledTab?.fontColor ?? "base-content"],
               tabs?.enabledTab?.fontSize,
-              tabs?.enabledTab?.fontWeight,
-              BORDER_COLORS[tabs?.enabledTab?.underlineColor ?? "primary"],
+              tabs?.enabledTab?.fontWeight ?? "font-light",
+              BORDER_COLORS[tabs?.enabledTab?.underlineColor ?? "neutral"],
             )}
           >
             {LANGUAGE_DIFFS[language].productPage.descriptionTitle}
@@ -119,11 +133,16 @@ export default function ProductDetails(
           <a
             href="#properties"
             class={clx(
-              "flex flex-1 border-b-2 items-center justify-center py-3",
+              "flex flex-1 border-b-2 items-center justify-center pb-3 pt-4",
               TEXT_COLORS[tabs?.disabledTab?.fontColor ?? "base-content"],
               tabs?.disabledTab?.fontSize,
               tabs?.disabledTab?.fontWeight ?? "font-light",
               BORDER_COLORS[tabs?.disabledTab?.underlineColor ?? "neutral"],
+              HOVER_TEXT_COLORS[tabs?.enabledTab?.fontColor ?? "primary"],
+              HOVER_FONT_WEIGHT[tabs?.enabledTab?.fontWeight ?? "font-normal"],
+              HOVER_BORDER_COLORS[
+                tabs?.enabledTab?.underlineColor ?? "primary"
+              ],
             )}
           >
             {LANGUAGE_DIFFS[language].productPage.recordTitle}

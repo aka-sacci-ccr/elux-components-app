@@ -116,7 +116,8 @@ export default function Breadcrumb(
               class={clx(
                 "last:line-clamp-1",
                 overrideFontColor && TEXT_COLORS[overrideFontColor],
-                hoverUnderline && "border-b-2 border-primary mt-0.5",
+                hoverUnderline &&
+                  "underline decoration-2 underline-offset-[3px]",
               )}
             >
               {label}

@@ -127,15 +127,23 @@ export const loader = (
 ) => {
   return {
     language: ctx.language,
+    siteTemplate: ctx.siteTemplate,
     ...props,
   };
 };
 
 export default function ProductPage(
-  { page, bannersProps, spacing, breadcrumbProps, language, productMain }:
-    ReturnType<
-      typeof loader
-    >,
+  {
+    page,
+    bannersProps,
+    spacing,
+    breadcrumbProps,
+    language,
+    productMain,
+    siteTemplate,
+  }: ReturnType<
+    typeof loader
+  >,
 ) {
   if (!page) return <NotFound language={language} />;
   const { product, breadcrumbList } = page;
@@ -145,6 +153,7 @@ export default function ProductPage(
     breadcrumbList,
     breadcrumbProps,
     product,
+    siteTemplate,
   );
 
   const infoBannerImages = image?.filter((image) =>
@@ -199,6 +208,7 @@ const getBreadcrumbItems = (
   breadcrumbList: BreadcrumbList,
   breadcrumbProps: PDPBreadcrumbProps,
   product: Product,
+  siteTemplate: "frigidaire" | "elux",
 ) => {
   const orderedBreadcrumbList = sortAndFilterBreadcrumbItems(
     [
@@ -220,6 +230,7 @@ const getBreadcrumbItems = (
     label: item,
     href: url,
     overrideFontColor: breadcrumbProps.breadcrumbColor,
+    hoverUnderline: false,
   }));
 
   if (!breadcrumbProps.hideProductName) {
@@ -227,6 +238,7 @@ const getBreadcrumbItems = (
       label: product.name!,
       overrideFontColor: "primary",
       href: undefined,
+      hoverUnderline: siteTemplate === "elux" ? true : false,
     });
   }
 
