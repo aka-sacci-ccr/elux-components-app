@@ -17,12 +17,18 @@ export default async function avaliableSites(
 
   const allCategories = await records.select({
     identifier: categories.identifier,
-    value: categories.value,
+    name: categories.name,
+    alternateName: categories.alternateName,
     additionalType: categories.additionalType,
+    subjectOf: categories.subjectOf,
   }).from(categories);
 
-  return allCategories.map(({ identifier, value, additionalType }) => ({
-    label: `${value} (/${identifier}, Level ${additionalType})`,
-    value: `${identifier}---${value}---${additionalType}`,
+  return allCategories.map((
+    { identifier, name, additionalType, subjectOf },
+  ) => ({
+    label: `/${
+      [subjectOf, identifier].filter(Boolean).join("/")
+    }, Level ${additionalType}`,
+    value: `${identifier}---${name}---${additionalType}`,
   }));
 }

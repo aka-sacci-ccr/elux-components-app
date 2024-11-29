@@ -66,7 +66,8 @@ interface Video {
 
 interface Category {
   identifier: string;
-  value: string;
+  name: string;
+  alternateName?: string;
   subjectOf: string | null;
 }
 
@@ -149,7 +150,8 @@ export async function getProduct(
         WITH RECURSIVE CategoryHierarchy AS (
           SELECT
             c.identifier,
-            c.value,
+            c.name,
+            c.alternateName,
             c.subjectOf
           FROM
             productCategories AS pc
@@ -159,7 +161,8 @@ export async function getProduct(
           UNION
           SELECT
             parent.identifier,
-            parent.value,
+            parent.name,
+            parent.alternateName,
             parent.subjectOf
           FROM
             categories AS parent
@@ -219,7 +222,8 @@ export const getCategoryTree = async (
     CategoryTree AS (
       SELECT
         identifier,
-        value,
+        name,
+        alternateName,
         description,
         additionalType,
         subjectOf,
@@ -231,7 +235,8 @@ export const getCategoryTree = async (
       UNION ALL
       SELECT
         c.identifier,
-        c.value,
+        c.name,
+        c.alternateName,
         c.description,
         c.additionalType,
         c.subjectOf,
@@ -251,7 +256,8 @@ export const getCategoryBranch = (
   searchedCategory: ExtendedCategory,
 ): {
   identifier: string;
-  value: string;
+  name: string;
+  alternateName?: string;
   additionalType?: string;
 }[] => {
   const getChildIdentifiers = (parentIds: string[]): string[] =>
@@ -266,12 +272,13 @@ export const getCategoryBranch = (
 
   return getChildIdentifiers([searchedCategory.identifier]).map(
     (identifier) => {
-      const { value, additionalType } = categories.find((cat) =>
+      const { name, alternateName, additionalType } = categories.find((cat) =>
         cat.identifier === identifier
       )!;
       return {
         identifier,
-        value,
+        name,
+        alternateName,
         additionalType,
       };
     },
@@ -369,11 +376,11 @@ function productsObject(
           }],
         }
       )),
-      ...category.map(({ identifier, value, subjectOf }) => (
+      ...category.map(({ identifier, name, alternateName, subjectOf }) => (
         {
           "@type": "PropertyValue" as const,
           propertyID: "CATEGORY",
-          name: value,
+          name: language === "EN" ? alternateName ?? name : name,
           value: identifier,
           subjectOf,
         }

@@ -85,9 +85,12 @@ export default async function loader(
 
   //This is the category branch that will be used to get the SKUs
   const categoryBranch = searchedCategory?.additionalType === "1"
-    ? categoryTree.map(({ identifier, value, additionalType }) => ({
+    ? categoryTree.map((
+      { identifier, name, alternateName, additionalType },
+    ) => ({
       identifier,
-      value,
+      name,
+      alternateName,
       additionalType,
     }))
     : getCategoryBranch(categoryTree, searchedCategory!);
@@ -174,7 +177,7 @@ export default async function loader(
 
   return {
     "@type": "ProductListingPage",
-    breadcrumb: getBreadcrumbList(paths, categoryTree, url),
+    breadcrumb: getBreadcrumbList(paths, categoryTree, url, language),
     products: products.productData,
     filters: onlyProducts ? [] : [
       ...(getCategoryFilters(
@@ -205,7 +208,9 @@ export default async function loader(
     },
     sortOptions,
     seo: {
-      title: searchedCategory?.value ?? "",
+      title: language === "EN"
+        ? searchedCategory?.alternateName ?? searchedCategory?.name ?? ""
+        : searchedCategory?.name ?? "",
       description: searchedCategory?.description ?? "",
       canonical: new URL(url.pathname, url.origin).href,
     },
@@ -282,7 +287,7 @@ const getCategoryFilters = (
   const categoryValues = categoryBranch
     .filter((c) => c.additionalType === categoryLevelToGet)
     .map((c) => ({
-      label: c.value,
+      label: language === "EN" ? c.alternateName ?? c.name : c.name,
       value: c.identifier,
       quantity: 0,
       selected: false,
@@ -375,6 +380,7 @@ const getBreadcrumbList = (
   pathnames: string[],
   categoryTree: ExtendedCategory[],
   url: URL,
+  language: "EN" | "ES",
 ): BreadcrumbList => {
   return {
     "@type": "BreadcrumbList",
@@ -385,7 +391,9 @@ const getBreadcrumbList = (
       return {
         "@type": "ListItem",
         position: index + 1,
-        item: category?.value ?? "",
+        item: language === "EN"
+          ? category?.alternateName ?? category?.name ?? ""
+          : category?.name ?? "",
         url: new URL(pathnames.slice(0, index + 1).join("/"), url.origin).href,
         image: category?.image
           ? [{

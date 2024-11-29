@@ -186,10 +186,14 @@ export interface Category {
    */
   identifier: string;
   /**
-   * @title Name
+   * @title Spanish Name
    * @description Category name
    */
-  value: string;
+  name: string;
+  /**
+   * @title English Name
+   */
+  alternateName?: string;
   /**
    * @description Category description
    */

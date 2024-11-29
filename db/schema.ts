@@ -30,7 +30,8 @@ export const domains = sqliteTable("domains", {
 //Define the categories
 export const categories = sqliteTable("categories", {
   identifier: text("identifier").primaryKey(),
-  value: text("value").notNull(),
+  name: text("name").notNull(),
+  alternateName: text("alternateName"),
   description: text("description"),
   additionalType: text("additionalType").notNull(),
   subjectOf: text("subjectOf").references((): AnySQLiteColumn =>
