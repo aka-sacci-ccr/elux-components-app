@@ -116,12 +116,6 @@ export default function GallerySlider(props: Props) {
 
         {/** Product Gallery - Dots  */}
         <div class="flex flex-row justify-between">
-          <Slider.PrevButton
-            class="no-animation hidden lg:flex items-center"
-            disabled={false}
-          >
-            <Icon id="chevron-right" class="rotate-180 text-primary" />
-          </Slider.PrevButton>
           {device === "mobile"
             ? (
               <ul
@@ -148,57 +142,65 @@ export default function GallerySlider(props: Props) {
               </ul>
             )
             : (
-              <ul
-                class={clx(
-                  "carousel carousel-center",
-                  "flex justify-center gap-3",
-                  "gap-2",
-                  "max-w-full h-16",
-                  "overflow-x-auto",
-                  "sm:overflow-y-auto",
-                )}
-                style={{ maxHeight: "600px" }}
-              >
-                {productMidia.map((img, index) => (
-                  <li class="carousel-item w-14 h-14 relative">
-                    <Slider.Dot
-                      index={index}
-                      className="border-2 border-transparent disabled:border-primary rounded overflow-hidden"
-                    >
-                      {img["@type"] === "ImageObject"
-                        ? (
-                          <Image
-                            style={{ aspectRatio: "1 / 1" }}
-                            class="object-cover w-14 h-14"
-                            width={56}
-                            height={56}
-                            src={img.url!}
-                            alt={img.alternateName}
-                          />
-                        )
-                        : (
-                          <div class="w-14 relative overflow-hidden">
+              <>
+                <Slider.PrevButton
+                  class="no-animation hidden lg:flex items-center"
+                  disabled={false}
+                >
+                  <Icon id="chevron-right" class="rotate-180 text-primary" />
+                </Slider.PrevButton>
+                <ul
+                  class={clx(
+                    "carousel carousel-center",
+                    "flex justify-center gap-3",
+                    "gap-2",
+                    "max-w-full h-16",
+                    "overflow-x-auto",
+                    "sm:overflow-y-auto",
+                  )}
+                  style={{ maxHeight: "600px" }}
+                >
+                  {productMidia.map((img, index) => (
+                    <li class="carousel-item w-14 h-14 relative">
+                      <Slider.Dot
+                        index={index}
+                        className="border-2 border-transparent disabled:border-primary rounded overflow-hidden"
+                      >
+                        {img["@type"] === "ImageObject"
+                          ? (
                             <Image
                               style={{ aspectRatio: "1 / 1" }}
-                              class="object-cover w-full h-full"
+                              class="object-cover w-14 h-14"
                               width={56}
                               height={56}
-                              src={img.thumbnailUrl!}
+                              src={img.url!}
                               alt={img.alternateName}
                             />
-                          </div>
-                        )}
-                    </Slider.Dot>
-                  </li>
-                ))}
-              </ul>
+                          )
+                          : (
+                            <div class="w-14 relative overflow-hidden">
+                              <Image
+                                style={{ aspectRatio: "1 / 1" }}
+                                class="object-cover w-full h-full"
+                                width={56}
+                                height={56}
+                                src={img.thumbnailUrl!}
+                                alt={img.alternateName}
+                              />
+                            </div>
+                          )}
+                      </Slider.Dot>
+                    </li>
+                  ))}
+                </ul>
+                <Slider.NextButton
+                  class="no-animation hidden lg:flex items-center h-16"
+                  disabled={false}
+                >
+                  <Icon id="chevron-right" class="text-primary" />
+                </Slider.NextButton>
+              </>
             )}
-          <Slider.NextButton
-            class="no-animation hidden lg:flex items-center h-16"
-            disabled={false}
-          >
-            <Icon id="chevron-right" class="text-primary" />
-          </Slider.NextButton>
         </div>
         <Slider.JS rootId={id} infinite={true} />
       </div>

@@ -53,8 +53,6 @@ export default function ProductDetails(
       return [...acc, current];
     }, []);
 
-  console.log(tableProperties);
-
   const techSheetConfig =
     !tabs?.techSheet?.length || tabs?.techSheet?.length < 2
       ? DEFAULT_TECH_SHEET_CONFIG
