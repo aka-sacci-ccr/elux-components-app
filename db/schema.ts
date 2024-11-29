@@ -51,11 +51,13 @@ export const productCategories = sqliteTable("productCategories", {
 export const products = sqliteTable("products", {
   sku: text("sku").primaryKey(), // P.K
   name: text("name").notNull(),
+  alternateName: text("alternateName"),
   productID: text("productID").notNull().unique(),
+  url: text("url").notNull().unique(),
   brand: text("brand").references(() => brands.identifier), // F.K
   description: text("description"),
+  alternateDescription: text("alternateDescription"),
   gtin: text("gtin"),
-  releaseDate: text("releaseDate"),
 });
 
 //Define brands

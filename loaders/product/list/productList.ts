@@ -11,6 +11,7 @@ import {
 } from "../../../db/schema.ts";
 import { and, asc, desc, eq, inArray, or, sql } from "drizzle-orm";
 import { getCategoryTree } from "../../../utils/product/getProduct.ts";
+import { AppContext as ModContext } from "../../../mod.ts";
 
 export interface Props {
   /**
@@ -78,7 +79,9 @@ interface BaseFilter {
 
 interface BaseProduct {
   name: string;
+  alternateName: string | null;
   productID: string;
+  url: string;
   sku: string;
   gtin: string | null;
   brand_name: string;
@@ -98,18 +101,25 @@ interface BaseImage {
 export default async function loader(
   { listOption, skip = 0, take = 10, sortBy = "name-asc" }: Props,
   req: Request,
-  ctx: AppContext,
+  ctx: AppContext | ModContext,
 ): Promise<Product[] | null> {
   const url = new URL(req.url);
-  const records = await ctx.invoke.records.loaders.drizzle();
+  const ctxRecords = ctx as AppContext;
+  const { language } = ctx as ModContext;
+  const records = await ctxRecords.invoke.records.loaders.drizzle();
   const listingByCategory = "category" in listOption;
+  const orderClause = language === "EN"
+    ? products.alternateName
+    : products.name;
 
   if (!listingByCategory) {
     //This query gets products by skus
     const [baseProducts, productImages] = await Promise.all([
       records.select({
         name: products.name,
+        alternateName: products.alternateName,
         productID: products.productID,
+        url: products.url,
         sku: products.sku,
         gtin: products.gtin,
         brand_name: brands.name,
@@ -132,7 +142,7 @@ export default async function loader(
         )
         .groupBy(products.sku)
         .orderBy(
-          sortBy === "name-asc" ? asc(products.name) : desc(products.name),
+          sortBy === "name-asc" ? asc(orderClause) : desc(orderClause),
         )
         .limit(take)
         .offset(skip),
@@ -151,7 +161,7 @@ export default async function loader(
         .all(),
     ]);
 
-    return joinProductData(baseProducts, productImages, url);
+    return joinProductData(baseProducts, productImages, url, language);
   }
 
   //Get the category tree
@@ -173,7 +183,9 @@ export default async function loader(
 
   const baseProducts = await records.select({
     name: products.name,
+    alternateName: products.alternateName,
     productID: products.productID,
+    url: products.url,
     sku: products.sku,
     gtin: products.gtin,
     brand_name: brands.name,
@@ -244,7 +256,7 @@ export default async function loader(
     )
     .groupBy(products.sku)
     .orderBy(
-      sortBy === "name-asc" ? asc(products.name) : desc(products.name),
+      sortBy === "name-asc" ? asc(orderClause) : desc(orderClause),
     )
     .limit(take)
     .offset(skip);
@@ -265,22 +277,23 @@ export default async function loader(
     )
     .all();
 
-  return joinProductData(baseProducts, productImages, url);
+  return joinProductData(baseProducts, productImages, url, language);
 }
 
 const joinProductData = (
   baseProducts: BaseProduct[],
   productImages: BaseImage[],
   url: URL,
+  language: "EN" | "ES",
 ) =>
   baseProducts.map<Product>((p) => ({
     "@type": "Product",
-    name: p.name,
+    name: language === "EN" ? p.alternateName ?? p.name : p.name,
     sku: p.sku,
     productID: p.productID ?? "",
     gtin: p.gtin ?? undefined,
     url: new URL(
-      `${p.productID}/p`,
+      `${p.url}/p`,
       url.origin,
     ).href,
     brand: {
@@ -307,6 +320,8 @@ export const cache = "stale-while-revalidate";
 
 export const cacheKey = (
   { listOption, skip = 0, take = 10, sortBy = "name-asc" }: Props,
+  _req: Request,
+  { language }: ModContext,
 ) => {
   const listingByCategory = "category" in listOption;
 
@@ -335,5 +350,5 @@ export const cacheKey = (
     [...measurementsFilters].sort().map(([key, value]) =>
       `${key}:${value.sort().join("-")}`
     ).join("_")
-  }_skip=${skip}_take=${take}_sortBy=${sortBy}`;
+  }_skip=${skip}_take=${take}_sortBy=${sortBy}_language=${language}`;
 };

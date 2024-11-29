@@ -222,18 +222,38 @@ export interface ProductCategory {
 
 export interface Product {
   sku: string;
+  /**
+   * @title Spanish name
+   */
   name: string;
+  /**
+   * @title English name
+   */
+  alternateName?: string;
+  /**
+   * @title Product ID
+   */
+  productID: string;
   /**
    * @title Slug
    */
-  productID: string;
+  url: string;
   /**
    * @title Brand
    * @format dynamic-options
    * @options elux-components-app/loaders/product/avaliableBrands.ts
    */
   brand?: string;
+  /**
+   * @title Description
+   * @format rich-text
+   */
   description?: string;
+  /**
+   * @title English description
+   * @format rich-text
+   */
+  alternateDescription?: string;
   gtin?: string;
 }
 

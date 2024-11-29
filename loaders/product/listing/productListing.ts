@@ -167,6 +167,7 @@ export default async function loader(
       ? sortOption as SortOptions
       : "name-asc",
     onlyProducts,
+    language,
   );
 
   if (!products) return null;
@@ -335,7 +336,7 @@ const getMeasurementsFilters = (
     const endRange = Math.ceil(max / rangeSize) * rangeSize;
     for (let start = startRange; start < endRange; start += rangeSize) {
       ranges.push({
-        start: start + 1,
+        start: start === 0 ? 0 : start + 1,
         end: start + rangeSize,
       });
     }
@@ -418,6 +419,7 @@ const getProductData = async (
   recordsPerPage: number = 20,
   sortBy: SortOptions,
   onlyProducts: boolean = false,
+  language: "EN" | "ES" = "ES",
 ): Promise<
   {
     productData: Product[];
@@ -425,14 +427,19 @@ const getProductData = async (
     measurements?: ProductMeasurements[];
   } | null
 > => {
+  const orderClause = language === "EN"
+    ? products.alternateName
+    : products.name;
   const offset = (page - 1) * recordsPerPage;
   const baseProductData = await records.select({
     name: products.name,
     productID: products.productID,
+    url: products.url,
     sku: products.sku,
     gtin: products.gtin,
     brand_name: brands.name,
     brand_id: brands.identifier,
+    alternateName: products.alternateName,
   })
     .from(products)
     .innerJoin(brands, eq(products.brand, brands.identifier))
@@ -443,7 +450,7 @@ const getProductData = async (
       ),
     )
     .groupBy(products.sku)
-    .orderBy(sortBy === "name-asc" ? asc(products.name) : desc(products.name))
+    .orderBy(sortBy === "name-asc" ? asc(orderClause) : desc(orderClause))
     .limit(recordsPerPage)
     .offset(offset);
 
@@ -500,12 +507,12 @@ const getProductData = async (
   return {
     productData: baseProductData.map<Product>((p) => ({
       "@type": "Product",
-      name: p.name,
+      name: language === "EN" ? p.alternateName ?? p.name : p.name,
       sku: p.sku,
       productID: p.productID ?? "",
       gtin: p.gtin ?? undefined,
       url: new URL(
-        `${p.productID}/p`,
+        `${p.url}/p`,
         url.origin,
       ).href,
       brand: {
@@ -553,6 +560,7 @@ export const cache = "stale-while-revalidate";
 export const cacheKey = (
   { page, sort, recordsPerPage = 20, returnOnlyProducts }: Props,
   req: Request,
+  { language }: ModContext,
 ) => {
   const url = new URL(req.url);
   const cacheKey = new URL(url.pathname, url.origin);
@@ -565,6 +573,7 @@ export const cacheKey = (
   cacheKey.searchParams.set("sort", sortOption);
   cacheKey.searchParams.set("recordsPerPage", recordsPerPage.toString());
   cacheKey.searchParams.set("onlyProducts", onlyProducts.toString());
+  cacheKey.searchParams.set("language", language);
 
   const { filtersFromUrl, measurementsFromUrl } = getFiltersFromUrl(url);
 

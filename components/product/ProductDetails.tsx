@@ -172,9 +172,10 @@ export default function ProductDetails(
                   "lg:border-b border-base-200 max-sm:hidden",
                   tabs?.productDescription?.descriptionSize ?? "text-sm",
                 )}
-              >
-                {description}
-              </article>
+                dangerouslySetInnerHTML={{
+                  __html: description,
+                }}
+              />
               <div>
                 <AdditionalPropertyCards
                   propertyCards={propertyCards}

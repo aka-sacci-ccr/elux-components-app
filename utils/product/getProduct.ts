@@ -21,10 +21,12 @@ import { ExtendedCategory } from "../../loaders/product/listing/productListing.t
 interface ProductBase {
   sku: string;
   name: string;
+  alternateName?: string;
   productID: string;
+  url: string;
   description: string | null;
+  alternateDescription?: string;
   gtin: string | null;
-  releaseDate: string | null;
   brand_name: string;
   brand_id: string;
 }
@@ -97,16 +99,18 @@ export async function getProduct(
     .select({
       sku: products.sku,
       name: products.name,
+      alternateName: products.alternateName,
       productID: products.productID,
+      url: products.url,
       description: products.description,
+      alternateDescription: products.alternateDescription,
       gtin: products.gtin,
-      releaseDate: products.releaseDate,
       brand_name: brands.name,
       brand_id: brands.identifier,
     })
     .from(products)
     .innerJoin(brands, eq(products.brand, brands.identifier))
-    .where(eq(useSkuAsSlug ? products.sku : products.productID, identifier))
+    .where(eq(useSkuAsSlug ? products.sku : products.url, identifier))
     .get();
 
   if (!productBase) {
@@ -313,19 +317,22 @@ function productsObject(
   },
 ): Product {
   const productUrl = new URL(
-    skuAsSlug ? `${productBase.sku}/p` : `${productBase.productID}/p`,
+    skuAsSlug ? `${productBase.sku}/p` : `${productBase.url}/p`,
     url.origin,
   );
   const language = ctx.language;
 
   return {
     "@type": "Product",
-    name: productBase?.name,
+    name: language === "EN"
+      ? productBase.alternateName ?? productBase.name
+      : productBase.name,
     sku: productBase.sku,
     productID: productBase?.productID ?? "",
     gtin: productBase.gtin ?? undefined,
-    releaseDate: productBase.releaseDate ?? undefined,
-    description: productBase.description ?? undefined,
+    description: language === "EN"
+      ? productBase.alternateDescription ?? productBase.description ?? ""
+      : productBase.description ?? "",
     url: productUrl.href,
     brand: {
       "@type": "Brand",
