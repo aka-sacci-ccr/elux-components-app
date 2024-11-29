@@ -147,7 +147,7 @@ export default function ProductDetails(
           </a>
         </div>
         <div class="flex flex-col lg:gap-12">
-          {description && propertyCards && propertyCards.length > 0 && (
+          {description && (
             <div
               class={clx(
                 "bg-white lg:pt-6 max-lg:my-6 max-lg:pt-6",
@@ -176,13 +176,15 @@ export default function ProductDetails(
                   __html: description,
                 }}
               />
-              <div>
-                <AdditionalPropertyCards
-                  propertyCards={propertyCards}
-                  mergeQuantity={productMain.mergeQuantity}
-                  productDescription={tabs?.productDescription}
-                />
-              </div>
+              {propertyCards && propertyCards.length > 0 && (
+                <div>
+                  <AdditionalPropertyCards
+                    propertyCards={propertyCards}
+                    mergeQuantity={productMain.mergeQuantity}
+                    productDescription={tabs?.productDescription}
+                  />
+                </div>
+              )}
             </div>
           )}
           <div
