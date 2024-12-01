@@ -57,6 +57,15 @@ export interface CountryStores {
   disableBorder?: boolean;
 }
 
+/**
+ * @title Where to buy
+ * @description Save an get the where to buy data.
+ *
+ * @param props - The props for the where to buy.
+ * @param req - The request object.
+ * @param ctx - The application context.
+ * @returns A promise that resolves to a where to buy.
+ */
 export default function loader(
   { countries }: Props,
   _req: Request,

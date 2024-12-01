@@ -17,6 +17,15 @@ export interface Props {
   useSkuAsSlug?: boolean;
 }
 
+/**
+ * @title ProductDetails from Deco Records
+ * @description Retrieves a product details from Deco Records.
+ *
+ * @param props - The props for the product details.
+ * @param req - The request object.
+ * @param ctx - The application context.
+ * @returns A promise that resolves to a specific product details.
+ */
 export default async function loader(
   { slug, useSkuAsSlug }: Props,
   req: Request,

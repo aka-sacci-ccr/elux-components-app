@@ -2,6 +2,14 @@ import { allowCorsFor, type FnContext } from "@deco/deco";
 import { AppContext as RecordsContext } from "apps/records/mod.ts";
 import { brands } from "../../db/schema.ts";
 
+/**
+ * @title Avaliable Brands
+ * @description Retrieves a avaliable brands from Deco Records.
+ *
+ * @param req - The request object.
+ * @param ctx - The application context.
+ * @returns A promise that resolves to a avaliable brands.
+ */
 export default async function avaliableBrands(
   _props: unknown,
   req: Request,

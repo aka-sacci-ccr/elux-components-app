@@ -53,6 +53,15 @@ export interface Props {
   returnOnlyProducts?: boolean;
 }
 
+/**
+ * @title ProductListing from Deco Records
+ * @description Retrieves a product listing from Deco Records.
+ *
+ * @param props - The props for the product listing.
+ * @param req - The request object.
+ * @param ctx - The application context.
+ * @returns A promise that resolves to a product listing.
+ */
 export default async function loader(
   { recordsPerPage = 20, page, sort, returnOnlyProducts }: Props,
   req: Request,

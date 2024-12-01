@@ -98,6 +98,15 @@ interface BaseImage {
   additionalType: string | null;
 }
 
+/**
+ * @title ProductShelf from Deco Records
+ * @description Retrieves a product shelf from Deco Records.
+ *
+ * @param props - The props for the product shelf.
+ * @param req - The request object.
+ * @param ctx - The application context.
+ * @returns A promise that resolves to a product shelf.
+ */
 export default async function loader(
   { listOption, skip = 0, take = 10, sortBy = "name-asc" }: Props,
   req: Request,

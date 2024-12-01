@@ -2,7 +2,15 @@ import { allowCorsFor, type FnContext } from "@deco/deco";
 import { AppContext as RecordsContext } from "apps/records/mod.ts";
 import { categories } from "../../db/schema.ts";
 
-export default async function avaliableSites(
+/**
+ * @title Avaliable Categories
+ * @description Retrieves a avaliable categories from Deco Records.
+ *
+ * @param req - The request object.
+ * @param ctx - The application context.
+ * @returns A promise that resolves to a avaliable categories.
+ */
+export default async function avaliableCategories(
   _props: unknown,
   req: Request,
   ctx: FnContext,
