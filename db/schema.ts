@@ -107,7 +107,9 @@ export const descriptions = sqliteTable("descriptions", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
   name: text("name").notNull(),
+  alternateName: text("alternateName"),
   value: text("value").notNull(),
+  alternateValue: text("alternateValue"),
   image: text("image"),
 });
 

@@ -359,14 +359,23 @@ export interface AdditionalProperty {
 
 export interface Description {
   /**
-   * @title Description title
+   * @title Spanish description title
    */
   name: string;
   /**
-   * @title Description body
+   * @title English description title
+   */
+  alternateName?: string;
+  /**
+   * @title Spanish description body
    * @format rich-text
    */
   value: string;
+  /**
+   * @title English description body
+   * @format rich-text
+   */
+  alternateValue?: string;
   /**
    * @title Description image
    * @format image-uri

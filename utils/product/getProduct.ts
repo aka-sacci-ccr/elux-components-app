@@ -43,9 +43,11 @@ interface AdditionalProperty {
 
 interface Description {
   name: string;
+  alternateName: string | null;
   identifier: number;
   subjectOf: string | null;
   value: string;
+  alternateValue: string | null;
   image: string | null;
 }
 
@@ -382,18 +384,23 @@ function productsObject(
           unitText,
         };
       }),
-      ...description.map(({ name, value, image }) => (
-        {
-          "@type": "PropertyValue" as const,
-          propertyID: "DESCRIPTION",
-          name,
-          value,
-          image: [{
-            "@type": "ImageObject" as const,
-            url: image ?? undefined,
-          }],
-        }
-      )),
+      ...description.map(
+        ({ name, value, image, alternateName, alternateValue }) => {
+          const [title, body] = language === "EN"
+            ? [alternateName ?? name, alternateValue ?? value]
+            : [name, value];
+          return {
+            "@type": "PropertyValue" as const,
+            propertyID: "DESCRIPTION",
+            name: title,
+            value: body,
+            image: [{
+              "@type": "ImageObject" as const,
+              url: image ?? undefined,
+            }],
+          };
+        },
+      ),
       ...category.map(({ identifier, name, alternateName, subjectOf }) => (
         {
           "@type": "PropertyValue" as const,
