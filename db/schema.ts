@@ -124,8 +124,6 @@ export const videos = sqliteTable("videos", {
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
   contentUrl: text("contentUrl").notNull(),
   thumbnailUrl: text("thumbnailUrl").notNull(),
-  uploadDate: text("uploadDate"),
-  duration: text("duration"),
 });
 
 //Define product avaliability

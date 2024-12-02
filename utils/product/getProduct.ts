@@ -62,8 +62,6 @@ interface Video {
   subjectOf: string | null;
   contentUrl: string;
   thumbnailUrl: string;
-  uploadDate: string | null;
-  duration: string | null;
 }
 
 interface Category {
@@ -414,8 +412,6 @@ function productsObject(
     video: video?.map((v) => ({
       "@type": "VideoObject" as const,
       ...v,
-      uploadDate: v.uploadDate ?? undefined,
-      duration: v.duration ?? undefined,
       identifier: String(v.identifier),
       subjectOf: v.subjectOf ?? undefined,
     })),

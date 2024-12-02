@@ -1,6 +1,8 @@
 import { allowCorsFor, type FnContext } from "@deco/deco";
 import { AppContext as RecordsContext } from "apps/records/mod.ts";
 import { domains } from "../../db/schema.ts";
+import { not, inArray } from "drizzle-orm";
+import { DEFAULT_DOMAINS } from "../../utils/product/constants.ts";
 
 /**
  * @title Avaliable Sites
@@ -26,7 +28,7 @@ export default async function avaliableSites(
   const allSites = await records.select({
     identifier: domains.identifier,
     name: domains.description,
-  }).from(domains);
+  }).from(domains).where(not(inArray(domains.identifier, DEFAULT_DOMAINS)));
 
   return allSites.map(({ identifier, name }) => ({
     label: `${name} (${identifier})`,

@@ -336,12 +336,17 @@ export interface AdditionalProperty {
 }
 
 export interface Description {
+  /**
+   * @title Description title
+   */
   name: string;
   /**
+   * @title Description body
    * @format rich-text
    */
   value: string;
   /**
+   * @title Description image
    * @format image-uri
    */
   image?: string;
@@ -354,32 +359,36 @@ export interface ImageProduct {
    */
   url: string;
   /**
-   * @title Alt
+   * @title Alternate Text
    */
   disambiguatingDescription?: string;
   /**
    * @title Image type
+   * @default PRODUCT_IMAGE
+   * @description PRODUCT_IMAGE: Carousel image; INFO_BANNER: Alternating banners; MAIN_BANNER: Product main banner; MAIN_BANNER_MOBILE: Main banner in mobile
    */
   additionalType?:
+    | "PRODUCT_IMAGE"
     | "INFO_BANNER"
     | "MAIN_BANNER"
-    | "PRODUCT_IMAGE"
     | "MAIN_BANNER_MOBILE";
   /**
    * @title Title (if banner)
+   * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a title to the banner.
    */
   name?: string;
   /**
    * @format rich-text
    * @title Description (if banner)
+   * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a description to the banner.
    */
   description?: string;
 }
 
 export interface Video {
   /**
-   * @title Video
-   * @format video-uri
+   * @title Video URL
+   * @description Paste the FULL video URL from YouTube
    */
   contentUrl: string;
   /**
@@ -387,7 +396,6 @@ export interface Video {
    * @format image-uri
    */
   thumbnailUrl: string;
-  duration?: string;
 }
 
 export interface AvaliableIn {
