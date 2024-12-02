@@ -40,7 +40,9 @@ interface AdditionalPropertiesFilters {
   name: string;
   alternateName: string | null;
   value: string;
+  alternateValue: string | null;
   unitText: string | null;
+  alternateUnitText: string | null;
 }
 
 export interface Props {
@@ -240,6 +242,8 @@ const getProductPropertiesFilters = (
         alternateName: prop.alternateName,
         value: prop.value,
         unitText: prop.unitText,
+        alternateValue: prop.alternateValue,
+        alternateUnitText: prop.alternateUnitText,
       });
     }
     values.counts[prop.value] = (values.counts[prop.value] || 0) + 1;
@@ -257,22 +261,27 @@ const getProductPropertiesFilters = (
         ? items[0].alternateName || items[0].name
         : items[0].name;
 
-      const filterValues = items.map(({ value, unitText }) => {
-        const { urlWithFilter, selected } = getUrlFilter(
-          value,
-          url,
-          filterKey,
-          filterFromUrl ?? undefined,
-        );
+      const filterValues = items.map(
+        ({ value, alternateValue, unitText, alternateUnitText }) => {
+          const { urlWithFilter, selected } = getUrlFilter(
+            value,
+            url,
+            filterKey,
+            filterFromUrl ?? undefined,
+          );
+          const [label, unit] = language === "EN"
+            ? [alternateValue ?? value, alternateUnitText ?? unitText]
+            : [value, unitText];
 
-        return {
-          label: unitText ? `${value} ${unitText}` : value,
-          value,
-          quantity: counts[value],
-          selected,
-          url: urlWithFilter,
-        };
-      });
+          return {
+            label: unit ? `${label} ${unit}` : label,
+            value,
+            quantity: counts[value],
+            selected,
+            url: urlWithFilter,
+          };
+        },
+      );
 
       return {
         "@type": "FilterToggle",
@@ -487,6 +496,8 @@ const getProductData = async (
             alternateName: filtersGroups.alternateName,
             value: additionalProperties.value,
             unitText: additionalProperties.unitText,
+            alternateValue: additionalProperties.alternateValue,
+            alternateUnitText: additionalProperties.alternateUnitText,
           })
           .from(additionalProperties)
           .innerJoin(

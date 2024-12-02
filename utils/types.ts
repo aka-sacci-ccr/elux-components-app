@@ -330,21 +330,31 @@ export interface AdditionalProperty {
    */
   additionalType?: string;
   /**
-   * @title Spanish Name
+   * @title Spanish Property Title
    */
   name: string;
   /**
-   * @title English Name
+   * @title English Property Title
    */
   alternateName: string;
   /**
-   * @title Value
+   * @title Spanish Property Value
    */
   value: string;
   /**
-   * @title Unit Text
+   * @title English Property Value
+   * @description If applicable
+   */
+  alternateValue?: string;
+  /**
+   * @title Spanish Unit Text
    */
   unitText?: string;
+  /**
+   * @title English Unit Text
+   * @description If applicable
+   */
+  alternateUnitText?: string;
 }
 
 export interface Description {

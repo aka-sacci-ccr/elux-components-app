@@ -36,7 +36,9 @@ interface AdditionalProperty {
   name: string;
   alternateName: string | null;
   value: string;
+  alternateValue: string | null;
   unitText: string | null;
+  alternateUnitText: string | null;
 }
 
 interface Description {
@@ -364,13 +366,22 @@ function productsObject(
         },
         [] as PropertyValue[],
       ),
-      ...additionalProperty.map((prop) => ({
-        "@type": "PropertyValue" as const,
-        propertyID: "OTHER",
-        name: language === "ES" ? prop.name : prop.alternateName ?? prop.name,
-        value: prop.value,
-        unitText: prop.unitText ?? undefined,
-      })),
+      ...additionalProperty.map((prop) => {
+        const [name, value, unitText] = language === "ES"
+          ? [prop.name, prop.value, prop.unitText]
+          : [
+            prop.alternateName ?? prop.name,
+            prop.alternateValue ?? prop.value,
+            prop.alternateUnitText ?? prop.unitText,
+          ];
+        return {
+          "@type": "PropertyValue" as const,
+          propertyID: "OTHER",
+          name,
+          value,
+          unitText,
+        };
+      }),
       ...description.map(({ name, value, image }) => (
         {
           "@type": "PropertyValue" as const,

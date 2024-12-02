@@ -96,8 +96,10 @@ export const additionalProperties = sqliteTable("additionalProperties", {
   ), // F.K
   name: text("name").notNull(), // In Spanish
   alternateName: text("alternateName"), // In English
-  value: text("value").notNull(),
-  unitText: text("unitText"),
+  value: text("value").notNull(), // In Spanish
+  alternateValue: text("alternateValue"), // In English
+  unitText: text("unitText"), // In Spanish
+  alternateUnitText: text("alternateUnitText"), // In English
 });
 
 //Define product extra descriptions

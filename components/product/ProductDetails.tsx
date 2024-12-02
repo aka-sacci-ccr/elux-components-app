@@ -272,7 +272,6 @@ export default function ProductDetails(
                           )}
                         >
                           {`${item.name} `}
-                          {item.unitCode && (`(${item.unitCode})`)}
                         </span>
                         <span
                           className={clx(
@@ -281,6 +280,7 @@ export default function ProductDetails(
                           )}
                         >
                           {`${item.value} `}
+                          {item.unitText && (`${item.unitText}`)}
                         </span>
                       </li>
                     );
