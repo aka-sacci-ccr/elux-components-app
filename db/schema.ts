@@ -33,6 +33,7 @@ export const categories = sqliteTable("categories", {
   name: text("name").notNull(),
   alternateName: text("alternateName"),
   description: text("description"),
+  alternateDescription: text("alternateDescription"),
   additionalType: text("additionalType").notNull(),
   subjectOf: text("subjectOf").references((): AnySQLiteColumn =>
     categories.identifier

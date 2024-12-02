@@ -227,6 +227,7 @@ export const getCategoryTree = async (
         name,
         alternateName,
         description,
+        alternateDescription,
         additionalType,
         subjectOf,
         image
@@ -240,6 +241,7 @@ export const getCategoryTree = async (
         c.name,
         c.alternateName,
         c.description,
+        c.alternateDescription,
         c.additionalType,
         c.subjectOf,
         c.image

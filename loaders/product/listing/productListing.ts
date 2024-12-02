@@ -411,7 +411,9 @@ const getBreadcrumbList = (
             url: category.image,
           }]
           : undefined,
-        description: category?.description,
+        description: language === "EN"
+          ? category?.alternateDescription
+          : category?.description,
       };
     }),
     numberOfItems: pathnames.length,

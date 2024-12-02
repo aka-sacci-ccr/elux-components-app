@@ -195,9 +195,15 @@ export interface Category {
    */
   alternateName?: string;
   /**
-   * @description Category description
+   * @title Category description
+   * @description Spanish category description
    */
   description?: string;
+  /**
+   * @title English description
+   * @description English category description
+   */
+  alternateDescription?: string;
   /**
    * @title Category father
    * @format dynamic-options

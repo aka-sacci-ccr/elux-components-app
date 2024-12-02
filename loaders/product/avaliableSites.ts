@@ -1,7 +1,7 @@
 import { allowCorsFor, type FnContext } from "@deco/deco";
 import { AppContext as RecordsContext } from "apps/records/mod.ts";
 import { domains } from "../../db/schema.ts";
-import { not, inArray } from "drizzle-orm";
+import { inArray, not } from "drizzle-orm";
 import { DEFAULT_DOMAINS } from "../../utils/product/constants.ts";
 
 /**
