@@ -1,4 +1,4 @@
-import { AvaliableIn } from "../../utils/types.ts";
+import { AvaliableIn, ProductDocument } from "../../utils/types.ts";
 import {
   AdditionalProperty,
   Description,
@@ -45,6 +45,10 @@ export interface Props {
    * @title Avaliability
    */
   avaliableIn: AvaliableIn[];
+  /**
+   * @title Documents
+   */
+  documents?: ProductDocument[];
 }
 
 export default async function submit(

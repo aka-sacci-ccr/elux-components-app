@@ -5,6 +5,7 @@ import {
   ImageProduct,
   Product,
   ProductCategory,
+  ProductDocument,
   ProductMeasurements,
   Video,
 } from "../types.ts";
@@ -14,6 +15,7 @@ import {
   descriptions,
   images,
   productCategories,
+  productDocuments,
   productMeasurements,
   products,
   videos,
@@ -158,6 +160,7 @@ export async function insertProduct(
     images,
     videos,
     measurements,
+    documents,
     ctx,
   }: SubmitProductProps & { ctx: AppContext },
 ) {
@@ -182,6 +185,9 @@ export async function insertProduct(
   if (videos && videos.length > 0) {
     await insertVideos(videos, product.sku, ctx);
   }
+  if (documents && documents.length > 0) {
+    await insertDocuments(documents, product.sku, ctx);
+  }
 }
 
 export async function updateBaseData(
@@ -202,4 +208,20 @@ export async function updateBaseData(
       .set(updateData)
       .where(eq(products.sku, product.sku!));
   }
+}
+
+export async function insertDocuments(
+  documents: ProductDocument[],
+  sku: string,
+  ctx: AppContext,
+) {
+  const records = await ctx.invoke.records.loaders.drizzle();
+  await records.insert(productDocuments).values(
+    documents.map((props) => {
+      return {
+        ...props,
+        subjectOf: sku,
+      };
+    }),
+  );
 }

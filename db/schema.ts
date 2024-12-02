@@ -39,6 +39,7 @@ export const categories = sqliteTable("categories", {
     categories.identifier
   ),
   image: text("image"),
+  thumbnail: text("thumbnail"),
 });
 
 //Define categories of a product
@@ -132,4 +133,14 @@ export const avaliableIn = sqliteTable("avaliableIn", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
   domain: text("domain").references(() => domains.identifier), // F.K
+});
+
+//Define product documents
+export const productDocuments = sqliteTable("productDocuments", {
+  identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
+  subjectOf: text("subjectOf").references(() => products.sku), // F.K
+  url: text("url").notNull(),
+  name: text("name").notNull(),
+  alternateName: text("alternateName"),
+  language: text("language").notNull(),
 });

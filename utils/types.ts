@@ -215,6 +215,12 @@ export interface Category {
    * @format image-uri
    */
   image?: string;
+  /**
+   * @title Icon
+   * @format icon-select
+   * @options site/loaders/availableIcons.ts
+   */
+  thumbnail?: AvailableIcons;
 }
 
 export interface ProductCategory {
@@ -411,4 +417,24 @@ export interface AvaliableIn {
    * @options elux-components-app/loaders/product/avaliableSites.ts
    */
   domain: string;
+}
+
+export interface ProductDocument {
+  /**
+   * @title Document
+   * @format file-uri
+   */
+  url: string;
+  /**
+   * @title Spanish name
+   */
+  name: string;
+  /**
+   * @title English name
+   */
+  alternateName?: string;
+  /**
+   * @title Language
+   */
+  language: "ES" | "EN" | "both";
 }
