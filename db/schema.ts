@@ -121,7 +121,9 @@ export const images = sqliteTable("images", {
   disambiguatingDescription: text("disambiguatingDescription"),
   additionalType: text("additionalType"),
   name: text("name"),
+  alternateName: text("alternateName"),
   description: text("description"),
+  alternateDescription: text("alternateDescription"),
 });
 
 //Define product videos

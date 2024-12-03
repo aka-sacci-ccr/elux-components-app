@@ -404,16 +404,27 @@ export interface ImageProduct {
     | "MAIN_BANNER"
     | "MAIN_BANNER_MOBILE";
   /**
-   * @title Title (if banner)
+   * @title Spanish Title (if banner)
    * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a title to the banner.
    */
   name?: string;
   /**
+   * @title English Title (if banner)
+   * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a description to the banner.
+   */
+  alternateName?: string;
+  /**
    * @format rich-text
-   * @title Description (if banner)
+   * @title Spanish Description (if banner)
    * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a description to the banner.
    */
   description?: string;
+  /**
+   * @title English Description (if banner)
+   * @format rich-text
+   * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a description to the banner.
+   */
+  alternateDescription?: string;
 }
 
 export interface Video {

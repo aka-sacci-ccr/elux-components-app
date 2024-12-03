@@ -18,6 +18,7 @@ export default function ListingPageBanner({ image, description }: Props) {
             width={375}
             height={240}
             class="object-contain w-full"
+            loading="eager"
           />
           <Source
             media="(min-width: 640px)"
@@ -26,11 +27,13 @@ export default function ListingPageBanner({ image, description }: Props) {
             width={1280}
             height={300}
             class="object-contain w-full"
+            loading="eager"
           />
           <img
             alt={description ?? ""}
             src={image}
             class="w-full"
+            loading="eager"
           />
         </Picture>
       </div>
