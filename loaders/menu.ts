@@ -127,6 +127,15 @@ export interface Menu {
   menuText: string;
 }
 
+/**
+ * @title Menu
+ * @description Save an get the menu data.
+ *
+ * @param props - The props for the menu.
+ * @param req - The request object.
+ * @param ctx - The application context.
+ * @returns A promise that resolves to a menu.
+ */
 export interface Props {
   menu: Department[];
   /** @title Extra links */

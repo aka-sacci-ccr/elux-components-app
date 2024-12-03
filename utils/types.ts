@@ -186,14 +186,24 @@ export interface Category {
    */
   identifier: string;
   /**
-   * @title Name
+   * @title Spanish Name
    * @description Category name
    */
-  value: string;
+  name: string;
   /**
-   * @description Category description
+   * @title English Name
+   */
+  alternateName?: string;
+  /**
+   * @title Category description
+   * @description Spanish category description
    */
   description?: string;
+  /**
+   * @title English description
+   * @description English category description
+   */
+  alternateDescription?: string;
   /**
    * @title Category father
    * @format dynamic-options
@@ -205,6 +215,12 @@ export interface Category {
    * @format image-uri
    */
   image?: string;
+  /**
+   * @title Icon
+   * @format icon-select
+   * @options site/loaders/availableIcons.ts
+   */
+  thumbnail?: AvailableIcons;
 }
 
 export interface ProductCategory {
@@ -218,18 +234,38 @@ export interface ProductCategory {
 
 export interface Product {
   sku: string;
+  /**
+   * @title Spanish name
+   */
   name: string;
+  /**
+   * @title English name
+   */
+  alternateName?: string;
+  /**
+   * @title Product ID
+   */
+  productID: string;
   /**
    * @title Slug
    */
-  productID: string;
+  url: string;
   /**
    * @title Brand
    * @format dynamic-options
    * @options elux-components-app/loaders/product/avaliableBrands.ts
    */
   brand?: string;
+  /**
+   * @title Description
+   * @format rich-text
+   */
   description?: string;
+  /**
+   * @title English description
+   * @format rich-text
+   */
+  alternateDescription?: string;
   gtin?: string;
 }
 
@@ -294,30 +330,54 @@ export interface AdditionalProperty {
    */
   additionalType?: string;
   /**
-   * @title Spanish Name
+   * @title Spanish Property Title
    */
   name: string;
   /**
-   * @title English Name
+   * @title English Property Title
    */
   alternateName: string;
   /**
-   * @title Value
+   * @title Spanish Property Value
    */
   value: string;
   /**
-   * @title Unit Text
+   * @title English Property Value
+   * @description If applicable
+   */
+  alternateValue?: string;
+  /**
+   * @title Spanish Unit Text
    */
   unitText?: string;
+  /**
+   * @title English Unit Text
+   * @description If applicable
+   */
+  alternateUnitText?: string;
 }
 
 export interface Description {
+  /**
+   * @title Spanish description title
+   */
   name: string;
   /**
+   * @title English description title
+   */
+  alternateName?: string;
+  /**
+   * @title Spanish description body
    * @format rich-text
    */
   value: string;
   /**
+   * @title English description body
+   * @format rich-text
+   */
+  alternateValue?: string;
+  /**
+   * @title Description image
    * @format image-uri
    */
   image?: string;
@@ -330,32 +390,47 @@ export interface ImageProduct {
    */
   url: string;
   /**
-   * @title Alt
+   * @title Alternate Text
    */
   disambiguatingDescription?: string;
   /**
    * @title Image type
+   * @default PRODUCT_IMAGE
+   * @description PRODUCT_IMAGE: Carousel image; INFO_BANNER: Alternating banners; MAIN_BANNER: Product main banner; MAIN_BANNER_MOBILE: Main banner in mobile
    */
   additionalType?:
+    | "PRODUCT_IMAGE"
     | "INFO_BANNER"
     | "MAIN_BANNER"
-    | "PRODUCT_IMAGE"
     | "MAIN_BANNER_MOBILE";
   /**
-   * @title Title (if banner)
+   * @title Spanish Title (if banner)
+   * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a title to the banner.
    */
   name?: string;
   /**
+   * @title English Title (if banner)
+   * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a description to the banner.
+   */
+  alternateName?: string;
+  /**
    * @format rich-text
-   * @title Description (if banner)
+   * @title Spanish Description (if banner)
+   * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a description to the banner.
    */
   description?: string;
+  /**
+   * @title English Description (if banner)
+   * @format rich-text
+   * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a description to the banner.
+   */
+  alternateDescription?: string;
 }
 
 export interface Video {
   /**
-   * @title Video
-   * @format video-uri
+   * @title Video URL
+   * @description Paste the FULL video URL from YouTube
    */
   contentUrl: string;
   /**
@@ -363,7 +438,6 @@ export interface Video {
    * @format image-uri
    */
   thumbnailUrl: string;
-  duration?: string;
 }
 
 export interface AvaliableIn {
@@ -373,4 +447,24 @@ export interface AvaliableIn {
    * @options elux-components-app/loaders/product/avaliableSites.ts
    */
   domain: string;
+}
+
+export interface ProductDocument {
+  /**
+   * @title Document
+   * @format file-uri
+   */
+  url: string;
+  /**
+   * @title Spanish name
+   */
+  name: string;
+  /**
+   * @title English name
+   */
+  alternateName?: string;
+  /**
+   * @title Language
+   */
+  language: "ES" | "EN" | "both";
 }

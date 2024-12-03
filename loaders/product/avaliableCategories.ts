@@ -2,7 +2,15 @@ import { allowCorsFor, type FnContext } from "@deco/deco";
 import { AppContext as RecordsContext } from "apps/records/mod.ts";
 import { categories } from "../../db/schema.ts";
 
-export default async function avaliableSites(
+/**
+ * @title Avaliable Categories
+ * @description Retrieves a avaliable categories from Deco Records.
+ *
+ * @param req - The request object.
+ * @param ctx - The application context.
+ * @returns A promise that resolves to a avaliable categories.
+ */
+export default async function avaliableCategories(
   _props: unknown,
   req: Request,
   ctx: FnContext,
@@ -17,12 +25,18 @@ export default async function avaliableSites(
 
   const allCategories = await records.select({
     identifier: categories.identifier,
-    value: categories.value,
+    name: categories.name,
+    alternateName: categories.alternateName,
     additionalType: categories.additionalType,
+    subjectOf: categories.subjectOf,
   }).from(categories);
 
-  return allCategories.map(({ identifier, value, additionalType }) => ({
-    label: `${value} (/${identifier}, Level ${additionalType})`,
-    value: `${identifier}---${value}---${additionalType}`,
+  return allCategories.map((
+    { identifier, name, additionalType, subjectOf },
+  ) => ({
+    label: `/${
+      [subjectOf, identifier].filter(Boolean).join("/")
+    }, Level ${additionalType}`,
+    value: `${identifier}---${name}---${additionalType}`,
   }));
 }

@@ -21,10 +21,12 @@ import { ExtendedCategory } from "../../loaders/product/listing/productListing.t
 interface ProductBase {
   sku: string;
   name: string;
+  alternateName?: string;
   productID: string;
+  url: string;
   description: string | null;
+  alternateDescription?: string;
   gtin: string | null;
-  releaseDate: string | null;
   brand_name: string;
   brand_id: string;
 }
@@ -34,21 +36,27 @@ interface AdditionalProperty {
   name: string;
   alternateName: string | null;
   value: string;
+  alternateValue: string | null;
   unitText: string | null;
+  alternateUnitText: string | null;
 }
 
 interface Description {
   name: string;
+  alternateName: string | null;
   identifier: number;
   subjectOf: string | null;
   value: string;
+  alternateValue: string | null;
   image: string | null;
 }
 
 interface Image {
   name: string | null;
+  alternateName: string | null;
   url: string;
   description: string | null;
+  alternateDescription: string | null;
   identifier: number;
   additionalType: string | null;
   disambiguatingDescription: string | null;
@@ -60,13 +68,12 @@ interface Video {
   subjectOf: string | null;
   contentUrl: string;
   thumbnailUrl: string;
-  uploadDate: string | null;
-  duration: string | null;
 }
 
 interface Category {
   identifier: string;
-  value: string;
+  name: string;
+  alternateName?: string;
   subjectOf: string | null;
 }
 
@@ -96,16 +103,18 @@ export async function getProduct(
     .select({
       sku: products.sku,
       name: products.name,
+      alternateName: products.alternateName,
       productID: products.productID,
+      url: products.url,
       description: products.description,
+      alternateDescription: products.alternateDescription,
       gtin: products.gtin,
-      releaseDate: products.releaseDate,
       brand_name: brands.name,
       brand_id: brands.identifier,
     })
     .from(products)
     .innerJoin(brands, eq(products.brand, brands.identifier))
-    .where(eq(useSkuAsSlug ? products.sku : products.productID, identifier))
+    .where(eq(useSkuAsSlug ? products.sku : products.url, identifier))
     .get();
 
   if (!productBase) {
@@ -149,7 +158,8 @@ export async function getProduct(
         WITH RECURSIVE CategoryHierarchy AS (
           SELECT
             c.identifier,
-            c.value,
+            c.name,
+            c.alternateName,
             c.subjectOf
           FROM
             productCategories AS pc
@@ -159,7 +169,8 @@ export async function getProduct(
           UNION
           SELECT
             parent.identifier,
-            parent.value,
+            parent.name,
+            parent.alternateName,
             parent.subjectOf
           FROM
             categories AS parent
@@ -219,8 +230,10 @@ export const getCategoryTree = async (
     CategoryTree AS (
       SELECT
         identifier,
-        value,
+        name,
+        alternateName,
         description,
+        alternateDescription,
         additionalType,
         subjectOf,
         image
@@ -231,8 +244,10 @@ export const getCategoryTree = async (
       UNION ALL
       SELECT
         c.identifier,
-        c.value,
+        c.name,
+        c.alternateName,
         c.description,
+        c.alternateDescription,
         c.additionalType,
         c.subjectOf,
         c.image
@@ -251,7 +266,8 @@ export const getCategoryBranch = (
   searchedCategory: ExtendedCategory,
 ): {
   identifier: string;
-  value: string;
+  name: string;
+  alternateName?: string;
   additionalType?: string;
 }[] => {
   const getChildIdentifiers = (parentIds: string[]): string[] =>
@@ -266,12 +282,13 @@ export const getCategoryBranch = (
 
   return getChildIdentifiers([searchedCategory.identifier]).map(
     (identifier) => {
-      const { value, additionalType } = categories.find((cat) =>
+      const { name, alternateName, additionalType } = categories.find((cat) =>
         cat.identifier === identifier
       )!;
       return {
         identifier,
-        value,
+        name,
+        alternateName,
         additionalType,
       };
     },
@@ -306,19 +323,22 @@ function productsObject(
   },
 ): Product {
   const productUrl = new URL(
-    skuAsSlug ? `${productBase.sku}/p` : `${productBase.productID}/p`,
+    skuAsSlug ? `${productBase.sku}/p` : `${productBase.url}/p`,
     url.origin,
   );
   const language = ctx.language;
 
   return {
     "@type": "Product",
-    name: productBase?.name,
+    name: language === "EN"
+      ? productBase.alternateName ?? productBase.name
+      : productBase.name,
     sku: productBase.sku,
     productID: productBase?.productID ?? "",
     gtin: productBase.gtin ?? undefined,
-    releaseDate: productBase.releaseDate ?? undefined,
-    description: productBase.description ?? undefined,
+    description: language === "EN"
+      ? productBase.alternateDescription ?? productBase.description ?? ""
+      : productBase.description ?? "",
     url: productUrl.href,
     brand: {
       "@type": "Brand",
@@ -350,30 +370,44 @@ function productsObject(
         },
         [] as PropertyValue[],
       ),
-      ...additionalProperty.map((prop) => ({
-        "@type": "PropertyValue" as const,
-        propertyID: "OTHER",
-        name: language === "ES" ? prop.name : prop.alternateName ?? prop.name,
-        value: prop.value,
-        unitText: prop.unitText ?? undefined,
-      })),
-      ...description.map(({ name, value, image }) => (
-        {
+      ...additionalProperty.map((prop) => {
+        const [name, value, unitText] = language === "ES"
+          ? [prop.name, prop.value, prop.unitText]
+          : [
+            prop.alternateName ?? prop.name,
+            prop.alternateValue ?? prop.value,
+            prop.alternateUnitText ?? prop.unitText,
+          ];
+        return {
           "@type": "PropertyValue" as const,
-          propertyID: "DESCRIPTION",
+          propertyID: "OTHER",
           name,
           value,
-          image: [{
-            "@type": "ImageObject" as const,
-            url: image ?? undefined,
-          }],
-        }
-      )),
-      ...category.map(({ identifier, value, subjectOf }) => (
+          unitText,
+        };
+      }),
+      ...description.map(
+        ({ name, value, image, alternateName, alternateValue }) => {
+          const [title, body] = language === "EN"
+            ? [alternateName ?? name, alternateValue ?? value]
+            : [name, value];
+          return {
+            "@type": "PropertyValue" as const,
+            propertyID: "DESCRIPTION",
+            name: title,
+            value: body,
+            image: [{
+              "@type": "ImageObject" as const,
+              url: image ?? undefined,
+            }],
+          };
+        },
+      ),
+      ...category.map(({ identifier, name, alternateName, subjectOf }) => (
         {
           "@type": "PropertyValue" as const,
           propertyID: "CATEGORY",
-          name: value,
+          name: language === "EN" ? alternateName ?? name : name,
           value: identifier,
           subjectOf,
         }
@@ -387,21 +421,27 @@ function productsObject(
         }
       )),
     ],
-    image: image?.map((i) => ({
-      "@type": "ImageObject" as const,
-      ...i,
-      name: i.name ?? undefined,
-      description: i.description ?? undefined,
-      disambiguatingDescription: i.disambiguatingDescription ?? undefined,
-      subjectOf: i.subjectOf ?? undefined,
-      identifier: String(i.identifier),
-      additionalType: i.additionalType ?? undefined,
-    })),
+    image: image?.map((i) => {
+      const [name, description] = language === "EN"
+        ? [
+          i.alternateName ?? i.name ?? undefined,
+          i.alternateDescription ?? i.description ?? undefined,
+        ]
+        : [i.name ?? undefined, i.description ?? undefined];
+      return {
+        "@type": "ImageObject" as const,
+        url: i.url ?? undefined,
+        name,
+        description,
+        disambiguatingDescription: i.disambiguatingDescription ?? undefined,
+        subjectOf: i.subjectOf ?? undefined,
+        identifier: String(i.identifier),
+        additionalType: i.additionalType ?? undefined,
+      };
+    }),
     video: video?.map((v) => ({
       "@type": "VideoObject" as const,
       ...v,
-      uploadDate: v.uploadDate ?? undefined,
-      duration: v.duration ?? undefined,
       identifier: String(v.identifier),
       subjectOf: v.subjectOf ?? undefined,
     })),

@@ -147,7 +147,7 @@ export default function ProductDetails(
           </a>
         </div>
         <div class="flex flex-col lg:gap-12">
-          {description && propertyCards && propertyCards.length > 0 && (
+          {description && (
             <div
               class={clx(
                 "bg-white lg:pt-6 max-lg:my-6 max-lg:pt-6",
@@ -172,16 +172,19 @@ export default function ProductDetails(
                   "lg:border-b border-base-200 max-sm:hidden",
                   tabs?.productDescription?.descriptionSize ?? "text-sm",
                 )}
-              >
-                {description}
-              </article>
-              <div>
-                <AdditionalPropertyCards
-                  propertyCards={propertyCards}
-                  mergeQuantity={productMain.mergeQuantity}
-                  productDescription={tabs?.productDescription}
-                />
-              </div>
+                dangerouslySetInnerHTML={{
+                  __html: description,
+                }}
+              />
+              {propertyCards && propertyCards.length > 0 && (
+                <div>
+                  <AdditionalPropertyCards
+                    propertyCards={propertyCards}
+                    mergeQuantity={productMain.mergeQuantity}
+                    productDescription={tabs?.productDescription}
+                  />
+                </div>
+              )}
             </div>
           )}
           <div
@@ -269,7 +272,6 @@ export default function ProductDetails(
                           )}
                         >
                           {`${item.name} `}
-                          {item.unitCode && (`(${item.unitCode})`)}
                         </span>
                         <span
                           className={clx(
@@ -278,6 +280,7 @@ export default function ProductDetails(
                           )}
                         >
                           {`${item.value} `}
+                          {item.unitText && (`${item.unitText}`)}
                         </span>
                       </li>
                     );

@@ -2,6 +2,14 @@ import { allowCorsFor, type FnContext } from "@deco/deco";
 import { AppContext as RecordsContext } from "apps/records/mod.ts";
 import { filtersGroups } from "../../db/schema.ts";
 
+/**
+ * @title Avaliable Filters Groups
+ * @description Retrieves a avaliable filters groups from Deco Records.
+ *
+ * @param req - The request object.
+ * @param ctx - The application context.
+ * @returns A promise that resolves to a avaliable filters groups.
+ */
 export default async function availableFiltersGroups(
   _props: unknown,
   req: Request,

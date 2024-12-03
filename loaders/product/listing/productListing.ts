@@ -40,7 +40,9 @@ interface AdditionalPropertiesFilters {
   name: string;
   alternateName: string | null;
   value: string;
+  alternateValue: string | null;
   unitText: string | null;
+  alternateUnitText: string | null;
 }
 
 export interface Props {
@@ -53,6 +55,15 @@ export interface Props {
   returnOnlyProducts?: boolean;
 }
 
+/**
+ * @title ProductListing from Deco Records
+ * @description Retrieves a product listing from Deco Records.
+ *
+ * @param props - The props for the product listing.
+ * @param req - The request object.
+ * @param ctx - The application context.
+ * @returns A promise that resolves to a product listing.
+ */
 export default async function loader(
   { recordsPerPage = 20, page, sort, returnOnlyProducts }: Props,
   req: Request,
@@ -85,9 +96,12 @@ export default async function loader(
 
   //This is the category branch that will be used to get the SKUs
   const categoryBranch = searchedCategory?.additionalType === "1"
-    ? categoryTree.map(({ identifier, value, additionalType }) => ({
+    ? categoryTree.map((
+      { identifier, name, alternateName, additionalType },
+    ) => ({
       identifier,
-      value,
+      name,
+      alternateName,
       additionalType,
     }))
     : getCategoryBranch(categoryTree, searchedCategory!);
@@ -164,6 +178,7 @@ export default async function loader(
       ? sortOption as SortOptions
       : "name-asc",
     onlyProducts,
+    language,
   );
 
   if (!products) return null;
@@ -174,7 +189,7 @@ export default async function loader(
 
   return {
     "@type": "ProductListingPage",
-    breadcrumb: getBreadcrumbList(paths, categoryTree, url),
+    breadcrumb: getBreadcrumbList(paths, categoryTree, url, language),
     products: products.productData,
     filters: onlyProducts ? [] : [
       ...(getCategoryFilters(
@@ -205,7 +220,9 @@ export default async function loader(
     },
     sortOptions,
     seo: {
-      title: searchedCategory?.value ?? "",
+      title: language === "EN"
+        ? searchedCategory?.alternateName ?? searchedCategory?.name ?? ""
+        : searchedCategory?.name ?? "",
       description: searchedCategory?.description ?? "",
       canonical: new URL(url.pathname, url.origin).href,
     },
@@ -225,6 +242,8 @@ const getProductPropertiesFilters = (
         alternateName: prop.alternateName,
         value: prop.value,
         unitText: prop.unitText,
+        alternateValue: prop.alternateValue,
+        alternateUnitText: prop.alternateUnitText,
       });
     }
     values.counts[prop.value] = (values.counts[prop.value] || 0) + 1;
@@ -242,22 +261,27 @@ const getProductPropertiesFilters = (
         ? items[0].alternateName || items[0].name
         : items[0].name;
 
-      const filterValues = items.map(({ value, unitText }) => {
-        const { urlWithFilter, selected } = getUrlFilter(
-          value,
-          url,
-          filterKey,
-          filterFromUrl ?? undefined,
-        );
+      const filterValues = items.map(
+        ({ value, alternateValue, unitText, alternateUnitText }) => {
+          const { urlWithFilter, selected } = getUrlFilter(
+            value,
+            url,
+            filterKey,
+            filterFromUrl ?? undefined,
+          );
+          const [label, unit] = language === "EN"
+            ? [alternateValue ?? value, alternateUnitText ?? unitText]
+            : [value, unitText];
 
-        return {
-          label: unitText ? `${value} ${unitText}` : value,
-          value,
-          quantity: counts[value],
-          selected,
-          url: urlWithFilter,
-        };
-      });
+          return {
+            label: unit ? `${label} ${unit}` : label,
+            value,
+            quantity: counts[value],
+            selected,
+            url: urlWithFilter,
+          };
+        },
+      );
 
       return {
         "@type": "FilterToggle",
@@ -282,7 +306,7 @@ const getCategoryFilters = (
   const categoryValues = categoryBranch
     .filter((c) => c.additionalType === categoryLevelToGet)
     .map((c) => ({
-      label: c.value,
+      label: language === "EN" ? c.alternateName ?? c.name : c.name,
       value: c.identifier,
       quantity: 0,
       selected: false,
@@ -330,7 +354,7 @@ const getMeasurementsFilters = (
     const endRange = Math.ceil(max / rangeSize) * rangeSize;
     for (let start = startRange; start < endRange; start += rangeSize) {
       ranges.push({
-        start: start + 1,
+        start: start === 0 ? 0 : start + 1,
         end: start + rangeSize,
       });
     }
@@ -375,6 +399,7 @@ const getBreadcrumbList = (
   pathnames: string[],
   categoryTree: ExtendedCategory[],
   url: URL,
+  language: "EN" | "ES",
 ): BreadcrumbList => {
   return {
     "@type": "BreadcrumbList",
@@ -385,7 +410,9 @@ const getBreadcrumbList = (
       return {
         "@type": "ListItem",
         position: index + 1,
-        item: category?.value ?? "",
+        item: language === "EN"
+          ? category?.alternateName ?? category?.name ?? ""
+          : category?.name ?? "",
         url: new URL(pathnames.slice(0, index + 1).join("/"), url.origin).href,
         image: category?.image
           ? [{
@@ -393,7 +420,9 @@ const getBreadcrumbList = (
             url: category.image,
           }]
           : undefined,
-        description: category?.description,
+        description: language === "EN"
+          ? category?.alternateDescription
+          : category?.description,
       };
     }),
     numberOfItems: pathnames.length,
@@ -410,6 +439,7 @@ const getProductData = async (
   recordsPerPage: number = 20,
   sortBy: SortOptions,
   onlyProducts: boolean = false,
+  language: "EN" | "ES" = "ES",
 ): Promise<
   {
     productData: Product[];
@@ -417,14 +447,19 @@ const getProductData = async (
     measurements?: ProductMeasurements[];
   } | null
 > => {
+  const orderClause = language === "EN"
+    ? products.alternateName
+    : products.name;
   const offset = (page - 1) * recordsPerPage;
   const baseProductData = await records.select({
     name: products.name,
     productID: products.productID,
+    url: products.url,
     sku: products.sku,
     gtin: products.gtin,
     brand_name: brands.name,
     brand_id: brands.identifier,
+    alternateName: products.alternateName,
   })
     .from(products)
     .innerJoin(brands, eq(products.brand, brands.identifier))
@@ -435,7 +470,7 @@ const getProductData = async (
       ),
     )
     .groupBy(products.sku)
-    .orderBy(sortBy === "name-asc" ? asc(products.name) : desc(products.name))
+    .orderBy(sortBy === "name-asc" ? asc(orderClause) : desc(orderClause))
     .limit(recordsPerPage)
     .offset(offset);
 
@@ -461,6 +496,8 @@ const getProductData = async (
             alternateName: filtersGroups.alternateName,
             value: additionalProperties.value,
             unitText: additionalProperties.unitText,
+            alternateValue: additionalProperties.alternateValue,
+            alternateUnitText: additionalProperties.alternateUnitText,
           })
           .from(additionalProperties)
           .innerJoin(
@@ -492,12 +529,12 @@ const getProductData = async (
   return {
     productData: baseProductData.map<Product>((p) => ({
       "@type": "Product",
-      name: p.name,
+      name: language === "EN" ? p.alternateName ?? p.name : p.name,
       sku: p.sku,
       productID: p.productID ?? "",
       gtin: p.gtin ?? undefined,
       url: new URL(
-        `${p.productID}/p`,
+        `${p.url}/p`,
         url.origin,
       ).href,
       brand: {
@@ -545,6 +582,7 @@ export const cache = "stale-while-revalidate";
 export const cacheKey = (
   { page, sort, recordsPerPage = 20, returnOnlyProducts }: Props,
   req: Request,
+  { language }: ModContext,
 ) => {
   const url = new URL(req.url);
   const cacheKey = new URL(url.pathname, url.origin);
@@ -557,6 +595,7 @@ export const cacheKey = (
   cacheKey.searchParams.set("sort", sortOption);
   cacheKey.searchParams.set("recordsPerPage", recordsPerPage.toString());
   cacheKey.searchParams.set("onlyProducts", onlyProducts.toString());
+  cacheKey.searchParams.set("language", language);
 
   const { filtersFromUrl, measurementsFromUrl } = getFiltersFromUrl(url);
 

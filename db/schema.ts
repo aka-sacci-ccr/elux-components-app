@@ -30,13 +30,16 @@ export const domains = sqliteTable("domains", {
 //Define the categories
 export const categories = sqliteTable("categories", {
   identifier: text("identifier").primaryKey(),
-  value: text("value").notNull(),
+  name: text("name").notNull(),
+  alternateName: text("alternateName"),
   description: text("description"),
+  alternateDescription: text("alternateDescription"),
   additionalType: text("additionalType").notNull(),
   subjectOf: text("subjectOf").references((): AnySQLiteColumn =>
     categories.identifier
   ),
   image: text("image"),
+  thumbnail: text("thumbnail"),
 });
 
 //Define categories of a product
@@ -50,11 +53,13 @@ export const productCategories = sqliteTable("productCategories", {
 export const products = sqliteTable("products", {
   sku: text("sku").primaryKey(), // P.K
   name: text("name").notNull(),
+  alternateName: text("alternateName"),
   productID: text("productID").notNull().unique(),
+  url: text("url").notNull().unique(),
   brand: text("brand").references(() => brands.identifier), // F.K
   description: text("description"),
+  alternateDescription: text("alternateDescription"),
   gtin: text("gtin"),
-  releaseDate: text("releaseDate"),
 });
 
 //Define brands
@@ -91,8 +96,10 @@ export const additionalProperties = sqliteTable("additionalProperties", {
   ), // F.K
   name: text("name").notNull(), // In Spanish
   alternateName: text("alternateName"), // In English
-  value: text("value").notNull(),
-  unitText: text("unitText"),
+  value: text("value").notNull(), // In Spanish
+  alternateValue: text("alternateValue"), // In English
+  unitText: text("unitText"), // In Spanish
+  alternateUnitText: text("alternateUnitText"), // In English
 });
 
 //Define product extra descriptions
@@ -100,7 +107,9 @@ export const descriptions = sqliteTable("descriptions", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
   name: text("name").notNull(),
+  alternateName: text("alternateName"),
   value: text("value").notNull(),
+  alternateValue: text("alternateValue"),
   image: text("image"),
 });
 
@@ -112,7 +121,9 @@ export const images = sqliteTable("images", {
   disambiguatingDescription: text("disambiguatingDescription"),
   additionalType: text("additionalType"),
   name: text("name"),
+  alternateName: text("alternateName"),
   description: text("description"),
+  alternateDescription: text("alternateDescription"),
 });
 
 //Define product videos
@@ -121,8 +132,6 @@ export const videos = sqliteTable("videos", {
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
   contentUrl: text("contentUrl").notNull(),
   thumbnailUrl: text("thumbnailUrl").notNull(),
-  uploadDate: text("uploadDate"),
-  duration: text("duration"),
 });
 
 //Define product avaliability
@@ -130,4 +139,14 @@ export const avaliableIn = sqliteTable("avaliableIn", {
   identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
   domain: text("domain").references(() => domains.identifier), // F.K
+});
+
+//Define product documents
+export const productDocuments = sqliteTable("productDocuments", {
+  identifier: integer("identifier").primaryKey({ autoIncrement: true }), // P.K
+  subjectOf: text("subjectOf").references(() => products.sku), // F.K
+  url: text("url").notNull(),
+  name: text("name").notNull(),
+  alternateName: text("alternateName"),
+  language: text("language").notNull(),
 });
