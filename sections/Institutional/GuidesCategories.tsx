@@ -2,7 +2,8 @@ import { AppContext } from "../../mod.ts";
 import { clx } from "../../utils/clx.ts";
 import Container, { SpacingConfig } from "../container/Container.tsx";
 import Icon from "../../components/ui/Icon.tsx";
-
+import { useId } from "../../sdk/useId.ts";
+import InformativeModal from "../../components/ui/InformativeModal.tsx";
 export interface Props {
   /**
    * @title Title
@@ -37,6 +38,21 @@ interface SearchSection {
    * @title Helper text
    */
   helperText: string;
+  /**
+   * @title Modal properties
+   * @description Modal information texts
+   */
+  modalProps: ModalProps;
+}
+
+export interface ModalProps {
+  title: string;
+  /**
+   * @title Description
+   * @format rich-text
+   */
+  description: string;
+  buttonText: string;
 }
 
 export const loader = (props: Props, req: Request, ctx: AppContext) => {
@@ -51,6 +67,7 @@ export default function GuidesCategories(props: ReturnType<typeof loader>) {
   const styling = props.siteTemplate === "elux"
     ? ELUX_STYLING
     : FRIGIDAIRE_STYLING;
+  const modalId = useId();
   return (
     <Container spacing={props.spacingConfig} class="container">
       <div class="max-w-[687px] max-lg:px-6 flex flex-col">
@@ -96,11 +113,29 @@ export default function GuidesCategories(props: ReturnType<typeof loader>) {
           <div
             class={clx(
               styling.searchSection.helperText,
-              "flex flex-row gap-1 lg:gap-2 mt-3 lg:mt-2 items-center",
+              "flex flex-row",
             )}
           >
-            <Icon id="error" width={16} height={16} />
-            <span>{props.searchSection.helperText}</span>
+            <label
+              for={modalId}
+              class="flex flex-row gap-1 lg:gap-2 mt-3 lg:mt-2 items-center cursor-pointer"
+            >
+              <Icon id="error" width={16} height={16} />
+              <span>{props.searchSection.helperText}</span>
+            </label>
+            <input
+              type="checkbox"
+              class="hidden modal-toggle -z-50"
+              id={modalId}
+            />
+            <div class="modal bg-[#C9C9CA] top-0 right-0 w-[100vw]">
+              <InformativeModal
+                modalId={modalId}
+                siteTemplate={props.siteTemplate}
+                modalProps={props.searchSection.modalProps}
+              >
+              </InformativeModal>
+            </div>
           </div>
         </div>
       </div>
