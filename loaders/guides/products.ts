@@ -21,8 +21,14 @@ interface Props {
    * @description Sort option of the products
    */
   sortBy?: "name-asc" | "name-desc";
-  urlComposing?: "slug" | "sku" | "productId" | "gtin";
+  /**
+   * @title Attribute to compose URL
+   * @description Select an attribute to compose the product url
+   */
+  urlComposing?: UrlComposing;
 }
+
+type UrlComposing = "slug" | "sku" | "productId" | "gtin";
 
 interface BaseProduct {
   name: string;
@@ -44,7 +50,7 @@ interface BaseImage {
 }
 
 export default async function loader(
-  { slug, sortBy = "name-asc" }: Props,
+  { slug, sortBy = "name-asc", urlComposing = "slug" }: Props,
   req: Request,
   ctx: AppContext & RecordsAppContext,
 ): Promise<Product[] | null> {
@@ -105,32 +111,49 @@ export default async function loader(
       )
       .all() as unknown as BaseImage[];
 
-    return baseProducts.map<Product>((p) => ({
-      "@type": "Product",
-      name: language === "EN" ? p.alternateName ?? p.name : p.name,
-      sku: p.sku,
-      productID: p.productID ?? "",
-      gtin: p.gtin ?? undefined,
-      url: new URL(
-        `guides-and-manuals/${p.url}/p`,
-        url.origin,
-      ).href,
-      image: productImages
-        .filter((i) => i.subjectOf === p.sku)
-        .map((i) => ({
-          "@type": "ImageObject" as const,
-          ...i,
-          name: i.name ?? undefined,
-          description: i.description ?? undefined,
-          disambiguatingDescription: i.disambiguatingDescription ??
-            undefined,
-          subjectOf: i.subjectOf ?? undefined,
-          identifier: String(i.identifier),
-          additionalType: i.additionalType ?? undefined,
-        })),
-    }));
+    return baseProducts.map<Product>((p) => {
+      return {
+        "@type": "Product",
+        name: language === "EN" ? p.alternateName ?? p.name : p.name,
+        sku: p.sku,
+        productID: p.productID ?? "",
+        gtin: p.gtin ?? undefined,
+        url: new URL(
+          `guides-and-manuals/${pickUrlComposed(p, urlComposing)}/p`,
+          url.origin,
+        ).href,
+        image: productImages
+          .filter((i) => i.subjectOf === p.sku)
+          .map((i) => ({
+            "@type": "ImageObject" as const,
+            ...i,
+            name: i.name ?? undefined,
+            description: i.description ?? undefined,
+            disambiguatingDescription: i.disambiguatingDescription ??
+              undefined,
+            subjectOf: i.subjectOf ?? undefined,
+            identifier: String(i.identifier),
+            additionalType: i.additionalType ?? undefined,
+          })),
+      };
+    });
   } catch (e) {
     logger.error(e);
     return null;
   }
 }
+
+const pickUrlComposed = (product: BaseProduct, urlComposing: UrlComposing) => {
+  if (urlComposing === "slug") {
+    return product.url;
+  }
+  if (urlComposing === "sku") {
+    return product.sku;
+  }
+  if (urlComposing === "productId") {
+    return product.productID;
+  }
+  if (urlComposing === "gtin") {
+    return product.gtin;
+  }
+};
