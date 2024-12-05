@@ -11,6 +11,9 @@ interface Props {
 
 export default function Collapsible({ category, siteTemplate }: Props) {
   const id = useId();
+  const styling = siteTemplate === "frigidaire"
+    ? FRIGIDAIRE_STYLING
+    : ELUX_STYLING;
   return (
     <div class="collapse collapse-plus rounded-none">
       <input
@@ -26,14 +29,14 @@ export default function Collapsible({ category, siteTemplate }: Props) {
               "flex items-center justify-between h-full w-full",
             )}
           >
-            <p class={ELUX_STYLING.title}>
+            <p class={styling.title}>
               {category.categoryName}
             </p>
             <Icon
               id="chevron-down-frigidaire"
               class={clx(
                 "ml-auto text-primary arrow pointer-events-none",
-                ELUX_STYLING.arrow,
+                styling.arrow,
               )}
             />
           </div>
@@ -58,4 +61,9 @@ export default function Collapsible({ category, siteTemplate }: Props) {
 const ELUX_STYLING = {
   title: "text-primary font-medium",
   arrow: "text-primary",
+};
+
+const FRIGIDAIRE_STYLING = {
+  title: "text-secondary font-medium text-sm lg:text-base",
+  arrow: "text-secondary",
 };
