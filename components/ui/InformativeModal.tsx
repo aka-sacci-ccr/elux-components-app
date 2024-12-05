@@ -43,7 +43,7 @@ export default function ModalContent(props: Props) {
           <label
             for={modalId}
             class={clx(
-              "btn btn-ghost px-6 min-h-12 max-h-12",
+              "btn btn-ghost",
               "w-full self-center lg:w-auto lg:self-end",
               styling.buttonStyle,
             )}
@@ -64,13 +64,14 @@ const ELUX_STYLING = {
   titleStyle: "text-2xl font-medium pb-6 text-primary lg:text-3.5xl lg:pb-8",
   descriptionStyle: "text-base text-secondary gap-[21px]",
   buttonStyle:
-    "bg-primary text-white rounded text-base font-medium hover:bg-warning-content",
+    "bg-primary text-white rounded text-base font-medium hover:bg-warning-content min-h-12 max-h-12 px-6",
 };
 
 const FRIGIDAIRE_STYLING = {
   borderColor: "border-base-200",
   closeIconColor: "text-secondary",
-  titleStyle: "text-2xl font-medium pb-6 text-secondary",
-  descriptionStyle: "text-sm text-secondary",
-  buttonStyle: "bg-primary text-white rounded",
+  titleStyle: "text-2xl font-semibold pb-6 text-secondary lg:text-3xl lg:pb-8",
+  descriptionStyle: "text-sm lg:text-base text-secondary gap-[22px]",
+  buttonStyle:
+    "bg-primary text-white rounded-[50px] text-sm h-10.5 min-h-10.5 px-11",
 };
