@@ -729,6 +729,7 @@ export const LANGUAGE_DIFFS = {
     guidesProducts: {
       notFound: "No products found",
       goBack: "Go back",
+      notFoundProduct: "Product not found",
     },
   },
   ES: {
@@ -813,6 +814,7 @@ export const LANGUAGE_DIFFS = {
     guidesProducts: {
       notFound: "No se encontraron productos",
       goBack: "Volver atrás",
+      notFoundProduct: "Producto no encontrado",
     },
   },
 };

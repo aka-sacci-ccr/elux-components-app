@@ -121,7 +121,7 @@ export default function Breadcrumb(
                   "underline decoration-2 underline-offset-[3px] content-center",
               )}
             >
-              <span class="block">{label}</span>
+              <span class="block w-max">{label}</span>
             </a>
             {i < items.length - 1 && (
               <Icon

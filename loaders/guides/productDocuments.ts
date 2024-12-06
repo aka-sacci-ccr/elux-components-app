@@ -27,16 +27,16 @@ interface Props {
    */
   slug: RequestURLParam;
   /**
-   * @title Attribute to compose URL
-   * @description Select an attribute to compose the product url
+   * @title Get Product By
+   * @description Select an attribute to get the product
    */
-  urlComposing?: UrlComposing;
+  getBy?: UrlComposing;
 }
 
 export default async function loader(
   {
     slug,
-    urlComposing,
+    getBy = "modelCode",
   }: Props,
   req: Request,
   ctx: AppContext & RecordsAppContext,
@@ -59,7 +59,7 @@ export default async function loader(
       )
       .where(
         and(
-          eq(fieldsToOrder[urlComposing], slug),
+          eq(fieldsToOrder[getBy], slug),
           sql`${url.hostname} LIKE '%' || ${avaliableIn.domain}`,
         ),
       )
@@ -133,6 +133,12 @@ export default async function loader(
     return null;
   }
 }
+
+export const cache = "stale-while-revalidate";
+
+export const cacheKey = ({ slug, getBy = "modelCode" }: Props) => {
+  return `product-documents-${slug}-composeUrl-${getBy}`;
+};
 
 const fieldsToOrder = {
   "slug": products.url,

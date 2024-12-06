@@ -20,7 +20,7 @@ export interface GuideProducts {
 
 interface Props {
   /**
-   * @title SLUG from URL
+   * @title Category Slug from URL
    */
   slug: RequestURLParam;
   /**
@@ -65,7 +65,7 @@ export default async function loader(
   {
     slug,
     sortBy = "name-asc",
-    urlComposing = "slug",
+    urlComposing = "modelCode",
     customPathname = "guias-y-manuales",
   }: Props,
   req: Request,
@@ -171,6 +171,19 @@ export default async function loader(
     return null;
   }
 }
+
+export const cache = "stale-while-revalidate";
+
+export const cacheKey = (
+  {
+    slug,
+    sortBy = "name-asc",
+    urlComposing = "modelCode",
+    customPathname = "guias-y-manuales",
+  }: Props,
+) => {
+  return `guides-products-${slug}-sortBy-${sortBy}-composeUrl-${urlComposing}-customPathname-${customPathname}`;
+};
 
 const pickUrlComposed = (product: BaseProduct, urlComposing: UrlComposing) => {
   if (urlComposing === "slug") {

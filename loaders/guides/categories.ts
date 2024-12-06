@@ -95,3 +95,16 @@ export default async function loader(
   }));
   return groupedCategories;
 }
+
+export const cache = "stale-while-revalidate";
+
+export const cacheKey = (
+  {
+    excludeCategories,
+    customPathname = "guias-y-manuales",
+  }: Props,
+) => {
+  return `guides-categories-excludeCategories-${
+    excludeCategories?.map((c) => `${c}`).join(";")
+  }-customPathname-${customPathname}`;
+};
