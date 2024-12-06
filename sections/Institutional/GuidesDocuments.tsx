@@ -79,7 +79,6 @@ export default function GuidesProducts(
   }: ReturnType<typeof loader>,
 ) {
   const isElux = siteTemplate === "elux";
-
   const styling = isElux ? ELUX_STYLING : FRIGIDAIRE_STYLING;
   const isDesktop = useDevice() === "desktop";
 
@@ -114,6 +113,7 @@ export default function GuidesProducts(
   const documents = product?.additionalProperty?.filter(
     (p) => p.propertyID === GUIDE_PROPERTY_ID,
   );
+  const hasDocuments = documents && documents?.length > 0;
 
   return (
     <Container spacing={spacingConfig} class="min-h-[80vh]">
@@ -127,14 +127,21 @@ export default function GuidesProducts(
           <div class="flex flex-col max-w-[795px] mt-8 gap-4">
             {product
               ? (
-                <div class="flex flex-col gap-8">
-                  <ProductCard
-                    product={product}
-                    siteTemplate={siteTemplate}
-                    mode="large"
-                  />
+                <div
+                  class={clx(
+                    "flex flex-col lg:flex-row gap-8",
+                    hasDocuments && "lg:gap-10",
+                  )}
+                >
+                  <div class="lg:max-w-[422px] lg:min-w-[422px]">
+                    <ProductCard
+                      product={product}
+                      siteTemplate={siteTemplate}
+                      mode="large"
+                    />
+                  </div>
                   <div>
-                    {documents?.length === 0 || !documents
+                    {!hasDocuments
                       ? (
                         <div
                           dangerouslySetInnerHTML={{
@@ -150,7 +157,7 @@ export default function GuidesProducts(
                               .avaliableFiles}
                           </div>
                           <div class="grid grid-cols-2 gap-4">
-                            {documents.map((d) => (
+                            {documents!.map((d) => (
                               <DownloadCard
                                 property={d}
                                 productID={product.productID}

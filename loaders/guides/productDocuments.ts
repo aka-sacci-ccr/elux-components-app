@@ -10,7 +10,6 @@ import {
   products,
 } from "../../db/schema.ts";
 import { and, eq, inArray, sql } from "drizzle-orm";
-import { logger } from "@deco/deco/o11y";
 import { GUIDE_PROPERTY_ID } from "../../utils/product/constants.ts";
 
 interface ProductDocuments {
@@ -45,93 +44,88 @@ export default async function loader(
   const url = new URL(req.url);
   const records = await ctx.invoke.records.loaders.drizzle();
   const { language } = ctx;
-  try {
-    const baseProduct = await records.select({
-      name: products.name,
-      alternateName: products.alternateName,
-      productID: products.productID,
-      url: products.url,
-      sku: products.sku,
-      gtin: products.gtin,
-    }).from(products)
-      .leftJoin(
-        avaliableIn,
-        eq(products.sku, avaliableIn.subjectOf),
-      )
-      .where(
-        and(
-          eq(fieldsToOrder[getBy], slug),
-          sql`${url.hostname} LIKE '%' || ${avaliableIn.domain}`,
-        ),
-      )
-      .limit(1).get() as unknown as BaseProduct;
+  const baseProduct = await records.select({
+    name: products.name,
+    alternateName: products.alternateName,
+    productID: products.productID,
+    url: products.url,
+    sku: products.sku,
+    gtin: products.gtin,
+  }).from(products)
+    .leftJoin(
+      avaliableIn,
+      eq(products.sku, avaliableIn.subjectOf),
+    )
+    .where(
+      and(
+        eq(fieldsToOrder[getBy], slug),
+        sql`${url.hostname} LIKE '%' || ${avaliableIn.domain}`,
+      ),
+    )
+    .limit(1).get() as unknown as BaseProduct;
 
-    if (!baseProduct) {
-      return null;
-    }
-
-    const [productImages, productDocs] = await Promise.all(
-      [
-        records
-          .select()
-          .from(images)
-          .where(
-            and(
-              eq(
-                images.subjectOf,
-                baseProduct.sku,
-              ),
-              eq(images.additionalType, "PRODUCT_IMAGE"),
-            ),
-          )
-          .all() as unknown as BaseImage[],
-        records
-          .select()
-          .from(productDocuments)
-          .where(and(
-            eq(
-              productDocuments.subjectOf,
-              baseProduct.sku,
-            ),
-            inArray(productDocuments.language, [language, "both"]),
-          )) as unknown as ProductDocuments[],
-      ],
-    );
-
-    return {
-      "@type": "Product",
-      name: language === "EN"
-        ? baseProduct.alternateName ?? baseProduct.name
-        : baseProduct.name,
-      sku: baseProduct.sku,
-      productID: baseProduct.productID ?? "",
-      gtin: baseProduct.gtin ?? undefined,
-      image: productImages
-        .filter((i) => i.subjectOf === baseProduct.sku)
-        .map((i) => ({
-          "@type": "ImageObject" as const,
-          ...i,
-          name: i.name ?? undefined,
-          description: i.description ?? undefined,
-          disambiguatingDescription: i.disambiguatingDescription ??
-            undefined,
-          subjectOf: i.subjectOf ?? undefined,
-          identifier: String(i.identifier),
-          additionalType: i.additionalType ?? undefined,
-        })),
-      additionalProperty: productDocs.map((
-        { url, name, alternateName },
-      ) => ({
-        "@type": "PropertyValue",
-        propertyID: GUIDE_PROPERTY_ID,
-        url,
-        name: language === "EN" ? alternateName ?? name : name,
-      })),
-    };
-  } catch (e) {
-    logger.error(e);
+  if (!baseProduct) {
     return null;
   }
+
+  const [productImages, productDocs] = await Promise.all(
+    [
+      records
+        .select()
+        .from(images)
+        .where(
+          and(
+            eq(
+              images.subjectOf,
+              baseProduct.sku,
+            ),
+            eq(images.additionalType, "PRODUCT_IMAGE"),
+          ),
+        )
+        .all() as unknown as BaseImage[],
+      records
+        .select()
+        .from(productDocuments)
+        .where(and(
+          eq(
+            productDocuments.subjectOf,
+            baseProduct.sku,
+          ),
+          inArray(productDocuments.language, [language, "both"]),
+        )) as unknown as ProductDocuments[],
+    ],
+  );
+
+  return {
+    "@type": "Product",
+    name: language === "EN"
+      ? baseProduct.alternateName ?? baseProduct.name
+      : baseProduct.name,
+    sku: baseProduct.sku,
+    productID: baseProduct.productID ?? "",
+    gtin: baseProduct.gtin ?? undefined,
+    image: productImages
+      .filter((i) => i.subjectOf === baseProduct.sku)
+      .map((i) => ({
+        "@type": "ImageObject" as const,
+        ...i,
+        name: i.name ?? undefined,
+        description: i.description ?? undefined,
+        disambiguatingDescription: i.disambiguatingDescription ??
+          undefined,
+        subjectOf: i.subjectOf ?? undefined,
+        identifier: String(i.identifier),
+        additionalType: i.additionalType ?? undefined,
+      })),
+    additionalProperty: productDocs.map((
+      { url, name, alternateName },
+    ) => ({
+      "@type": "PropertyValue",
+      propertyID: GUIDE_PROPERTY_ID,
+      url,
+      name: language === "EN" ? alternateName ?? name : name,
+    })),
+  };
 }
 
 export const cache = "stale-while-revalidate";

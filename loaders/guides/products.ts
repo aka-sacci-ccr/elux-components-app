@@ -10,7 +10,6 @@ import {
   products,
 } from "../../db/schema.ts";
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
-import { logger } from "@deco/deco/o11y";
 import { Category } from "../../utils/types.ts";
 
 export interface GuideProducts {
@@ -75,101 +74,96 @@ export default async function loader(
   const records = await ctx.invoke.records.loaders.drizzle();
   const { language } = ctx;
   const handledCustomPathname = customPathname.replace(/^\/+|\/+$/g, "");
-  try {
-    const categoryBranch = await getCategoryTree(records, slug);
-    const selectedCategory = categoryBranch.find((c) => c.identifier === slug);
-    const orderClause = language === "EN"
-      ? products.alternateName
-      : products.name;
+  const categoryBranch = await getCategoryTree(records, slug);
+  const selectedCategory = categoryBranch.find((c) => c.identifier === slug);
+  const orderClause = language === "EN"
+    ? products.alternateName
+    : products.name;
 
-    if (!selectedCategory) {
-      return null;
-    }
-
-    const baseProducts = await records.select({
-      name: products.name,
-      alternateName: products.alternateName,
-      productID: products.productID,
-      url: products.url,
-      sku: products.sku,
-      gtin: products.gtin,
-    }).from(productCategories)
-      .innerJoin(
-        products,
-        eq(productCategories.product, products.sku),
-      )
-      .leftJoin(
-        avaliableIn,
-        eq(productCategories.product, avaliableIn.subjectOf),
-      )
-      .where(
-        and(
-          inArray(
-            productCategories.subjectOf,
-            categoryBranch.map((c) => c.identifier),
-          ),
-          sql`${url.hostname} LIKE '%' || ${avaliableIn.domain}`,
-        ),
-      )
-      .groupBy(products.sku)
-      .orderBy(
-        sortBy === "name-asc" ? asc(orderClause) : desc(orderClause),
-      ) as unknown as BaseProduct[];
-
-    if (!baseProducts || baseProducts.length === 0) {
-      return {
-        category: selectedCategory,
-        products: [],
-      };
-    }
-
-    const productImages = await records
-      .select()
-      .from(images)
-      .where(
-        and(
-          inArray(
-            images.subjectOf,
-            baseProducts.map((p) => p.sku),
-          ),
-          eq(images.additionalType, "PRODUCT_IMAGE"),
-        ),
-      )
-      .all() as unknown as BaseImage[];
-
-    return {
-      category: selectedCategory,
-      products: baseProducts.map<Product>((p) => {
-        return {
-          "@type": "Product",
-          name: language === "EN" ? p.alternateName ?? p.name : p.name,
-          sku: p.sku,
-          productID: p.productID ?? "",
-          gtin: p.gtin ?? undefined,
-          url: new URL(
-            `${handledCustomPathname}/${pickUrlComposed(p, urlComposing)}/p`,
-            url.origin,
-          ).href,
-          image: productImages
-            .filter((i) => i.subjectOf === p.sku)
-            .map((i) => ({
-              "@type": "ImageObject" as const,
-              ...i,
-              name: i.name ?? undefined,
-              description: i.description ?? undefined,
-              disambiguatingDescription: i.disambiguatingDescription ??
-                undefined,
-              subjectOf: i.subjectOf ?? undefined,
-              identifier: String(i.identifier),
-              additionalType: i.additionalType ?? undefined,
-            })),
-        };
-      }),
-    };
-  } catch (e) {
-    logger.error(e);
+  if (!selectedCategory) {
     return null;
   }
+
+  const baseProducts = await records.select({
+    name: products.name,
+    alternateName: products.alternateName,
+    productID: products.productID,
+    url: products.url,
+    sku: products.sku,
+    gtin: products.gtin,
+  }).from(productCategories)
+    .innerJoin(
+      products,
+      eq(productCategories.product, products.sku),
+    )
+    .leftJoin(
+      avaliableIn,
+      eq(productCategories.product, avaliableIn.subjectOf),
+    )
+    .where(
+      and(
+        inArray(
+          productCategories.subjectOf,
+          categoryBranch.map((c) => c.identifier),
+        ),
+        sql`${url.hostname} LIKE '%' || ${avaliableIn.domain}`,
+      ),
+    )
+    .groupBy(products.sku)
+    .orderBy(
+      sortBy === "name-asc" ? asc(orderClause) : desc(orderClause),
+    ) as unknown as BaseProduct[];
+
+  if (!baseProducts || baseProducts.length === 0) {
+    return {
+      category: selectedCategory,
+      products: [],
+    };
+  }
+
+  const productImages = await records
+    .select()
+    .from(images)
+    .where(
+      and(
+        inArray(
+          images.subjectOf,
+          baseProducts.map((p) => p.sku),
+        ),
+        eq(images.additionalType, "PRODUCT_IMAGE"),
+      ),
+    )
+    .all() as unknown as BaseImage[];
+
+  return {
+    category: selectedCategory,
+    products: baseProducts.map<Product>((p) => {
+      return {
+        "@type": "Product",
+        name: language === "EN" ? p.alternateName ?? p.name : p.name,
+        sku: p.sku,
+        productID: p.productID ?? "",
+        gtin: p.gtin ?? undefined,
+        url: new URL(
+          `${handledCustomPathname}/${pickUrlComposed(p, urlComposing)}/p`,
+          url.origin,
+        ).href,
+        image: productImages
+          .filter((i) => i.subjectOf === p.sku)
+          .map((i) => ({
+            "@type": "ImageObject" as const,
+            ...i,
+            name: i.name ?? undefined,
+            description: i.description ?? undefined,
+            disambiguatingDescription: i.disambiguatingDescription ??
+              undefined,
+            subjectOf: i.subjectOf ?? undefined,
+            identifier: String(i.identifier),
+            additionalType: i.additionalType ?? undefined,
+          })),
+      };
+    }),
+  };
 }
 
 export const cache = "stale-while-revalidate";
