@@ -23,6 +23,11 @@ interface Props {
    * @description Insert categories to exclude.
    */
   excludeCategories?: string[];
+  /**
+   * @title Custom URL Pathname
+   * @description Insert a custom URL path to be redirected to, onclick of a category card.
+   */
+  customPathname?: string;
 }
 
 /**
@@ -35,13 +40,14 @@ interface Props {
  * @returns A promise that resolves to an array of categories and level 2 subcategories.
  */
 export default async function loader(
-  { excludeCategories }: Props,
+  { excludeCategories, customPathname = "guias-y-manuales" }: Props,
   req: Request,
   ctx: AppContext & RecordsContext,
 ): Promise<CategoryFather[]> {
   const url = new URL(req.url);
   const { language } = ctx;
   const records = await ctx.invoke.records.loaders.drizzle();
+  const handledCustomPathname = customPathname.replace(/^\/+|\/+$/g, "");
   const categoriesFromDatabase = await records.select().from(categories)
     .where(
       and(
@@ -49,8 +55,12 @@ export default async function loader(
           eq(categories.additionalType, "1"),
           eq(categories.additionalType, "2"),
         ),
-        (excludeCategories && excludeCategories.length > 0) &&
-          notInArray(categories.identifier, excludeCategories),
+        notInArray(
+          categories.identifier,
+          (!excludeCategories || excludeCategories.length === 0)
+            ? [""]
+            : excludeCategories,
+        ),
       ),
     ) as (Category & { additionalType: "1" | "2" })[];
   const fatherCategories = categoriesFromDatabase.filter(
@@ -72,7 +82,7 @@ export default async function loader(
               ? child.alternateName ?? child.name
               : child.name,
             url: new URL(
-              `guides-and-manuals/${child.identifier}`,
+              `${handledCustomPathname}/${child.identifier}`,
               url.origin,
             ).href,
             icon: child.thumbnail,

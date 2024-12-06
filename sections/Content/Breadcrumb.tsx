@@ -83,16 +83,17 @@ export default function Breadcrumb(
     >
       <div
         class={clx(
-          "flex flex-row items-center",
+          "flex flex-row",
           TEXT_COLORS[fontColor ?? "primary"],
           fontWeight ?? "font-medium",
           fontSize,
           GAP_SIZES[gap ?? "2"],
+          "max-w-[calc(100vw-32px)]",
         )}
       >
         {icon && (
           <>
-            <a href="/">
+            <a href="/" class="self-center">
               <Icon
                 id={icon}
                 size={iconSize}
@@ -105,7 +106,7 @@ export default function Breadcrumb(
               size={16}
               width={16}
               height={16}
-              class="text-accent min-w-4"
+              class="text-accent min-w-4 self-center"
             />
           </>
         )}
@@ -117,10 +118,10 @@ export default function Breadcrumb(
                 "last:line-clamp-1",
                 overrideFontColor && TEXT_COLORS[overrideFontColor],
                 hoverUnderline &&
-                  "underline decoration-2 underline-offset-[3px]",
+                  "underline decoration-2 underline-offset-[3px] content-center",
               )}
             >
-              {label}
+              <span class="block">{label}</span>
             </a>
             {i < items.length - 1 && (
               <Icon
@@ -128,7 +129,7 @@ export default function Breadcrumb(
                 size={16}
                 width={16}
                 height={16}
-                class="text-accent min-w-4"
+                class="text-accent min-w-4 self-center"
               />
             )}
           </>

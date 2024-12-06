@@ -243,7 +243,7 @@ export interface Product {
    */
   alternateName?: string;
   /**
-   * @title Product ID
+   * @title Model code
    */
   productID: string;
   /**

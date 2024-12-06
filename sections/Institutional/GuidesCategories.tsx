@@ -27,6 +27,9 @@ export interface Props {
    * @title Search section properties
    */
   searchSection: SearchSection;
+  /**
+   * @title Spacing configuration
+   */
   spacingConfig: SpacingConfig;
 }
 

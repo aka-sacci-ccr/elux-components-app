@@ -23,9 +23,9 @@ import * as $$$9 from "./loaders/product/list/productList.ts";
 import * as $$$10 from "./loaders/product/listing/productListing.ts";
 import * as $$$11 from "./loaders/testShelf.ts";
 import * as $$$12 from "./loaders/whereToBuy.ts";
-import * as $$$$$$19 from "./sections/blog/BlogShelf.tsx";
+import * as $$$$$$20 from "./sections/blog/BlogShelf.tsx";
 import * as $$$$$$0 from "./sections/Component.tsx";
-import * as $$$$$$20 from "./sections/container/Container.tsx";
+import * as $$$$$$21 from "./sections/container/Container.tsx";
 import * as $$$$$$1 from "./sections/Content/Banner.tsx";
 import * as $$$$$$2 from "./sections/Content/Breadcrumb.tsx";
 import * as $$$$$$3 from "./sections/Content/Cards.tsx";
@@ -37,13 +37,14 @@ import * as $$$$$$8 from "./sections/Footer/Footer.tsx";
 import * as $$$$$$9 from "./sections/Header/Header.tsx";
 import * as $$$$$$10 from "./sections/Images/Carousel.tsx";
 import * as $$$$$$11 from "./sections/Institutional/GuidesCategories.tsx";
-import * as $$$$$$12 from "./sections/Institutional/Policy.tsx";
-import * as $$$$$$13 from "./sections/Institutional/Support.tsx";
-import * as $$$$$$14 from "./sections/Institutional/WhereToBuy.tsx";
-import * as $$$$$$15 from "./sections/Product/ProductDetails/ProductPage.tsx";
-import * as $$$$$$16 from "./sections/Product/ProductListing/ProductListingPage.tsx";
-import * as $$$$$$17 from "./sections/Product/ProductShelf/ProductShelf.tsx";
-import * as $$$$$$18 from "./sections/Social/ContactForm.tsx";
+import * as $$$$$$12 from "./sections/Institutional/GuidesProducts.tsx";
+import * as $$$$$$13 from "./sections/Institutional/Policy.tsx";
+import * as $$$$$$14 from "./sections/Institutional/Support.tsx";
+import * as $$$$$$15 from "./sections/Institutional/WhereToBuy.tsx";
+import * as $$$$$$16 from "./sections/Product/ProductDetails/ProductPage.tsx";
+import * as $$$$$$17 from "./sections/Product/ProductListing/ProductListingPage.tsx";
+import * as $$$$$$18 from "./sections/Product/ProductShelf/ProductShelf.tsx";
+import * as $$$$$$19 from "./sections/Social/ContactForm.tsx";
 
 const manifest = {
   "loaders": {
@@ -62,9 +63,9 @@ const manifest = {
     "elux-components-app/loaders/whereToBuy.ts": $$$12,
   },
   "sections": {
-    "elux-components-app/sections/blog/BlogShelf.tsx": $$$$$$19,
+    "elux-components-app/sections/blog/BlogShelf.tsx": $$$$$$20,
     "elux-components-app/sections/Component.tsx": $$$$$$0,
-    "elux-components-app/sections/container/Container.tsx": $$$$$$20,
+    "elux-components-app/sections/container/Container.tsx": $$$$$$21,
     "elux-components-app/sections/Content/Banner.tsx": $$$$$$1,
     "elux-components-app/sections/Content/Breadcrumb.tsx": $$$$$$2,
     "elux-components-app/sections/Content/Cards.tsx": $$$$$$3,
@@ -76,16 +77,17 @@ const manifest = {
     "elux-components-app/sections/Header/Header.tsx": $$$$$$9,
     "elux-components-app/sections/Images/Carousel.tsx": $$$$$$10,
     "elux-components-app/sections/Institutional/GuidesCategories.tsx": $$$$$$11,
-    "elux-components-app/sections/Institutional/Policy.tsx": $$$$$$12,
-    "elux-components-app/sections/Institutional/Support.tsx": $$$$$$13,
-    "elux-components-app/sections/Institutional/WhereToBuy.tsx": $$$$$$14,
+    "elux-components-app/sections/Institutional/GuidesProducts.tsx": $$$$$$12,
+    "elux-components-app/sections/Institutional/Policy.tsx": $$$$$$13,
+    "elux-components-app/sections/Institutional/Support.tsx": $$$$$$14,
+    "elux-components-app/sections/Institutional/WhereToBuy.tsx": $$$$$$15,
     "elux-components-app/sections/Product/ProductDetails/ProductPage.tsx":
-      $$$$$$15,
-    "elux-components-app/sections/Product/ProductListing/ProductListingPage.tsx":
       $$$$$$16,
-    "elux-components-app/sections/Product/ProductShelf/ProductShelf.tsx":
+    "elux-components-app/sections/Product/ProductListing/ProductListingPage.tsx":
       $$$$$$17,
-    "elux-components-app/sections/Social/ContactForm.tsx": $$$$$$18,
+    "elux-components-app/sections/Product/ProductShelf/ProductShelf.tsx":
+      $$$$$$18,
+    "elux-components-app/sections/Social/ContactForm.tsx": $$$$$$19,
   },
   "actions": {
     "elux-components-app/actions/category/submit.ts": $$$$$$$$$0,

@@ -11,6 +11,13 @@ import {
 } from "../../db/schema.ts";
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 import { logger } from "@deco/deco/o11y";
+import { Category } from "../../utils/types.ts";
+
+export interface GuideProducts {
+  products: Product[];
+  category: Category;
+}
+
 interface Props {
   /**
    * @title SLUG from URL
@@ -26,9 +33,14 @@ interface Props {
    * @description Select an attribute to compose the product url
    */
   urlComposing?: UrlComposing;
+  /**
+   * @title Custom URL Pathname
+   * @description Insert a custom URL path to be redirected to, onclick of a product card.
+   */
+  customPathname?: string;
 }
 
-type UrlComposing = "slug" | "sku" | "productId" | "gtin";
+type UrlComposing = "slug" | "sku" | "modelCode" | "gtin";
 
 interface BaseProduct {
   name: string;
@@ -50,18 +62,29 @@ interface BaseImage {
 }
 
 export default async function loader(
-  { slug, sortBy = "name-asc", urlComposing = "slug" }: Props,
+  {
+    slug,
+    sortBy = "name-asc",
+    urlComposing = "slug",
+    customPathname = "guias-y-manuales",
+  }: Props,
   req: Request,
   ctx: AppContext & RecordsAppContext,
-): Promise<Product[] | null> {
+): Promise<GuideProducts | null> {
   const url = new URL(req.url);
   const records = await ctx.invoke.records.loaders.drizzle();
-  const categoryBranch = await getCategoryTree(records, slug);
   const { language } = ctx;
+  const handledCustomPathname = customPathname.replace(/^\/+|\/+$/g, "");
   try {
+    const categoryBranch = await getCategoryTree(records, slug);
+    const selectedCategory = categoryBranch.find((c) => c.identifier === slug);
     const orderClause = language === "EN"
       ? products.alternateName
       : products.name;
+
+    if (!selectedCategory) {
+      return null;
+    }
 
     const baseProducts = await records.select({
       name: products.name,
@@ -94,7 +117,10 @@ export default async function loader(
       ) as unknown as BaseProduct[];
 
     if (!baseProducts || baseProducts.length === 0) {
-      return null;
+      return {
+        category: selectedCategory,
+        products: [],
+      };
     }
 
     const productImages = await records
@@ -111,32 +137,35 @@ export default async function loader(
       )
       .all() as unknown as BaseImage[];
 
-    return baseProducts.map<Product>((p) => {
-      return {
-        "@type": "Product",
-        name: language === "EN" ? p.alternateName ?? p.name : p.name,
-        sku: p.sku,
-        productID: p.productID ?? "",
-        gtin: p.gtin ?? undefined,
-        url: new URL(
-          `guides-and-manuals/${pickUrlComposed(p, urlComposing)}/p`,
-          url.origin,
-        ).href,
-        image: productImages
-          .filter((i) => i.subjectOf === p.sku)
-          .map((i) => ({
-            "@type": "ImageObject" as const,
-            ...i,
-            name: i.name ?? undefined,
-            description: i.description ?? undefined,
-            disambiguatingDescription: i.disambiguatingDescription ??
-              undefined,
-            subjectOf: i.subjectOf ?? undefined,
-            identifier: String(i.identifier),
-            additionalType: i.additionalType ?? undefined,
-          })),
-      };
-    });
+    return {
+      category: selectedCategory,
+      products: baseProducts.map<Product>((p) => {
+        return {
+          "@type": "Product",
+          name: language === "EN" ? p.alternateName ?? p.name : p.name,
+          sku: p.sku,
+          productID: p.productID ?? "",
+          gtin: p.gtin ?? undefined,
+          url: new URL(
+            `${handledCustomPathname}/${pickUrlComposed(p, urlComposing)}/p`,
+            url.origin,
+          ).href,
+          image: productImages
+            .filter((i) => i.subjectOf === p.sku)
+            .map((i) => ({
+              "@type": "ImageObject" as const,
+              ...i,
+              name: i.name ?? undefined,
+              description: i.description ?? undefined,
+              disambiguatingDescription: i.disambiguatingDescription ??
+                undefined,
+              subjectOf: i.subjectOf ?? undefined,
+              identifier: String(i.identifier),
+              additionalType: i.additionalType ?? undefined,
+            })),
+        };
+      }),
+    };
   } catch (e) {
     logger.error(e);
     return null;
@@ -150,7 +179,7 @@ const pickUrlComposed = (product: BaseProduct, urlComposing: UrlComposing) => {
   if (urlComposing === "sku") {
     return product.sku;
   }
-  if (urlComposing === "productId") {
+  if (urlComposing === "modelCode") {
     return product.productID;
   }
   if (urlComposing === "gtin") {
