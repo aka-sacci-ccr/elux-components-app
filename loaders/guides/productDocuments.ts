@@ -11,6 +11,7 @@ import {
 } from "../../db/schema.ts";
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { logger } from "@deco/deco/o11y";
+import { GUIDE_PROPERTY_ID } from "../../utils/product/constants.ts";
 
 interface ProductDocuments {
   identifier: number;
@@ -105,7 +106,6 @@ export default async function loader(
       sku: baseProduct.sku,
       productID: baseProduct.productID ?? "",
       gtin: baseProduct.gtin ?? undefined,
-      url: new URL(`${baseProduct.url}/p`, url.origin).href,
       image: productImages
         .filter((i) => i.subjectOf === baseProduct.sku)
         .map((i) => ({
@@ -123,7 +123,7 @@ export default async function loader(
         { url, name, alternateName },
       ) => ({
         "@type": "PropertyValue",
-        propertyID: "GUIDE",
+        propertyID: GUIDE_PROPERTY_ID,
         url,
         name: language === "EN" ? alternateName ?? name : name,
       })),

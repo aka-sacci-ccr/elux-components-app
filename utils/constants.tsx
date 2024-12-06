@@ -730,6 +730,7 @@ export const LANGUAGE_DIFFS = {
       notFound: "No products found",
       goBack: "Go back",
       notFoundProduct: "Product not found",
+      avaliableFiles: "Avaliable files:",
     },
   },
   ES: {
@@ -815,6 +816,7 @@ export const LANGUAGE_DIFFS = {
       notFound: "No se encontraron productos",
       goBack: "Volver atrás",
       notFoundProduct: "Producto no encontrado",
+      avaliableFiles: "Archivos disponibles:",
     },
   },
 };

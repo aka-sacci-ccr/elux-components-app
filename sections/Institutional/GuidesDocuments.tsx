@@ -8,6 +8,9 @@ import Breadcrumb, {
 import { Colors } from "../../utils/types.ts";
 import { LANGUAGE_DIFFS } from "../../utils/constants.tsx";
 import { Product } from "apps/commerce/types.ts";
+import ProductCard from "../../components/guides/ProductCard.tsx";
+import { GUIDE_PROPERTY_ID } from "../../utils/product/constants.ts";
+import DownloadCard from "../../components/guides/DownloadCard.tsx";
 
 export interface Props {
   /**
@@ -26,6 +29,16 @@ export interface Props {
     items: BreadcrumbItems[];
     hideProductName?: boolean;
   };
+  /**
+   * @title Unavailable documents text
+   * @description Text to display when there are no documents available
+   * @format rich-text
+   */
+  unavailableText: string;
+  /**
+   * @title Download button text
+   */
+  downloadButtonText?: string;
   /**
    * @title Spacing configuration
    */
@@ -61,6 +74,8 @@ export default function GuidesProducts(
     language,
     breadcrumb,
     spacingConfig,
+    unavailableText,
+    downloadButtonText = "Download",
   }: ReturnType<typeof loader>,
 ) {
   const isElux = siteTemplate === "elux";
@@ -96,6 +111,10 @@ export default function GuidesProducts(
     });
   }
 
+  const documents = product?.additionalProperty?.filter(
+    (p) => p.propertyID === GUIDE_PROPERTY_ID,
+  );
+
   return (
     <Container spacing={spacingConfig} class="min-h-[80vh]">
       <Breadcrumb {...newBreadcrumb} />
@@ -105,10 +124,44 @@ export default function GuidesProducts(
           <h2 class={clx(styling.description, "mt-6")}>
             {description}
           </h2>
-          <div class="flex flex-col max-w-[510px] mt-8 gap-4">
+          <div class="flex flex-col max-w-[795px] mt-8 gap-4">
             {product
               ? (
-                <div>
+                <div class="flex flex-col gap-8">
+                  <ProductCard
+                    product={product}
+                    siteTemplate={siteTemplate}
+                    mode="large"
+                  />
+                  <div>
+                    {documents?.length === 0 || !documents
+                      ? (
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: unavailableText,
+                          }}
+                          class={styling.unavailableText}
+                        />
+                      )
+                      : (
+                        <div class="flex flex-col gap-6">
+                          <div class={styling.avaliableText}>
+                            {LANGUAGE_DIFFS[language].guidesProducts
+                              .avaliableFiles}
+                          </div>
+                          <div class="grid grid-cols-2 gap-4">
+                            {documents.map((d) => (
+                              <DownloadCard
+                                property={d}
+                                productID={product.productID}
+                                siteTemplate={siteTemplate}
+                                downloadButtonText={downloadButtonText}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                  </div>
                 </div>
               )
               : <NotFound language={language} />}
@@ -122,11 +175,16 @@ export default function GuidesProducts(
 const ELUX_STYLING = {
   title: "text-primary text-2.5xl font-medium lg:text-3.5xl lg:font-semibold",
   description: "text-secondary text-base font-normal",
+  unavailableText: "text-secondary text-base font-medium",
+  avaliableText: "text-secondary text-base font-medium",
 };
 
 const FRIGIDAIRE_STYLING = {
   title: "text-primary text-2.5xl lg:text-4xl font-semibold",
   description: "text-secondary text-sm lg:text-base font-light",
+  unavailableText: "text-secondary text-sm lg:text-base font-light",
+  avaliableText:
+    "text-secondary text-sm lg:text-base font-medium leading-[21px]",
 };
 
 const BREADCRUMB_STYLING_ELUX = {

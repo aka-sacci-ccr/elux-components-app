@@ -182,7 +182,7 @@ export const cacheKey = (
     customPathname = "guias-y-manuales",
   }: Props,
 ) => {
-  return `guides-products-${slug}-sortBy-${sortBy}-composeUrl-${urlComposing}-customPathname-${customPathname}`;
+  return `guides-${slug}-sortBy-${sortBy}-composeUrl-${urlComposing}-customPathname-${customPathname}`;
 };
 
 const pickUrlComposed = (product: BaseProduct, urlComposing: UrlComposing) => {
