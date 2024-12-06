@@ -107,7 +107,7 @@ export default function ProductListingPage(
 
   return (
     <Container class="flex flex-col" spacing={spacing}>
-      <div class="w-full flex flex-row justify-center">
+      <div class="w-full flex flex-row lg:justify-center">
         <div class="my-6 w-[1280px] sm:pl-10">
           <Breadcrumb
             {...breadcrumbProps}

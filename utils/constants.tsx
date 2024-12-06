@@ -726,6 +726,12 @@ export const LANGUAGE_DIFFS = {
       WEIGHT: "Weight",
       category: "Category",
     },
+    guidesProducts: {
+      notFound: "No products found",
+      goBack: "Go back",
+      notFoundProduct: "Product not found",
+      avaliableFiles: "Avaliable files:",
+    },
   },
   ES: {
     contactForm: {
@@ -805,6 +811,12 @@ export const LANGUAGE_DIFFS = {
       DEPTH: "Profundidad",
       WEIGHT: "Peso",
       category: "Categoría",
+    },
+    guidesProducts: {
+      notFound: "No se encontraron productos",
+      goBack: "Volver atrás",
+      notFoundProduct: "Producto no encontrado",
+      avaliableFiles: "Archivos disponibles:",
     },
   },
 };

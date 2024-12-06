@@ -40,3 +40,5 @@ export const EXTENDED_URL_PARAMS_TO_EXCLUDE = [
 ];
 
 export const MEASUREMENTS_KEYS = ["height", "width", "depth", "weight"];
+
+export const GUIDE_PROPERTY_ID = "GUIDE";
