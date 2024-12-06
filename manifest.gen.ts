@@ -11,18 +11,19 @@ import * as $$$$$$$$$5 from "./actions/product/submit.ts";
 import * as $$$$$$$$$6 from "./actions/product/update/basicData.ts";
 import * as $$$$$$$$$7 from "./actions/product/update/documents.ts";
 import * as $$$0 from "./loaders/guides/categories.ts";
-import * as $$$1 from "./loaders/guides/products.ts";
-import * as $$$2 from "./loaders/menu.ts";
-import * as $$$3 from "./loaders/product/avaliableBrands.ts";
-import * as $$$4 from "./loaders/product/avaliableCategories.ts";
-import * as $$$5 from "./loaders/product/avaliableFiltersGroups.ts";
-import * as $$$6 from "./loaders/product/avaliableSites.ts";
-import * as $$$7 from "./loaders/product/avaliableSkus.ts";
-import * as $$$8 from "./loaders/product/details/productDetails.ts";
-import * as $$$9 from "./loaders/product/list/productList.ts";
-import * as $$$10 from "./loaders/product/listing/productListing.ts";
-import * as $$$11 from "./loaders/testShelf.ts";
-import * as $$$12 from "./loaders/whereToBuy.ts";
+import * as $$$1 from "./loaders/guides/productDocuments.tsx";
+import * as $$$2 from "./loaders/guides/products.ts";
+import * as $$$3 from "./loaders/menu.ts";
+import * as $$$4 from "./loaders/product/avaliableBrands.ts";
+import * as $$$5 from "./loaders/product/avaliableCategories.ts";
+import * as $$$6 from "./loaders/product/avaliableFiltersGroups.ts";
+import * as $$$7 from "./loaders/product/avaliableSites.ts";
+import * as $$$8 from "./loaders/product/avaliableSkus.ts";
+import * as $$$9 from "./loaders/product/details/productDetails.ts";
+import * as $$$10 from "./loaders/product/list/productList.ts";
+import * as $$$11 from "./loaders/product/listing/productListing.ts";
+import * as $$$12 from "./loaders/testShelf.ts";
+import * as $$$13 from "./loaders/whereToBuy.ts";
 import * as $$$$$$20 from "./sections/blog/BlogShelf.tsx";
 import * as $$$$$$0 from "./sections/Component.tsx";
 import * as $$$$$$21 from "./sections/container/Container.tsx";
@@ -49,18 +50,19 @@ import * as $$$$$$19 from "./sections/Social/ContactForm.tsx";
 const manifest = {
   "loaders": {
     "elux-components-app/loaders/guides/categories.ts": $$$0,
-    "elux-components-app/loaders/guides/products.ts": $$$1,
-    "elux-components-app/loaders/menu.ts": $$$2,
-    "elux-components-app/loaders/product/avaliableBrands.ts": $$$3,
-    "elux-components-app/loaders/product/avaliableCategories.ts": $$$4,
-    "elux-components-app/loaders/product/avaliableFiltersGroups.ts": $$$5,
-    "elux-components-app/loaders/product/avaliableSites.ts": $$$6,
-    "elux-components-app/loaders/product/avaliableSkus.ts": $$$7,
-    "elux-components-app/loaders/product/details/productDetails.ts": $$$8,
-    "elux-components-app/loaders/product/list/productList.ts": $$$9,
-    "elux-components-app/loaders/product/listing/productListing.ts": $$$10,
-    "elux-components-app/loaders/testShelf.ts": $$$11,
-    "elux-components-app/loaders/whereToBuy.ts": $$$12,
+    "elux-components-app/loaders/guides/productDocuments.tsx": $$$1,
+    "elux-components-app/loaders/guides/products.ts": $$$2,
+    "elux-components-app/loaders/menu.ts": $$$3,
+    "elux-components-app/loaders/product/avaliableBrands.ts": $$$4,
+    "elux-components-app/loaders/product/avaliableCategories.ts": $$$5,
+    "elux-components-app/loaders/product/avaliableFiltersGroups.ts": $$$6,
+    "elux-components-app/loaders/product/avaliableSites.ts": $$$7,
+    "elux-components-app/loaders/product/avaliableSkus.ts": $$$8,
+    "elux-components-app/loaders/product/details/productDetails.ts": $$$9,
+    "elux-components-app/loaders/product/list/productList.ts": $$$10,
+    "elux-components-app/loaders/product/listing/productListing.ts": $$$11,
+    "elux-components-app/loaders/testShelf.ts": $$$12,
+    "elux-components-app/loaders/whereToBuy.ts": $$$13,
   },
   "sections": {
     "elux-components-app/sections/blog/BlogShelf.tsx": $$$$$$20,

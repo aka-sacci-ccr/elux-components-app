@@ -40,9 +40,9 @@ interface Props {
   customPathname?: string;
 }
 
-type UrlComposing = "slug" | "sku" | "modelCode" | "gtin";
+export type UrlComposing = "slug" | "sku" | "modelCode" | "gtin";
 
-interface BaseProduct {
+export interface BaseProduct {
   name: string;
   alternateName?: string | null;
   productID: string;
@@ -51,7 +51,7 @@ interface BaseProduct {
   gtin: string | null;
 }
 
-interface BaseImage {
+export interface BaseImage {
   url: string;
   name: string | null;
   description: string | null;
