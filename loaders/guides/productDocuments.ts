@@ -10,7 +10,10 @@ import {
   products,
 } from "../../db/schema.ts";
 import { and, eq, inArray, sql } from "drizzle-orm";
-import { GUIDE_PROPERTY_ID } from "../../utils/product/constants.ts";
+import {
+  DATABASE_FIELDS,
+  GUIDE_PROPERTY_ID,
+} from "../../utils/product/constants.ts";
 
 interface ProductDocuments {
   identifier: number;
@@ -58,7 +61,7 @@ export default async function loader(
     )
     .where(
       and(
-        eq(fieldsToOrder[getBy], slug),
+        eq(DATABASE_FIELDS[getBy], slug),
         sql`${url.hostname} LIKE '%' || ${avaliableIn.domain}`,
       ),
     )
@@ -132,11 +135,4 @@ export const cache = "stale-while-revalidate";
 
 export const cacheKey = ({ slug, getBy = "modelCode" }: Props) => {
   return `product-documents-${slug}-composeUrl-${getBy}`;
-};
-
-const fieldsToOrder = {
-  "slug": products.url,
-  "sku": products.sku,
-  "modelCode": products.productID,
-  "gtin": products.gtin,
 };

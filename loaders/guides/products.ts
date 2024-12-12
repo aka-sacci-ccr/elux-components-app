@@ -11,6 +11,7 @@ import {
 } from "../../db/schema.ts";
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 import { Category } from "../../utils/types.ts";
+import { pickUrlComposed } from "../../utils/product/constants.ts";
 
 export interface GuideProducts {
   products: Product[];
@@ -177,19 +178,4 @@ export const cacheKey = (
   }: Props,
 ) => {
   return `guides-${slug}-sortBy-${sortBy}-composeUrl-${urlComposing}-customPathname-${customPathname}`;
-};
-
-const pickUrlComposed = (product: BaseProduct, urlComposing: UrlComposing) => {
-  if (urlComposing === "slug") {
-    return product.url;
-  }
-  if (urlComposing === "sku") {
-    return product.sku;
-  }
-  if (urlComposing === "modelCode") {
-    return product.productID;
-  }
-  if (urlComposing === "gtin") {
-    return product.gtin;
-  }
 };
