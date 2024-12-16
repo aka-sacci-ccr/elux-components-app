@@ -211,12 +211,13 @@ export interface Category {
    */
   subjectOf?: string;
   /**
-   * @title Image
+   * @title Category Banner
    * @format image-uri
    */
   image?: string;
   /**
-   * @title Icon
+   * @title Category Icon
+   * @description Used in Guides and manuals page.
    * @format icon-select
    * @options site/loaders/availableIcons.ts
    */
@@ -243,7 +244,7 @@ export interface Product {
    */
   alternateName?: string;
   /**
-   * @title Product ID
+   * @title Model code
    */
   productID: string;
   /**

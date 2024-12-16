@@ -1,4 +1,6 @@
 import { AvailableIcons } from "../../components/ui/Icon.tsx";
+import { products } from "../../db/schema.ts";
+import { BaseProduct, UrlComposing } from "../../loaders/guides/products.ts";
 import { LANGUAGE_DIFFS } from "../constants.tsx";
 
 export const DEFAULT_DOMAINS = ["deno.dev", "decocdn.com", "localhost"];
@@ -40,3 +42,30 @@ export const EXTENDED_URL_PARAMS_TO_EXCLUDE = [
 ];
 
 export const MEASUREMENTS_KEYS = ["height", "width", "depth", "weight"];
+
+export const GUIDE_PROPERTY_ID = "GUIDE";
+
+export const DATABASE_FIELDS = {
+  "slug": products.url,
+  "sku": products.sku,
+  "modelCode": products.productID,
+  "gtin": products.gtin,
+};
+
+export const pickUrlComposed = (
+  product: BaseProduct,
+  urlComposing: UrlComposing,
+) => {
+  if (urlComposing === "slug") {
+    return product.url;
+  }
+  if (urlComposing === "sku") {
+    return product.sku;
+  }
+  if (urlComposing === "modelCode") {
+    return product.productID;
+  }
+  if (urlComposing === "gtin") {
+    return product.gtin;
+  }
+};

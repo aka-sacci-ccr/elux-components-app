@@ -12,8 +12,7 @@ export interface Props {
   originSite?: string;
 }
 
-export interface State extends Omit<Props, "token"> {
-}
+export type State = Omit<Props, "token">;
 
 /**
  * @title Elux Global Sections
