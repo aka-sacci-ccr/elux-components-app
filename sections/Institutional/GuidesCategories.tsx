@@ -6,6 +6,12 @@ import { useId } from "../../sdk/useId.ts";
 import InformativeModal from "../../components/ui/InformativeModal.tsx";
 import { CategoryFather } from "../../loaders/guides/categories.ts";
 import Collapsible from "../../components/guides/Collapsible.tsx";
+import { useScript } from "@deco/deco/hooks";
+import { Product } from "apps/commerce/types.ts";
+import { asResolved, Resolved } from "@deco/deco";
+import { useComponent } from "../Component.tsx";
+import { Props as SearchResultProps } from "../../components/guides/SearchResult.tsx";
+
 export interface Props {
   /**
    * @title Title
@@ -34,6 +40,10 @@ export interface Props {
 }
 
 interface SearchSection {
+  /**
+   * @title Product Search Loader
+   */
+  loader: Resolved<Product[] | null>;
   /**
    * @title Auxiliary text
    * @format rich-text
@@ -64,12 +74,34 @@ export interface ModalProps {
   buttonText: string;
 }
 
+const Component = import.meta.resolve(
+  "../../components/guides/SearchResult.tsx",
+);
+
 export const loader = (props: Props, req: Request, ctx: AppContext) => {
   return {
     ...props,
     siteTemplate: ctx.siteTemplate,
     url: req.url,
   };
+};
+
+const scroll = () => {
+  const div = document.getElementById("collapse-result") as
+    | HTMLDivElement
+    | null;
+
+  if (div) {
+    const rect = div.getBoundingClientRect();
+
+    // Calculate scroll needed to maintain current viewport position
+    const targetScroll = globalThis.scrollY + rect.top - 200;
+
+    globalThis.scrollTo({
+      top: targetScroll,
+      behavior: "smooth",
+    });
+  }
 };
 
 export default function GuidesCategories(props: ReturnType<typeof loader>) {
@@ -96,6 +128,18 @@ export default function GuidesCategories(props: ReturnType<typeof loader>) {
             __html: `
                     input:checked ~ label .arrow { transform: rotate(180deg); transition: transform 0.4s ease; }
                     input:not(:checked) ~ label .arrow { transform: rotate(0deg); transition: transform 0.4s ease; }
+                    .collapse-result.htmx-settling > #search-result { 
+                    --tw-translate-y: -20px;
+                      opacity: 0;
+                      transition: none;
+                    }
+                  .collapse-result > #search-result {
+                    --tw-translate-y: 0;
+                    opacity: 1;
+                    transition-property: opacity, transform;
+                    transition-timing-function: ease-in-out;
+                    transition-duration: 150ms;
+                  }
                     `,
           }}
         />
@@ -116,35 +160,70 @@ export default function GuidesCategories(props: ReturnType<typeof loader>) {
         </ul>
         <div
           class={clx(
-            "w-full flex flex-col p-4",
+            "w-full flex flex-col p-4 group",
             styling.searchSection.container,
           )}
         >
-          <div
-            class={clx("mb-4", styling.searchSection.auxiliaryText)}
-            dangerouslySetInnerHTML={{
-              __html: props.searchSection.auxiliaryText,
-            }}
-          />
+          <div class="lg:min-h-[37px] min-h-[58px]">
+            {/** Auxiliary text */}
+            <div
+              class={clx(
+                "mb-4",
+                styling.searchSection.auxiliaryText,
+              )}
+              dangerouslySetInnerHTML={{
+                __html: props.searchSection.auxiliaryText,
+              }}
+            />
+            {/** Seachbar result */}
+            <div
+              class="collapse collapse-open rounded-none"
+              id="collapse-search"
+            >
+              <div class="collapse-content p-0">
+                <div id="collapse-result" class="collapse-result" />
+              </div>
+            </div>
+            <style
+              dangerouslySetInnerHTML={{
+                __html: `
+      
+    `,
+              }}
+            />
+          </div>
           {/* Searchbar */}
-          <div class="relative">
+          <div class="relative group">
             <input
               type="text"
+              name="term"
               placeholder={props.searchSection.placeholder}
               class={clx(
-                "w-full bg-white",
+                "w-full bg-white peer",
                 styling.searchSection.input,
               )}
+              autocomplete="off"
+              hx-target={`#collapse-result`}
+              hx-post={props.searchSection.loader &&
+                useComponent<SearchResultProps>(Component, {
+                  loader: asResolved(props.searchSection.loader),
+                  siteTemplate: props.siteTemplate,
+                })}
+              hx-swap="innerHTML settle:75ms"
+              hx-trigger={`input changed delay:350ms`}
+              hx-select="section>*"
+              hx-on-htmx-after-request={useScript(scroll)}
             />
             <Icon
               id="search"
               class={clx(
-                "absolute left-4 top-1/2 -translate-y-1/2",
+                "absolute left-4 top-1/2 -translate-y-1/2 group-has-[.htmx-request]:hidden",
                 styling.searchSection.icon,
               )}
               width={24}
               height={24}
             />
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 loading loading-spinner hidden group-has-[.htmx-request]:block text-primary h-6 w-6" />
           </div>
           <div
             class={clx(
