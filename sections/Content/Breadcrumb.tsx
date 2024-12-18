@@ -79,7 +79,7 @@ export default function Breadcrumb(
   return (
     <Container
       spacing={spacing}
-      class={clx("px-4 lg:px-0", !disableContainer && "container")}
+      class={clx("px-6 lg:px-0", !disableContainer && "container")}
     >
       <div
         class={clx(

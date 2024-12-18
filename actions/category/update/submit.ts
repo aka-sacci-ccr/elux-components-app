@@ -23,7 +23,9 @@ export default async function submit(
   const records = await ctx.invoke.records.loaders.drizzle();
 
   try {
-    const identifier = categoryIdentifier ? categoryIdentifier.split("---")[0] : undefined;
+    const identifier = categoryIdentifier
+      ? categoryIdentifier.split("---")[0]
+      : undefined;
     console.log(rest);
     await records.update(categories).set({
       ...rest,
