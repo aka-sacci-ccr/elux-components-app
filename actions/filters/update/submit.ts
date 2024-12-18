@@ -6,7 +6,7 @@ import { logger } from "@deco/deco/o11y";
 export interface Props {
   /**
    * @title Filter Group
-   * @description To use this property as a filter, you need to select a filter group.
+   * @description Select a filter group to update.
    * @format dynamic-options
    * @options elux-components-app/loaders/product/avaliableFiltersGroups.ts
    */

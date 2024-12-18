@@ -1,8 +1,8 @@
 import { AppContext } from "apps/records/mod.ts";
-import { insertDocuments } from "../../../utils/product/submitProduct.ts";
-import { ProductDocument } from "../../../utils/types.ts";
+import { insertDocuments } from "../../utils/product/submitProduct.ts";
+import { ProductDocument } from "../../utils/types.ts";
 import { logger } from "@deco/deco/o11y";
-import { productDocuments } from "../../../db/schema.ts";
+import { productDocuments } from "../../db/schema.ts";
 import { eq } from "drizzle-orm";
 export interface Props {
   /**
@@ -21,7 +21,7 @@ export interface Props {
  * @title Update documents
  * @description Blank data will not be changed
  */
-export default async function documents(
+export default async function action(
   props: Props,
   _req: Request,
   ctx: AppContext,
@@ -33,7 +33,7 @@ export default async function documents(
       .select()
       .from(productDocuments)
       .where(eq(productDocuments.subjectOf, props.sku));
-    return productDocs;
+    return productDocs as ProductDocument[];
   } catch (e) {
     logger.error(e);
     return {

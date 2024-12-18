@@ -182,7 +182,8 @@ export interface IconProps {
 
 export interface Category {
   /**
-   * @description Category identifier
+   * @title Category identifier
+   * @description e.g SLUG. The unique category ID
    */
   identifier: string;
   /**
@@ -192,26 +193,29 @@ export interface Category {
   name: string;
   /**
    * @title English Name
+   * @description Category name in english
    */
   alternateName?: string;
   /**
-   * @title Category description
-   * @description Spanish category description
+   * @title Spanish Category description
+   * @description Category description
    */
   description?: string;
   /**
-   * @title English description
-   * @description English category description
+   * @title English Category description
+   * @description Category description in english
    */
   alternateDescription?: string;
   /**
    * @title Category father
+   * @description Select an category to be superior to this category.
    * @format dynamic-options
    * @options elux-components-app/loaders/product/avaliableCategories.ts
    */
   subjectOf?: string;
   /**
    * @title Category Banner
+   * @description Banner displayed in the category page.
    * @format image-uri
    */
   image?: string;

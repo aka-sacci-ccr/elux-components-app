@@ -3,13 +3,14 @@
 // This file is automatically updated during development when running `dev.ts`.
 
 import * as $$$$$$$$$0 from "./actions/category/submit.ts";
-import * as $$$$$$$$$1 from "./actions/contact/submit.ts";
-import * as $$$$$$$$$2 from "./actions/domains/submit.ts";
-import * as $$$$$$$$$3 from "./actions/filters/submit.ts";
-import * as $$$$$$$$$4 from "./actions/filters/update/submit.ts";
-import * as $$$$$$$$$5 from "./actions/product/submit.ts";
-import * as $$$$$$$$$6 from "./actions/product/update/basicData.ts";
-import * as $$$$$$$$$7 from "./actions/product/update/documents.ts";
+import * as $$$$$$$$$1 from "./actions/category/update/submit.ts";
+import * as $$$$$$$$$2 from "./actions/contact/submit.ts";
+import * as $$$$$$$$$3 from "./actions/domains/submit.ts";
+import * as $$$$$$$$$4 from "./actions/filters/submit.ts";
+import * as $$$$$$$$$5 from "./actions/filters/update/submit.ts";
+import * as $$$$$$$$$6 from "./actions/product/submit.ts";
+import * as $$$$$$$$$7 from "./actions/product/submitDocuments.ts";
+import * as $$$$$$$$$8 from "./actions/product/update/basicData.ts";
 import * as $$$0 from "./loaders/guides/categories.ts";
 import * as $$$1 from "./loaders/guides/productDocuments.ts";
 import * as $$$2 from "./loaders/guides/products.ts";
@@ -97,13 +98,14 @@ const manifest = {
   },
   "actions": {
     "elux-components-app/actions/category/submit.ts": $$$$$$$$$0,
-    "elux-components-app/actions/contact/submit.ts": $$$$$$$$$1,
-    "elux-components-app/actions/domains/submit.ts": $$$$$$$$$2,
-    "elux-components-app/actions/filters/submit.ts": $$$$$$$$$3,
-    "elux-components-app/actions/filters/update/submit.ts": $$$$$$$$$4,
-    "elux-components-app/actions/product/submit.ts": $$$$$$$$$5,
-    "elux-components-app/actions/product/update/basicData.ts": $$$$$$$$$6,
-    "elux-components-app/actions/product/update/documents.ts": $$$$$$$$$7,
+    "elux-components-app/actions/category/update/submit.ts": $$$$$$$$$1,
+    "elux-components-app/actions/contact/submit.ts": $$$$$$$$$2,
+    "elux-components-app/actions/domains/submit.ts": $$$$$$$$$3,
+    "elux-components-app/actions/filters/submit.ts": $$$$$$$$$4,
+    "elux-components-app/actions/filters/update/submit.ts": $$$$$$$$$5,
+    "elux-components-app/actions/product/submit.ts": $$$$$$$$$6,
+    "elux-components-app/actions/product/submitDocuments.ts": $$$$$$$$$7,
+    "elux-components-app/actions/product/update/basicData.ts": $$$$$$$$$8,
   },
   "name": "elux-components-app",
   "baseUrl": import.meta.url,
