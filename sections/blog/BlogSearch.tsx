@@ -1,8 +1,26 @@
-import { Category } from "apps/blog/types.ts";
 import Container, { SpacingConfig } from "../container/Container.tsx";
 import { AppContext } from "../../mod.ts";
 import { clx } from "../../utils/clx.ts";
 import { type SectionProps } from "@deco/deco";
+import Icon from "../../components/ui/Icon.tsx";
+import { useScript } from "@deco/deco/hooks";
+
+const ACTION = "q";
+
+interface SearchCategory {
+  /**
+   * @title Category name
+   */
+  name: string;
+  /**
+   * @title Category slug
+   */
+  slug: string;
+  /**
+   * @title Is default
+   */
+  default?: boolean;
+}
 
 interface Props {
   /**
@@ -27,7 +45,7 @@ interface CategorySection {
   /**
    * @title Blog categories
    */
-  categories: Category[] | null;
+  categories: SearchCategory[];
 }
 
 interface SearchSection {
@@ -49,28 +67,85 @@ interface SearchSection {
   searchButtonText: string;
 }
 
-export async function loader(props: Props, _req: Request, ctx: AppContext) {
+export async function loader(props: Props, req: Request, ctx: AppContext) {
   const { siteTemplate } = ctx;
-  await 0;
-  /*   const url = new URL(req.url);
+  const url = new URL(req.url);
+  const pathname = url.pathname.split("/");
+  const query = url.searchParams.get(ACTION);
   const pageResolverId = ctx.resolverId?.split("@")[0];
 
-  const resolvables: Record<string, Resolvable<{ path: string }>> = await ctx
+  //@ts-expect-error paths exists in resovables
+  const resolvables: Record<string, { path: string }> = await ctx
     .get({
       __resolveType: "resolvables",
     });
 
-  const current = Object.entries(resolvables).find(([key]) => {
-    return key === pageResolverId;
-  });
+  if (pageResolverId) {
+    const current = resolvables[pageResolverId];
+    if (current) {
+      if (current.path.includes(":")) {
+        return {
+          ...props,
+          siteTemplate,
+          markedValue: props.categorySection.categories.findIndex((c) =>
+            c.slug === pathname[pathname.length - 1]
+          ),
+          query,
+        };
+      }
+    }
+  }
 
-  //console.log(current); */
-  return { ...props, siteTemplate };
+  return {
+    ...props,
+    siteTemplate,
+    markedValue: !query
+      ? props.categorySection.categories.findIndex((c) => c.default)
+      : -1,
+    query,
+  };
 }
 
+const handleCategoryClick = (slug: string) => {
+  const cleanSlug = slug.replace(/\//g, "");
+  globalThis.location.href = `/blog/${cleanSlug}`;
+};
+
+const script = () => {
+  const validateForm = () => {
+    const requiredFields = document.querySelectorAll(
+      "[data-required]",
+    ) as NodeListOf<HTMLInputElement>;
+    const allFields = Array.from(requiredFields).reduce((isValid, field) => {
+      if (!field.value.trim()) {
+        return false;
+      }
+      return isValid;
+    }, true);
+    return allFields;
+  };
+
+  const form = document.querySelector("form");
+  const submitButton = document.querySelector('button[type="submit"]');
+  if (form && submitButton) {
+    submitButton.addEventListener("click", function (event) {
+      if (!validateForm()) {
+        event.preventDefault();
+      }
+    });
+  }
+};
+
 export default function BlogSearch(props: SectionProps<typeof loader>) {
-  const { categorySection, spacing, siteTemplate } = props;
-  const { container, categoryStyling } = siteTemplate === "elux"
+  const {
+    categorySection,
+    spacing,
+    siteTemplate,
+    markedValue,
+    searchSection,
+    query,
+  } = props;
+  const { container, categoryStyling, searchStyling } = siteTemplate === "elux"
     ? ELUX_STYLING
     : FRIGIDAIRE_STYLING;
   return (
@@ -78,33 +153,90 @@ export default function BlogSearch(props: SectionProps<typeof loader>) {
       spacing={spacing}
       class="container px-6 lg:px-0"
     >
-      <div class={clx("px-4 py-6 flex flex-col", container)}>
+      <div class={clx("px-4 py-6 flex flex-col lg:flex-row", container)}>
+        {/* Category section */}
         {categorySection.categories && categorySection.categories.length > 0 &&
           (
-            <div class="flex flex-col gap-2">
-              <p class={categoryStyling.title}>{categorySection.title}</p>
-              <div class="flex flex-row flex-wrap gap-2">
-                {categorySection.categories.map((category, index) => (
-                  <label
-                    class={clx(
-                      categoryStyling.button,
-                      "h-[34px] leading-3 content-center cursor-pointer",
-                      "has-[:checked]:cursor-default has-[:checked]:pointer-events-none",
-                    )}
-                  >
-                    <input
-                      type="radio"
-                      name="blog-category"
-                      value={index}
-                      class="peer hidden"
-                    />
-                    <span>{category.name}</span>
-                  </label>
-                ))}
+            <div class="lg:min-w-[582px] flex flex-col lg:flex-row lg:justify-between">
+              <div class="flex flex-col gap-2">
+                {/* Category section title */}
+                <p class={categoryStyling.title}>{categorySection.title}</p>
+                <div class="flex flex-row flex-wrap gap-2">
+                  {/* Category section buttons */}
+                  {categorySection.categories.map((category, index) => (
+                    <label
+                      class={clx(
+                        categoryStyling.button,
+                        "h-[34px] leading-3 content-center cursor-pointer",
+                        "has-[:checked]:cursor-default has-[:checked]:pointer-events-none",
+                        "btn btn-ghost min-h-[34px]",
+                      )}
+                    >
+                      <input
+                        type="radio"
+                        name="blog-category"
+                        value={index}
+                        class="peer hidden"
+                        defaultChecked={index === markedValue}
+                        hx-on:click={useScript(
+                          handleCategoryClick,
+                          category.slug,
+                        )}
+                      />
+                      <span>{category.name}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
+              <div
+                class={clx(
+                  "my-5 h-0 border-t lg:border-t-0 lg:h-auto lg:w-0 lg:border-l lg:my-0 lg:mx-5",
+                  categoryStyling.hr,
+                )}
+              />
             </div>
           )}
+        {/* Search section */}
+        <div class="flex flex-col gap-2 w-full self-center">
+          {/* Search section title */}
+          <p class={searchStyling.title}>{searchSection.title}</p>
+          <form class="flex flex-row gap-4">
+            {/* Searchbar */}
+            <div class="relative group w-full">
+              <input
+                type="text"
+                name={ACTION}
+                placeholder={searchSection.placeholder}
+                class={clx(
+                  "w-full bg-white peer",
+                  searchStyling.input,
+                )}
+                autocomplete="off"
+                value={query ?? ""}
+                data-required
+              />
+              <Icon
+                id="search"
+                class={clx(
+                  "absolute left-4 top-1/2 -translate-y-1/2",
+                  searchStyling.icon,
+                )}
+                width={24}
+                height={24}
+              />
+            </div>
+            <button
+              class={clx(searchStyling.button, "btn btn-ghost")}
+              type="submit"
+            >
+              {searchSection.searchButtonText}
+            </button>
+          </form>
+        </div>
       </div>
+      <script
+        dangerouslySetInnerHTML={{ __html: useScript(script) }}
+      />
     </Container>
   );
 }
@@ -115,6 +247,14 @@ const ELUX_STYLING = {
     title: "text-sm text-primary font-medium",
     button:
       "text-sm text-primary font-medium px-3 rounded-[40px] border border-primary has-[:checked]:bg-primary has-[:checked]:text-white hover:bg-primary hover:text-white",
+    hr: "border-warning",
+  },
+  searchStyling: {
+    title: "text-sm text-primary font-medium",
+    input:
+      "border border-neutral rounded-sm pl-12 h-12 text-base placeholder:text-success-content text-primary leading-6",
+    icon: "text-primary",
+    button: "text-base text-white bg-primary font-medium px-4 rounded-sm",
   },
 };
 
@@ -123,6 +263,15 @@ const FRIGIDAIRE_STYLING = {
   categoryStyling: {
     title: "text-sm text-primary font-bold",
     button: "text-sm text-primary font-bold p-4 rounded-[40px]",
+    hr: "border-warning",
+  },
+  searchStyling: {
+    title: "text-sm text-primary font-medium",
+    input:
+      "border border-accent rounded-sm pl-12 h-12 text-sm lg:text-base placeholder:text-info text-secondary font-light !leading-[80px]",
+    icon: "text-secondary",
+    button:
+      "text-base text-secondary font-medium px-4 rounded-sm hover:warning-content",
   },
 };
 
@@ -134,7 +283,7 @@ export const LoadingFallback = (
       spacing={spacing}
       class="container px-6 lg:px-0 flex justify-center items-center"
     >
-      <div class="h-64 lg:h-128 content-center">
+      <div class="h-64 lg:h-32 content-center">
         <span class="loading loading-lg loading-spinner text-primary" />
       </div>
     </Container>
