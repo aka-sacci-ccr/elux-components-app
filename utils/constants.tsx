@@ -732,6 +732,12 @@ export const LANGUAGE_DIFFS = {
       notFoundProduct: "Product not found",
       avaliableFiles: "Avaliable files:",
     },
+    listingBlogs: {
+      results: "results for your search",
+      showMore: "Show more",
+      showLess: "Show less",
+      page: "Page",
+    },
   },
   ES: {
     contactForm: {
@@ -817,6 +823,12 @@ export const LANGUAGE_DIFFS = {
       goBack: "Volver atrás",
       notFoundProduct: "Producto no encontrado",
       avaliableFiles: "Archivos disponibles:",
+    },
+    listingBlogs: {
+      results: "resultados para su búsqueda",
+      showMore: "Mostrar más",
+      showLess: "Mostrar menos",
+      page: "Página",
     },
   },
 };
