@@ -227,7 +227,7 @@ function Result(props: SectionProps<typeof loader>) {
       {partial
         ? <PageResult {...props} isDesktop={isDesktop} />
         : (
-          <div class="mt-8">
+          <div class={clx(props.hasTitleOrResultsQty && "mt-8")}>
             <PageResult {...props} isDesktop={isDesktop} />
           </div>
         )}
@@ -276,6 +276,9 @@ export const loader = (props: Props, req: Request, ctx: AppContext) => {
     url: req.url,
     language,
     siteTemplate,
+    hasTitleOrResultsQty: Boolean(
+      props.title || props.layout?.showResultsQuantity,
+    ),
   };
 };
 
