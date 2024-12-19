@@ -273,7 +273,8 @@ const ELUX_STYLING = {
     input:
       "border border-neutral rounded-sm pl-12 h-12 text-base placeholder:text-success-content text-primary leading-6",
     icon: "text-primary",
-    button: "text-base text-white bg-primary font-medium px-4 rounded-sm",
+    button:
+      "text-base text-white bg-primary font-medium px-4 rounded-sm hover:bg-warning",
     clearSearch:
       "text-sm text-primary font-light underline lg:underline-offset-2",
   },
