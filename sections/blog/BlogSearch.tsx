@@ -208,7 +208,7 @@ export default function BlogSearch(props: SectionProps<typeof loader>) {
                 name={ACTION}
                 placeholder={searchSection.placeholder}
                 class={clx(
-                  "w-full bg-white peer",
+                  "w-full bg-white peer pr-3",
                   searchStyling.input,
                 )}
                 autocomplete="off"
@@ -261,17 +261,18 @@ const ELUX_STYLING = {
 const FRIGIDAIRE_STYLING = {
   container: "bg-base-300 border border-base-200",
   categoryStyling: {
-    title: "text-sm text-primary font-bold",
-    button: "text-sm text-primary font-bold p-4 rounded-[40px]",
+    title: "text-sm text-secondary font-medium",
+    button:
+      "text-sm text-primary font-medium px-3 rounded-[40px] border border-primary has-[:checked]:bg-primary has-[:checked]:text-white hover:bg-primary hover:text-white",
     hr: "border-warning",
   },
   searchStyling: {
-    title: "text-sm text-primary font-medium",
+    title: "text-sm text-secondary font-medium",
     input:
-      "border border-accent rounded-sm pl-12 h-12 text-sm lg:text-base placeholder:text-info text-secondary font-light !leading-[80px]",
-    icon: "text-secondary",
+      "border border-base-200 rounded pl-12 h-12 text-base placeholder:text-accent text-secondary font-light placeholder:font-medium",
+    icon: "text-primary",
     button:
-      "text-base text-secondary font-medium px-4 rounded-sm hover:warning-content",
+      "text-sm text-white bg-primary font-medium px-6 rounded-[50px] min-h-10.5 max-h-10.5 self-center",
   },
 };
 
