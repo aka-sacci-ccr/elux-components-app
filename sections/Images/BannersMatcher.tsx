@@ -53,8 +53,17 @@ export default function BannersMatcher(
 
 export const loader = (props: Props, req: Request) => {
   const { banners } = { ...props };
-  const banner = banners?.find(({ matcher }) =>
-    new URLPattern({ pathname: matcher }).test(req.url)
+
+  // Primeiro procura por um matcher específico
+  const specificBanner = banners?.find(({ matcher }) =>
+    matcher !== "/*" && new URLPattern({ pathname: matcher }).test(req.url)
   );
-  return { banner };
+
+  // Se não encontrar específico, procura pelo matcher genérico
+  const fallbackBanner = banners?.find(({ matcher }) =>
+    matcher === "/*" && new URLPattern({ pathname: matcher }).test(req.url)
+  );
+
+  // Retorna o banner específico se existir, senão retorna o fallback
+  return { banner: specificBanner || fallbackBanner };
 };

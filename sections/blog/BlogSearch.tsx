@@ -68,33 +68,21 @@ interface SearchSection {
   searchButtonText: string;
 }
 
-export async function loader(props: Props, req: Request, ctx: AppContext) {
+export function loader(props: Props, req: Request, ctx: AppContext) {
   const { siteTemplate } = ctx;
   const url = new URL(req.url);
   const pathname = url.pathname.split("/");
   const query = url.searchParams.get(ACTION);
-  const pageResolverId = ctx.resolverId?.split("@")[0];
 
-  //@ts-expect-error paths exists in resovables
-  const resolvables: Record<string, { path: string }> = await ctx
-    .get({
-      __resolveType: "resolvables",
-    });
-
-  if (pageResolverId) {
-    const current = resolvables[pageResolverId];
-    if (current) {
-      if (current.path.includes(":")) {
-        return {
-          ...props,
-          siteTemplate,
-          markedValue: props.categorySection.categories.findIndex((c) =>
-            c.slug === pathname[pathname.length - 1]
-          ),
-          query,
-        };
-      }
-    }
+  if (pathname[1] === "blog" && pathname.length > 2) {
+    return {
+      ...props,
+      siteTemplate,
+      markedValue: props.categorySection.categories.findIndex((c) =>
+        c.slug.replace(/\//g, "") === pathname[pathname.length - 1]
+      ),
+      query,
+    };
   }
 
   return {
