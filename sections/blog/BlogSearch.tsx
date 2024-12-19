@@ -6,6 +6,7 @@ import Icon from "../../components/ui/Icon.tsx";
 import { useScript } from "@deco/deco/hooks";
 
 const ACTION = "q";
+const INPUT_ID = "search-blog";
 
 interface SearchCategory {
   /**
@@ -111,6 +112,13 @@ const handleCategoryClick = (slug: string) => {
   globalThis.location.href = `/blog/${cleanSlug}`;
 };
 
+const handleCleanSearchClick = (id: string) => {
+  const inputElement = document.getElementById(id) as HTMLInputElement;
+  if (inputElement) {
+    inputElement.value = "";
+  }
+};
+
 const script = () => {
   const validateForm = () => {
     const requiredFields = document.querySelectorAll(
@@ -153,7 +161,9 @@ export default function BlogSearch(props: SectionProps<typeof loader>) {
       spacing={spacing}
       class="container px-6 lg:px-0"
     >
-      <div class={clx("px-4 py-6 flex flex-col lg:flex-row", container)}>
+      <div
+        class={clx("px-4 py-6 flex flex-col lg:flex-row relative", container)}
+      >
         {/* Category section */}
         {categorySection.categories && categorySection.categories.length > 0 &&
           (
@@ -207,6 +217,7 @@ export default function BlogSearch(props: SectionProps<typeof loader>) {
                 type="text"
                 name={ACTION}
                 placeholder={searchSection.placeholder}
+                id={INPUT_ID}
                 class={clx(
                   "w-full bg-white peer pr-3",
                   searchStyling.input,
@@ -233,6 +244,14 @@ export default function BlogSearch(props: SectionProps<typeof loader>) {
             </button>
           </form>
         </div>
+        <div
+          class="absolute top-3 right-3 lg:top-4 lg:right-4 z-10 cursor-pointer"
+          hx-on:click={useScript(handleCleanSearchClick, INPUT_ID)}
+        >
+          <span class={searchStyling.clearSearch}>
+            {searchSection.clearText}
+          </span>
+        </div>
       </div>
       <script
         dangerouslySetInnerHTML={{ __html: useScript(script) }}
@@ -255,6 +274,8 @@ const ELUX_STYLING = {
       "border border-neutral rounded-sm pl-12 h-12 text-base placeholder:text-success-content text-primary leading-6",
     icon: "text-primary",
     button: "text-base text-white bg-primary font-medium px-4 rounded-sm",
+    clearSearch:
+      "text-sm text-primary font-light underline lg:underline-offset-2",
   },
 };
 
@@ -272,7 +293,9 @@ const FRIGIDAIRE_STYLING = {
       "border border-base-200 rounded pl-12 h-12 text-base placeholder:text-accent text-secondary font-light placeholder:font-medium",
     icon: "text-primary",
     button:
-      "text-sm text-white bg-primary font-medium px-6 rounded-[50px] min-h-10.5 max-h-10.5 self-center",
+      "text-sm text-white bg-primary font-medium px-5 rounded-[50px] min-h-10.5 h-10.5 self-center leading-6",
+    clearSearch:
+      "text-sm text-secondary font-light underline lg:underline-offset-2",
   },
 };
 
