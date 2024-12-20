@@ -88,9 +88,7 @@ export function loader(props: Props, req: Request, ctx: AppContext) {
   return {
     ...props,
     siteTemplate,
-    markedValue: !query
-      ? props.categorySection.categories.findIndex((c) => c.default)
-      : -1,
+    markedValue: props.categorySection.categories.findIndex((c) => c.default),
     query,
   };
 }
@@ -100,10 +98,19 @@ const handleCategoryClick = (slug: string) => {
   globalThis.location.href = `/blog/${cleanSlug}`;
 };
 
-const handleCleanSearchClick = (id: string) => {
+const handleCleanSearchClick = (id: string, action: string) => {
+  const url = new URL(globalThis.location.href);
   const inputElement = document.getElementById(id) as HTMLInputElement;
-  if (inputElement) {
+
+  if (url.searchParams.has(action)) {
+    url.searchParams.delete(action);
+    globalThis.location.href = url.toString();
+    return;
+  }
+
+  if (inputElement?.value) {
     inputElement.value = "";
+    return;
   }
 };
 
@@ -234,7 +241,7 @@ export default function BlogSearch(props: SectionProps<typeof loader>) {
         </div>
         <div
           class="absolute top-3 right-3 lg:top-4 lg:right-4 z-10 cursor-pointer"
-          hx-on:click={useScript(handleCleanSearchClick, INPUT_ID)}
+          hx-on:click={useScript(handleCleanSearchClick, INPUT_ID, ACTION)}
         >
           <span class={searchStyling.clearSearch}>
             {searchSection.clearText}
