@@ -61,13 +61,6 @@ const useUrlRebased = (overrides: string | undefined, base: string) => {
   }
   return url;
 };
-function NotFound() {
-  return (
-    <div class="w-full flex justify-center items-center py-10 lg:container">
-      <span>Not Found!</span>
-    </div>
-  );
-}
 function PageResult(
   props: SectionProps<typeof loader> & {
     isDesktop: boolean;
@@ -243,8 +236,11 @@ export default function BlogListing(
     : FRIGIDAIRE_STYLING;
   if (!page?.posts) {
     return (
-      <Container spacing={props.spacing}>
-        <NotFound />
+      <Container
+        spacing={props.spacing}
+        class="px-6 lg:container justify-items-center"
+      >
+        <NotFound language={props.language} />
       </Container>
     );
   }
@@ -269,6 +265,21 @@ export default function BlogListing(
     </Container>
   );
 }
+
+function NotFound({ language }: { language: "EN" | "ES" }) {
+  return (
+    <div class="flex flex-col justify-center text-primary font-bold">
+      <span>{LANGUAGE_DIFFS[language].listingBlogs.notFound}</span>
+      <a
+        href="javascript:history.back()"
+        class="mt-1 text-base underline cursor-pointer hover:opacity-75 self-center"
+      >
+        {LANGUAGE_DIFFS[language].listingBlogs.goBack || "Go back"}
+      </a>
+    </div>
+  );
+}
+
 export const loader = (props: Props, req: Request, ctx: AppContext) => {
   const { language, siteTemplate } = ctx;
   return {

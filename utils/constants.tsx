@@ -737,6 +737,8 @@ export const LANGUAGE_DIFFS = {
       showMore: "Show more",
       showLess: "Show less",
       page: "Page",
+      notFound: "Posts not found!",
+      goBack: "Go back",
     },
   },
   ES: {
@@ -829,6 +831,8 @@ export const LANGUAGE_DIFFS = {
       showMore: "Mostrar más",
       showLess: "Mostrar menos",
       page: "Página",
+      notFound: "Posts no encontrados!",
+      goBack: "Volver atrás",
     },
   },
 };
