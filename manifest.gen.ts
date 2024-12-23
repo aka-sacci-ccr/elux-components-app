@@ -27,11 +27,12 @@ import * as $$$12 from "./loaders/product/listing/productListing.ts";
 import * as $$$13 from "./loaders/testShelf.ts";
 import * as $$$14 from "./loaders/whereToBuy.ts";
 import * as $$$$$$22 from "./sections/blog/BlogListing.tsx";
-import * as $$$$$$25 from "./sections/blog/BlogpostBreadcrumb.tsx";
-import * as $$$$$$23 from "./sections/blog/BlogSearch.tsx";
-import * as $$$$$$24 from "./sections/blog/BlogShelf.tsx";
+import * as $$$$$$23 from "./sections/blog/BlogListingBreadcrumb.tsx";
+import * as $$$$$$26 from "./sections/blog/BlogpostBreadcrumb.tsx";
+import * as $$$$$$24 from "./sections/blog/BlogSearch.tsx";
+import * as $$$$$$25 from "./sections/blog/BlogShelf.tsx";
 import * as $$$$$$0 from "./sections/Component.tsx";
-import * as $$$$$$26 from "./sections/container/Container.tsx";
+import * as $$$$$$27 from "./sections/container/Container.tsx";
 import * as $$$$$$1 from "./sections/Content/Banner.tsx";
 import * as $$$$$$2 from "./sections/Content/Breadcrumb.tsx";
 import * as $$$$$$3 from "./sections/Content/Cards.tsx";
@@ -74,11 +75,12 @@ const manifest = {
   },
   "sections": {
     "elux-components-app/sections/blog/BlogListing.tsx": $$$$$$22,
-    "elux-components-app/sections/blog/BlogpostBreadcrumb.tsx": $$$$$$25,
-    "elux-components-app/sections/blog/BlogSearch.tsx": $$$$$$23,
-    "elux-components-app/sections/blog/BlogShelf.tsx": $$$$$$24,
+    "elux-components-app/sections/blog/BlogListingBreadcrumb.tsx": $$$$$$23,
+    "elux-components-app/sections/blog/BlogpostBreadcrumb.tsx": $$$$$$26,
+    "elux-components-app/sections/blog/BlogSearch.tsx": $$$$$$24,
+    "elux-components-app/sections/blog/BlogShelf.tsx": $$$$$$25,
     "elux-components-app/sections/Component.tsx": $$$$$$0,
-    "elux-components-app/sections/container/Container.tsx": $$$$$$26,
+    "elux-components-app/sections/container/Container.tsx": $$$$$$27,
     "elux-components-app/sections/Content/Banner.tsx": $$$$$$1,
     "elux-components-app/sections/Content/Breadcrumb.tsx": $$$$$$2,
     "elux-components-app/sections/Content/Cards.tsx": $$$$$$3,
