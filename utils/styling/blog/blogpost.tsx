@@ -40,9 +40,8 @@ export const ElectrluxStyle = (
   }
   
   /* Image description */
-  .article-content img + span {
-    font-size: 0.875rem;
-    display: flex;
+  .article-content img {
+    margin-bottom: 8px;
   }
   `}
   </style>
@@ -61,7 +60,6 @@ export const FrigidaireStyle = (
   h6 {
     font-size: revert-layer;
     font-weight: 500;
-    color: #011e41;
   }
   
   /* Paragraph margin */
@@ -71,7 +69,6 @@ export const FrigidaireStyle = (
   
   /* Anchor */
   .article-content a {
-    color: #011e41;
     text-decoration: underline;
   }
   
@@ -90,9 +87,8 @@ export const FrigidaireStyle = (
   }
   
   /* Image description */
-  .article-content img + span {
-    font-size: 0.875rem;
-    display: flex;
+  .article-content img {
+    margin-bottom: 8px;
   }
   `}
   </style>
