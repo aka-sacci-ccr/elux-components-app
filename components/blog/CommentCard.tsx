@@ -46,8 +46,8 @@ const ELUX_STYLING = {
 };
 
 const FRIGIDAIRE_STYLING = {
-  container: "border border-[#DEE7EA]",
-  authorName: "text-secondary font-light",
-  time: "text-neutral text-sm font-light",
+  container: "border border-neutral rounded",
+  authorName: "text-secondary",
+  time: "text-info text-sm font-light",
   reviewBody: "text-secondary text-sm font-light",
 };

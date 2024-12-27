@@ -189,10 +189,10 @@ export function loader(
 
 const ELUX_STYLING = {
   commentTitle: "text-primary font-medium text-xl",
-  submitTitle: "font-primary font-medium text-xl pb-6",
+  submitTitle: "text-primary font-medium text-xl pb-6",
 };
 
 const FRIGIDAIRE_STYLING = {
   commentTitle: "text-secondary font-medium text-xl",
-  submitTitle: "font-secondary font-medium text-xl pb-6",
+  submitTitle: "text-secondary font-medium text-xl pb-6",
 };
