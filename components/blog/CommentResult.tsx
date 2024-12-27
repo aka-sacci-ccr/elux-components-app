@@ -1,14 +1,12 @@
 import { BlogPostPage, Review } from "apps/blog/types.ts";
 import { ComponentProps, useComponent } from "../../sections/Component.tsx";
 import { clx } from "../../utils/clx.ts";
-import { ModalProps } from "../ui/InformativeModal.tsx";
 import { LANGUAGE_DIFFS } from "../../utils/constants.tsx";
 import CommentCard from "./CommentCard.tsx";
 
 interface Props {
   page: BlogPostPage | null;
   commentsPerPage: number;
-  modalProps: ModalProps;
   comments?: Review[];
   commentsPage: number;
   language: "EN" | "ES";
@@ -21,7 +19,6 @@ export default function CommentResult(
     commentsPerPage,
     comments,
     commentsPage,
-    modalProps,
     language,
     siteTemplate,
   }: ComponentProps<
@@ -48,14 +45,13 @@ export default function CommentResult(
         <a
           rel="next"
           class={clx(
-            "btn btn-ghost w-full sm:w-max",
+            "btn btn-ghost w-full sm:w-max self-center",
             styling.pagination,
           )}
           hx-post={useComponent<Props>(import.meta.url, {
             page,
             commentsPerPage,
             commentsPage: commentsPage + 1,
-            modalProps,
             language,
             siteTemplate,
           })}

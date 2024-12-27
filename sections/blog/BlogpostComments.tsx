@@ -1,8 +1,11 @@
 import { BlogPostPage, Review } from "apps/blog/types.ts";
 import Container, { SpacingConfig } from "../container/Container.tsx";
 import { AppContext } from "../../mod.ts";
-import { ModalProps } from "../../components/ui/InformativeModal.tsx";
 import CommentResult from "../../components/blog/CommentResult.tsx";
+import SubmitComment, {
+  CommentSection,
+  Props as SubmitCommentProps,
+} from "../../components/blog/SubmitComment.tsx";
 
 export interface Props {
   /**
@@ -22,14 +25,9 @@ export interface Props {
    */
   commentsPerPage: number;
   /**
-   * @title Submit dialog
-   * @description Dialog displayed after submitting a comment
+   * @title Comment Section Props
    */
-  modalProps: ModalProps;
-  /**
-   * @title Comment textbox
-   */
-  textboxProps?: TextboxProps;
+  sectionConfig: CommentSection;
   /**
    * @title Spacing config
    */
@@ -58,10 +56,10 @@ export default function Comments(
     comments,
     commentsPerPage,
     page,
-    modalProps,
     titleComment,
     siteTemplate,
     language,
+    sectionConfig,
   }: ReturnType<
     typeof loader
   >,
@@ -90,24 +88,22 @@ export default function Comments(
                 commentsPerPage={commentsPerPage}
                 page={page}
                 commentsPage={1}
-                modalProps={modalProps}
                 siteTemplate={siteTemplate}
                 language={language}
               />
             </div>
-            <h2 class={styling.submitTitle}>
-              {titleComment}
-            </h2>
-            {
-              /* <Submit
-              hasComments={hasComments}
-              titleComment={titleComment}
-              modalProps={modalProps}
-              itemReviewed={page?.post.slug!}
-              maxLines={textboxProps?.maxLines}
-              maxLength={textboxProps?.maxLength}
-            /> */
-            }
+            <div class="max-w-[687px]">
+              <h2 class={styling.submitTitle}>
+                {titleComment}
+              </h2>
+              {
+                <Submit
+                  itemReviewed={page?.post.slug!}
+                  siteTemplate={siteTemplate}
+                  sectionConfig={sectionConfig}
+                />
+              }
+            </div>
           </>
         )
         : (
@@ -116,14 +112,11 @@ export default function Comments(
               {titleComment}
             </h2>
             {
-              /* <Submit
-              hasComments={hasComments}
-              titleComment={titleComment}
-              modalProps={modalProps}
-              itemReviewed={page?.post.slug!}
-              maxLines={textboxProps?.maxLines}
-              maxLength={textboxProps?.maxLength}
-            /> */
+              <Submit
+                itemReviewed={page?.post.slug!}
+                siteTemplate={siteTemplate}
+                sectionConfig={sectionConfig}
+              />
             }
           </>
         )}
@@ -131,29 +124,11 @@ export default function Comments(
   );
 }
 
-/* const Submit = (
-  props: SubmitCommentProps & {
-    hasComments: boolean;
-    hideNotFound: boolean;
-    titleComment: string;
-    maxLines?: number;
-    maxLength?: number;
-  },
+const Submit = (
+  props: SubmitCommentProps,
 ) => {
-  return (
-    <div
-      class={clx(
-        props.hasComments ? "pt-6" : props.hideNotFound ? "" : "pt-6",
-        "lg:max-w-3.5xl",
-      )}
-    >
-      <h2 class="font-electrolux-sans font-medium text-2xl text-accent-content">
-        {props.titleComment}
-      </h2>
-      <SubmitComment {...props} />
-    </div>
-  );
-}; */
+  return <SubmitComment {...props} />;
+};
 
 export function loader(
   {
