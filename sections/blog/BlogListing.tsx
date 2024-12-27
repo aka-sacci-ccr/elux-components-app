@@ -45,7 +45,9 @@ export interface Props {
    * @title Container spacing
    */
   spacing?: SpacingConfig;
-  /** @ignore */
+  /**
+   * @ignore
+   */
   partial?: "hideMore" | "hideLess" | null;
 }
 const useUrlRebased = (overrides: string | undefined, base: string) => {
@@ -297,15 +299,13 @@ const ELUX_STYLING = {
   title:
     "text-primary text-2xl font-medium max-lg:leading-7 lg:text-2.5xl lg:leading-8",
   results: "text-primary text-base font-medium lg:text-secondary",
-  pagination: clx(
+  pagination:
     "text-base text-white bg-primary font-medium lg:px-12 rounded-sm hover:bg-warning",
-  ),
 };
 
 const FRIGIDAIRE_STYLING = {
   title: "text-secondary text-base font-medium lg:text-3xl",
   results: "text-secondary text-base",
-  pagination: clx(
+  pagination:
     "text-sm text-white bg-primary font-medium px-10 rounded-[50px] min-h-10.5 h-10.5 self-center leading-6",
-  ),
 };

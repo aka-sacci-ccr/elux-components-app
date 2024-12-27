@@ -1,11 +1,23 @@
 import Icon from "./Icon.tsx";
 import { clx } from "../../utils/clx.ts";
-import { ModalProps } from "../../sections/Institutional/GuidesCategories.tsx";
 
 export interface Props {
   modalId: string;
   siteTemplate: "elux" | "frigidaire";
   modalProps: ModalProps;
+}
+
+export interface ModalProps {
+  /**
+   * @title Modal title
+   */
+  title: string;
+  /**
+   * @title Description
+   * @format rich-text
+   */
+  description: string;
+  buttonText: string;
 }
 
 export default function ModalContent(props: Props) {

@@ -30,11 +30,12 @@ import * as $$$$$$22 from "./sections/blog/BlogListing.tsx";
 import * as $$$$$$23 from "./sections/blog/BlogListingBreadcrumb.tsx";
 import * as $$$$$$26 from "./sections/blog/BlogpostBanner.tsx";
 import * as $$$$$$27 from "./sections/blog/BlogpostBreadcrumb.tsx";
-import * as $$$$$$28 from "./sections/blog/BlogpostContent.tsx";
+import * as $$$$$$28 from "./sections/blog/BlogpostComments.tsx";
+import * as $$$$$$29 from "./sections/blog/BlogpostContent.tsx";
 import * as $$$$$$24 from "./sections/blog/BlogSearch.tsx";
 import * as $$$$$$25 from "./sections/blog/BlogShelf.tsx";
 import * as $$$$$$0 from "./sections/Component.tsx";
-import * as $$$$$$29 from "./sections/container/Container.tsx";
+import * as $$$$$$30 from "./sections/container/Container.tsx";
 import * as $$$$$$1 from "./sections/Content/Banner.tsx";
 import * as $$$$$$2 from "./sections/Content/Breadcrumb.tsx";
 import * as $$$$$$3 from "./sections/Content/Cards.tsx";
@@ -80,11 +81,12 @@ const manifest = {
     "elux-components-app/sections/blog/BlogListingBreadcrumb.tsx": $$$$$$23,
     "elux-components-app/sections/blog/BlogpostBanner.tsx": $$$$$$26,
     "elux-components-app/sections/blog/BlogpostBreadcrumb.tsx": $$$$$$27,
-    "elux-components-app/sections/blog/BlogpostContent.tsx": $$$$$$28,
+    "elux-components-app/sections/blog/BlogpostComments.tsx": $$$$$$28,
+    "elux-components-app/sections/blog/BlogpostContent.tsx": $$$$$$29,
     "elux-components-app/sections/blog/BlogSearch.tsx": $$$$$$24,
     "elux-components-app/sections/blog/BlogShelf.tsx": $$$$$$25,
     "elux-components-app/sections/Component.tsx": $$$$$$0,
-    "elux-components-app/sections/container/Container.tsx": $$$$$$29,
+    "elux-components-app/sections/container/Container.tsx": $$$$$$30,
     "elux-components-app/sections/Content/Banner.tsx": $$$$$$1,
     "elux-components-app/sections/Content/Breadcrumb.tsx": $$$$$$2,
     "elux-components-app/sections/Content/Cards.tsx": $$$$$$3,

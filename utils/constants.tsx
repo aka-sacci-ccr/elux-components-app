@@ -740,6 +740,10 @@ export const LANGUAGE_DIFFS = {
       notFound: "Posts not found!",
       goBack: "Go back",
     },
+    blogDetails: {
+      showMore: "Show more",
+      anonymous: "Anonymous",
+    },
   },
   ES: {
     contactForm: {
@@ -833,6 +837,10 @@ export const LANGUAGE_DIFFS = {
       page: "Página",
       notFound: "Posts no encontrados!",
       goBack: "Volver atrás",
+    },
+    blogDetails: {
+      showMore: "Mostrar más",
+      anonymous: "Anónimo",
     },
   },
 };

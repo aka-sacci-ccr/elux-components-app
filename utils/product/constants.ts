@@ -52,6 +52,15 @@ export const DATABASE_FIELDS = {
   "gtin": products.gtin,
 };
 
+export const TIME_UNITS = [
+  { unit: "Ano", seconds: 31536000, plural: "s" },
+  { unit: "Mes", seconds: 2592000, plural: "es" },
+  { unit: "Sem.", seconds: 604800, plural: "" },
+  { unit: "Dia", seconds: 86400, plural: "s" },
+  { unit: "Hora", seconds: 3600, plural: "s" },
+  { unit: "Min.", seconds: 60, plural: "" },
+];
+
 export const pickUrlComposed = (
   product: BaseProduct,
   urlComposing: UrlComposing,

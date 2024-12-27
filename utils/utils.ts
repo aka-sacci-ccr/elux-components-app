@@ -2,6 +2,7 @@ import {
   DEFAULT_URL_PARAMS_TO_EXCLUDE,
   EXTENDED_URL_PARAMS_TO_EXCLUDE,
   MEASUREMENTS_KEYS,
+  TIME_UNITS,
 } from "./product/constants.ts";
 
 export function chunkArray<T>(array: T[], size: number): T[][] {
@@ -64,4 +65,20 @@ export function getFiltersFromUrl(url: URL) {
       ? measurementsFromUrl
       : null,
   };
+}
+
+export function formatRelativeTime(isoDate: string) {
+  const now = new Date();
+  const date = new Date(isoDate);
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  for (const { unit, seconds, plural } of TIME_UNITS) {
+    const count = Math.floor(diffInSeconds / seconds);
+    if (count >= 1 || unit === "Min.") {
+      if (unit === "Min." && count < 1) return "menos de 1 min.";
+      return `${count} ${unit === "Mes" && count === 1 ? "Mês" : unit}${
+        count > 1 ? plural : ""
+      }`;
+    }
+  }
 }
