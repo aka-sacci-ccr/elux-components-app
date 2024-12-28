@@ -5,6 +5,7 @@ import Modal from "../../../components/ui/Modal.tsx";
 import Slider from "../../../components/ui/Slider.tsx";
 import { useId } from "../../../sdk/useId.ts";
 import { useScript } from "@deco/deco/hooks";
+import YoutubeVideo from "../../ui/YoutubeVideo.tsx";
 
 export interface Props {
   id?: string;
@@ -61,18 +62,7 @@ function ProductImageZoom(
                       class="h-full w-auto"
                     />
                   )
-                  : (
-                    <iframe
-                      src={image.contentUrl?.replace(
-                        "watch?v=",
-                        "embed/",
-                      )}
-                      title="YouTube video player"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      class="w-full h-[400px] max-w-full  lg:max-h-full z-20"
-                    />
-                  )}
+                  : <YoutubeVideo url={image.contentUrl!} />}
               </div>
             </Slider.Item>
           ))}

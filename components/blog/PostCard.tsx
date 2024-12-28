@@ -6,6 +6,7 @@ export interface Props {
   template: "elux" | "frigidaire";
   post: BlogPost;
   url: string;
+  shelfSize?: "medium" | "large";
 }
 
 const buildPostUrl = (url: string, postSlug: string, categorySlug: string) => {
@@ -14,10 +15,13 @@ const buildPostUrl = (url: string, postSlug: string, categorySlug: string) => {
   return new URL(pathname, newUrl.origin).href;
 };
 
-export default function PostCard({ template, post, url }: Props) {
+export default function PostCard(
+  { template, post, url, shelfSize = "medium" }: Props,
+) {
   const { category, title, borders } = template === "elux"
     ? ELUX_STYLING
     : FRIGIDAIRE_STYLING;
+  const sizes = SIZES_STYLING[shelfSize];
   return (
     <a
       class="flex flex-col w-full h-full"
@@ -46,11 +50,13 @@ export default function PostCard({ template, post, url }: Props) {
           class="w-full"
         />
       </Picture>
-      <div class={clx("flex flex-col py-3 px-4 bg-white h-full", borders)}>
-        <p class={clx(category)}>
+      <div
+        class={clx("flex flex-col bg-white h-full", borders, sizes.contentDiv)}
+      >
+        <p class={clx(category, sizes.category)}>
           {post.categories[0].name}
         </p>
-        <p class={clx(title, "pt-2")}>{post.title}</p>
+        <p class={clx(title, "pt-2", sizes.title)}>{post.title}</p>
         <div class="flex-grow" />
       </div>
     </a>
@@ -58,13 +64,26 @@ export default function PostCard({ template, post, url }: Props) {
 }
 
 const ELUX_STYLING = {
-  category: "font-light text-sm text-neutral",
-  title: "text-secondary font-medium leading-[20px]",
+  category: "text-neutral",
+  title: "text-secondary leading-[20px]",
   borders: "border-[#DEE7EA] border-b border-x",
 };
 
 const FRIGIDAIRE_STYLING = {
-  category: "font-light text-sm text-info",
-  title: "text-secondary font-medium text-base",
+  category: "text-info !font-light max-lg:text-sm",
+  title: "text-secondary",
   borders: "border-neutral border-b border-x",
+};
+
+const SIZES_STYLING = {
+  "medium": {
+    category: "text-sm font-light",
+    title: "font-medium text-base",
+    contentDiv: "py-3 px-4",
+  },
+  "large": {
+    category: "text-base font-light lg:font-medium",
+    title: "font-medium text-base lg:text-xl",
+    contentDiv: "py-3 px-4 lg:py-4 lg:px-5",
+  },
 };

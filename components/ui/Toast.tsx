@@ -49,14 +49,14 @@ export default function TooltipAddButton({ text, time, type }: Props) {
       class={clx(
         "absolute flex flex-row",
         "h-12 items-center px-4 justify-between",
-        "text-xs font-medium text-white",
+        "text-xs font-medium text-white sm:gap-2",
         "sm:m-8 sm:text-sm toast-shadow",
         "transition-all duration-300 ease-in-out",
         "transform translate-y-full opacity-0",
         type === "success" ? "bg-success" : "bg-error",
       )}
       style={{
-        width: device === "desktop" ? "18rem" : "100vw",
+        width: device === "desktop" ? "max-content" : "100vw",
         bottom: "-100vh",
       }}
     >

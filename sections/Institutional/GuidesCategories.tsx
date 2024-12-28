@@ -3,7 +3,9 @@ import { clx } from "../../utils/clx.ts";
 import Container, { SpacingConfig } from "../container/Container.tsx";
 import Icon from "../../components/ui/Icon.tsx";
 import { useId } from "../../sdk/useId.ts";
-import InformativeModal from "../../components/ui/InformativeModal.tsx";
+import InformativeModal, {
+  ModalProps,
+} from "../../components/ui/InformativeModal.tsx";
 import { CategoryFather } from "../../loaders/guides/categories.ts";
 import Collapsible from "../../components/guides/Collapsible.tsx";
 import { useScript } from "@deco/deco/hooks";
@@ -62,16 +64,6 @@ interface SearchSection {
    * @description Modal information texts
    */
   modalProps: ModalProps;
-}
-
-export interface ModalProps {
-  title: string;
-  /**
-   * @title Description
-   * @format rich-text
-   */
-  description: string;
-  buttonText: string;
 }
 
 const Component = import.meta.resolve(

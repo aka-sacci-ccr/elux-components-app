@@ -61,6 +61,10 @@ export interface Items {
    * @title Underline on hover
    */
   hoverUnderline?: boolean;
+  /**
+   * @title Override font weight
+   */
+  overrideFontWeight?: FontWeight;
 }
 
 export default function Breadcrumb(
@@ -79,7 +83,7 @@ export default function Breadcrumb(
   return (
     <Container
       spacing={spacing}
-      class={clx("px-4 lg:px-0", !disableContainer && "container")}
+      class={clx("px-6 lg:px-0", !disableContainer && "container")}
     >
       <div
         class={clx(
@@ -110,15 +114,25 @@ export default function Breadcrumb(
             />
           </>
         )}
-        {items.map(({ label, href, overrideFontColor, hoverUnderline }, i) => (
+        {items.map((
+          {
+            label,
+            href,
+            overrideFontColor,
+            hoverUnderline,
+            overrideFontWeight,
+          },
+          i,
+        ) => (
           <>
             <a
               href={href}
               class={clx(
-                "last:line-clamp-1",
+                "last:line-clamp-1 content-center",
                 overrideFontColor && TEXT_COLORS[overrideFontColor],
+                overrideFontWeight,
                 hoverUnderline &&
-                  "underline decoration-2 underline-offset-[3px] content-center",
+                  "underline decoration-2 underline-offset-[3px]",
               )}
             >
               <span class="block w-max">{label}</span>

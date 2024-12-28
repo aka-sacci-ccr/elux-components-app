@@ -26,7 +26,9 @@ export interface Props {
   page: ProductListingPage;
   listingMain?: ListingMainProps;
   mainBreadcrumbItem?: ListItem<string>;
-  /** @hidden */
+  /**
+   * @ignore
+   */
   partial?: "hideMore" | "hideLess";
   url: string;
   language: "EN" | "ES";

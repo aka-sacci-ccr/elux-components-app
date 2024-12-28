@@ -10,6 +10,7 @@ import Icon from "../../ui/Icon.tsx";
 import Slider from "../../ui/Slider.tsx";
 import { useId } from "../../../sdk/useId.ts";
 import { useDevice } from "@deco/deco/hooks";
+import YoutubeVideo from "../../ui/YoutubeVideo.tsx";
 
 export interface Props {
   /** @title Integration */
@@ -96,18 +97,7 @@ export default function GallerySlider(props: Props) {
                         />
                       </label>
                     )
-                    : (
-                      <iframe
-                        src={img.contentUrl?.replace(
-                          "watch?v=",
-                          "embed/",
-                        )}
-                        title="YouTube video player"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        class="w-full h-full max-w-full max-h-full z-20"
-                      />
-                    )}
+                    : <YoutubeVideo url={img.contentUrl!} />}
                 </Slider.Item>
               ))}
             </Slider>
