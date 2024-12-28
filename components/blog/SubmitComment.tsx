@@ -3,6 +3,7 @@ import { AppContext as BlogContext } from "apps/blog/mod.ts";
 import { logger } from "@deco/deco/o11y";
 import { clx } from "../../utils/clx.ts";
 import Icon from "../ui/Icon.tsx";
+import { useScript } from "@deco/deco/hooks";
 
 export interface Props {
   itemReviewed: string;
@@ -24,6 +25,10 @@ export interface CommentSection {
    * @title Email input properties
    */
   emailInputProps: EmailInputProps;
+  /**
+   * @title Submit button text
+   */
+  submitButtonText?: string;
 }
 
 interface TextareaProps {
@@ -81,6 +86,78 @@ interface EmailInputProps {
   extraText?: string;
 }
 
+function handleRequiredField(elementName: string) {
+  const field = document.querySelector(
+    `[name="${elementName}"]`,
+  ) as HTMLInputElement;
+  const errorElement = field?.nextElementSibling as HTMLInputElement;
+
+  if (!field && !errorElement) return;
+
+  const isInvalid = !field.value.trim();
+  errorElement.checked = isInvalid;
+  field.classList.toggle("!border-error", isInvalid);
+}
+
+function script(charLimit: number) {
+  const form = document.querySelector("form");
+  const textarea = document.getElementById("messageTextarea") as
+    | HTMLInputElement
+    | null;
+  const charCountLabel = document.getElementById("charCount");
+  const submitButton = document.querySelector('button[type="submit"]');
+
+  //Update char count label
+  if (textarea && charCountLabel) {
+    textarea.addEventListener("input", function () {
+      const currentLength = this.value.length;
+      charCountLabel.textContent = `${currentLength}/${charLimit}`;
+    });
+  }
+
+  //Add submit event prevent in form
+  if (form && submitButton) {
+    submitButton.addEventListener("click", function (event) {
+      if (!validateForm()) {
+        event.preventDefault();
+      }
+    });
+  }
+
+  //Validate the form before send
+  const validateForm = () => {
+    const requiredFields = document.querySelectorAll("[data-required]");
+    const allFields = Array.from(requiredFields).reduce((isValid, field) => {
+      if (
+        field instanceof HTMLInputElement ||
+        field instanceof HTMLTextAreaElement
+      ) {
+        if (!field.value.trim()) {
+          showError(field);
+          return false;
+        }
+      } else if (field instanceof HTMLSelectElement) {
+        if (field.value === "" || field.value === "default") {
+          showError(field);
+          return false;
+        }
+      }
+      return isValid;
+    }, true);
+
+    return allFields;
+  };
+
+  //Show form errors
+  const showError = (field: HTMLElement) => {
+    const errorElement = field.nextElementSibling as HTMLInputElement;
+    if (errorElement && errorElement.type === "radio") {
+      errorElement.checked = true;
+    }
+    field.classList.add("!border-error");
+  };
+}
+
 export default function SubmitComment(
   props: Props,
 ) {
@@ -133,11 +210,12 @@ export default function SubmitComment(
               class={styling.input}
               name="personName"
               data-required
-              /* hx-on:input={useScript(handleRequiredField, "personName")} */
+              hx-on:input={useScript(handleRequiredField, "personName")}
             />
             <ErrorComponent
               name={"nameControl"}
               text={nameInputProps.requiredText}
+              siteTemplate={siteTemplate}
             />
           </div>
           <div class="form-control w-full">
@@ -145,50 +223,59 @@ export default function SubmitComment(
               {emailInputProps.label}
             </label>
             <input
-              type="text"
+              type="email"
               placeholder={emailInputProps.placeholder}
               class={styling.input}
               name="personEmail"
               data-required
-              /* hx-on:input={useScript(handleRequiredField, "personEmail")} */
+              hx-on:input={useScript(handleRequiredField, "personEmail")}
+            />
+            <ErrorComponent
+              name={"emailControl"}
+              text={emailInputProps.requiredText}
+              siteTemplate={siteTemplate}
             />
             <label
               class={clx("self-start", styling.extraText)}
             >
               {emailInputProps.extraText}
             </label>
-            <ErrorComponent
-              name={"emailControl"}
-              text={emailInputProps.requiredText}
-            />
           </div>
+        </div>
+        <div class="flex pt-8 sm:pt-4">
+          <button
+            class={clx("btn btn-ghost w-max self-center", styling.submitButton)}
+            type="submit"
+          >
+            {sectionConfig.submitButtonText ?? "Submit"}
+          </button>
         </div>
       </form>
 
       {
-        /* <script
-        type="module"
-        dangerouslySetInnerHTML={{
-          __html: useScript(
-            script,
-            TEXTAREA_ID,
-            maxLines,
-            INPUT_MAXSIZE_ID,
-          ),
-        }}
-      /> */
+        <script
+          type="module"
+          dangerouslySetInnerHTML={{
+            __html: useScript(
+              script,
+              textareaProps.maxLength ?? 200,
+            ),
+          }}
+        />
       }
     </>
   );
 }
 
 function ErrorComponent(
-  { name, text = "this field is required", id }: {
+  { name, text = "this field is required", id, siteTemplate }: {
     name: string;
     text?: string;
     id?: string;
+    siteTemplate: "elux" | "frigidaire";
   },
 ) {
+  const styling = siteTemplate === "elux" ? ELUX_STYLING : FRIGIDAIRE_STYLING;
   return (
     <>
       <input
@@ -199,7 +286,10 @@ function ErrorComponent(
       />
       <label
         for={name}
-        class="hidden peer-checked:flex flex-row gap-1.5 text-error items-center"
+        class={clx(
+          "hidden peer-checked:flex flex-row gap-1.5 !text-error items-center",
+          styling.extraText,
+        )}
       >
         <Icon id="error-frigidaire" size={16} width={16} height={16} />
         <span class="text-xs">
@@ -212,9 +302,10 @@ function ErrorComponent(
 
 export async function action(props: Props, req: Request, ctx: BlogContext) {
   const formData = await req.formData();
-  const isAnonymous = formData.get("asAnonymous")?.toString();
-  const reviewBody = formData.get("textarea")?.toString();
-
+  const reviewBody = formData.get("message")?.toString();
+  const userName = formData.get("personName")?.toString()
+  const userEmail = formData.get("personEmail")?.toString()
+  console.log(reviewBody, userName, userEmail);
   try {
     //Author must change
     const author = await ctx.invoke("site/loaders/user.ts");
@@ -226,7 +317,7 @@ export async function action(props: Props, req: Request, ctx: BlogContext) {
       additionalType: "submitted",
       reviewBody: reviewBody?.replaceAll("\n", "<br>"),
       itemReviewed: props.itemReviewed,
-      isAnonymous: isAnonymous ?? false,
+      isAnonymous: false,
       author,
     });
   } catch (e) {
@@ -245,6 +336,8 @@ const ELUX_STYLING = {
   extraText: "text-secondary font-light text-sm mt-1",
   input:
     "border border-neutral rounded-sm px-4 h-12 text-base placeholder:text-success-content text-secondary leading-6",
+  submitButton:
+    "text-base text-white bg-primary font-medium px-6 rounded-sm hover:bg-warning",
 };
 
 const FRIGIDAIRE_STYLING = {
@@ -255,4 +348,6 @@ const FRIGIDAIRE_STYLING = {
   extraText: "text-secondary font-light text-xs",
   input:
     "border border-accent rounded-sm px-4 h-12 text-sm placeholder:text-info text-secondary font-light pt-0.5",
+  submitButton:
+    "text-sm text-white bg-primary font-medium px-6 rounded-[50px] min-h-10.5 h-10.5 self-center leading-6",
 };
