@@ -4,6 +4,7 @@ import { logger } from "@deco/deco/o11y";
 import { clx } from "../../utils/clx.ts";
 import Icon from "../ui/Icon.tsx";
 import { useScript } from "@deco/deco/hooks";
+import { useToast } from "../../sdk/useToast.ts";
 
 export interface Props {
   itemReviewed: string;
@@ -29,6 +30,11 @@ export interface CommentSection {
    * @title Submit button text
    */
   submitButtonText?: string;
+  /**
+   * @title Toast properties
+   * @description Define the popup toast when the form is submitted
+   */
+  toastProps?: ToastProps;
 }
 
 interface TextareaProps {
@@ -84,6 +90,21 @@ interface EmailInputProps {
    * @title Extra text
    */
   extraText?: string;
+}
+
+interface ToastProps {
+  /**
+   * @title Success text
+   */
+  successText?: string;
+  /**
+   * @title Error text
+   */
+  errorText?: string;
+  /**
+   * @title Toast duration
+   */
+  toastDuration?: number;
 }
 
 function handleRequiredField(elementName: string) {
@@ -161,11 +182,31 @@ function script(charLimit: number) {
 export default function SubmitComment(
   props: Props,
 ) {
-  const { siteTemplate, sectionConfig } = props;
-  const { textareaProps, nameInputProps, emailInputProps } = sectionConfig;
+  const { siteTemplate, sectionConfig, displayToast } = props;
+  const { textareaProps, nameInputProps, emailInputProps, toastProps } =
+    sectionConfig;
   const styling = siteTemplate === "elux" ? ELUX_STYLING : FRIGIDAIRE_STYLING;
+  const toast = displayToast
+    ? displayToast === "success"
+      ? useToast({
+        text: toastProps?.successText ??
+          "Comentario enviado! Nuestro equipo avalian tu comentario pronto.",
+        time: toastProps?.toastDuration ?? 5,
+        trigger: "load",
+        type: "success",
+      })
+      : useToast({
+        text: toastProps?.errorText ??
+          "No se pudo enviar el comentario. Por favor, intenta nuevamente.",
+        time: toastProps?.toastDuration ?? 5,
+        trigger: "load",
+        type: "error",
+      })
+    : undefined;
   return (
-    <>
+    <div
+      {...toast}
+    >
       <form
         hx-sync="this:replace"
         hx-trigger="submit"
@@ -263,7 +304,7 @@ export default function SubmitComment(
           }}
         />
       }
-    </>
+    </div>
   );
 }
 
@@ -303,29 +344,26 @@ function ErrorComponent(
 export async function action(props: Props, req: Request, ctx: BlogContext) {
   const formData = await req.formData();
   const reviewBody = formData.get("message")?.toString();
-  const userName = formData.get("personName")?.toString()
-  const userEmail = formData.get("personEmail")?.toString()
-  console.log(reviewBody, userName, userEmail);
+  const userName = formData.get("personName")?.toString();
+  const userEmail = formData.get("personEmail")?.toString();
   try {
-    //Author must change
-    const author = await ctx.invoke("site/loaders/user.ts");
-    if (!author) {
-      throw new Error("User not defined");
-    }
     await ctx.invoke("blog/actions/submitReview.ts", {
       action: "create",
       additionalType: "submitted",
       reviewBody: reviewBody?.replaceAll("\n", "<br>"),
       itemReviewed: props.itemReviewed,
       isAnonymous: false,
-      author,
+      author: {
+        givenName: userName,
+        email: userEmail,
+      },
     });
   } catch (e) {
     logger.error(e);
-    return { ...props, openModal: false };
+    return { ...props, displayToast: "error" };
   }
 
-  return props;
+  return { ...props, displayToast: "success" };
 }
 
 const ELUX_STYLING = {
