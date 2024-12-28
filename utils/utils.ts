@@ -3,6 +3,7 @@ import {
   EXTENDED_URL_PARAMS_TO_EXCLUDE,
   MEASUREMENTS_KEYS,
   TIME_UNITS,
+  TIME_UNITS_EN,
 } from "./product/constants.ts";
 
 export function chunkArray<T>(array: T[], size: number): T[][] {
@@ -67,18 +68,19 @@ export function getFiltersFromUrl(url: URL) {
   };
 }
 
-export function formatRelativeTime(isoDate: string) {
+export function formatRelativeTime(isoDate: string, language: "ES" | "EN") {
   const now = new Date();
   const date = new Date(isoDate);
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  const timeUnits = language === "ES" ? TIME_UNITS : TIME_UNITS_EN;
 
-  for (const { unit, seconds, plural } of TIME_UNITS) {
+  for (const { unit, seconds, plural } of timeUnits) {
     const count = Math.floor(diffInSeconds / seconds);
     if (count >= 1 || unit === "Min.") {
-      if (unit === "Min." && count < 1) return "menos de 1 min.";
-      return `${count} ${unit === "Mes" && count === 1 ? "Mês" : unit}${
-        count > 1 ? plural : ""
-      }`;
+      if ((unit === "Min.") && count < 1) {
+        return language === "ES" ? "menos de 1 min." : "less than 1 min.";
+      }
+      return `${count} ${unit}${count > 1 ? plural : ""}`;
     }
   }
 }

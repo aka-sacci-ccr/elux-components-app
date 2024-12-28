@@ -16,7 +16,7 @@ export default function CommentCard(
   const authorName = isAnonymous
     ? LANGUAGE_DIFFS[language].blogDetails.anonymous
     : author?.givenName ?? author?.name;
-  const time = formatRelativeTime(comment.datePublished!);
+  const time = formatRelativeTime(comment.datePublished!, language);
   const styling = siteTemplate === "elux" ? ELUX_STYLING : FRIGIDAIRE_STYLING;
 
   return (

@@ -53,11 +53,20 @@ export const DATABASE_FIELDS = {
 };
 
 export const TIME_UNITS = [
-  { unit: "Ano", seconds: 31536000, plural: "s" },
+  { unit: "Año", seconds: 31536000, plural: "s" },
   { unit: "Mes", seconds: 2592000, plural: "es" },
-  { unit: "Sem.", seconds: 604800, plural: "" },
-  { unit: "Dia", seconds: 86400, plural: "s" },
+  { unit: "Sem", seconds: 604800, plural: "s" },
+  { unit: "Día", seconds: 86400, plural: "s" },
   { unit: "Hora", seconds: 3600, plural: "s" },
+  { unit: "Min.", seconds: 60, plural: "" },
+];
+
+export const TIME_UNITS_EN = [
+  { unit: "Year", seconds: 31536000, plural: "s" },
+  { unit: "Month", seconds: 2592000, plural: "s" },
+  { unit: "Week", seconds: 604800, plural: "s" },
+  { unit: "Day", seconds: 86400, plural: "s" },
+  { unit: "Hour", seconds: 3600, plural: "s" },
   { unit: "Min.", seconds: 60, plural: "" },
 ];
 
