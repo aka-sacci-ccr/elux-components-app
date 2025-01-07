@@ -1,5 +1,4 @@
 import type { ImageWidget } from "apps/admin/widgets.ts";
-import { type SectionProps } from "@deco/deco";
 import ListingPageBanner, {
   ImageSizes,
 } from "../../components/product/ListingPageBanner.tsx";
@@ -33,7 +32,7 @@ export interface Banner {
 }
 
 export default function BannersMatcher(
-  props: SectionProps<ReturnType<typeof loader>>,
+  props: ReturnType<typeof loader>,
 ) {
   const { banner } = props;
   if (!banner) {

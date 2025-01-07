@@ -4,10 +4,6 @@ import {
   Product,
   ProductDetailsPage,
 } from "apps/commerce/types.ts";
-import ProductMainBanner from "../../../components/product/ProductMainBanner.tsx";
-import ProductInfoBanners, {
-  BannerColors,
-} from "../../../components/product/ProductInfoBanners.tsx";
 import ProductMain from "../../../components/product/ProductMain.tsx";
 import ProductDetails from "../../../components/product/ProductDetails.tsx";
 import Container, { SpacingConfig } from "../../container/Container.tsx";
@@ -28,8 +24,6 @@ interface ProductPageProps {
   page: ProductDetailsPage | null;
   /** @description Props of PDP breadcrumb */
   breadcrumbProps: PDPBreadcrumbProps;
-  /** @description Define alternating banners colors */
-  bannersProps: BannerColors[];
   /** @description Product main colors */
   productMain: ProductMainProps;
   /** @description Spacing config */
@@ -135,7 +129,6 @@ export const loader = (
 export default function ProductPage(
   {
     page,
-    bannersProps,
     spacing,
     breadcrumbProps,
     language,
@@ -147,17 +140,13 @@ export default function ProductPage(
 ) {
   if (!page) return <NotFound language={language} />;
   const { product, breadcrumbList } = page;
-  const { image, additionalProperty, description } = product;
+  const { additionalProperty, description } = product;
 
   const breadcrumbItems = getBreadcrumbItems(
     breadcrumbList,
     breadcrumbProps,
     product,
     siteTemplate,
-  );
-
-  const infoBannerImages = image?.filter((image) =>
-    image.additionalType === "INFO_BANNER"
   );
 
   return (
@@ -172,11 +161,6 @@ export default function ProductPage(
           />
         </div>
       </div>
-      <ProductMainBanner product={product} />
-      <ProductInfoBanners
-        banners={infoBannerImages}
-        bannerColors={bannersProps}
-      />
       <ProductMain
         page={page}
         productMain={productMain}

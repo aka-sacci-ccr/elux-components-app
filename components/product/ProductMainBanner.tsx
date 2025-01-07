@@ -1,28 +1,21 @@
 import Image from "apps/website/components/Image.tsx";
-import { Product } from "apps/commerce/types.ts";
+import { Banner } from "../../sections/Product/ProductDetails/ProductBannerMatcher.tsx";
 
 interface Props {
-  product: Product;
+  banner: Banner & {
+    secondaryTitle?: string;
+  };
 }
 
-export default function ProductMainBanner({ product }: Props) {
-  const { name, image, sku, brand } = product;
-
-  const mainBannerMobile = image?.find((image) =>
-    image.additionalType === "MAIN_BANNER_MOBILE"
-  );
-  const mainBannerDesktop = image?.find((image) =>
-    image.additionalType === "MAIN_BANNER"
-  );
-
-  if (!mainBannerMobile || !mainBannerDesktop) return <></>;
+export default function ProductMainBanner({ banner }: Props) {
+  if (!banner) return <></>;
 
   return (
     <div className="w-full relative overflow-hidden mx-auto">
       <div className="flex lg:hidden">
         <Image
-          alt={mainBannerMobile?.description}
-          src={mainBannerMobile?.url ?? ""}
+          alt={banner.title}
+          src={banner.image.mobile ?? ""}
           width={400}
           height={600}
           class="object-contain w-full"
@@ -30,8 +23,8 @@ export default function ProductMainBanner({ product }: Props) {
       </div>
       <div className="hidden lg:flex">
         <Image
-          alt={mainBannerDesktop?.description}
-          src={mainBannerDesktop?.url ?? ""}
+          alt={banner.title}
+          src={banner.image.desktop ?? ""}
           width={1280}
           height={600}
           class="object-contain w-full"
@@ -39,14 +32,16 @@ export default function ProductMainBanner({ product }: Props) {
       </div>
       <div class="absolute z-10 w-full h-full top-0 bg-black opacity-40"></div>
       <div class="absolute z-20 flex flex-col bottom-5 lg:bottom-32 lg:left-40 text-white px-5 lg:p-0 gap-2 max-w-96">
-        <span className="text-base lg:text-xl uppercase font-medium">
-          {sku}
-        </span>
+        {banner.secondaryTitle && (
+          <span className="text-base lg:text-xl uppercase font-medium">
+            {banner.secondaryTitle}
+          </span>
+        )}
         <h1 className="text-2.5xl lg:text-4xl font-semibold">
-          {brand?.name}
+          {banner.title}
         </h1>
         <h2 className="text-base font-light">
-          {name}
+          {banner.description}
         </h2>
       </div>
     </div>
