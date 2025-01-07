@@ -53,9 +53,12 @@ interface SecondaryBanner {
 
 interface ProductBanners {
   /**
-   * @description RegExp to enable this banner on the current URL.
+   * @description RegExp to enable this banner on the current URL. Use /test-product/p to display this banner on the product page with the same url.
    */
   matcher: string;
+  /**
+   * @description Main banner of the product
+   */
   mainBanner: SecondaryBanner;
   /**
    * @description Additional alternating banners
