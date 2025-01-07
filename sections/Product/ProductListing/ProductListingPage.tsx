@@ -114,6 +114,7 @@ export default function ProductListingPage(
             items={breadcrumbItems}
             fontColor={breadcrumbProps.iconColor}
             disableContainer={true}
+            iconSize={siteTemplate === "elux" ? 24 : 16}
           />
         </div>
       </div>
