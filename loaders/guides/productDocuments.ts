@@ -77,12 +77,9 @@ export default async function loader(
         .select()
         .from(images)
         .where(
-          and(
-            eq(
-              images.subjectOf,
-              baseProduct.sku,
-            ),
-            eq(images.additionalType, "PRODUCT_IMAGE"),
+          eq(
+            images.subjectOf,
+            baseProduct.sku,
           ),
         )
         .all() as unknown as BaseImage[],
@@ -112,13 +109,10 @@ export default async function loader(
       .map((i) => ({
         "@type": "ImageObject" as const,
         ...i,
-        name: i.name ?? undefined,
-        description: i.description ?? undefined,
         disambiguatingDescription: i.disambiguatingDescription ??
           undefined,
         subjectOf: i.subjectOf ?? undefined,
         identifier: String(i.identifier),
-        additionalType: i.additionalType ?? undefined,
       })),
     additionalProperty: productDocs.map((
       { url, name, alternateName },

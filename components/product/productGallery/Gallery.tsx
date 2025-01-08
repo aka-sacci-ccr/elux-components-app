@@ -50,13 +50,9 @@ export default function GallerySlider(props: Props) {
     images: ImageObject[],
     product: { video: VideoObject[] },
   ) {
-    const filteredImages = images.filter((image) =>
-      image.additionalType === "PRODUCT_IMAGE"
-    );
-
     const videos = product.video.length > 0 ? product.video : [];
 
-    return [...filteredImages, ...videos];
+    return [...images, ...videos];
   }
   const productMidia = imagesAndVideosData(images, {
     video: product.video ?? [],

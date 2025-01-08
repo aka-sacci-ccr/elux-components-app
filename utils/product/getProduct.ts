@@ -52,13 +52,8 @@ interface Description {
 }
 
 interface Image {
-  name: string | null;
-  alternateName: string | null;
   url: string;
-  description: string | null;
-  alternateDescription: string | null;
   identifier: number;
-  additionalType: string | null;
   disambiguatingDescription: string | null;
   subjectOf: string | null;
 }
@@ -422,21 +417,12 @@ function productsObject(
       )),
     ],
     image: image?.map((i) => {
-      const [name, description] = language === "EN"
-        ? [
-          i.alternateName ?? i.name ?? undefined,
-          i.alternateDescription ?? i.description ?? undefined,
-        ]
-        : [i.name ?? undefined, i.description ?? undefined];
       return {
         "@type": "ImageObject" as const,
         url: i.url ?? undefined,
-        name,
-        description,
         disambiguatingDescription: i.disambiguatingDescription ?? undefined,
         subjectOf: i.subjectOf ?? undefined,
         identifier: String(i.identifier),
-        additionalType: i.additionalType ?? undefined,
       };
     }),
     video: video?.map((v) => ({

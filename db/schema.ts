@@ -119,11 +119,6 @@ export const images = sqliteTable("images", {
   subjectOf: text("subjectOf").references(() => products.sku), // F.K
   url: text("url").notNull(),
   disambiguatingDescription: text("disambiguatingDescription"),
-  additionalType: text("additionalType"),
-  name: text("name"),
-  alternateName: text("alternateName"),
-  description: text("description"),
-  alternateDescription: text("alternateDescription"),
 });
 
 //Define product videos

@@ -482,10 +482,7 @@ const getProductData = async (
         .select()
         .from(images)
         .where(
-          and(
-            inArray(images.subjectOf, baseProductData.map((p) => p.sku)),
-            eq(images.additionalType, "PRODUCT_IMAGE"),
-          ),
+          inArray(images.subjectOf, baseProductData.map((p) => p.sku)),
         )
         .all(),
       !onlyProducts
