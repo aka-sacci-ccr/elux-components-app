@@ -7,7 +7,7 @@ import {
 import Breadcrumb, {
   Props as BreadcrumbProps,
 } from "../../Content/Breadcrumb.tsx";
-import { Colors } from "../../../utils/types.ts";
+import { Colors, FontWeight } from "../../../utils/types.ts";
 import Container, { SpacingConfig } from "../../container/Container.tsx";
 import { AppContext } from "../../../mod.ts";
 
@@ -121,7 +121,14 @@ const getBreadcrumbItems = (
     href: url,
     overrideFontColor: breadcrumbProps.breadcrumbColor,
     hoverUnderline: false,
-  }));
+    overrideFontWeight: undefined,
+  })) as {
+    label: string;
+    href: string | undefined;
+    overrideFontColor: Colors;
+    hoverUnderline: boolean;
+    overrideFontWeight: FontWeight | undefined;
+  }[];
 
   if (!breadcrumbProps.hideProductName) {
     breadcrumbItems.push({
@@ -129,6 +136,9 @@ const getBreadcrumbItems = (
       overrideFontColor: "primary",
       href: undefined,
       hoverUnderline: siteTemplate === "elux" ? true : false,
+      overrideFontWeight: siteTemplate === "frigidaire"
+        ? "font-medium" as FontWeight
+        : undefined,
     });
   }
 

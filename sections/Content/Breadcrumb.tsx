@@ -132,7 +132,7 @@ export default function Breadcrumb(
             <a
               href={href}
               class={clx(
-                "last:line-clamp-1 content-center",
+                "last:line-clamp-1 content-center [&:not(:last-child)]:inline-block [&:not(:last-child)]:whitespace-nowrap",
                 overrideFontColor && TEXT_COLORS[overrideFontColor],
                 overrideFontWeight,
               )}
