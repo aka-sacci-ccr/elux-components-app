@@ -1,19 +1,7 @@
-import {
-  BreadcrumbList,
-  ListItem,
-  Product,
-  ProductDetailsPage,
-} from "apps/commerce/types.ts";
-import ProductMainBanner from "../../../components/product/ProductMainBanner.tsx";
-import ProductInfoBanners, {
-  BannerColors,
-} from "../../../components/product/ProductInfoBanners.tsx";
+import { ProductDetailsPage } from "apps/commerce/types.ts";
 import ProductMain from "../../../components/product/ProductMain.tsx";
 import ProductDetails from "../../../components/product/ProductDetails.tsx";
 import Container, { SpacingConfig } from "../../container/Container.tsx";
-import Breadcrumb, {
-  Props as BreadcrumbProps,
-} from "../../Content/Breadcrumb.tsx";
 import {
   Colors,
   FontSize,
@@ -26,10 +14,6 @@ import { LANGUAGE_DIFFS } from "../../../utils/constants.tsx";
 interface ProductPageProps {
   /** @description product loader of the page */
   page: ProductDetailsPage | null;
-  /** @description Props of PDP breadcrumb */
-  breadcrumbProps: PDPBreadcrumbProps;
-  /** @description Define alternating banners colors */
-  bannersProps: BannerColors[];
   /** @description Product main colors */
   productMain: ProductMainProps;
   /** @description Spacing config */
@@ -69,26 +53,6 @@ interface ProductNameProps {
   sku?: Omit<TextProps, "text">;
   /** @description Position of SKU/Name */
   position?: "1" | "2";
-}
-
-interface PDPBreadcrumbProps extends
-  Omit<
-    BreadcrumbProps,
-    "items" | "fontColor" | "spacing" | "disableContainer"
-  > {
-  /** @description Breadcrumb icon color */
-  iconColor: Colors;
-  /** @description Breadcrumb font color */
-  breadcrumbColor: Colors;
-  /** @description Max qty of items in breadcrumb */
-  maxItems?: number;
-  /** @description Hide product name in breadcrumb */
-  hideProductName?: boolean;
-  /** @description Override first item of breadcrumb */
-  overrideFirst?: {
-    item: string;
-    url: string;
-  };
 }
 
 interface TabProps {
@@ -135,48 +99,19 @@ export const loader = (
 export default function ProductPage(
   {
     page,
-    bannersProps,
     spacing,
-    breadcrumbProps,
     language,
     productMain,
-    siteTemplate,
   }: ReturnType<
     typeof loader
   >,
 ) {
   if (!page) return <NotFound language={language} />;
-  const { product, breadcrumbList } = page;
-  const { image, additionalProperty, description } = product;
-
-  const breadcrumbItems = getBreadcrumbItems(
-    breadcrumbList,
-    breadcrumbProps,
-    product,
-    siteTemplate,
-  );
-
-  const infoBannerImages = image?.filter((image) =>
-    image.additionalType === "INFO_BANNER"
-  );
+  const { product } = page;
+  const { additionalProperty, description } = product;
 
   return (
     <Container class="flex flex-col" spacing={spacing}>
-      <div class="w-full flex flex-row justify-center">
-        <div class="my-6 w-[1280px] sm:pl-10">
-          <Breadcrumb
-            {...breadcrumbProps}
-            items={breadcrumbItems}
-            fontColor={breadcrumbProps.iconColor}
-            disableContainer={true}
-          />
-        </div>
-      </div>
-      <ProductMainBanner product={product} />
-      <ProductInfoBanners
-        banners={infoBannerImages}
-        bannerColors={bannersProps}
-      />
       <ProductMain
         page={page}
         productMain={productMain}
@@ -191,59 +126,6 @@ export default function ProductPage(
     </Container>
   );
 }
-
-const sortAndFilterBreadcrumbItems = (items: ListItem[]): ListItem[] =>
-  Object.values(
-    [...items].sort((a, b) =>
-      a.position === b.position
-        ? a.item.localeCompare(b.item)
-        : a.position - b.position
-    ).reduce((acc, item) => ({
-      ...acc,
-      [item.position]: acc[item.position] || item,
-    }), {} as Record<number, ListItem>),
-  );
-
-const getBreadcrumbItems = (
-  breadcrumbList: BreadcrumbList,
-  breadcrumbProps: PDPBreadcrumbProps,
-  product: Product,
-  siteTemplate: "frigidaire" | "elux",
-) => {
-  const orderedBreadcrumbList = sortAndFilterBreadcrumbItems(
-    [
-      ...breadcrumbList.itemListElement,
-      ...breadcrumbProps.overrideFirst
-        ? [{
-          "@type": "ListItem" as const,
-          position: 0,
-          ...breadcrumbProps.overrideFirst,
-        }]
-        : [],
-    ],
-  ).slice(
-    0,
-    (breadcrumbProps.maxItems ?? 3) -
-      (breadcrumbProps.hideProductName ? 0 : 1),
-  );
-  const breadcrumbItems = orderedBreadcrumbList.map(({ item, url }) => ({
-    label: item,
-    href: url,
-    overrideFontColor: breadcrumbProps.breadcrumbColor,
-    hoverUnderline: false,
-  }));
-
-  if (!breadcrumbProps.hideProductName) {
-    breadcrumbItems.push({
-      label: product.name!,
-      overrideFontColor: "primary",
-      href: undefined,
-      hoverUnderline: siteTemplate === "elux" ? true : false,
-    });
-  }
-
-  return breadcrumbItems;
-};
 
 function NotFound({ language }: { language: "EN" | "ES" }) {
   return (

@@ -159,12 +159,9 @@ export default async function loader(
         .select()
         .from(images)
         .where(
-          and(
-            inArray(
-              images.subjectOf,
-              listOption.map((sku) => sku),
-            ),
-            eq(images.additionalType, "PRODUCT_IMAGE"),
+          inArray(
+            images.subjectOf,
+            listOption.map((sku) => sku),
           ),
         )
         .all(),
@@ -276,12 +273,9 @@ export default async function loader(
     .select()
     .from(images)
     .where(
-      and(
-        inArray(
-          images.subjectOf,
-          baseProducts.map((p) => p.sku),
-        ),
-        eq(images.additionalType, "PRODUCT_IMAGE"),
+      inArray(
+        images.subjectOf,
+        baseProducts.map((p) => p.sku),
       ),
     )
     .all();
@@ -315,13 +309,10 @@ const joinProductData = (
       .map((i) => ({
         "@type": "ImageObject" as const,
         ...i,
-        name: i.name ?? undefined,
-        description: i.description ?? undefined,
         disambiguatingDescription: i.disambiguatingDescription ??
           undefined,
         subjectOf: i.subjectOf ?? undefined,
         identifier: String(i.identifier),
-        additionalType: i.additionalType ?? undefined,
       })),
   }));
 

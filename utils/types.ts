@@ -398,38 +398,6 @@ export interface ImageProduct {
    * @title Alternate Text
    */
   disambiguatingDescription?: string;
-  /**
-   * @title Image type
-   * @default PRODUCT_IMAGE
-   * @description PRODUCT_IMAGE: Carousel image; INFO_BANNER: Alternating banners; MAIN_BANNER: Product main banner; MAIN_BANNER_MOBILE: Main banner in mobile
-   */
-  additionalType?:
-    | "PRODUCT_IMAGE"
-    | "INFO_BANNER"
-    | "MAIN_BANNER"
-    | "MAIN_BANNER_MOBILE";
-  /**
-   * @title Spanish Title (if banner)
-   * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a title to the banner.
-   */
-  name?: string;
-  /**
-   * @title English Title (if banner)
-   * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a description to the banner.
-   */
-  alternateName?: string;
-  /**
-   * @format rich-text
-   * @title Spanish Description (if banner)
-   * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a description to the banner.
-   */
-  description?: string;
-  /**
-   * @title English Description (if banner)
-   * @format rich-text
-   * @description If using INFO_BANNER, MAIN_BANNER and MAIN_BANNER_MOBILE, you can add a description to the banner.
-   */
-  alternateDescription?: string;
 }
 
 export interface Video {

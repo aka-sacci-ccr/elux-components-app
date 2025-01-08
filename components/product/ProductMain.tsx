@@ -47,7 +47,7 @@ export default function ProductMain({ page, productMain, language }: Props) {
   );
 
   return (
-    <div className="container flex flex-col lg:flex-row gap-4 mt-6 mb-4 px-5 lg:p-0 lg:mb-8">
+    <div className="container flex flex-col lg:flex-row gap-4 mb-4 px-5 lg:p-0 lg:mb-8">
       {/* Galeria do produto */}
       <div className="w-full lg:w-2/4">
         <GallerySlider

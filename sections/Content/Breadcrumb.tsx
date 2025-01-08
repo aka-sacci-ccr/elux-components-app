@@ -1,6 +1,10 @@
 import Icon from "../../components/ui/Icon.tsx";
 import { AvailableIcons } from "../../components/ui/Icon.tsx";
-import { GAP_SIZES, TEXT_COLORS } from "../../utils/constants.tsx";
+import {
+  BORDER_COLORS,
+  GAP_SIZES,
+  TEXT_COLORS,
+} from "../../utils/constants.tsx";
 import { clx } from "../../utils/clx.ts";
 import { Colors, FontSize, FontWeight } from "../../utils/types.ts";
 import Container, { SpacingConfig } from "../container/Container.tsx";
@@ -131,11 +135,16 @@ export default function Breadcrumb(
                 "last:line-clamp-1 content-center",
                 overrideFontColor && TEXT_COLORS[overrideFontColor],
                 overrideFontWeight,
-                hoverUnderline &&
-                  "underline decoration-2 underline-offset-[3px]",
               )}
             >
-              <span class="block w-max">{label}</span>
+              <span
+                class={clx(
+                  hoverUnderline && "border-b-2 line-clamp-1",
+                  BORDER_COLORS[overrideFontColor ?? fontColor],
+                )}
+              >
+                {label}
+              </span>
             </a>
             {i < items.length - 1 && (
               <Icon
