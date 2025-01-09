@@ -1,4 +1,3 @@
-import { Secret } from "apps/website/loaders/secret.ts";
 import { AppContext } from "../../mod.ts";
 
 export default function withPassword(props: unknown, ctx: AppContext) {
@@ -9,12 +8,10 @@ export default function withPassword(props: unknown, ctx: AppContext) {
     throw new Error("Invalid password");
   }
 
-  const { password } = props as { password?: Secret };
+  const { password } = props as { password?: string };
 
-  const decripted = password?.get() ?? "";
-  console.log(decripted);
 
-  if (decripted !== ctx.actionPassword) {
+  if (password !== ctx.actionPassword) {
     throw new Error("Invalid password");
   }
 }
@@ -25,6 +22,6 @@ function isObject(obj: unknown) {
 
 function hasActionPassword(props: object) {
   return ("password" in props) &&
-    typeof props?.password === "object" &&
-    props?.password !== null && ("get" in props?.password);
+    typeof props?.password === "string" &&
+    props?.password !== null;
 }
