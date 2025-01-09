@@ -8,12 +8,12 @@ export interface Props {
   filtersGroups: FiltersGroups[];
 }
 
-export default async function submit(
+export default async function createFilters(
   { filtersGroups: filters, ...rest }: { password: string } & Props,
   _req: Request,
   ctx: AppContext,
 ) {
-  withPassword(rest, ctx)
+  withPassword(rest, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
 
   try {

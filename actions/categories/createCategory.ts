@@ -5,7 +5,7 @@ import { categories } from "../../db/schema.ts";
 import { AppContext } from "../../mod.ts";
 import withPassword from "../../utils/auth/withPassword.ts";
 
-export default async function submit(
+export default async function createCategory(
   { subjectOf, ...props }: { password: string } & Category,
   _req: Request,
   ctx: AppContext,
