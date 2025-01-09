@@ -43,7 +43,7 @@ function ProductImageZoom(
         id={container}
         class="w-screen h-[100vh] lg:w-11/12 max-w-7xl flex flex-col"
       >
-        <Slider.Counter class="absolute top-5 left-5 lg:left-1/2 lg:top-6" />
+        <Slider.Counter class="absolute top-5 left-5 lg:left-1/2 lg:top-6 text-[#747474]" />
         <Slider class="carousel col-span-full col-start-1  h-3/5 w-full">
           {images.map((image, index) => (
             <Slider.Item

@@ -1,6 +1,6 @@
 import { ImageWidget } from "apps/admin/widgets.ts";
 import { ProductDetailsPage } from "apps/commerce/types.ts";
-import Container, { SpacingConfig } from "../../container/Container.tsx";
+import Container from "../../container/Container.tsx";
 import ProductMainBanner from "../../../components/product/ProductMainBanner.tsx";
 import ProductInfoBanners from "../../../components/product/ProductInfoBanners.tsx";
 import { AppContext } from "../../../mod.ts";
@@ -72,17 +72,13 @@ interface Props {
    */
   banners: ProductBanners[];
   /**
-   * @description Spacing configuration from deco
-   */
-  spacing?: SpacingConfig;
-  /**
    * @title Loader
    */
   product: ProductDetailsPage | null;
 }
 
 export default function ProductBannerMatcher(
-  { banner = null, spacing, siteTemplate }: ReturnType<typeof loader>,
+  { banner = null, siteTemplate }: ReturnType<typeof loader>,
 ) {
   if (!banner) {
     return <></>;
@@ -91,7 +87,7 @@ export default function ProductBannerMatcher(
   const { mainBanner, alternatingBanners } = banner;
 
   return (
-    <Container class="flex flex-col" spacing={spacing}>
+    <Container class="flex flex-col">
       <ProductMainBanner banner={mainBanner} />
       <ProductInfoBanners
         banners={alternatingBanners}
