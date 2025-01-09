@@ -1,14 +1,16 @@
-import { AppContext } from "apps/records/mod.ts";
 import { Category } from "../../utils/types.ts";
 
 import { logger } from "@deco/deco/o11y";
 import { categories } from "../../db/schema.ts";
+import { AppContext } from "../../mod.ts";
+import withPassword from "../../utils/auth/withPassword.ts";
 
 export default async function submit(
-  { subjectOf, ...props }: Category,
+  { subjectOf, ...props }: { password: string } & Category,
   _req: Request,
   ctx: AppContext,
 ) {
+  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   const category = subjectOf?.split("---");
   try {

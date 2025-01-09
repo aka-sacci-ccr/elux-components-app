@@ -1,9 +1,11 @@
-import { AppContext } from "apps/records/mod.ts";
 import { filtersGroups } from "../../../db/schema.ts";
 import { eq } from "drizzle-orm";
 import { logger } from "@deco/deco/o11y";
+import { AppContext } from "../../../mod.ts";
+import withPassword from "../../../utils/auth/withPassword.ts";
 
 export interface Props {
+  password: string
   /**
    * @title Filter Group
    * @description Select a filter group to update.
@@ -26,6 +28,7 @@ export default async function submit(
   _req: Request,
   ctx: AppContext,
 ) {
+  withPassword(props, ctx);
   const { filterIdentifier, ...rest } = props;
   const records = await ctx.invoke.records.loaders.drizzle();
 

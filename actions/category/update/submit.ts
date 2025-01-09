@@ -1,10 +1,12 @@
-import { AppContext } from "apps/records/mod.ts";
 import { categories } from "../../../db/schema.ts";
 import { eq } from "drizzle-orm";
 import { logger } from "@deco/deco/o11y";
 import { Category } from "../../../utils/types.ts";
+import withPassword from "../../../utils/auth/withPassword.ts";
+import { AppContext } from "../../../mod.ts";
 
 export interface Props extends Omit<Category, "identifier"> {
+  password: string;
   /**
    * @title Category
    * @description Select a category to update.
@@ -19,6 +21,7 @@ export default async function submit(
   _req: Request,
   ctx: AppContext,
 ) {
+  withPassword(props, ctx);
   const { categoryIdentifier, ...rest } = props;
   const records = await ctx.invoke.records.loaders.drizzle();
 
