@@ -350,7 +350,8 @@ const getMeasurementsFilters = (
     const unitCode = values[0]?.unitCode ?? "";
     const rangeSize = 10;
     const ranges: { start: number; end: number }[] = [];
-    const startRange = Math.floor((min - 1) / rangeSize) * rangeSize;
+    const startRange = Math.floor((min === 0 ? (min - 1) : min) / rangeSize) *
+      rangeSize;
     const endRange = Math.ceil(max / rangeSize) * rangeSize;
     for (let start = startRange; start < endRange; start += rangeSize) {
       ranges.push({
