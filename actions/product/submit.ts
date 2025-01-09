@@ -8,11 +8,13 @@ import {
   ProductMeasurements,
   Video,
 } from "../../utils/types.ts";
-import { AppContext } from "apps/records/mod.ts";
 import { logger } from "@deco/deco/o11y";
 import { insertProduct } from "../../utils/product/submitProduct.ts";
+import { AppContext } from "../../mod.ts";
+import withPassword from "../../utils/auth/withPassword.ts";
 
 export interface Props {
+  password: string;
   /**
    * @title Base info
    */
@@ -56,6 +58,7 @@ export default async function submit(
   _req: Request,
   ctx: AppContext,
 ): Promise<{ success: boolean; message?: string }> {
+  withPassword(props, ctx);
   try {
     await insertProduct({ ...props, ctx });
     return {

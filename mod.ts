@@ -3,16 +3,21 @@ import type { App, FnContext } from "@deco/deco";
 import { PreviewContainer } from "apps/utils/preview.tsx";
 
 import manifest, { Manifest } from "./manifest.gen.ts";
+import { Secret } from "apps/website/loaders/secret.ts";
+import { AppContext as RecordsAppContext } from "apps/records/mod.ts";
 
-export type AppContext = FnContext<State, Manifest>;
+export type AppContext = FnContext<State, Manifest> & RecordsAppContext;
 
 export interface Props {
   language: "EN" | "ES";
   siteTemplate: "elux" | "frigidaire";
   originSite?: string;
+  actionPassword?: Secret;
 }
 
-export type State = Omit<Props, "token">;
+export type State = Omit<Props, "actionPassword"> & {
+  actionPassword: string;
+};
 
 /**
  * @title Elux Global Sections
@@ -22,9 +27,13 @@ export type State = Omit<Props, "token">;
  */
 export default function App(props: Props): App<Manifest, State> {
   const state = props;
+  const actionPassword = state.actionPassword?.get() ?? "";
 
   return {
-    state,
+    state: {
+      ...state,
+      actionPassword,
+    },
     manifest,
   };
 }

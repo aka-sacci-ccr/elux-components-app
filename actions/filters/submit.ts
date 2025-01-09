@@ -1,17 +1,19 @@
-import { AppContext } from "apps/records/mod.ts";
 import { FiltersGroups } from "../../utils/types.ts";
 import { logger } from "@deco/deco/o11y";
 import { filtersGroups } from "../../db/schema.ts";
+import withPassword from "../../utils/auth/withPassword.ts";
+import { AppContext } from "../../mod.ts";
 
 export interface Props {
   filtersGroups: FiltersGroups[];
 }
 
 export default async function submit(
-  { filtersGroups: filters }: Props,
+  { filtersGroups: filters, ...rest }: { password: string } & Props,
   _req: Request,
   ctx: AppContext,
 ) {
+  withPassword(rest, ctx)
   const records = await ctx.invoke.records.loaders.drizzle();
 
   try {

@@ -1,10 +1,12 @@
-import { AppContext } from "apps/records/mod.ts";
 import { insertDocuments } from "../../utils/product/submitProduct.ts";
 import { ProductDocument } from "../../utils/types.ts";
 import { logger } from "@deco/deco/o11y";
 import { productDocuments } from "../../db/schema.ts";
 import { eq } from "drizzle-orm";
+import { AppContext } from "../../mod.ts";
+import withPassword from "../../utils/auth/withPassword.ts";
 export interface Props {
+  password: string;
   /**
    * @title Sku
    * @format dynamic-options
@@ -26,6 +28,7 @@ export default async function action(
   _req: Request,
   ctx: AppContext,
 ): Promise<ProductDocument[] | { success: boolean; message: string }> {
+  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
     await insertDocuments(props.documents, props.sku, ctx);
