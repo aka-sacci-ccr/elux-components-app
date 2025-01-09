@@ -1,10 +1,10 @@
-import { insertDocuments } from "../../utils/product/submitProduct.ts";
-import { ProductDocument } from "../../utils/types.ts";
+import { insertDocuments } from "../../../utils/product/submitProduct.ts";
+import { ProductDocument } from "../../../utils/types.ts";
 import { logger } from "@deco/deco/o11y";
-import { productDocuments } from "../../db/schema.ts";
+import { productDocuments } from "../../../db/schema.ts";
 import { eq } from "drizzle-orm";
-import { AppContext } from "../../mod.ts";
-import withPassword from "../../utils/auth/withPassword.ts";
+import { AppContext } from "../../../mod.ts";
+import withPassword from "../../../utils/auth/withPassword.ts";
 export interface Props {
   password: string;
   /**
@@ -23,7 +23,7 @@ export interface Props {
  * @title Update documents
  * @description Blank data will not be changed
  */
-export default async function action(
+export default async function submitDocuments(
   props: Props,
   _req: Request,
   ctx: AppContext,

@@ -20,7 +20,7 @@ import {
   products,
   videos,
 } from "../../db/schema.ts";
-import { Props as SubmitProductProps } from "../../actions/product/submit.ts";
+import { Props as SubmitProductProps } from "../../actions/product/createProduct.ts";
 import { Description } from "../types.ts";
 import { eq } from "drizzle-orm";
 import { DEFAULT_DOMAINS } from "./constants.ts";

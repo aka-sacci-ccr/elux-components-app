@@ -53,7 +53,7 @@ export interface Props {
   documents?: ProductDocument[];
 }
 
-export default async function submit(
+export default async function createProduct(
   props: Props,
   _req: Request,
   ctx: AppContext,

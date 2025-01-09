@@ -8,9 +8,9 @@ import * as $$$$$$$$$2 from "./actions/contact/submit.ts";
 import * as $$$$$$$$$3 from "./actions/domains/createDomain.ts";
 import * as $$$$$$$$$4 from "./actions/filters/createFilters.ts";
 import * as $$$$$$$$$5 from "./actions/filters/updateFilter.ts";
-import * as $$$$$$$$$6 from "./actions/product/submit.ts";
-import * as $$$$$$$$$7 from "./actions/product/submitDocuments.ts";
-import * as $$$$$$$$$8 from "./actions/product/update/basicData.ts";
+import * as $$$$$$$$$6 from "./actions/product/createProduct.ts";
+import * as $$$$$$$$$7 from "./actions/product/documents/submitDocuments.ts";
+import * as $$$$$$$$$8 from "./actions/product/updateProductBasicData.ts";
 import * as $$$0 from "./loaders/guides/categories.ts";
 import * as $$$1 from "./loaders/guides/productDocuments.ts";
 import * as $$$2 from "./loaders/guides/products.ts";
@@ -125,9 +125,10 @@ const manifest = {
     "elux-components-app/actions/domains/createDomain.ts": $$$$$$$$$3,
     "elux-components-app/actions/filters/createFilters.ts": $$$$$$$$$4,
     "elux-components-app/actions/filters/updateFilter.ts": $$$$$$$$$5,
-    "elux-components-app/actions/product/submit.ts": $$$$$$$$$6,
-    "elux-components-app/actions/product/submitDocuments.ts": $$$$$$$$$7,
-    "elux-components-app/actions/product/update/basicData.ts": $$$$$$$$$8,
+    "elux-components-app/actions/product/createProduct.ts": $$$$$$$$$6,
+    "elux-components-app/actions/product/documents/submitDocuments.ts":
+      $$$$$$$$$7,
+    "elux-components-app/actions/product/updateProductBasicData.ts": $$$$$$$$$8,
   },
   "name": "elux-components-app",
   "baseUrl": import.meta.url,
