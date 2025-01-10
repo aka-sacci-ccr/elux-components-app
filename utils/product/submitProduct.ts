@@ -22,7 +22,7 @@ import {
 } from "../../db/schema.ts";
 import { Props as SubmitProductProps } from "../../actions/product/createProduct.ts";
 import { Description } from "../types.ts";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { DEFAULT_DOMAINS } from "./constants.ts";
 import { isValidMeasurements } from "../utils.ts";
 
@@ -239,4 +239,26 @@ export async function updateDocuments(
   if (documents && documents.length > 0) {
     await insertDocuments(documents, sku, ctx);
   }
+}
+
+export async function overrideMeasurements(
+  measurements: Partial<Measurements>,
+  sku: string,
+  ctx: AppContext,
+) {
+  const records = await ctx.invoke.records.loaders.drizzle();
+  const measurementsArray = Object.entries(measurements).map(([key, value]) => {
+    return {
+      ...value,
+      subjectOf: sku,
+      propertyID: key.toUpperCase(),
+    };
+  });
+  const promises = measurementsArray.map((measurement) => {
+    return records.update(productMeasurements).set(measurement).where(and(
+      eq(productMeasurements.subjectOf, sku),
+      eq(productMeasurements.propertyID, measurement.propertyID),
+    ));
+  });
+  await Promise.all(promises);
 }
