@@ -326,6 +326,27 @@ export interface ProductMeasurements {
   maxValue: number;
 }
 
+export type BaseMeasurement = Omit<ProductMeasurements, "propertyID">;
+
+export interface Measurements {
+  /**
+   * @title Height
+   */
+  height: BaseMeasurement;
+  /**
+   * @title Width
+   */
+  width: BaseMeasurement;
+  /**
+   * @title Depth
+   */
+  depth: BaseMeasurement;
+  /**
+   * @title Weight
+   */
+  weight: BaseMeasurement;
+}
+
 export interface AdditionalProperty {
   /**
    * @title Filter Group

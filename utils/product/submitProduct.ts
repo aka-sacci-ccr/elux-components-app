@@ -3,10 +3,10 @@ import {
   AdditionalProperty,
   AvaliableIn,
   ImageProduct,
+  Measurements,
   Product,
   ProductCategory,
   ProductDocument,
-  ProductMeasurements,
   Video,
 } from "../types.ts";
 import {
@@ -24,6 +24,7 @@ import { Props as SubmitProductProps } from "../../actions/product/createProduct
 import { Description } from "../types.ts";
 import { eq } from "drizzle-orm";
 import { DEFAULT_DOMAINS } from "./constants.ts";
+import { isValidMeasurements } from "../utils.ts";
 
 export async function insertBaseData(product: Product, ctx: AppContext) {
   const records = await ctx.invoke.records.loaders.drizzle();
@@ -52,16 +53,17 @@ export async function insertCategories(
 }
 
 export async function insertMeasurements(
-  measurements: ProductMeasurements[],
+  measurements: Measurements,
   sku: string,
   ctx: AppContext,
 ) {
   const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(productMeasurements).values(
-    measurements.map((props) => {
+    Object.entries(measurements).map(([key, value]) => {
       return {
-        ...props,
+        ...value,
         subjectOf: sku,
+        propertyID: key.toUpperCase(),
       };
     }),
   );
@@ -165,14 +167,14 @@ export async function insertProduct(
 ) {
   if (
     categories.length === 0 || additionalProperties.length === 0 ||
-    images.length === 0 || measurements.length === 0
+    images.length === 0 || !isValidMeasurements(measurements)
   ) {
     throw new Error("Invalid product data");
   }
 
   await insertBaseData(product, ctx);
-  await insertCategories(categories, product.sku, ctx);
   await insertMeasurements(measurements, product.sku, ctx);
+  await insertCategories(categories, product.sku, ctx);
   await insertAdditionalProperties(additionalProperties, product.sku, ctx);
   await insertImages(images, product.sku, ctx);
   if (avaliableIn && avaliableIn.length > 0) {

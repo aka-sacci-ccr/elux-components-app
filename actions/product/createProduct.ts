@@ -1,11 +1,14 @@
-import { AvaliableIn, ProductDocument } from "../../utils/types.ts";
+import {
+  AvaliableIn,
+  Measurements,
+  ProductDocument,
+} from "../../utils/types.ts";
 import {
   AdditionalProperty,
   Description,
   ImageProduct,
   Product as BaseProduct,
   ProductCategory,
-  ProductMeasurements,
   Video,
 } from "../../utils/types.ts";
 import { logger } from "@deco/deco/o11y";
@@ -20,13 +23,13 @@ export interface Props {
    */
   product: BaseProduct;
   /**
+   * @title Measurements
+   */
+  measurements: Measurements;
+  /**
    * @title Categories
    */
   categories: ProductCategory[];
-  /**
-   * @title Measurements
-   */
-  measurements: ProductMeasurements[];
   /**
    * @title Additional Properties
    */
