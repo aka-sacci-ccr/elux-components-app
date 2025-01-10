@@ -1,9 +1,9 @@
-import { categories } from "../../../db/schema.ts";
+import { categories } from "../../db/schema.ts";
 import { eq } from "drizzle-orm";
 import { logger } from "@deco/deco/o11y";
-import { Category } from "../../../utils/types.ts";
-import withPassword from "../../../utils/auth/withPassword.ts";
-import { AppContext } from "../../../mod.ts";
+import { Category } from "../../utils/types.ts";
+import withPassword from "../../utils/auth/withPassword.ts";
+import { AppContext } from "../../mod.ts";
 
 export interface Props extends Omit<Category, "identifier"> {
   password: string;
@@ -16,7 +16,7 @@ export interface Props extends Omit<Category, "identifier"> {
   categoryIdentifier: string;
 }
 
-export default async function submit(
+export default async function updateCategory(
   props: Props,
   _req: Request,
   ctx: AppContext,

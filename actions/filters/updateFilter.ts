@@ -1,11 +1,11 @@
-import { filtersGroups } from "../../../db/schema.ts";
+import { filtersGroups } from "../../db/schema.ts";
 import { eq } from "drizzle-orm";
 import { logger } from "@deco/deco/o11y";
-import { AppContext } from "../../../mod.ts";
-import withPassword from "../../../utils/auth/withPassword.ts";
+import { AppContext } from "../../mod.ts";
+import withPassword from "../../utils/auth/withPassword.ts";
 
 export interface Props {
-  password: string
+  password: string;
   /**
    * @title Filter Group
    * @description Select a filter group to update.
@@ -23,7 +23,7 @@ export interface Props {
   alternateName: string;
 }
 
-export default async function submit(
+export default async function updateFilter(
   props: Props,
   _req: Request,
   ctx: AppContext,

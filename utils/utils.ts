@@ -5,6 +5,7 @@ import {
   TIME_UNITS,
   TIME_UNITS_EN,
 } from "./product/constants.ts";
+import { BaseMeasurement, Measurements } from "./types.ts";
 
 export function chunkArray<T>(array: T[], size: number): T[][] {
   const chunks: T[][] = [];
@@ -83,4 +84,27 @@ export function formatRelativeTime(isoDate: string, language: "ES" | "EN") {
       return `${count} ${unit}${count > 1 ? plural : ""}`;
     }
   }
+}
+
+export function isValidMeasurements(
+  measurements: Partial<Measurements>,
+): measurements is Measurements {
+  if (
+    !measurements.height || !measurements.width ||
+    !measurements.depth || !measurements.weight
+  ) {
+    return false;
+  }
+  const isValidBaseMeasurement = (
+    measurement: Partial<BaseMeasurement>,
+  ): boolean => {
+    return typeof measurement.unitCode === "string" &&
+      typeof measurement.minValue === "number" &&
+      typeof measurement.maxValue === "number";
+  };
+
+  return isValidBaseMeasurement(measurements.height) &&
+    isValidBaseMeasurement(measurements.width) &&
+    isValidBaseMeasurement(measurements.depth) &&
+    isValidBaseMeasurement(measurements.weight);
 }

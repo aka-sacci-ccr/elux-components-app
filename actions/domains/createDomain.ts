@@ -7,7 +7,7 @@ interface Props {
   description: string;
 }
 
-export default async function submit(
+export default async function createDomain(
   props: Props,
   _req: Request,
   ctx: AppContext,

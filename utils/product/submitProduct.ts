@@ -3,10 +3,10 @@ import {
   AdditionalProperty,
   AvaliableIn,
   ImageProduct,
+  Measurements,
   Product,
   ProductCategory,
   ProductDocument,
-  ProductMeasurements,
   Video,
 } from "../types.ts";
 import {
@@ -20,10 +20,11 @@ import {
   products,
   videos,
 } from "../../db/schema.ts";
-import { Props as SubmitProductProps } from "../../actions/product/submit.ts";
+import { Props as SubmitProductProps } from "../../actions/product/createProduct.ts";
 import { Description } from "../types.ts";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { DEFAULT_DOMAINS } from "./constants.ts";
+import { isValidMeasurements } from "../utils.ts";
 
 export async function insertBaseData(product: Product, ctx: AppContext) {
   const records = await ctx.invoke.records.loaders.drizzle();
@@ -52,16 +53,17 @@ export async function insertCategories(
 }
 
 export async function insertMeasurements(
-  measurements: ProductMeasurements[],
+  measurements: Measurements,
   sku: string,
   ctx: AppContext,
 ) {
   const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(productMeasurements).values(
-    measurements.map((props) => {
+    Object.entries(measurements).map(([key, value]) => {
       return {
-        ...props,
+        ...value,
         subjectOf: sku,
+        propertyID: key.toUpperCase(),
       };
     }),
   );
@@ -165,14 +167,14 @@ export async function insertProduct(
 ) {
   if (
     categories.length === 0 || additionalProperties.length === 0 ||
-    images.length === 0 || measurements.length === 0
+    images.length === 0 || !isValidMeasurements(measurements)
   ) {
     throw new Error("Invalid product data");
   }
 
   await insertBaseData(product, ctx);
-  await insertCategories(categories, product.sku, ctx);
   await insertMeasurements(measurements, product.sku, ctx);
+  await insertCategories(categories, product.sku, ctx);
   await insertAdditionalProperties(additionalProperties, product.sku, ctx);
   await insertImages(images, product.sku, ctx);
   if (avaliableIn && avaliableIn.length > 0) {
@@ -223,4 +225,40 @@ export async function insertDocuments(
       };
     }),
   );
+}
+
+export async function updateDocuments(
+  documents: ProductDocument[],
+  sku: string,
+  ctx: AppContext,
+) {
+  const records = await ctx.invoke.records.loaders.drizzle();
+  await records
+    .delete(productDocuments)
+    .where(eq(productDocuments.subjectOf, sku));
+  if (documents && documents.length > 0) {
+    await insertDocuments(documents, sku, ctx);
+  }
+}
+
+export async function overrideMeasurements(
+  measurements: Partial<Measurements>,
+  sku: string,
+  ctx: AppContext,
+) {
+  const records = await ctx.invoke.records.loaders.drizzle();
+  const measurementsArray = Object.entries(measurements).map(([key, value]) => {
+    return {
+      ...value,
+      subjectOf: sku,
+      propertyID: key.toUpperCase(),
+    };
+  });
+  const promises = measurementsArray.map((measurement) => {
+    return records.update(productMeasurements).set(measurement).where(and(
+      eq(productMeasurements.subjectOf, sku),
+      eq(productMeasurements.propertyID, measurement.propertyID),
+    ));
+  });
+  await Promise.all(promises);
 }

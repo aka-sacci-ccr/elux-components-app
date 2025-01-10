@@ -1,14 +1,15 @@
-import { insertDocuments } from "../../utils/product/submitProduct.ts";
-import { ProductDocument } from "../../utils/types.ts";
+import { updateDocuments } from "../../../utils/product/submitProduct.ts";
+import { ProductDocument } from "../../../utils/types.ts";
 import { logger } from "@deco/deco/o11y";
-import { productDocuments } from "../../db/schema.ts";
+import { productDocuments } from "../../../db/schema.ts";
 import { eq } from "drizzle-orm";
-import { AppContext } from "../../mod.ts";
-import withPassword from "../../utils/auth/withPassword.ts";
+import { AppContext } from "../../../mod.ts";
+import withPassword from "../../../utils/auth/withPassword.ts";
 export interface Props {
   password: string;
   /**
    * @title Sku
+   * @description This action will update the documents of the product. Existing documents will be overwritten.
    * @format dynamic-options
    * @options elux-components-app/loaders/product/avaliableSkus.ts
    */
@@ -20,10 +21,9 @@ export interface Props {
 }
 
 /**
- * @title Update documents
- * @description Blank data will not be changed
+ * @title Add new documents
  */
-export default async function action(
+export default async function addDocuments(
   props: Props,
   _req: Request,
   ctx: AppContext,
@@ -31,7 +31,7 @@ export default async function action(
   withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
-    await insertDocuments(props.documents, props.sku, ctx);
+    await updateDocuments(props.documents, props.sku, ctx);
     const productDocs = await records
       .select()
       .from(productDocuments)
