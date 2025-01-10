@@ -262,3 +262,17 @@ export async function overrideMeasurements(
   });
   await Promise.all(promises);
 }
+
+export async function overrideAdditionalProperties(
+  productProps: AdditionalProperty[],
+  sku: string,
+  ctx: AppContext,
+) {
+  const records = await ctx.invoke.records.loaders.drizzle();
+  await records.delete(additionalProperties).where(
+    eq(additionalProperties.subjectOf, sku),
+  );
+  if (productProps && productProps.length > 0) {
+    await insertAdditionalProperties(productProps, sku, ctx);
+  }
+}
