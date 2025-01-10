@@ -226,3 +226,17 @@ export async function insertDocuments(
     }),
   );
 }
+
+export async function updateDocuments(
+  documents: ProductDocument[],
+  sku: string,
+  ctx: AppContext,
+) {
+  const records = await ctx.invoke.records.loaders.drizzle();
+  await records
+    .delete(productDocuments)
+    .where(eq(productDocuments.subjectOf, sku));
+  if (documents && documents.length > 0) {
+    await insertDocuments(documents, sku, ctx);
+  }
+}
