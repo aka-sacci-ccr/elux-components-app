@@ -297,6 +297,17 @@ export async function overrideImages(
   }
 }
 
+export async function overrideVideos(
+  override: Video[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  await records.delete(videos).where(eq(videos.subjectOf, sku));
+  if (override && override.length > 0) {
+    await insertVideos(override, sku, records);
+  }
+}
+
 export async function addCategories(
   categories: ProductCategory[],
   sku: string,

@@ -58,7 +58,7 @@ export interface Image {
   subjectOf: string | null;
 }
 
-interface Video {
+export interface Video {
   identifier: number;
   subjectOf: string | null;
   contentUrl: string;

@@ -19,6 +19,8 @@ import * as $$$$$$$$$13 from "./actions/product/images/addProductImages.ts";
 import * as $$$$$$$$$14 from "./actions/product/images/updateProductImages.ts";
 import * as $$$$$$$$$15 from "./actions/product/measurements/updateMeasurements.ts";
 import * as $$$$$$$$$16 from "./actions/product/updateProductBasicData.ts";
+import * as $$$$$$$$$17 from "./actions/product/videos/addProductVideos.ts";
+import * as $$$$$$$$$18 from "./actions/product/videos/updateProductVideos.ts";
 import * as $$$0 from "./loaders/guides/categories.ts";
 import * as $$$1 from "./loaders/guides/productDocuments.ts";
 import * as $$$2 from "./loaders/guides/products.ts";
@@ -154,6 +156,10 @@ const manifest = {
       $$$$$$$$$15,
     "elux-components-app/actions/product/updateProductBasicData.ts":
       $$$$$$$$$16,
+    "elux-components-app/actions/product/videos/addProductVideos.ts":
+      $$$$$$$$$17,
+    "elux-components-app/actions/product/videos/updateProductVideos.ts":
+      $$$$$$$$$18,
   },
   "name": "elux-components-app",
   "baseUrl": import.meta.url,
