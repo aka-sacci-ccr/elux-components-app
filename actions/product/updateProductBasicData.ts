@@ -10,15 +10,13 @@ import { matchAvaliableBrandsLoaderPattern } from "../../utils/utils.ts";
 export interface Props extends Partial<DatabaseProduct> {
   /**
    * @title Sku
+   * @description This action will update the basic data of an product. Blank fields will not be changed.
    * @format dynamic-options
    * @options elux-components-app/loaders/product/avaliableSkus.ts
    */
   sku: string;
 }
 
-/**
- * @description Blank data will not be changed
- */
 export default async function updateProductBasicData(
   props: { password: string } & Props,
   req: Request,

@@ -9,7 +9,7 @@ import { eq } from "drizzle-orm";
 export interface Props {
   /**
    * @title Sku
-   * @description This action will update the documents of the product. Existing documents will be overwritten.
+   * @description This action will update the measurements of a product.
    * @format dynamic-options
    * @options elux-components-app/loaders/product/avaliableSkus.ts
    */

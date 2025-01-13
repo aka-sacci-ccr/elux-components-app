@@ -290,6 +290,7 @@ export interface Brand {
 export interface FiltersGroups {
   /**
    * @title Filter Slug
+   * @description The unique filter group ID and his slug.
    */
   identifier: string;
   /**

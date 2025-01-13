@@ -9,7 +9,7 @@ export interface Props {
   password: string;
   /**
    * @title Sku
-   * @description This action will add new additional properties to the product. No additional properties will be removed or overwritten.
+   * @description This action will add new categories to the product. No categories will be removed or overwritten.
    * @format dynamic-options
    * @options elux-components-app/loaders/product/avaliableSkus.ts
    */

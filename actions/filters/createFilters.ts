@@ -5,6 +5,10 @@ import withPassword from "../../utils/auth/withPassword.ts";
 import { AppContext } from "../../mod.ts";
 
 export interface Props {
+  /**
+   * @title Filters Groups
+   * @description Add new filters groups.
+   */
   filtersGroups: FiltersGroups[];
 }
 
