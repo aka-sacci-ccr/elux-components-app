@@ -10,7 +10,6 @@ export default function withPassword(props: unknown, ctx: AppContext) {
 
   const { password } = props as { password?: string };
 
-
   if (password !== ctx.actionPassword) {
     throw new Error("Invalid password");
   }

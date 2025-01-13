@@ -1,11 +1,14 @@
-import { AvaliableIn, ProductDocument } from "../../utils/types.ts";
+import {
+  AvaliableIn,
+  Measurements,
+  ProductDocument,
+} from "../../utils/types.ts";
 import {
   AdditionalProperty,
   Description,
   ImageProduct,
   Product as BaseProduct,
   ProductCategory,
-  ProductMeasurements,
   Video,
 } from "../../utils/types.ts";
 import { logger } from "@deco/deco/o11y";
@@ -20,13 +23,13 @@ export interface Props {
    */
   product: BaseProduct;
   /**
+   * @title Measurements
+   */
+  measurements: Measurements;
+  /**
    * @title Categories
    */
   categories: ProductCategory[];
-  /**
-   * @title Measurements
-   */
-  measurements: ProductMeasurements[];
   /**
    * @title Additional Properties
    */
@@ -53,14 +56,15 @@ export interface Props {
   documents?: ProductDocument[];
 }
 
-export default async function submit(
+export default async function createProduct(
   props: Props,
   _req: Request,
   ctx: AppContext,
 ): Promise<{ success: boolean; message?: string }> {
-  withPassword(props, ctx);
+  const records = await ctx.invoke.records.loaders.drizzle();
   try {
-    await insertProduct({ ...props, ctx });
+    withPassword(props, ctx);
+    await insertProduct({ ...props, records });
     return {
       success: true,
     };

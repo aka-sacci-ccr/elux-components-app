@@ -1,12 +1,11 @@
-import { AppContext } from "apps/records/mod.ts";
 import {
   AdditionalProperty,
   AvaliableIn,
   ImageProduct,
+  Measurements,
   Product,
   ProductCategory,
   ProductDocument,
-  ProductMeasurements,
   Video,
 } from "../types.ts";
 import {
@@ -20,31 +19,40 @@ import {
   products,
   videos,
 } from "../../db/schema.ts";
-import { Props as SubmitProductProps } from "../../actions/product/submit.ts";
+import { Props as SubmitProductProps } from "../../actions/product/createProduct.ts";
 import { Description } from "../types.ts";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { DEFAULT_DOMAINS } from "./constants.ts";
+import {
+  isValidMeasurements,
+  matchAvaliableBrandsLoaderPattern,
+  matchAvaliableCategoriesLoaderPattern,
+} from "../utils.ts";
+import { Category as CategoryFromDatabase } from "./getProduct.ts";
+import { LibSQLDatabase } from "apps/records/deps.ts";
 
-export async function insertBaseData(product: Product, ctx: AppContext) {
-  const records = await ctx.invoke.records.loaders.drizzle();
-  const productBrand = product.brand?.split("---");
+export async function insertBaseData(
+  product: Product,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  const { brandId } = matchAvaliableBrandsLoaderPattern(product.brand) ?? {};
   await records.insert(products).values({
     ...product,
-    brand: productBrand ? productBrand[0] ?? "" : "",
+    brand: brandId ?? "",
   });
 }
 
 export async function insertCategories(
   categories: ProductCategory[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(productCategories).values(
     categories.map(({ subjectOf }) => {
-      const category = subjectOf.split("---");
+      const { categoryId } = matchAvaliableCategoriesLoaderPattern(subjectOf) ??
+        {};
       return {
-        subjectOf: category[0],
+        subjectOf: categoryId,
         product: sku,
       };
     }),
@@ -52,16 +60,16 @@ export async function insertCategories(
 }
 
 export async function insertMeasurements(
-  measurements: ProductMeasurements[],
+  measurements: Measurements,
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(productMeasurements).values(
-    measurements.map((props) => {
+    Object.entries(measurements).map(([key, value]) => {
       return {
-        ...props,
+        ...value,
         subjectOf: sku,
+        propertyID: key.toUpperCase(),
       };
     }),
   );
@@ -70,9 +78,8 @@ export async function insertMeasurements(
 export async function insertAdditionalProperties(
   productProps: AdditionalProperty[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(additionalProperties).values(
     productProps.map((props) => {
       return {
@@ -86,9 +93,8 @@ export async function insertAdditionalProperties(
 export async function insertDescriptions(
   productProps: Description[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(descriptions).values(
     productProps.map((props) => {
       return {
@@ -102,9 +108,8 @@ export async function insertDescriptions(
 export async function insertImages(
   productImages: ImageProduct[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(images).values(
     productImages.map((props) => {
       return {
@@ -118,9 +123,8 @@ export async function insertImages(
 export async function insertVideos(
   productVideo: Video[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(videos).values(
     productVideo.map((props) => {
       return {
@@ -134,19 +138,34 @@ export async function insertVideos(
 export async function insertAvaliability(
   avaliablility: AvaliableIn[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
+  omitDefaultDomains = false,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(avaliableIn).values([
     ...avaliablility.map(({ domain }) => ({
       domain,
       subjectOf: sku,
     })),
-    ...DEFAULT_DOMAINS.map((domain) => ({
+    ...(omitDefaultDomains ? [] : DEFAULT_DOMAINS.map((domain) => ({
       domain,
       subjectOf: sku,
-    })),
+    }))),
   ]);
+}
+
+export async function insertDocuments(
+  documents: ProductDocument[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  await records.insert(productDocuments).values(
+    documents.map((props) => {
+      return {
+        ...props,
+        subjectOf: sku,
+      };
+    }),
+  );
 }
 
 export async function insertProduct(
@@ -160,40 +179,39 @@ export async function insertProduct(
     videos,
     measurements,
     documents,
-    ctx,
-  }: SubmitProductProps & { ctx: AppContext },
+    records,
+  }: SubmitProductProps & { records: LibSQLDatabase<Record<string, never>> },
 ) {
   if (
     categories.length === 0 || additionalProperties.length === 0 ||
-    images.length === 0 || measurements.length === 0
+    images.length === 0 || !isValidMeasurements(measurements)
   ) {
     throw new Error("Invalid product data");
   }
 
-  await insertBaseData(product, ctx);
-  await insertCategories(categories, product.sku, ctx);
-  await insertMeasurements(measurements, product.sku, ctx);
-  await insertAdditionalProperties(additionalProperties, product.sku, ctx);
-  await insertImages(images, product.sku, ctx);
+  await insertBaseData(product, records);
+  await insertMeasurements(measurements, product.sku, records);
+  await insertCategories(categories, product.sku, records);
+  await insertAdditionalProperties(additionalProperties, product.sku, records);
+  await insertImages(images, product.sku, records);
   if (avaliableIn && avaliableIn.length > 0) {
-    await insertAvaliability(avaliableIn, product.sku, ctx);
+    await insertAvaliability(avaliableIn, product.sku, records);
   }
   if (descriptions && descriptions.length > 0) {
-    await insertDescriptions(descriptions, product.sku, ctx);
+    await insertDescriptions(descriptions, product.sku, records);
   }
   if (videos && videos.length > 0) {
-    await insertVideos(videos, product.sku, ctx);
+    await insertVideos(videos, product.sku, records);
   }
   if (documents && documents.length > 0) {
-    await insertDocuments(documents, product.sku, ctx);
+    await insertDocuments(documents, product.sku, records);
   }
 }
 
-export async function updateBaseData(
+export async function overrideBaseData(
   product: Partial<Product>,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   const updateData: Partial<Product> = {};
   Object.keys(product).forEach((key) => {
     const value = product[key as keyof Product];
@@ -209,18 +227,164 @@ export async function updateBaseData(
   }
 }
 
-export async function insertDocuments(
+export async function overrideDocuments(
   documents: ProductDocument[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
-  await records.insert(productDocuments).values(
-    documents.map((props) => {
-      return {
-        ...props,
-        subjectOf: sku,
-      };
-    }),
-  );
+  await records
+    .delete(productDocuments)
+    .where(eq(productDocuments.subjectOf, sku));
+  if (documents && documents.length > 0) {
+    await insertDocuments(documents, sku, records);
+  }
 }
+
+export async function overrideMeasurements(
+  measurements: Partial<Measurements>,
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  const measurementsArray = Object.entries(measurements).map(([key, value]) => {
+    return {
+      ...value,
+      subjectOf: sku,
+      propertyID: key.toUpperCase(),
+    };
+  });
+  const promises = measurementsArray.map((measurement) => {
+    return records.update(productMeasurements).set(measurement).where(and(
+      eq(productMeasurements.subjectOf, sku),
+      eq(productMeasurements.propertyID, measurement.propertyID),
+    ));
+  });
+  await Promise.all(promises);
+}
+
+export async function overrideAdditionalProperties(
+  productProps: AdditionalProperty[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  if (!productProps || productProps.length === 0) {
+    throw new Error("Product MUST have additional properties");
+  }
+  await records.delete(additionalProperties).where(
+    eq(additionalProperties.subjectOf, sku),
+  );
+  await insertAdditionalProperties(productProps, sku, records);
+}
+
+export async function overrideCategories(
+  categories: ProductCategory[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  if (!categories || categories.length === 0) {
+    throw new Error("Product MUST have categories");
+  }
+  await records.delete(productCategories).where(
+    eq(productCategories.product, sku),
+  );
+
+  await insertCategories(categories, sku, records);
+}
+
+export async function overrideImages(
+  override: ImageProduct[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  if (!override || override.length === 0) {
+    throw new Error("Product MUST have images");
+  }
+  await records.delete(images).where(eq(images.subjectOf, sku));
+  await insertImages(override, sku, records);
+}
+
+export async function overrideVideos(
+  override: Video[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  await records.delete(videos).where(eq(videos.subjectOf, sku));
+  if (override && override.length > 0) {
+    await insertVideos(override, sku, records);
+  }
+}
+
+export async function overrideProductDescriptions(
+  override: Description[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  if (!override || override.length === 0) {
+    throw new Error("Product MUST have descriptions");
+  }
+  await records.delete(descriptions).where(eq(descriptions.subjectOf, sku));
+  await insertDescriptions(override, sku, records);
+}
+
+export async function overrideAvaliability(
+  avaliability: AvaliableIn[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  await records.delete(avaliableIn).where(eq(avaliableIn.subjectOf, sku));
+  if (avaliability && avaliability.length > 0) {
+    await insertAvaliability(avaliability, sku, records);
+  }
+}
+
+export async function addCategories(
+  categories: ProductCategory[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  const productCategoriesFromRecords = await getProductCategories(sku, records);
+  const categoriesToInsert = categories.filter((c) =>
+    !productCategoriesFromRecords.find((productCat) =>
+      productCat.subjectOf ===
+        matchAvaliableCategoriesLoaderPattern(c.subjectOf)?.categoryId
+    )
+  );
+  if (categoriesToInsert.length > 0) {
+    await insertCategories(categoriesToInsert, sku, records);
+  }
+  return getProductCategories(sku, records);
+}
+
+export async function addAvaliability(
+  avaliability: AvaliableIn[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  const avaliabilityFromRecords = await getProductAvaliability(sku, records);
+  const avaliabilityToInsert = avaliability.filter((a) =>
+    !avaliabilityFromRecords.find((aFromRecords) =>
+      aFromRecords.domain === a.domain
+    )
+  );
+  if (avaliabilityToInsert.length > 0) {
+    await insertAvaliability(avaliabilityToInsert, sku, records, true);
+  }
+  return getProductAvaliability(sku, records);
+}
+
+const getProductAvaliability = async (
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) =>
+  await records
+    .select()
+    .from(avaliableIn)
+    .where(eq(avaliableIn.subjectOf, sku)) as AvaliableIn[];
+
+const getProductCategories = async (
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) =>
+  await records
+    .select()
+    .from(productCategories)
+    .where(eq(productCategories.product, sku)) as CategoryFromDatabase[];

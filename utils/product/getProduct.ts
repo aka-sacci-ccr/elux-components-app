@@ -41,7 +41,7 @@ interface AdditionalProperty {
   alternateUnitText: string | null;
 }
 
-interface Description {
+export interface Description {
   name: string;
   alternateName: string | null;
   identifier: number;
@@ -51,21 +51,21 @@ interface Description {
   image: string | null;
 }
 
-interface Image {
+export interface Image {
   url: string;
   identifier: number;
   disambiguatingDescription: string | null;
   subjectOf: string | null;
 }
 
-interface Video {
+export interface Video {
   identifier: number;
   subjectOf: string | null;
   contentUrl: string;
   thumbnailUrl: string;
 }
 
-interface Category {
+export interface Category {
   identifier: string;
   name: string;
   alternateName?: string;

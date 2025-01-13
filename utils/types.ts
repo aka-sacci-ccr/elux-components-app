@@ -260,7 +260,7 @@ export interface Product {
    * @format dynamic-options
    * @options elux-components-app/loaders/product/avaliableBrands.ts
    */
-  brand?: string;
+  brand: string;
   /**
    * @title Description
    * @format rich-text
@@ -290,6 +290,7 @@ export interface Brand {
 export interface FiltersGroups {
   /**
    * @title Filter Slug
+   * @description The unique filter group ID and his slug.
    */
   identifier: string;
   /**
@@ -324,6 +325,27 @@ export interface ProductMeasurements {
    * @title Value with box
    */
   maxValue: number;
+}
+
+export type BaseMeasurement = Omit<ProductMeasurements, "propertyID">;
+
+export interface Measurements {
+  /**
+   * @title Height
+   */
+  height: BaseMeasurement;
+  /**
+   * @title Width
+   */
+  width: BaseMeasurement;
+  /**
+   * @title Depth
+   */
+  depth: BaseMeasurement;
+  /**
+   * @title Weight
+   */
+  weight: BaseMeasurement;
 }
 
 export interface AdditionalProperty {

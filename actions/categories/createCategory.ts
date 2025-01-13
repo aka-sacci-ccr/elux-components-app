@@ -5,15 +5,15 @@ import { categories } from "../../db/schema.ts";
 import { AppContext } from "../../mod.ts";
 import withPassword from "../../utils/auth/withPassword.ts";
 
-export default async function submit(
+export default async function createCategory(
   { subjectOf, ...props }: { password: string } & Category,
   _req: Request,
   ctx: AppContext,
 ) {
-  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   const category = subjectOf?.split("---");
   try {
+    withPassword(props, ctx);
     const additionalType = category ? String(Number(category[2]) + 1) : "1";
     const subjectOf = category ? category[0] : undefined;
     //Insert category

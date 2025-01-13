@@ -5,18 +5,21 @@ import withPassword from "../../utils/auth/withPassword.ts";
 import { AppContext } from "../../mod.ts";
 
 export interface Props {
+  /**
+   * @title Filters Groups
+   * @description Add new filters groups.
+   */
   filtersGroups: FiltersGroups[];
 }
 
-export default async function submit(
+export default async function createFilters(
   { filtersGroups: filters, ...rest }: { password: string } & Props,
   _req: Request,
   ctx: AppContext,
 ) {
-  withPassword(rest, ctx)
   const records = await ctx.invoke.records.loaders.drizzle();
-
   try {
+    withPassword(rest, ctx);
     if (filters.length === 0) {
       throw new Error("No filters groups to insert");
     }

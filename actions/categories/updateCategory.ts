@@ -1,9 +1,10 @@
-import { categories } from "../../../db/schema.ts";
+import { categories } from "../../db/schema.ts";
 import { eq } from "drizzle-orm";
 import { logger } from "@deco/deco/o11y";
-import { Category } from "../../../utils/types.ts";
-import withPassword from "../../../utils/auth/withPassword.ts";
-import { AppContext } from "../../../mod.ts";
+import { Category } from "../../utils/types.ts";
+import withPassword from "../../utils/auth/withPassword.ts";
+import { AppContext } from "../../mod.ts";
+import { matchAvaliableCategoriesLoaderPattern } from "../../utils/utils.ts";
 
 export interface Props extends Omit<Category, "identifier"> {
   password: string;
@@ -16,20 +17,19 @@ export interface Props extends Omit<Category, "identifier"> {
   categoryIdentifier: string;
 }
 
-export default async function submit(
+export default async function updateCategory(
   props: Props,
   _req: Request,
   ctx: AppContext,
 ) {
-  withPassword(props, ctx);
   const { categoryIdentifier, ...rest } = props;
   const records = await ctx.invoke.records.loaders.drizzle();
 
   try {
+    withPassword(props, ctx);
     const identifier = categoryIdentifier
-      ? categoryIdentifier.split("---")[0]
+      ? matchAvaliableCategoriesLoaderPattern(categoryIdentifier)?.categoryId
       : undefined;
-    console.log(rest);
     await records.update(categories).set({
       ...rest,
     }).where(eq(categories.identifier, identifier));

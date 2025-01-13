@@ -1,10 +1,13 @@
 import {
+  AVAILABLE_BRANDS_REGEX,
+  AVAILABLE_CATEGORIES_REGEX,
   DEFAULT_URL_PARAMS_TO_EXCLUDE,
   EXTENDED_URL_PARAMS_TO_EXCLUDE,
   MEASUREMENTS_KEYS,
   TIME_UNITS,
   TIME_UNITS_EN,
 } from "./product/constants.ts";
+import { BaseMeasurement, Measurements } from "./types.ts";
 
 export function chunkArray<T>(array: T[], size: number): T[][] {
   const chunks: T[][] = [];
@@ -83,4 +86,57 @@ export function formatRelativeTime(isoDate: string, language: "ES" | "EN") {
       return `${count} ${unit}${count > 1 ? plural : ""}`;
     }
   }
+}
+
+export function isValidMeasurements(
+  measurements: Partial<Measurements>,
+): measurements is Measurements {
+  if (
+    !measurements.height || !measurements.width ||
+    !measurements.depth || !measurements.weight
+  ) {
+    return false;
+  }
+  const isValidBaseMeasurement = (
+    measurement: Partial<BaseMeasurement>,
+  ): boolean => {
+    return typeof measurement.unitCode === "string" &&
+      typeof measurement.minValue === "number" &&
+      typeof measurement.maxValue === "number";
+  };
+
+  return isValidBaseMeasurement(measurements.height) &&
+    isValidBaseMeasurement(measurements.width) &&
+    isValidBaseMeasurement(measurements.depth) &&
+    isValidBaseMeasurement(measurements.weight);
+}
+
+export function matchAvaliableCategoriesLoaderPattern(
+  subjectOf: string,
+): {
+  categoryId: string;
+  categoryName: string;
+  categoryLevel: string;
+} | null {
+  const match = subjectOf.match(AVAILABLE_CATEGORIES_REGEX);
+  if (match) {
+    return {
+      categoryId: match.groups?.categoryId ?? "",
+      categoryName: match.groups?.categoryName ?? "",
+      categoryLevel: match.groups?.categoryLevel ?? "",
+    };
+  }
+  return null;
+}
+
+export function matchAvaliableBrandsLoaderPattern(brand: string) {
+  const match = brand.match(AVAILABLE_BRANDS_REGEX);
+  if (match) {
+    return {
+      brandId: match.groups?.brandId ?? "",
+      brandName: match.groups?.brandName ?? "",
+    };
+  }
+
+  return null;
 }
