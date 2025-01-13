@@ -1,10 +1,11 @@
-import { updateBaseData } from "../../utils/product/submitProduct.ts";
+import { overrideBaseData } from "../../utils/product/submitProduct.ts";
 import { Product as DatabaseProduct } from "../../utils/types.ts";
 import { logger } from "@deco/deco/o11y";
 import { getProduct } from "../../utils/product/getProduct.ts";
 import { Product } from "apps/commerce/types.ts";
 import withPassword from "../../utils/auth/withPassword.ts";
 import { AppContext } from "../../mod.ts";
+import { matchAvaliableBrandsLoaderPattern } from "../../utils/utils.ts";
 
 export interface Props extends Partial<DatabaseProduct> {
   /**
@@ -24,12 +25,13 @@ export default async function updateProductBasicData(
   ctx: AppContext,
 ): Promise<Product | { success: boolean; message: string }> {
   withPassword(props, ctx);
-  const productBrand = props?.brand?.split("---");
+  const { brandId } = matchAvaliableBrandsLoaderPattern(props.brand ?? "") ??
+    {};
   const url = new URL(req.url);
   try {
-    await updateBaseData({
+    await overrideBaseData({
       ...props,
-      brand: productBrand ? productBrand[0] ?? undefined : undefined,
+      brand: brandId,
     }, ctx);
 
     const product = await getProduct(props.sku, ctx, url, true);

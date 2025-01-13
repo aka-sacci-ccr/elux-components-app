@@ -158,6 +158,22 @@ export async function insertAvaliability(
   ]);
 }
 
+export async function insertDocuments(
+  documents: ProductDocument[],
+  sku: string,
+  ctx: AppContext,
+) {
+  const records = await ctx.invoke.records.loaders.drizzle();
+  await records.insert(productDocuments).values(
+    documents.map((props) => {
+      return {
+        ...props,
+        subjectOf: sku,
+      };
+    }),
+  );
+}
+
 export async function insertProduct(
   {
     product,
@@ -198,7 +214,7 @@ export async function insertProduct(
   }
 }
 
-export async function updateBaseData(
+export async function overrideBaseData(
   product: Partial<Product>,
   ctx: AppContext,
 ) {
@@ -218,23 +234,7 @@ export async function updateBaseData(
   }
 }
 
-export async function insertDocuments(
-  documents: ProductDocument[],
-  sku: string,
-  ctx: AppContext,
-) {
-  const records = await ctx.invoke.records.loaders.drizzle();
-  await records.insert(productDocuments).values(
-    documents.map((props) => {
-      return {
-        ...props,
-        subjectOf: sku,
-      };
-    }),
-  );
-}
-
-export async function updateDocuments(
+export async function overrideDocuments(
   documents: ProductDocument[],
   sku: string,
   ctx: AppContext,
@@ -281,6 +281,20 @@ export async function overrideAdditionalProperties(
   );
   if (productProps && productProps.length > 0) {
     await insertAdditionalProperties(productProps, sku, ctx);
+  }
+}
+
+export async function overrideCategories(
+  categories: ProductCategory[],
+  sku: string,
+  ctx: AppContext,
+) {
+  const records = await ctx.invoke.records.loaders.drizzle();
+  await records.delete(productCategories).where(
+    eq(productCategories.product, sku),
+  );
+  if (categories && categories.length > 0) {
+    await insertCategories(categories, sku, ctx);
   }
 }
 

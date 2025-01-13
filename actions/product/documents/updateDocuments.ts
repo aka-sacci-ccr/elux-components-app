@@ -1,4 +1,4 @@
-import { updateDocuments } from "../../../utils/product/submitProduct.ts";
+import { overrideDocuments } from "../../../utils/product/submitProduct.ts";
 import { ProductDocument } from "../../../utils/types.ts";
 import { logger } from "@deco/deco/o11y";
 import { productDocuments } from "../../../db/schema.ts";
@@ -20,10 +20,7 @@ export interface Props {
   documents: ProductDocument[];
 }
 
-/**
- * @title Add new documents
- */
-export default async function addDocuments(
+export default async function updateDocuments(
   props: Props,
   _req: Request,
   ctx: AppContext,
@@ -31,7 +28,7 @@ export default async function addDocuments(
   withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
-    await updateDocuments(props.documents, props.sku, ctx);
+    await overrideDocuments(props.documents, props.sku, ctx);
     const productDocs = await records
       .select()
       .from(productDocuments)
