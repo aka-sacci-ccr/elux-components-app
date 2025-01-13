@@ -17,12 +17,13 @@ import * as $$$$$$$$$11 from "./actions/product/descriptions/updateProductDescri
 import * as $$$$$$$$$12 from "./actions/product/documents/addDocuments.ts";
 import * as $$$$$$$$$13 from "./actions/product/documents/updateDocuments.ts";
 import * as $$$$$$$$$14 from "./actions/product/domains/addProductAvaliability.ts";
-import * as $$$$$$$$$15 from "./actions/product/images/addProductImages.ts";
-import * as $$$$$$$$$16 from "./actions/product/images/updateProductImages.ts";
-import * as $$$$$$$$$17 from "./actions/product/measurements/updateMeasurements.ts";
-import * as $$$$$$$$$18 from "./actions/product/updateProductBasicData.ts";
-import * as $$$$$$$$$19 from "./actions/product/videos/addProductVideos.ts";
-import * as $$$$$$$$$20 from "./actions/product/videos/updateProductVideos.ts";
+import * as $$$$$$$$$15 from "./actions/product/domains/updateProductAvaliability.ts";
+import * as $$$$$$$$$16 from "./actions/product/images/addProductImages.ts";
+import * as $$$$$$$$$17 from "./actions/product/images/updateProductImages.ts";
+import * as $$$$$$$$$18 from "./actions/product/measurements/updateMeasurements.ts";
+import * as $$$$$$$$$19 from "./actions/product/updateProductBasicData.ts";
+import * as $$$$$$$$$20 from "./actions/product/videos/addProductVideos.ts";
+import * as $$$$$$$$$21 from "./actions/product/videos/updateProductVideos.ts";
 import * as $$$0 from "./loaders/guides/categories.ts";
 import * as $$$1 from "./loaders/guides/productDocuments.ts";
 import * as $$$2 from "./loaders/guides/products.ts";
@@ -155,18 +156,20 @@ const manifest = {
       $$$$$$$$$13,
     "elux-components-app/actions/product/domains/addProductAvaliability.ts":
       $$$$$$$$$14,
-    "elux-components-app/actions/product/images/addProductImages.ts":
+    "elux-components-app/actions/product/domains/updateProductAvaliability.ts":
       $$$$$$$$$15,
-    "elux-components-app/actions/product/images/updateProductImages.ts":
+    "elux-components-app/actions/product/images/addProductImages.ts":
       $$$$$$$$$16,
-    "elux-components-app/actions/product/measurements/updateMeasurements.ts":
+    "elux-components-app/actions/product/images/updateProductImages.ts":
       $$$$$$$$$17,
-    "elux-components-app/actions/product/updateProductBasicData.ts":
+    "elux-components-app/actions/product/measurements/updateMeasurements.ts":
       $$$$$$$$$18,
-    "elux-components-app/actions/product/videos/addProductVideos.ts":
+    "elux-components-app/actions/product/updateProductBasicData.ts":
       $$$$$$$$$19,
-    "elux-components-app/actions/product/videos/updateProductVideos.ts":
+    "elux-components-app/actions/product/videos/addProductVideos.ts":
       $$$$$$$$$20,
+    "elux-components-app/actions/product/videos/updateProductVideos.ts":
+      $$$$$$$$$21,
   },
   "name": "elux-components-app",
   "baseUrl": import.meta.url,

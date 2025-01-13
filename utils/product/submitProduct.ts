@@ -325,6 +325,17 @@ export async function overrideProductDescriptions(
   await insertDescriptions(override, sku, records);
 }
 
+export async function overrideAvaliability(
+  avaliability: AvaliableIn[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  await records.delete(avaliableIn).where(eq(avaliableIn.subjectOf, sku));
+  if (avaliability && avaliability.length > 0) {
+    await insertAvaliability(avaliability, sku, records);
+  }
+}
+
 export async function addCategories(
   categories: ProductCategory[],
   sku: string,
@@ -342,15 +353,6 @@ export async function addCategories(
   }
   return getProductCategories(sku, records);
 }
-
-const getProductCategories = async (
-  sku: string,
-  records: LibSQLDatabase<Record<string, never>>,
-) =>
-  await records
-    .select()
-    .from(productCategories)
-    .where(eq(productCategories.product, sku)) as CategoryFromDatabase[];
 
 export async function addAvaliability(
   avaliability: AvaliableIn[],
@@ -377,3 +379,12 @@ const getProductAvaliability = async (
     .select()
     .from(avaliableIn)
     .where(eq(avaliableIn.subjectOf, sku)) as AvaliableIn[];
+
+const getProductCategories = async (
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) =>
+  await records
+    .select()
+    .from(productCategories)
+    .where(eq(productCategories.product, sku)) as CategoryFromDatabase[];
