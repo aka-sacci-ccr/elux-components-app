@@ -17,10 +17,9 @@ export default async function createFilters(
   _req: Request,
   ctx: AppContext,
 ) {
-  withPassword(rest, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
-
   try {
+    withPassword(rest, ctx);
     if (filters.length === 0) {
       throw new Error("No filters groups to insert");
     }

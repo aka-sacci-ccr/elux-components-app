@@ -27,9 +27,9 @@ export default async function updateProductCategories(
   _req: Request,
   ctx: AppContext,
 ): Promise<CategoryFromDatabase[] | { success: boolean; message: string }> {
-  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
+    withPassword(props, ctx);
     await overrideCategories(props.categories, props.sku, records);
     const categories = await records
       .select()

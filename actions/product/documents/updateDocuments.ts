@@ -25,9 +25,9 @@ export default async function updateDocuments(
   _req: Request,
   ctx: AppContext,
 ): Promise<ProductDocument[] | { success: boolean; message: string }> {
-  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
+    withPassword(props, ctx);
     await overrideDocuments(props.documents, props.sku, records);
     const productDocs = await records
       .select()

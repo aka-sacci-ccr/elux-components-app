@@ -22,11 +22,11 @@ export default async function updateCategory(
   _req: Request,
   ctx: AppContext,
 ) {
-  withPassword(props, ctx);
   const { categoryIdentifier, ...rest } = props;
   const records = await ctx.invoke.records.loaders.drizzle();
 
   try {
+    withPassword(props, ctx);
     const identifier = categoryIdentifier
       ? matchAvaliableCategoriesLoaderPattern(categoryIdentifier)?.categoryId
       : undefined;

@@ -28,11 +28,11 @@ export default async function updateFilter(
   _req: Request,
   ctx: AppContext,
 ) {
-  withPassword(props, ctx);
   const { filterIdentifier, ...rest } = props;
   const records = await ctx.invoke.records.loaders.drizzle();
 
   try {
+    withPassword(props, ctx);
     await records.update(filtersGroups).set({
       ...rest,
     }).where(eq(filtersGroups.identifier, filterIdentifier));

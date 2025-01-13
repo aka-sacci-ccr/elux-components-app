@@ -26,9 +26,9 @@ export default async function addAdditionalProperties(
   _req: Request,
   ctx: AppContext,
 ): Promise<AdditionalProperty[] | { success: boolean; message: string }> {
-  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
+    withPassword(props, ctx);
     await insertAdditionalProperties(
       props.additionalProperties,
       props.sku,

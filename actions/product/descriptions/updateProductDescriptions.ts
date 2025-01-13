@@ -26,9 +26,9 @@ export default async function updateProductDescriptions(
   _req: Request,
   ctx: AppContext,
 ): Promise<DescriptionFromDatabase[] | { success: boolean; message: string }> {
-  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
+    withPassword(props, ctx);
     await overrideProductDescriptions(props.descriptions, props.sku, records);
     const productDescriptions = await records
       .select()

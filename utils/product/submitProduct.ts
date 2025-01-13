@@ -265,12 +265,13 @@ export async function overrideAdditionalProperties(
   sku: string,
   records: LibSQLDatabase<Record<string, never>>,
 ) {
+  if (!productProps || productProps.length === 0) {
+    throw new Error("Product MUST have additional properties");
+  }
   await records.delete(additionalProperties).where(
     eq(additionalProperties.subjectOf, sku),
   );
-  if (productProps && productProps.length > 0) {
-    await insertAdditionalProperties(productProps, sku, records);
-  }
+  await insertAdditionalProperties(productProps, sku, records);
 }
 
 export async function overrideCategories(
@@ -278,12 +279,14 @@ export async function overrideCategories(
   sku: string,
   records: LibSQLDatabase<Record<string, never>>,
 ) {
+  if (!categories || categories.length === 0) {
+    throw new Error("Product MUST have categories");
+  }
   await records.delete(productCategories).where(
     eq(productCategories.product, sku),
   );
-  if (categories && categories.length > 0) {
-    await insertCategories(categories, sku, records);
-  }
+
+  await insertCategories(categories, sku, records);
 }
 
 export async function overrideImages(
@@ -291,10 +294,11 @@ export async function overrideImages(
   sku: string,
   records: LibSQLDatabase<Record<string, never>>,
 ) {
-  await records.delete(images).where(eq(images.subjectOf, sku));
-  if (override && override.length > 0) {
-    await insertImages(override, sku, records);
+  if (!override || override.length === 0) {
+    throw new Error("Product MUST have images");
   }
+  await records.delete(images).where(eq(images.subjectOf, sku));
+  await insertImages(override, sku, records);
 }
 
 export async function overrideVideos(
@@ -313,10 +317,11 @@ export async function overrideProductDescriptions(
   sku: string,
   records: LibSQLDatabase<Record<string, never>>,
 ) {
-  await records.delete(descriptions).where(eq(descriptions.subjectOf, sku));
-  if (override && override.length > 0) {
-    await insertDescriptions(override, sku, records);
+  if (!override || override.length === 0) {
+    throw new Error("Product MUST have descriptions");
   }
+  await records.delete(descriptions).where(eq(descriptions.subjectOf, sku));
+  await insertDescriptions(override, sku, records);
 }
 
 export async function addCategories(

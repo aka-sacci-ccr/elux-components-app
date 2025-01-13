@@ -26,9 +26,9 @@ export default async function addProductDescriptions(
   _req: Request,
   ctx: AppContext,
 ): Promise<DescriptionFromDatabase[] | { success: boolean; message: string }> {
-  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
+    withPassword(props, ctx);
     await insertDescriptions(props.descriptions, props.sku, records);
     const productDescriptions = await records
       .select()

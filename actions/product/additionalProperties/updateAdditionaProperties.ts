@@ -26,9 +26,9 @@ export default async function updateAdditionalProperties(
   _req: Request,
   ctx: AppContext,
 ): Promise<AdditionalProperty[] | { success: boolean; message: string }> {
-  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
+    withPassword(props, ctx);
     await overrideAdditionalProperties(
       props.additionalProperties,
       props.sku,

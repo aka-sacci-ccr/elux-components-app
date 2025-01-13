@@ -27,9 +27,9 @@ export default async function updateProductImages(
   _req: Request,
   ctx: AppContext,
 ): Promise<ImageFromDatabase[] | { success: boolean; message: string }> {
-  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
+    withPassword(props, ctx);
     await overrideImages(props.images, props.sku, records);
     const productImages = await records
       .select()

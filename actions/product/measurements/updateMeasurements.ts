@@ -26,9 +26,9 @@ export default async function updateMeasurements(
   _req: Request,
   ctx: AppContext,
 ): Promise<ProductMeasurements[] | { success: boolean; message: string }> {
-  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
+    withPassword(props, ctx);
     await overrideMeasurements(props.measurements, props.sku, records);
     const measurements = await records
       .select()

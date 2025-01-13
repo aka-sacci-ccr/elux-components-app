@@ -25,9 +25,9 @@ export default async function addDocuments(
   _req: Request,
   ctx: AppContext,
 ): Promise<ProductDocument[] | { success: boolean; message: string }> {
-  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
+    withPassword(props, ctx);
     await insertDocuments(props.documents, props.sku, records);
     const productDocs = await records
       .select()

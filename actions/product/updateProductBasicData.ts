@@ -22,12 +22,12 @@ export default async function updateProductBasicData(
   req: Request,
   ctx: AppContext,
 ): Promise<Product | { success: boolean; message: string }> {
-  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   const { brandId } = matchAvaliableBrandsLoaderPattern(props.brand ?? "") ??
     {};
   const url = new URL(req.url);
   try {
+    withPassword(props, ctx);
     await overrideBaseData({
       ...props,
       brand: brandId,

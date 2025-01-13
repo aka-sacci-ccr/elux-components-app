@@ -27,9 +27,9 @@ export default async function addProductVideos(
   _req: Request,
   ctx: AppContext,
 ): Promise<VideoFromDatabase[] | { success: boolean; message: string }> {
-  withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
+    withPassword(props, ctx);
     await insertVideos(props.videos, props.sku, records);
     const productVideos = await records
       .select()
