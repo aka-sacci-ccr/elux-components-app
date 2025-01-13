@@ -87,3 +87,9 @@ export const pickUrlComposed = (
     return product.gtin;
   }
 };
+
+export const AVAILABLE_CATEGORIES_REGEX =
+  /^(?<categoryId>[^-][\w-]+)---(?<categoryName>[^-](?:[^-]|-(?!--))+)---(?<categoryLevel>\d+)$/;
+
+export const AVAILABLE_BRANDS_REGEX =
+  /^(?<brandId>[^-][\w-]+)---(?<brandName>[^-](?:[^-]|-(?!--))+)$/;

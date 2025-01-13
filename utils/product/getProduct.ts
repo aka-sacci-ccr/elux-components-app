@@ -65,7 +65,7 @@ interface Video {
   thumbnailUrl: string;
 }
 
-interface Category {
+export interface Category {
   identifier: string;
   name: string;
   alternateName?: string;

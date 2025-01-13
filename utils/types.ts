@@ -260,7 +260,7 @@ export interface Product {
    * @format dynamic-options
    * @options elux-components-app/loaders/product/avaliableBrands.ts
    */
-  brand?: string;
+  brand: string;
   /**
    * @title Description
    * @format rich-text

@@ -24,14 +24,20 @@ import { Props as SubmitProductProps } from "../../actions/product/createProduct
 import { Description } from "../types.ts";
 import { and, eq } from "drizzle-orm";
 import { DEFAULT_DOMAINS } from "./constants.ts";
-import { isValidMeasurements } from "../utils.ts";
+import {
+  isValidMeasurements,
+  matchAvaliableBrandsLoaderPattern,
+  matchAvaliableCategoriesLoaderPattern,
+} from "../utils.ts";
+import { Category as CategoryFromDatabase } from "./getProduct.ts";
+import { LibSQLDatabase } from "apps/records/deps.ts";
 
 export async function insertBaseData(product: Product, ctx: AppContext) {
   const records = await ctx.invoke.records.loaders.drizzle();
-  const productBrand = product.brand?.split("---");
+  const { brandId } = matchAvaliableBrandsLoaderPattern(product.brand) ?? {};
   await records.insert(products).values({
     ...product,
-    brand: productBrand ? productBrand[0] ?? "" : "",
+    brand: brandId ?? "",
   });
 }
 
@@ -43,9 +49,10 @@ export async function insertCategories(
   const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(productCategories).values(
     categories.map(({ subjectOf }) => {
-      const category = subjectOf.split("---");
+      const { categoryId } = matchAvaliableCategoriesLoaderPattern(subjectOf) ??
+        {};
       return {
-        subjectOf: category[0],
+        subjectOf: categoryId,
         product: sku,
       };
     }),
@@ -276,3 +283,29 @@ export async function overrideAdditionalProperties(
     await insertAdditionalProperties(productProps, sku, ctx);
   }
 }
+
+export async function addCategories(
+  categories: ProductCategory[],
+  sku: string,
+  ctx: AppContext,
+) {
+  const records = await ctx.invoke.records.loaders.drizzle();
+  const productCategoriesFromRecords = await getProductCategories(sku, records);
+  const categoriesToInsert = categories.filter((c) =>
+    !productCategoriesFromRecords.find((productCat) =>
+      productCat.subjectOf ===
+        matchAvaliableCategoriesLoaderPattern(c.subjectOf)?.categoryId
+    )
+  );
+  await insertCategories(categoriesToInsert, sku, ctx);
+  return getProductCategories(sku, records);
+}
+
+const getProductCategories = async (
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) =>
+  await records
+    .select()
+    .from(productCategories)
+    .where(eq(productCategories.product, sku)) as CategoryFromDatabase[];

@@ -1,4 +1,6 @@
 import {
+  AVAILABLE_BRANDS_REGEX,
+  AVAILABLE_CATEGORIES_REGEX,
   DEFAULT_URL_PARAMS_TO_EXCLUDE,
   EXTENDED_URL_PARAMS_TO_EXCLUDE,
   MEASUREMENTS_KEYS,
@@ -107,4 +109,34 @@ export function isValidMeasurements(
     isValidBaseMeasurement(measurements.width) &&
     isValidBaseMeasurement(measurements.depth) &&
     isValidBaseMeasurement(measurements.weight);
+}
+
+export function matchAvaliableCategoriesLoaderPattern(
+  subjectOf: string,
+): {
+  categoryId: string;
+  categoryName: string;
+  categoryLevel: string;
+} | null {
+  const match = subjectOf.match(AVAILABLE_CATEGORIES_REGEX);
+  if (match) {
+    return {
+      categoryId: match.groups?.categoryId ?? "",
+      categoryName: match.groups?.categoryName ?? "",
+      categoryLevel: match.groups?.categoryLevel ?? "",
+    };
+  }
+  return null;
+}
+
+export function matchAvaliableBrandsLoaderPattern(brand: string) {
+  const match = brand.match(AVAILABLE_BRANDS_REGEX);
+  if (match) {
+    return {
+      brandId: match.groups?.brandId ?? "",
+      brandName: match.groups?.brandName ?? "",
+    };
+  }
+
+  return null;
 }
