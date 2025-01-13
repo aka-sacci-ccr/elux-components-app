@@ -139,16 +139,17 @@ export async function insertAvaliability(
   avaliablility: AvaliableIn[],
   sku: string,
   records: LibSQLDatabase<Record<string, never>>,
+  omitDefaultDomains = false,
 ) {
   await records.insert(avaliableIn).values([
     ...avaliablility.map(({ domain }) => ({
       domain,
       subjectOf: sku,
     })),
-    ...DEFAULT_DOMAINS.map((domain) => ({
+    ...(omitDefaultDomains ? [] : DEFAULT_DOMAINS.map((domain) => ({
       domain,
       subjectOf: sku,
-    })),
+    }))),
   ]);
 }
 
@@ -336,7 +337,9 @@ export async function addCategories(
         matchAvaliableCategoriesLoaderPattern(c.subjectOf)?.categoryId
     )
   );
-  await insertCategories(categoriesToInsert, sku, records);
+  if (categoriesToInsert.length > 0) {
+    await insertCategories(categoriesToInsert, sku, records);
+  }
   return getProductCategories(sku, records);
 }
 
@@ -348,3 +351,29 @@ const getProductCategories = async (
     .select()
     .from(productCategories)
     .where(eq(productCategories.product, sku)) as CategoryFromDatabase[];
+
+export async function addAvaliability(
+  avaliability: AvaliableIn[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  const avaliabilityFromRecords = await getProductAvaliability(sku, records);
+  const avaliabilityToInsert = avaliability.filter((a) =>
+    !avaliabilityFromRecords.find((aFromRecords) =>
+      aFromRecords.domain === a.domain
+    )
+  );
+  if (avaliabilityToInsert.length > 0) {
+    await insertAvaliability(avaliabilityToInsert, sku, records, true);
+  }
+  return getProductAvaliability(sku, records);
+}
+
+const getProductAvaliability = async (
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) =>
+  await records
+    .select()
+    .from(avaliableIn)
+    .where(eq(avaliableIn.subjectOf, sku)) as AvaliableIn[];
