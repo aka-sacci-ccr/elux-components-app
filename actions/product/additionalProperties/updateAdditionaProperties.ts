@@ -32,7 +32,7 @@ export default async function updateAdditionalProperties(
     await overrideAdditionalProperties(
       props.additionalProperties,
       props.sku,
-      ctx,
+      records,
     );
     const retrievedAdditionalProperties = await records
       .select()

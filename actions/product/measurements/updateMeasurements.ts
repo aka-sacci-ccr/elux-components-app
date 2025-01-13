@@ -29,7 +29,7 @@ export default async function updateMeasurements(
   withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
-    await overrideMeasurements(props.measurements, props.sku, ctx);
+    await overrideMeasurements(props.measurements, props.sku, records);
     const measurements = await records
       .select()
       .from(productMeasurements)

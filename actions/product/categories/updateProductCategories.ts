@@ -30,7 +30,7 @@ export default async function updateProductCategories(
   withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
-    await overrideCategories(props.categories, props.sku, ctx);
+    await overrideCategories(props.categories, props.sku, records);
     const categories = await records
       .select()
       .from(productCategories)

@@ -32,7 +32,7 @@ export default async function addAdditionalProperties(
     await insertAdditionalProperties(
       props.additionalProperties,
       props.sku,
-      ctx,
+      records,
     );
     const retrievedAdditionalProperties = await records
       .select()

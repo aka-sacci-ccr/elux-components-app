@@ -62,8 +62,9 @@ export default async function createProduct(
   ctx: AppContext,
 ): Promise<{ success: boolean; message?: string }> {
   withPassword(props, ctx);
+  const records = await ctx.invoke.records.loaders.drizzle();
   try {
-    await insertProduct({ ...props, ctx });
+    await insertProduct({ ...props, records });
     return {
       success: true,
     };

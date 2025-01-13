@@ -28,7 +28,7 @@ export default async function addDocuments(
   withPassword(props, ctx);
   const records = await ctx.invoke.records.loaders.drizzle();
   try {
-    await insertDocuments(props.documents, props.sku, ctx);
+    await insertDocuments(props.documents, props.sku, records);
     const productDocs = await records
       .select()
       .from(productDocuments)

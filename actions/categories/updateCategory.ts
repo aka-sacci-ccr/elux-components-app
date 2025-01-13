@@ -4,6 +4,7 @@ import { logger } from "@deco/deco/o11y";
 import { Category } from "../../utils/types.ts";
 import withPassword from "../../utils/auth/withPassword.ts";
 import { AppContext } from "../../mod.ts";
+import { matchAvaliableCategoriesLoaderPattern } from "../../utils/utils.ts";
 
 export interface Props extends Omit<Category, "identifier"> {
   password: string;
@@ -27,9 +28,8 @@ export default async function updateCategory(
 
   try {
     const identifier = categoryIdentifier
-      ? categoryIdentifier.split("---")[0]
+      ? matchAvaliableCategoriesLoaderPattern(categoryIdentifier)?.categoryId
       : undefined;
-    console.log(rest);
     await records.update(categories).set({
       ...rest,
     }).where(eq(categories.identifier, identifier));

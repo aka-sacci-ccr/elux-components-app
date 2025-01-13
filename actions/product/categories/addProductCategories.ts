@@ -26,8 +26,13 @@ export default async function addProductCategories(
   ctx: AppContext,
 ): Promise<CategoryFromDatabase[] | { success: boolean; message: string }> {
   withPassword(props, ctx);
+  const records = await ctx.invoke.records.loaders.drizzle();
   try {
-    const categories = await addCategories(props.categories, props.sku, ctx);
+    const categories = await addCategories(
+      props.categories,
+      props.sku,
+      records,
+    );
     return categories;
   } catch (e) {
     logger.error(e);

@@ -1,4 +1,3 @@
-import { AppContext } from "apps/records/mod.ts";
 import {
   AdditionalProperty,
   AvaliableIn,
@@ -32,8 +31,10 @@ import {
 import { Category as CategoryFromDatabase } from "./getProduct.ts";
 import { LibSQLDatabase } from "apps/records/deps.ts";
 
-export async function insertBaseData(product: Product, ctx: AppContext) {
-  const records = await ctx.invoke.records.loaders.drizzle();
+export async function insertBaseData(
+  product: Product,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
   const { brandId } = matchAvaliableBrandsLoaderPattern(product.brand) ?? {};
   await records.insert(products).values({
     ...product,
@@ -44,9 +45,8 @@ export async function insertBaseData(product: Product, ctx: AppContext) {
 export async function insertCategories(
   categories: ProductCategory[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(productCategories).values(
     categories.map(({ subjectOf }) => {
       const { categoryId } = matchAvaliableCategoriesLoaderPattern(subjectOf) ??
@@ -62,9 +62,8 @@ export async function insertCategories(
 export async function insertMeasurements(
   measurements: Measurements,
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(productMeasurements).values(
     Object.entries(measurements).map(([key, value]) => {
       return {
@@ -79,9 +78,8 @@ export async function insertMeasurements(
 export async function insertAdditionalProperties(
   productProps: AdditionalProperty[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(additionalProperties).values(
     productProps.map((props) => {
       return {
@@ -95,9 +93,8 @@ export async function insertAdditionalProperties(
 export async function insertDescriptions(
   productProps: Description[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(descriptions).values(
     productProps.map((props) => {
       return {
@@ -111,9 +108,8 @@ export async function insertDescriptions(
 export async function insertImages(
   productImages: ImageProduct[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(images).values(
     productImages.map((props) => {
       return {
@@ -127,9 +123,8 @@ export async function insertImages(
 export async function insertVideos(
   productVideo: Video[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(videos).values(
     productVideo.map((props) => {
       return {
@@ -143,9 +138,8 @@ export async function insertVideos(
 export async function insertAvaliability(
   avaliablility: AvaliableIn[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(avaliableIn).values([
     ...avaliablility.map(({ domain }) => ({
       domain,
@@ -161,9 +155,8 @@ export async function insertAvaliability(
 export async function insertDocuments(
   documents: ProductDocument[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.insert(productDocuments).values(
     documents.map((props) => {
       return {
@@ -185,8 +178,8 @@ export async function insertProduct(
     videos,
     measurements,
     documents,
-    ctx,
-  }: SubmitProductProps & { ctx: AppContext },
+    records,
+  }: SubmitProductProps & { records: LibSQLDatabase<Record<string, never>> },
 ) {
   if (
     categories.length === 0 || additionalProperties.length === 0 ||
@@ -195,30 +188,29 @@ export async function insertProduct(
     throw new Error("Invalid product data");
   }
 
-  await insertBaseData(product, ctx);
-  await insertMeasurements(measurements, product.sku, ctx);
-  await insertCategories(categories, product.sku, ctx);
-  await insertAdditionalProperties(additionalProperties, product.sku, ctx);
-  await insertImages(images, product.sku, ctx);
+  await insertBaseData(product, records);
+  await insertMeasurements(measurements, product.sku, records);
+  await insertCategories(categories, product.sku, records);
+  await insertAdditionalProperties(additionalProperties, product.sku, records);
+  await insertImages(images, product.sku, records);
   if (avaliableIn && avaliableIn.length > 0) {
-    await insertAvaliability(avaliableIn, product.sku, ctx);
+    await insertAvaliability(avaliableIn, product.sku, records);
   }
   if (descriptions && descriptions.length > 0) {
-    await insertDescriptions(descriptions, product.sku, ctx);
+    await insertDescriptions(descriptions, product.sku, records);
   }
   if (videos && videos.length > 0) {
-    await insertVideos(videos, product.sku, ctx);
+    await insertVideos(videos, product.sku, records);
   }
   if (documents && documents.length > 0) {
-    await insertDocuments(documents, product.sku, ctx);
+    await insertDocuments(documents, product.sku, records);
   }
 }
 
 export async function overrideBaseData(
   product: Partial<Product>,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   const updateData: Partial<Product> = {};
   Object.keys(product).forEach((key) => {
     const value = product[key as keyof Product];
@@ -237,23 +229,21 @@ export async function overrideBaseData(
 export async function overrideDocuments(
   documents: ProductDocument[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records
     .delete(productDocuments)
     .where(eq(productDocuments.subjectOf, sku));
   if (documents && documents.length > 0) {
-    await insertDocuments(documents, sku, ctx);
+    await insertDocuments(documents, sku, records);
   }
 }
 
 export async function overrideMeasurements(
   measurements: Partial<Measurements>,
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   const measurementsArray = Object.entries(measurements).map(([key, value]) => {
     return {
       ...value,
@@ -273,37 +263,34 @@ export async function overrideMeasurements(
 export async function overrideAdditionalProperties(
   productProps: AdditionalProperty[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.delete(additionalProperties).where(
     eq(additionalProperties.subjectOf, sku),
   );
   if (productProps && productProps.length > 0) {
-    await insertAdditionalProperties(productProps, sku, ctx);
+    await insertAdditionalProperties(productProps, sku, records);
   }
 }
 
 export async function overrideCategories(
   categories: ProductCategory[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   await records.delete(productCategories).where(
     eq(productCategories.product, sku),
   );
   if (categories && categories.length > 0) {
-    await insertCategories(categories, sku, ctx);
+    await insertCategories(categories, sku, records);
   }
 }
 
 export async function addCategories(
   categories: ProductCategory[],
   sku: string,
-  ctx: AppContext,
+  records: LibSQLDatabase<Record<string, never>>,
 ) {
-  const records = await ctx.invoke.records.loaders.drizzle();
   const productCategoriesFromRecords = await getProductCategories(sku, records);
   const categoriesToInsert = categories.filter((c) =>
     !productCategoriesFromRecords.find((productCat) =>
@@ -311,7 +298,7 @@ export async function addCategories(
         matchAvaliableCategoriesLoaderPattern(c.subjectOf)?.categoryId
     )
   );
-  await insertCategories(categoriesToInsert, sku, ctx);
+  await insertCategories(categoriesToInsert, sku, records);
   return getProductCategories(sku, records);
 }
 
