@@ -15,8 +15,10 @@ import * as $$$$$$$$$9 from "./actions/product/categories/updateProductCategorie
 import * as $$$$$$$$$10 from "./actions/product/createProduct.ts";
 import * as $$$$$$$$$11 from "./actions/product/documents/addDocuments.ts";
 import * as $$$$$$$$$12 from "./actions/product/documents/updateDocuments.ts";
-import * as $$$$$$$$$13 from "./actions/product/measurements/updateMeasurements.ts";
-import * as $$$$$$$$$14 from "./actions/product/updateProductBasicData.ts";
+import * as $$$$$$$$$13 from "./actions/product/images/addProductImages.ts";
+import * as $$$$$$$$$14 from "./actions/product/images/updateProductImages.ts";
+import * as $$$$$$$$$15 from "./actions/product/measurements/updateMeasurements.ts";
+import * as $$$$$$$$$16 from "./actions/product/updateProductBasicData.ts";
 import * as $$$0 from "./loaders/guides/categories.ts";
 import * as $$$1 from "./loaders/guides/productDocuments.ts";
 import * as $$$2 from "./loaders/guides/products.ts";
@@ -144,10 +146,14 @@ const manifest = {
       $$$$$$$$$11,
     "elux-components-app/actions/product/documents/updateDocuments.ts":
       $$$$$$$$$12,
-    "elux-components-app/actions/product/measurements/updateMeasurements.ts":
+    "elux-components-app/actions/product/images/addProductImages.ts":
       $$$$$$$$$13,
-    "elux-components-app/actions/product/updateProductBasicData.ts":
+    "elux-components-app/actions/product/images/updateProductImages.ts":
       $$$$$$$$$14,
+    "elux-components-app/actions/product/measurements/updateMeasurements.ts":
+      $$$$$$$$$15,
+    "elux-components-app/actions/product/updateProductBasicData.ts":
+      $$$$$$$$$16,
   },
   "name": "elux-components-app",
   "baseUrl": import.meta.url,

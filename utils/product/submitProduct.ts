@@ -286,6 +286,17 @@ export async function overrideCategories(
   }
 }
 
+export async function overrideImages(
+  override: ImageProduct[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  await records.delete(images).where(eq(images.subjectOf, sku));
+  if (override && override.length > 0) {
+    await insertImages(override, sku, records);
+  }
+}
+
 export async function addCategories(
   categories: ProductCategory[],
   sku: string,

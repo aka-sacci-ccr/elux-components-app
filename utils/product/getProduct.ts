@@ -51,7 +51,7 @@ interface Description {
   image: string | null;
 }
 
-interface Image {
+export interface Image {
   url: string;
   identifier: number;
   disambiguatingDescription: string | null;
