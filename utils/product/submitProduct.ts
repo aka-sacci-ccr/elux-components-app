@@ -308,6 +308,17 @@ export async function overrideVideos(
   }
 }
 
+export async function overrideProductDescriptions(
+  override: Description[],
+  sku: string,
+  records: LibSQLDatabase<Record<string, never>>,
+) {
+  await records.delete(descriptions).where(eq(descriptions.subjectOf, sku));
+  if (override && override.length > 0) {
+    await insertDescriptions(override, sku, records);
+  }
+}
+
 export async function addCategories(
   categories: ProductCategory[],
   sku: string,

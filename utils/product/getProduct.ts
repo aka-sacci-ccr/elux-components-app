@@ -41,7 +41,7 @@ interface AdditionalProperty {
   alternateUnitText: string | null;
 }
 
-interface Description {
+export interface Description {
   name: string;
   alternateName: string | null;
   identifier: number;
