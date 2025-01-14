@@ -51,6 +51,9 @@ interface SecondaryBanner {
   disabledOpacity?: boolean;
 }
 
+/**
+ * @titleBy matcher
+ */
 interface ProductBanners {
   /**
    * @description RegExp to enable this banner on the current URL. Use /test-product/p to display this banner on the product page with the same url.
