@@ -26,15 +26,18 @@ export default function ProductDetails(
   { additionalProperty, description, language, productMain }: Props,
 ) {
   const { tabs } = productMain;
-  const dimensionsProperties = additionalProperty?.filter((property) =>
-    property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" ||
-    property.propertyID === "DEPTH" || property.propertyID === "WEIGHT"
-  );
-  const dimensionsPropertiesWithBox = additionalProperty?.filter((property) =>
-    property.propertyID === "BOX_HEIGHT" ||
-    property.propertyID === "BOX_WIDTH" ||
-    property.propertyID === "BOX_DEPTH" || property.propertyID === "BOX_WEIGHT"
-  );
+  const dimensionsProperties =
+    additionalProperty?.filter((property) =>
+      property.propertyID === "HEIGHT" || property.propertyID === "WIDTH" ||
+      property.propertyID === "DEPTH" || property.propertyID === "WEIGHT"
+    ) ?? [];
+  const dimensionsPropertiesWithBox =
+    additionalProperty?.filter((property) =>
+      property.propertyID === "BOX_HEIGHT" ||
+      property.propertyID === "BOX_WIDTH" ||
+      property.propertyID === "BOX_DEPTH" ||
+      property.propertyID === "BOX_WEIGHT"
+    ) ?? [];
 
   const propertyCards = additionalProperty?.filter((property) =>
     property.propertyID === "DESCRIPTION"
@@ -51,7 +54,11 @@ export default function ProductDetails(
       }
 
       return [...acc, current];
-    }, []);
+    }, []) ?? [];
+
+  const hasDimensions = dimensionsProperties?.length > 0;
+  const hasDimensionsWithBox = dimensionsPropertiesWithBox?.length > 0;
+  const hasTableProperties = tableProperties?.length > 0;
 
   const techSheetConfig =
     !tabs?.techSheet?.length || tabs?.techSheet?.length < 2
@@ -109,6 +116,10 @@ export default function ProductDetails(
       </ul>
     );
   };
+
+  if (!hasDimensions && !hasDimensionsWithBox && !hasTableProperties) {
+    return <></>;
+  }
 
   return (
     <div
@@ -169,7 +180,7 @@ export default function ProductDetails(
               <article
                 class={clx(
                   "py-4 font-light text-secondary",
-                  "lg:border-b border-base-200 max-sm:hidden",
+                  "lg:border-b border-base-200",
                   tabs?.productDescription?.descriptionSize ?? "text-sm",
                 )}
                 dangerouslySetInnerHTML={{
@@ -209,50 +220,53 @@ export default function ProductDetails(
             <span class="text-sm text-secondary flex lg:hidden py-2">
               {LANGUAGE_DIFFS[language].productPage.dimensionsProduct}
             </span>
-            <div className="flex flex-col px-2">
-              <div role="tablist" class="tabs border-primary tabs-bordered">
-                <input
-                  type="text"
-                  disabled
-                  value={LANGUAGE_DIFFS[language].productPage.dimensionsProduct}
-                  class="tab !text-secondary !bg-transparent !border-0 text-sm px-0 lg:w-48 hidden lg:flex"
-                />
-                <input
-                  type="radio"
-                  name="my_tabs_2"
-                  role="tab"
-                  class="tab text-xs text-primary font-light checked:!border-primary"
-                  aria-label={LANGUAGE_DIFFS[language].productPage
-                    .dimensionsBox}
-                  checked={true}
-                />
-                <div
-                  role="tabpanel"
-                  class="tab-content bg-base-100 rounded-box py-5"
-                >
-                  <DimensionsCards
-                    additionalProperty={dimensionsProperties}
+            {hasDimensions && hasDimensionsWithBox && (
+              <div className="flex flex-col px-2">
+                <div role="tablist" class="tabs border-primary tabs-bordered">
+                  <input
+                    type="text"
+                    disabled
+                    value={LANGUAGE_DIFFS[language].productPage
+                      .dimensionsProduct}
+                    class="tab !text-secondary !bg-transparent !border-0 text-sm px-0 lg:w-48 hidden lg:flex"
                   />
-                </div>
+                  <input
+                    type="radio"
+                    name="my_tabs_2"
+                    role="tab"
+                    class="tab text-xs text-primary font-light checked:!border-primary"
+                    aria-label={LANGUAGE_DIFFS[language].productPage
+                      .dimensionsBox}
+                    checked={true}
+                  />
+                  <div
+                    role="tabpanel"
+                    class="tab-content bg-base-100 rounded-box py-5"
+                  >
+                    <DimensionsCards
+                      additionalProperty={dimensionsProperties}
+                    />
+                  </div>
 
-                <input
-                  type="radio"
-                  name="my_tabs_2"
-                  role="tab"
-                  class="tab text-xs text-primary font-light checked:!border-primary"
-                  aria-label={LANGUAGE_DIFFS[language].productPage.dimensions}
-                />
-                <div
-                  role="tabpanel"
-                  class="tab-content bg-base-100  rounded-box py-5"
-                >
-                  <DimensionsCards
-                    additionalProperty={dimensionsPropertiesWithBox}
+                  <input
+                    type="radio"
+                    name="my_tabs_2"
+                    role="tab"
+                    class="tab text-xs text-primary font-light checked:!border-primary"
+                    aria-label={LANGUAGE_DIFFS[language].productPage.dimensions}
                   />
+                  <div
+                    role="tabpanel"
+                    class="tab-content bg-base-100  rounded-box py-5"
+                  >
+                    <DimensionsCards
+                      additionalProperty={dimensionsPropertiesWithBox}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            {tableProperties && (
+            )}
+            {hasTableProperties && (
               <div className="w-full">
                 <ul>
                   {tableProperties.map((item, index) => {
