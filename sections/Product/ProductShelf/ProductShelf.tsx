@@ -13,9 +13,7 @@ import ProductSlider, {
 import { useComponent } from "../../Component.tsx";
 import { useScript } from "@deco/deco/hooks";
 
-const ProductSliderShelf = import.meta.resolve(
-  "../../../components/product/ProductSlider.tsx",
-);
+const ProductSliderShelf = `${import.meta.dirname}/../../../components/product/ProductSlider.tsx`;
 
 export interface Props {
   /**
