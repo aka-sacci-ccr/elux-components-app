@@ -8,6 +8,9 @@ import { useScript } from "@deco/deco/hooks";
 const ACTION = "q";
 const INPUT_ID = "search-blog";
 
+/**
+ * @titleBy name
+ */
 interface SearchCategory {
   /**
    * @title Category name

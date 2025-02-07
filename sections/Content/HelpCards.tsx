@@ -4,10 +4,19 @@ import { AppContext } from "../../mod.ts";
 import { clx } from "../../utils/clx.ts";
 
 export interface Props {
+  /**
+   * @title Title
+   */
   title: string;
+  /**
+   * @title Cards
+   */
   cards: HelpCard[];
 }
 
+/**
+ * @titleBy title
+ */
 export interface HelpCard {
   /**
    * @title Icon

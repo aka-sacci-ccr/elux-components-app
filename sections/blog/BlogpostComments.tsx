@@ -9,7 +9,7 @@ import SubmitComment, {
 
 export interface Props {
   /**
-   * @title Blogpostpage Loader
+   * @title Blogpost Page integration
    */
   page: BlogPostPage | null;
   /**

@@ -57,6 +57,9 @@ interface ProductShelf {
   loader: Product[] | null;
 }
 
+/**
+ * @titleBy title
+ */
 interface TabbedShelf {
   /**
    * @title Tab title

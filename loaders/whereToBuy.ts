@@ -9,6 +9,9 @@ export interface Props {
   countries: CountryCardContent[];
 }
 
+/**
+ * @titleBy label
+ */
 export interface CountryCardContent {
   /**
    * @title Country name

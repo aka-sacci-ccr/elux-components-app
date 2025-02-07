@@ -15,7 +15,7 @@ export interface Props {
    */
   description?: string;
   /**
-   * @description Blog posts to be displayed
+   * @description Blogpost shelf integration
    */
   blogposts: BlogPost[] | null;
   /**

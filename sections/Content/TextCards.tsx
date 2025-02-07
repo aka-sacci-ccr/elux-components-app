@@ -32,6 +32,9 @@ export interface Props {
   spacingConfig?: SpacingConfig;
 }
 
+/**
+ * @titleBy title
+ */
 interface TextSection {
   /**
    * @title Title

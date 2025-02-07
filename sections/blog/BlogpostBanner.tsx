@@ -6,7 +6,7 @@ import Section from "../../components/ui/Section.tsx";
 
 export interface Props {
   /**
-   * @title Blogpost Loader
+   * @title Blogpost Page integration
    */
   postPage: BlogPostPage | null;
 }

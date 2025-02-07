@@ -10,7 +10,7 @@ import {
 } from "../../utils/styling/breadcrumb.ts";
 interface Props {
   /**
-   * @title Blogpost Loader
+   * @title Blogpost Page integration
    */
   postPage: BlogPostPage | null;
   /**

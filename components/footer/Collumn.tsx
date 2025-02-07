@@ -1,9 +1,9 @@
-import { useDevice } from "jsr:@deco/deco@^1.99.1/hooks";
 import Icon, { AvailableIcons } from "../ui/Icon.tsx";
 import Collapse from "./Collapse.tsx";
 import { Colors, FontWeight } from "../../utils/types.ts";
 import { clx } from "../../utils/clx.ts";
 import { TEXT_COLORS } from "../../utils/constants.tsx";
+import { useDevice } from "@deco/deco/hooks";
 
 /** @titleBy title */
 export interface ItemText {

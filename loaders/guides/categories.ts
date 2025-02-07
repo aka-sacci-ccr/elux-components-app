@@ -5,6 +5,9 @@ import { AppContext as RecordsContext } from "apps/records/mod.ts";
 import { Category } from "../../utils/types.ts";
 import { AvailableIcons } from "../../components/ui/Icon.tsx";
 
+/**
+ * @titleBy categoryName
+ */
 export interface CategoryFather {
   categoryName: string;
   categoryId: string;

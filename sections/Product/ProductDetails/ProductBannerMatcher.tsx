@@ -5,6 +5,9 @@ import ProductMainBanner from "../../../components/product/ProductMainBanner.tsx
 import ProductInfoBanners from "../../../components/product/ProductInfoBanners.tsx";
 import { AppContext } from "../../../mod.ts";
 
+/**
+ * @titleBy title
+ */
 export interface Banner {
   /**
    * @description The banner title

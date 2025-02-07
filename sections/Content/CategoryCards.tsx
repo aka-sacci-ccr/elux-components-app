@@ -8,6 +8,9 @@ export interface Props {
   cards: CategoryCard[];
 }
 
+/**
+ * @titleBy title
+ */
 export interface CategoryCard {
   /**
    * @title Icon

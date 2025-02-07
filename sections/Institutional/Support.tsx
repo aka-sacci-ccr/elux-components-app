@@ -32,6 +32,9 @@ export interface Props {
   spacing?: SpacingConfig;
 }
 
+/**
+ * @titleBy title
+ */
 interface CardContent {
   /**
    * @title Title
@@ -43,6 +46,9 @@ interface CardContent {
   cardItems: CardItem[];
 }
 
+/**
+ * @titleBy label
+ */
 interface CardItem {
   /**
    * @title Icon

@@ -34,7 +34,7 @@ export interface Props {
    */
   title?: string;
   /**
-   * @title Post integration
+   * @title Post listing integration
    */
   page: BlogPostListingPage | null;
   /**

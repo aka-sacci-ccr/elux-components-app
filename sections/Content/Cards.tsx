@@ -34,8 +34,17 @@ interface CardConfig {
   grid: "1" | "2" | "3" | "4";
 }
 
+/**
+ * @titleBy text
+ */
 interface Card {
+  /**
+   * @title Text
+   */
   text: string;
+  /**
+   * @title Link
+   */
   href?: string;
 }
 

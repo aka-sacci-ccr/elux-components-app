@@ -33,6 +33,9 @@ export interface Props {
   spacingConfig: SpacingConfig;
 }
 
+/**
+ * @titleBy label
+ */
 interface BreadcrumbItems {
   /**
    * @title Label

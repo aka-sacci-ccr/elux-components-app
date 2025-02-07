@@ -13,7 +13,7 @@ export const IFRAME_KEY = "[youtube]";
 export const IFRAME_KEY_REGEX = /\[youtube\]\[(.*?)\]/;
 
 interface Props {
-  /** @title Blogpost Loader */
+  /** @title Blogpost Page integration */
   postPage: BlogPostPage | null;
   /** @title Spacing */
   spacing?: SpacingConfig;
