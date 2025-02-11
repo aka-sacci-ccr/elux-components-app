@@ -9,7 +9,7 @@ function NavItem(
   return (
     <li
       class={clx(
-        "group flex items-center justify-center h-full relative w-[182px]",
+        "group flex items-center justify-center h-full relative max-w-[182px]",
         hasContentDiv ? "hover-nav-item" : "",
         "group-has-[#open-menu:checked]/header:pointer-events-none",
       )}

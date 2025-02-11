@@ -204,7 +204,7 @@ function Menu({ links, menuText, hideSecondaryMenu }: MenuProps) {
                         href={link}
                         target={isBlank ? "_blank" : "_self"}
                         rel={isBlank ? "noopener noreferrer" : ""}
-                        class="flex items-center px-2 text-base font-semibold h-9"
+                        class="flex items-center px-2 text-base font-semibold"
                       >
                         {title}
                       </a>
