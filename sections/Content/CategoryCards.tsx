@@ -48,7 +48,7 @@ export default function CategoryCards(
         </h2>
         <div
           class={clx(
-            "grid grid-cols-4 md:grid-cols-8 gap-1 md:gap-4",
+            "flex flex-wrap justify-center gap-1 md:gap-4",
             style.textColors,
           )}
         >
