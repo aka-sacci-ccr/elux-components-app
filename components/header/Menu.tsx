@@ -183,7 +183,7 @@ function Menu({ links, menuText, hideSecondaryMenu }: MenuProps) {
                   <Radio id={id} />
                   <a
                     class={clx(
-                      "text-base font-normal leading-none h-[54px] px-2 flex justify-between items-center peer-checked:bg-base-200 border-b border-base-200",
+                      "text-base font-normal leading-none min-h-[54px] p-2 flex justify-between items-center peer-checked:bg-base-200 border-b border-base-200",
                       color && TEXT_COLORS[color],
                     )}
                     href={link}

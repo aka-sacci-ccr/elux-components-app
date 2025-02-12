@@ -81,7 +81,7 @@ const Desktop = ({ logo, menu }: ReturnType<typeof loader>) => {
       {!hideSecondaryMenu && (
         <div class="bg-base-200 h-[72px] shadow-[0px_1px_4px_0px_#56697326]">
           <ul class="flex justify-start h-full max-w-[1280px] mx-auto text-sm text-secondary font-medium">
-            <li class="relative w-[182px]">
+            <li class="relative w-[182px] mr-6">
               <label
                 htmlFor="open-menu"
                 class="flex items-center justify-center h-full w-[182px] gap-2 cursor-pointer"
