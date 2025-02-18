@@ -11,6 +11,7 @@ import { useRadio } from "../../sdk/useRadio.tsx";
 import Column from "./Collum.tsx";
 import Image from "apps/website/components/Image.tsx";
 import { useScript } from "@deco/deco/hooks";
+import { useSendEvent } from "../../sdk/useSendEvent.ts";
 const ExtraLink = ({ title, links, isLast }: ExtraMenu & {
   isLast: boolean;
 }) => {
@@ -41,7 +42,12 @@ const ExtraLink = ({ title, links, isLast }: ExtraMenu & {
     </div>
   );
 };
-const MenuMobile = ({ links, extraLinks, mobile, menuText }: MenuProps) => {
+const MenuMobile = (
+  { links, extraLinks, mobile, menuText, event }: MenuProps & {
+    event?: { type: "navigation" | "filter" };
+  },
+) => {
+  const hasEvent = !!event;
   return (
     <>
       <aside
@@ -79,6 +85,31 @@ const MenuMobile = ({ links, extraLinks, mobile, menuText }: MenuProps) => {
                 const onClickEvent = hasAside
                   ? { "hx-on:click": useScript(onClick, id) }
                   : {};
+                let datalayerEvent = {};
+
+                if (hasEvent) {
+                  datalayerEvent = event.type === "navigation"
+                    ? useSendEvent({
+                      on: "click",
+                      event: {
+                        name: "navigation" as const,
+                        params: {
+                          menu_location: "menu_header",
+                          menu_button: title,
+                        },
+                      },
+                    })
+                    : useSendEvent({
+                      on: "click",
+                      event: {
+                        name: "apply_filter",
+                        params: {
+                          filter_option: id,
+                        },
+                      },
+                    });
+                }
+
                 return (
                   <li class="group">
                     <input type="checkbox" class="hidden peer" id={id} />
@@ -96,6 +127,7 @@ const MenuMobile = ({ links, extraLinks, mobile, menuText }: MenuProps) => {
                           target={isBlank ? "_blank" : "_self"}
                           rel={isBlank ? "noopener noreferrer" : ""}
                           class="h-full font-semibold items-center flex text-secondary"
+                          {...datalayerEvent}
                         >
                           {title}
                         </a>
@@ -170,6 +202,16 @@ function Menu({ links, menuText, hideSecondaryMenu }: MenuProps) {
           <ul>
             {links.map(({ title, icon, color, link, isBlank, collums }) => {
               const id = useId();
+              const event = useSendEvent({
+                on: "click",
+                event: {
+                  name: "navigation" as const,
+                  params: {
+                    menu_location: "menu_header",
+                    menu_button: title,
+                  },
+                },
+              });
               return (
                 <li
                   class="group"
@@ -182,6 +224,7 @@ function Menu({ links, menuText, hideSecondaryMenu }: MenuProps) {
                 >
                   <Radio id={id} />
                   <a
+                    {...event}
                     class={clx(
                       "text-base font-normal leading-none min-h-[54px] p-2 flex justify-between items-center peer-checked:bg-base-200 border-b border-base-200",
                       color && TEXT_COLORS[color],

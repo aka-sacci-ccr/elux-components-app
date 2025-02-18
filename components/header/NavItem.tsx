@@ -2,10 +2,21 @@ import { NAVBAR_HEIGHT_DESKTOP } from "../../utils/constants.tsx";
 import type { Department } from "../../loaders/menu.ts";
 import { clx } from "../../utils/clx.ts";
 import Column from "./Collum.tsx";
+import { useSendEvent } from "../../sdk/useSendEvent.ts";
 function NavItem(
   { title, collums, link, isBlank, color }: Department,
 ) {
   const hasContentDiv = collums && collums.length > 0;
+  const event = useSendEvent({
+    on: "click",
+    event: {
+      name: "navigation" as const,
+      params: {
+        menu_location: "menu_header",
+        menu_button: title,
+      },
+    },
+  });
   return (
     <li
       class={clx(
@@ -16,6 +27,7 @@ function NavItem(
     >
       <a
         href={link}
+        {...event}
         class={clx(
           "text-base font-normal leading-none h-7 flex items-center",
         )}
@@ -32,7 +44,9 @@ function NavItem(
           style={{ marginTop: NAVBAR_HEIGHT_DESKTOP }}
         >
           <ul class="flex items-start justify-start p-6 gap-4">
-            {collums.map((column) => <Column {...column} />)}
+            {collums.map((column) => (
+              <Column {...column} sendToDatalayer={true} />
+            ))}
           </ul>
         </div>
       )}

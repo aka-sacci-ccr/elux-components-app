@@ -4,6 +4,7 @@ import { useId } from "../../sdk/useId.ts";
 import Icon from "../ui/Icon.tsx";
 import { useScript } from "@deco/deco/hooks";
 import { TEXT_COLORS } from "../../utils/constants.tsx";
+import { useSendEvent } from "../../sdk/useSendEvent.ts";
 function Dropdown(
   { icon, title, links, textColor, iconColor, textSize, fontWeight }: ExtraMenu,
 ) {
@@ -55,26 +56,39 @@ function Dropdown(
       >
         {links.map((
           { link, title, icon, isBlank, textColor, textSize, fontWeight },
-        ) => (
-          <li
-            class={clx(
-              "w-full hover:bg-base-200 !px-4 cursor-pointer",
-              textColor && TEXT_COLORS[textColor],
-              textSize ?? "text-sm",
-              fontWeight ?? "font-semibold",
-            )}
-          >
-            <a
-              class="min-w-max flex items-center w-max h-[38px] hover:!bg-transparent gap-2.5"
-              href={link}
-              target={isBlank ? "_blank" : "_self"}
-              rel={isBlank ? "noopener noreferrer" : ""}
+        ) => {
+          const event = useSendEvent({
+            on: "click",
+            event: {
+              name: "navigation" as const,
+              params: {
+                menu_location: "menu_header",
+                menu_button: title,
+              },
+            },
+          });
+          return (
+            <li
+              class={clx(
+                "w-full hover:bg-base-200 !px-4 cursor-pointer",
+                textColor && TEXT_COLORS[textColor],
+                textSize ?? "text-sm",
+                fontWeight ?? "font-semibold",
+              )}
             >
-              {icon && <Icon id={icon} size={16} />}
-              <p>{title}</p>
-            </a>
-          </li>
-        ))}
+              <a
+                class="min-w-max flex items-center w-max h-[38px] hover:!bg-transparent gap-2.5"
+                href={link}
+                target={isBlank ? "_blank" : "_self"}
+                rel={isBlank ? "noopener noreferrer" : ""}
+                {...event}
+              >
+                {icon && <Icon id={icon} size={16} />}
+                <p>{title}</p>
+              </a>
+            </li>
+          );
+        })}
       </ul>
       <script dangerouslySetInnerHTML={{ __html: useScript(setup, id) }} />
     </div>

@@ -136,7 +136,7 @@ const Mobile = ({ logo, menu }: Props) => (
         {!menu.languages.hide && <Dropdown {...menu.languages} />}
       </div>
     </div>
-    <Menu.Mobile {...menu} />
+    <Menu.Mobile {...menu} event={{ type: "navigation" }} />
     <input id="open-menu" type="checkbox" class="hidden" />
   </>
 );
