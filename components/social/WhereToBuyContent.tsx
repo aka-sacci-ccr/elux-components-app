@@ -84,6 +84,8 @@ export default function WhereToBuyContent(
             </label>
             <a
               href={store.href}
+              target="_blank"
+              rel="noopener noreferrer"
               class={clx(
                 descriptionFontSize,
                 "font-light underline",
