@@ -82,11 +82,12 @@ export const loader = (props: Props, req: Request, ctx: AppContext) => {
   };
 };
 
-function goToItem(index: number) {
-  const item = document.querySelector<HTMLLabelElement>(
+function goToItem(rootId: string, index: number) {
+  const root = document.getElementById(rootId);
+  const item = root?.querySelector<HTMLLabelElement>(
     `[data-tab-index="${index}"]`,
   );
-  const slider = document.querySelector<HTMLDivElement>(`[data-tab-slider]`);
+  const slider = root?.querySelector<HTMLDivElement>(`[data-tab-slider]`);
   if (item && slider) {
     slider.scrollTo({
       left: item.offsetLeft - slider.offsetLeft,
@@ -181,6 +182,7 @@ export default function ProductShelf(
               dotsColor={dotsColor}
               borderColor={borderColor}
               tabStyle={tabStyle}
+              rootId={id}
             />
           )}
       </div>
@@ -192,15 +194,17 @@ const checkIsProductShelf = (products: TabbedShelf[] | ProductShelf) =>
   "loader" in products;
 
 const TabbedShelf = (
-  { products, divId, skuStyle, nameStyle, dotsColor, borderColor, tabStyle }:
+  { products, divId, skuStyle, nameStyle, dotsColor, borderColor, tabStyle, rootId }:
     & {
       products: TabbedShelf[];
     }
     & Omit<ProductSliderProps, "products" | "loader">
     & {
       tabStyle: string;
+      rootId: string;
     },
 ) => {
+  const slotId = useId();
   return (
     <div class="flex flex-col">
       <div
@@ -221,12 +225,12 @@ const TabbedShelf = (
           >
             <input
               type="radio"
-              name="product-tabs"
+              name={`product-tabs-${slotId}`}
               defaultChecked={index === 0}
               value={index}
               class="peer hidden"
               hx-trigger="change"
-              hx-target="#slot"
+              hx-target={`#${slotId}`}
               hx-swap="innerHTML"
               hx-select="section>*"
               hx-post={loader &&
@@ -241,8 +245,8 @@ const TabbedShelf = (
                     divId,
                   },
                 ))}
-              hx-on:click={useScript(goToItem, index)}
-              hx-indicator="#slot"
+              hx-on:click={useScript(goToItem, rootId, index)}
+              hx-indicator={`#${slotId}`}
             />
             <span
               class={clx(
@@ -256,7 +260,7 @@ const TabbedShelf = (
         ))}
       </div>
       <div
-        id="slot"
+        id={slotId}
         class="min-h-[376px] lg:min-h-[400px]"
         hx-post={products[0].loader &&
           (useComponent<ProductSliderProps>(ProductSliderShelf, {
