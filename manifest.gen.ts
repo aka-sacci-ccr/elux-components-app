@@ -3,27 +3,28 @@
 // This file is automatically updated during development when running `dev.ts`.
 
 import * as $$$$$$$$$0 from "./actions/categories/createCategory.ts";
-import * as $$$$$$$$$1 from "./actions/categories/updateCategory.ts";
-import * as $$$$$$$$$2 from "./actions/contact/submit.ts";
-import * as $$$$$$$$$3 from "./actions/filters/createFilters.ts";
-import * as $$$$$$$$$4 from "./actions/filters/updateFilter.ts";
-import * as $$$$$$$$$5 from "./actions/product/additionalProperties/addAdditionalProperties.ts";
-import * as $$$$$$$$$6 from "./actions/product/additionalProperties/updateAdditionaProperties.ts";
-import * as $$$$$$$$$7 from "./actions/product/categories/addProductCategories.ts";
-import * as $$$$$$$$$8 from "./actions/product/categories/updateProductCategories.ts";
-import * as $$$$$$$$$9 from "./actions/product/createProduct.ts";
-import * as $$$$$$$$$10 from "./actions/product/descriptions/addProductDescriptions.ts";
-import * as $$$$$$$$$11 from "./actions/product/descriptions/updateProductDescriptions.ts";
-import * as $$$$$$$$$12 from "./actions/product/documents/addDocuments.ts";
-import * as $$$$$$$$$13 from "./actions/product/documents/updateDocuments.ts";
-import * as $$$$$$$$$14 from "./actions/product/domains/addProductAvaliability.ts";
-import * as $$$$$$$$$15 from "./actions/product/domains/updateProductAvaliability.ts";
-import * as $$$$$$$$$16 from "./actions/product/images/addProductImages.ts";
-import * as $$$$$$$$$17 from "./actions/product/images/updateProductImages.ts";
-import * as $$$$$$$$$18 from "./actions/product/measurements/updateMeasurements.ts";
-import * as $$$$$$$$$19 from "./actions/product/updateProductBasicData.ts";
-import * as $$$$$$$$$20 from "./actions/product/videos/addProductVideos.ts";
-import * as $$$$$$$$$21 from "./actions/product/videos/updateProductVideos.ts";
+import * as $$$$$$$$$1 from "./actions/categories/deleteCategory.ts";
+import * as $$$$$$$$$2 from "./actions/categories/updateCategory.ts";
+import * as $$$$$$$$$3 from "./actions/contact/submit.ts";
+import * as $$$$$$$$$4 from "./actions/filters/createFilters.ts";
+import * as $$$$$$$$$5 from "./actions/filters/updateFilter.ts";
+import * as $$$$$$$$$6 from "./actions/product/additionalProperties/addAdditionalProperties.ts";
+import * as $$$$$$$$$7 from "./actions/product/additionalProperties/updateAdditionaProperties.ts";
+import * as $$$$$$$$$8 from "./actions/product/categories/addProductCategories.ts";
+import * as $$$$$$$$$9 from "./actions/product/categories/updateProductCategories.ts";
+import * as $$$$$$$$$10 from "./actions/product/createProduct.ts";
+import * as $$$$$$$$$11 from "./actions/product/descriptions/addProductDescriptions.ts";
+import * as $$$$$$$$$12 from "./actions/product/descriptions/updateProductDescriptions.ts";
+import * as $$$$$$$$$13 from "./actions/product/documents/addDocuments.ts";
+import * as $$$$$$$$$14 from "./actions/product/documents/updateDocuments.ts";
+import * as $$$$$$$$$15 from "./actions/product/domains/addProductAvaliability.ts";
+import * as $$$$$$$$$16 from "./actions/product/domains/updateProductAvaliability.ts";
+import * as $$$$$$$$$17 from "./actions/product/images/addProductImages.ts";
+import * as $$$$$$$$$18 from "./actions/product/images/updateProductImages.ts";
+import * as $$$$$$$$$19 from "./actions/product/measurements/updateMeasurements.ts";
+import * as $$$$$$$$$20 from "./actions/product/updateProductBasicData.ts";
+import * as $$$$$$$$$21 from "./actions/product/videos/addProductVideos.ts";
+import * as $$$$$$$$$22 from "./actions/product/videos/updateProductVideos.ts";
 import * as $$$0 from "./loaders/guides/categories.ts";
 import * as $$$1 from "./loaders/guides/productDocuments.ts";
 import * as $$$2 from "./loaders/guides/products.ts";
@@ -135,43 +136,44 @@ const manifest = {
   },
   "actions": {
     "elux-components-app/actions/categories/createCategory.ts": $$$$$$$$$0,
-    "elux-components-app/actions/categories/updateCategory.ts": $$$$$$$$$1,
-    "elux-components-app/actions/contact/submit.ts": $$$$$$$$$2,
-    "elux-components-app/actions/filters/createFilters.ts": $$$$$$$$$3,
-    "elux-components-app/actions/filters/updateFilter.ts": $$$$$$$$$4,
+    "elux-components-app/actions/categories/deleteCategory.ts": $$$$$$$$$1,
+    "elux-components-app/actions/categories/updateCategory.ts": $$$$$$$$$2,
+    "elux-components-app/actions/contact/submit.ts": $$$$$$$$$3,
+    "elux-components-app/actions/filters/createFilters.ts": $$$$$$$$$4,
+    "elux-components-app/actions/filters/updateFilter.ts": $$$$$$$$$5,
     "elux-components-app/actions/product/additionalProperties/addAdditionalProperties.ts":
-      $$$$$$$$$5,
-    "elux-components-app/actions/product/additionalProperties/updateAdditionaProperties.ts":
       $$$$$$$$$6,
-    "elux-components-app/actions/product/categories/addProductCategories.ts":
+    "elux-components-app/actions/product/additionalProperties/updateAdditionaProperties.ts":
       $$$$$$$$$7,
-    "elux-components-app/actions/product/categories/updateProductCategories.ts":
+    "elux-components-app/actions/product/categories/addProductCategories.ts":
       $$$$$$$$$8,
-    "elux-components-app/actions/product/createProduct.ts": $$$$$$$$$9,
+    "elux-components-app/actions/product/categories/updateProductCategories.ts":
+      $$$$$$$$$9,
+    "elux-components-app/actions/product/createProduct.ts": $$$$$$$$$10,
     "elux-components-app/actions/product/descriptions/addProductDescriptions.ts":
-      $$$$$$$$$10,
-    "elux-components-app/actions/product/descriptions/updateProductDescriptions.ts":
       $$$$$$$$$11,
-    "elux-components-app/actions/product/documents/addDocuments.ts":
+    "elux-components-app/actions/product/descriptions/updateProductDescriptions.ts":
       $$$$$$$$$12,
-    "elux-components-app/actions/product/documents/updateDocuments.ts":
+    "elux-components-app/actions/product/documents/addDocuments.ts":
       $$$$$$$$$13,
-    "elux-components-app/actions/product/domains/addProductAvaliability.ts":
+    "elux-components-app/actions/product/documents/updateDocuments.ts":
       $$$$$$$$$14,
-    "elux-components-app/actions/product/domains/updateProductAvaliability.ts":
+    "elux-components-app/actions/product/domains/addProductAvaliability.ts":
       $$$$$$$$$15,
-    "elux-components-app/actions/product/images/addProductImages.ts":
+    "elux-components-app/actions/product/domains/updateProductAvaliability.ts":
       $$$$$$$$$16,
-    "elux-components-app/actions/product/images/updateProductImages.ts":
+    "elux-components-app/actions/product/images/addProductImages.ts":
       $$$$$$$$$17,
-    "elux-components-app/actions/product/measurements/updateMeasurements.ts":
+    "elux-components-app/actions/product/images/updateProductImages.ts":
       $$$$$$$$$18,
-    "elux-components-app/actions/product/updateProductBasicData.ts":
+    "elux-components-app/actions/product/measurements/updateMeasurements.ts":
       $$$$$$$$$19,
-    "elux-components-app/actions/product/videos/addProductVideos.ts":
+    "elux-components-app/actions/product/updateProductBasicData.ts":
       $$$$$$$$$20,
-    "elux-components-app/actions/product/videos/updateProductVideos.ts":
+    "elux-components-app/actions/product/videos/addProductVideos.ts":
       $$$$$$$$$21,
+    "elux-components-app/actions/product/videos/updateProductVideos.ts":
+      $$$$$$$$$22,
   },
   "name": "elux-components-app",
   "baseUrl": import.meta.url,

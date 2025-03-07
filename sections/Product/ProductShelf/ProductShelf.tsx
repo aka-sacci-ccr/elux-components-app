@@ -194,7 +194,16 @@ const checkIsProductShelf = (products: TabbedShelf[] | ProductShelf) =>
   "loader" in products;
 
 const TabbedShelf = (
-  { products, divId, skuStyle, nameStyle, dotsColor, borderColor, tabStyle, rootId }:
+  {
+    products,
+    divId,
+    skuStyle,
+    nameStyle,
+    dotsColor,
+    borderColor,
+    tabStyle,
+    rootId,
+  }:
     & {
       products: TabbedShelf[];
     }
