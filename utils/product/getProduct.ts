@@ -348,7 +348,11 @@ function productsObject(
             {
               "@type": "PropertyValue" as const,
               propertyID,
-              value: minValue?.toString(),
+              value: minValue !== null
+                ? (Number.isInteger(minValue)
+                  ? String(minValue)
+                  : minValue.toFixed(2))
+                : undefined,
               unitCode: unitCode ?? undefined,
               //@ts-ignore Is an keyof
               name: LANGUAGE_DIFFS[language].pdpLoader[propertyID],
@@ -356,7 +360,11 @@ function productsObject(
             {
               "@type": "PropertyValue" as const,
               propertyID: `BOX_${propertyID}`,
-              value: maxValue?.toString(),
+              value: maxValue !== null
+                ? (Number.isInteger(maxValue)
+                  ? String(maxValue)
+                  : maxValue.toFixed(2))
+                : undefined,
               unitCode: unitCode ?? undefined,
               //@ts-ignore Is an keyof
               name: LANGUAGE_DIFFS[language].pdpLoader[`BOX_${propertyID}`],
