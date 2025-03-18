@@ -54,7 +54,10 @@ export default function ProductMain({ page, productMain, language }: Props) {
           page={page}
         />
       </div>
-      <div className="flex flex-col gap-2  w-full lg:w-2/4 mt-6 lg:mt-12 lg:ml-6">
+      <div
+        className="flex flex-col gap-2  w-full lg:w-2/4 mt-6 lg:mt-12 lg:ml-6"
+        data-gtm-block-name="pdp-top"
+      >
         {productName?.position === "1"
           ? (
             <>
@@ -77,6 +80,8 @@ export default function ProductMain({ page, productMain, language }: Props) {
               ROUNDED_OPTIONS[buyButton.rounded],
             )}
             href={buyButton.redirectTo}
+            data-gtm-element="pdp-cta-link"
+            data-gtm-value={LANGUAGE_DIFFS[language].productPage.buttonText}
           >
             {LANGUAGE_DIFFS[language].productPage.buttonText}
           </a>
