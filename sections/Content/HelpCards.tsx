@@ -25,7 +25,7 @@ export interface HelpCard {
    */
   icon: AvailableIcons;
   title: string;
-  description: string;
+  description?: string;
   url?: string;
 }
 

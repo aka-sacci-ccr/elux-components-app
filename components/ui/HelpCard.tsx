@@ -17,7 +17,7 @@ export default function HelpCard(
       </div>
       <div class="flex flex-col gap-3">
         <p class={style.titleStyle}>{title}</p>
-        <p class={style.descriptionStyle}>{description}</p>
+        {description && <p class={style.descriptionStyle}>{description}</p>}
       </div>
     </a>
   );
