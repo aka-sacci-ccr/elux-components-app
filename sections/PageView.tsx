@@ -1,40 +1,13 @@
 import { Head } from "$fresh/runtime.ts";
 import { useScript } from "@deco/deco/hooks";
-
-interface Props {
-  contentGroupValue: string;
-  considerSubpages: boolean;
-}
-
-type DataLayerPushData = {
-  [key: string]: string;
-};
-
-export function loader(
-  props: Props,
-  req: Request,
-) {
-  return { ...props, url: req.url };
-}
+import { usePageContext as useDecoPageContext } from "@deco/deco";
+import { pageIdFromMetadata } from "apps/website/pages/Page.tsx";
 
 function script(
-  contentGroupValue: string,
-  url: string,
-  considerSubpages: boolean,
+  pageId: string,
 ) {
-  const pageUrl = new URL(url ?? "");
-  const subpages = considerSubpages ? pageUrl.pathname.split("/") : undefined;
-
   const pushToDataLayer = () => {
-    const data = subpages?.reduce<DataLayerPushData>((acc, _, index) => {
-      const groupKey = index === 0
-        ? "content_group"
-        : `content_group${index + 1}`;
-      const pathSegments = subpages.slice(0, index + 1).join("_");
-      acc[groupKey] = `${contentGroupValue}_${pathSegments}`;
-      return acc;
-    }, { event: "page_view_custom" }) ??
-      { event: "page_view_custom", "content_group": contentGroupValue };
+    const data = { event: "page_view", "content_group": pageId };
 
     // @ts-ignore globalThis is defined
     globalThis.dataLayer = globalThis.dataLayer || [];
@@ -49,9 +22,9 @@ function script(
   }
 }
 
-export default function PageView(
-  { contentGroupValue, url, considerSubpages }: ReturnType<typeof loader>,
-) {
+export default function PageView() {
+  const metadata = useDecoPageContext()?.metadata;
+  const pageId = pageIdFromMetadata(metadata);
   return (
     <Head>
       <script
@@ -59,9 +32,7 @@ export default function PageView(
         dangerouslySetInnerHTML={{
           __html: useScript(
             script,
-            contentGroupValue,
-            url,
-            considerSubpages,
+            String(pageId),
           ),
         }}
       />
