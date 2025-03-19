@@ -4,7 +4,7 @@ import { clx } from "../../utils/clx.ts";
 import Container, { SpacingConfig } from "../container/Container.tsx";
 
 /**
- * @titleBy headline
+ * @titleBy text
  */
 export interface ImageCard {
   /**
@@ -15,7 +15,7 @@ export interface ImageCard {
   /**
    * @title Headline
    */
-  headline: string;
+  headline?: string;
   /**
    * @title Text
    */
@@ -116,70 +116,6 @@ export default function ImageCards(
     </div>
   );
 }
-
-export const LoadingFallback = (
-  { spacing, shelfSize = "medium", description, gridOption = "3" }: Partial<
-    Props
-  >,
-) => {
-  const cardArray = gridOption === "3" ? [1, 2, 3] : [1, 2];
-  return (
-    <div class="w-full h-full">
-      <Container
-        class={clx(
-          "container flex flex-col gap-8 max-lg:px-6",
-          SIZES[shelfSize],
-        )}
-        spacing={spacing}
-      >
-        <div class="flex flex-col gap-4">
-          <div className="skeleton h-7 w-52"></div>
-          {description && (
-            <div className="w-full flex flex-col gap-2">
-              <div className="skeleton h-4 w-full"></div>
-              <div className="skeleton h-4 w-full lg:hidden"></div>
-              <div className="skeleton h-4 w-full lg:hidden"></div>
-              <div className="skeleton h-4 w-40"></div>
-            </div>
-          )}
-        </div>
-        <div
-          class={clx(
-            "grid grid-cols-1 gap-6 lg:gap-5",
-            GRID_OPTIONS[gridOption],
-          )}
-        >
-          {cardArray.map((_) => <CardSkeleton shelfSize={shelfSize} />)}
-        </div>
-      </Container>
-    </div>
-  );
-};
-
-const CardSkeleton = (
-  { shelfSize = "medium" }: { shelfSize: "medium" | "large" },
-) => {
-  return (
-    <div
-      className={clx(
-        "w-full flex flex-col gap-4",
-        shelfSize === "medium" ? "h-[250px]" : "h-[250px] lg:h-[407px]",
-      )}
-    >
-      {/* Image skeleton */}
-      <div className="w-full h-3/4 skeleton rounded-lg" />
-
-      {/* Category skeleton */}
-      <div className="skeleton h-4 w-24" />
-
-      {/* Title skeleton - two lines */}
-      <div className="flex flex-col gap-2">
-        <div className="skeleton h-4 w-full" />
-        <div className="skeleton h-4 w-3/4" />
-      </div>
-    </div>
-  );
-};
 
 const ELUX_STYLING = {
   bgColor: "bg-base-content",

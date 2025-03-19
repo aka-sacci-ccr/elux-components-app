@@ -17,6 +17,7 @@ export function Collapse({ items, link, title, isBlank, textColor }: Category) {
             class={clx(
               "flex items-center justify-between h-full w-full",
             )}
+            data-gtm-block-name="footer"
           >
             <a
               class={clx(
@@ -26,6 +27,8 @@ export function Collapse({ items, link, title, isBlank, textColor }: Category) {
               href={link}
               target={isBlank ? "_blank" : "_self"}
               rel={isBlank ? "noopener noreferrer" : ""}
+              data-gtm-element="footer-link"
+              data-gtm-value={title}
             >
               <p>{title}</p>
             </a>
@@ -49,7 +52,7 @@ export function Collapse({ items, link, title, isBlank, textColor }: Category) {
       </label>
 
       <div class="collapse-content !p-0">
-        <div class="flex flex-col gap-6 py-6">
+        <div class="flex flex-col gap-6 py-6" data-gtm-block-name="footer">
           {(items as unknown[] as ItemText[]).map((
             { link, title, isBlank, fontWeight },
           ) => (
@@ -58,6 +61,8 @@ export function Collapse({ items, link, title, isBlank, textColor }: Category) {
               href={link}
               target={isBlank ? "_blank" : "_self"}
               rel={isBlank ? "noopener noreferrer" : ""}
+              data-gtm-element="footer-link"
+              data-gtm-value={title}
             >
               {title}
             </a>

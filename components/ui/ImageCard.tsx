@@ -17,8 +17,11 @@ export default function ImageCard(
   const sizes = SIZES_STYLING[shelfSize];
   return (
     <a
-      class="flex flex-col w-full h-full"
-      href={card.link ?? "#"}
+      class={clx(
+        "flex flex-col w-full h-full",
+        card?.link ? "cursor-pointer" : "cursor-default pointer-events-none",
+      )}
+      href={card?.link ?? "#"}
     >
       <Picture class="object-contain">
         <Source
@@ -50,9 +53,11 @@ export default function ImageCard(
           sizes.contentDiv,
         )}
       >
-        <p class={clx(category, sizes.category)}>
-          {card.headline}
-        </p>
+        {card.headline && (
+          <p class={clx(category, sizes.category)}>
+            {card.headline}
+          </p>
+        )}
         <p class={clx(title, "pt-2", sizes.title)}>{card.text}</p>
         <div class="flex-grow" />
       </div>

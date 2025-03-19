@@ -46,7 +46,10 @@ export interface Props {
 
 const SocialItems = ({ title, link, isBlank, items, textColor }: Category) => {
   return (
-    <div class="flex flex-col gap-3 max-md:border-b border-base-200 max-md:pb-8 md:mt-16">
+    <div
+      class="flex flex-col gap-3 max-md:border-b border-base-200 max-md:pb-8 md:mt-16"
+      data-gtm-block-name="footer"
+    >
       <a
         class={clx(
           "font-semibold text-sm",
@@ -55,16 +58,20 @@ const SocialItems = ({ title, link, isBlank, items, textColor }: Category) => {
         href={link}
         target={isBlank ? "_blank" : "_self"}
         rel={isBlank ? "noopener noreferrer" : ""}
+        data-gtm-element="footer-link"
+        data-gtm-value={title}
       >
         {title}
       </a>
-      <div class="flex justify-start gap-8">
+      <div class="flex justify-start gap-8" data-gtm-block-name="footer">
         {(items as unknown as ItemSocial[]).map(({ link, icon, isBlank }) => (
           <a
             class="text-primary"
             href={link}
             target={isBlank ? "_blank" : "_self"}
             rel={isBlank ? "noopener noreferrer" : ""}
+            data-gtm-element="footer-link"
+            data-gtm-value={icon}
           >
             <Icon id={icon} />
           </a>
@@ -80,7 +87,10 @@ const TextItems = (
   },
 ) => {
   return (
-    <div class={clx("flex flex-col gap-4", !justifyBetween && "w-[245px]")}>
+    <div
+      class={clx("flex flex-col gap-4", !justifyBetween && "w-[245px]")}
+      data-gtm-block-name="footer"
+    >
       <a
         class={clx(
           "font-semibold text-sm",
@@ -89,10 +99,12 @@ const TextItems = (
         href={link}
         target={isBlank ? "_blank" : "_self"}
         rel={isBlank ? "noopener noreferrer" : ""}
+        data-gtm-element="footer-link"
+        data-gtm-value={title}
       >
         {title}
       </a>
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-4" data-gtm-block-name="footer">
         {(items as unknown[] as ItemText[]).map((
           { link, title, isBlank, fontWeight },
         ) => (
@@ -101,6 +113,8 @@ const TextItems = (
             href={link}
             target={isBlank ? "_blank" : "_self"}
             rel={isBlank ? "noopener noreferrer" : ""}
+            data-gtm-element="footer-link"
+            data-gtm-value={title}
           >
             {title}
           </a>

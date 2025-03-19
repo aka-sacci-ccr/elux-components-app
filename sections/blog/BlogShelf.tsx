@@ -82,6 +82,7 @@ export default function BlogShelf(
             "grid grid-cols-1 gap-6 lg:gap-5",
             GRID_OPTIONS[gridOption],
           )}
+          data-gtm-block-name="blog"
         >
           {blogposts?.map((post) => (
             <PostCard

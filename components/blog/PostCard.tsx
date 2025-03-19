@@ -26,6 +26,8 @@ export default function PostCard(
     <a
       class="flex flex-col w-full h-full"
       href={buildPostUrl(url, post.slug, post.categories[0].slug)}
+      data-gtm-element="blog-article"
+      data-gtm-value={post.title}
     >
       <Picture class="object-contain">
         <Source
