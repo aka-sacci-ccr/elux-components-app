@@ -11,6 +11,8 @@ export default function HelpCard(
     <a
       href={url ?? "#"}
       class="flex flex-row gap-4 h-40 w-full px-6 bg-white rounded items-center"
+      data-gtm-element="help-link"
+      data-gtm-value={title}
     >
       <div class="min-w-min">
         <Icon id={icon} class="text-primary" height={40} width={40} />

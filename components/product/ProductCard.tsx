@@ -6,6 +6,8 @@ import Image from "apps/website/components/Image.tsx";
 
 export interface Props extends CardStyling {
   product: Product;
+  index?: number;
+  shouldHideGTM?: boolean;
 }
 
 export interface CardStyling {
@@ -17,7 +19,18 @@ const WIDTH = 164;
 const HEIGHT = 164;
 const ASPECT_RATIO = `${WIDTH} / ${HEIGHT}`;
 
-export default function ProductCard({ product, skuStyle, nameStyle }: Props) {
+export default function ProductCard(
+  { product, skuStyle, nameStyle, index, shouldHideGTM }: Props,
+) {
+  const gtmData = (index || index === 0) && !shouldHideGTM
+    ? {
+      "data-gtm-element": "item-link",
+      "data-gtm-item-name": product.name,
+      "data-gtm-item-id": product.sku,
+      "data-gtm-item-position": index,
+    }
+    : {};
+
   return (
     <a
       class="w-full p-4 flex flex-col gap-4 h-full"
@@ -25,6 +38,7 @@ export default function ProductCard({ product, skuStyle, nameStyle }: Props) {
         boxShadow: "0px 4px 8px 0px #56697326, 0px 0px 1px 0px #56697326",
       }}
       href={product.url ?? "#"}
+      {...gtmData}
     >
       <div class="w-full px-6 py-4">
         {product?.image?.[0]?.url && (

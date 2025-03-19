@@ -14,6 +14,7 @@ export interface Props {
   dotsColor: string;
   borderColor: string;
   divId: string;
+  overrideGTM?: string;
 }
 
 export const action = async (
@@ -36,7 +37,8 @@ export const action = async (
 };
 
 export default function ProductSlider(
-  { skuStyle, nameStyle, products, dotsColor, borderColor, divId }: Props,
+  { skuStyle, nameStyle, products, dotsColor, borderColor, divId, overrideGTM }:
+    Props,
 ) {
   return (
     <>
@@ -48,11 +50,14 @@ export default function ProductSlider(
               index={index}
               class="w-[245px] min-w-[245px] pt-4 pb-4 h-[376px] min-h-[376px]"
             >
-              <ProductCard
-                product={p}
-                skuStyle={skuStyle}
-                nameStyle={nameStyle}
-              />
+              <div data-gtm-block-name={overrideGTM ?? "carrossel-produtos"}>
+                <ProductCard
+                  product={p}
+                  skuStyle={skuStyle}
+                  nameStyle={nameStyle}
+                  index={index}
+                />
+              </div>
             </Slider.Item>
           ))}
         </Slider>

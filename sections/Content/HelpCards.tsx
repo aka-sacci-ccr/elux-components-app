@@ -54,6 +54,7 @@ export default function HelpCards(
           class={clx(
             "grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-5",
           )}
+          data-gtm-block-name="help"
         >
           {cards.map((card) => (
             <HelpCard {...card} siteTemplate={siteTemplate} />

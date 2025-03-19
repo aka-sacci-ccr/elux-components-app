@@ -51,6 +51,7 @@ export default function CategoryCards(
             "flex flex-wrap justify-center gap-1 md:gap-4",
             style.textColors,
           )}
+          data-gtm-block-name="our-products"
         >
           {cards.map((card) => <CategoryCard {...card} />)}
         </div>

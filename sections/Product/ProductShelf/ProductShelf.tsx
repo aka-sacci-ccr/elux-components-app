@@ -232,39 +232,44 @@ const TabbedShelf = (
             )}
             data-tab-index={index}
           >
-            <input
-              type="radio"
-              name={`product-tabs-${slotId}`}
-              defaultChecked={index === 0}
-              value={index}
-              class="peer hidden"
-              hx-trigger="change"
-              hx-target={`#${slotId}`}
-              hx-swap="innerHTML"
-              hx-select="section>*"
-              hx-post={loader &&
-                (useComponent<ProductSliderProps>(
-                  ProductSliderShelf,
-                  {
-                    skuStyle: skuStyle,
-                    nameStyle: nameStyle,
-                    loader: asResolved(loader),
-                    dotsColor: dotsColor,
-                    borderColor: borderColor,
-                    divId,
-                  },
-                ))}
-              hx-on:click={useScript(goToItem, rootId, index)}
-              hx-indicator={`#${slotId}`}
-            />
-            <span
-              class={clx(
-                "block px-6 py-2 border-b-2 transition-colors whitespace-nowrap",
-                tabStyle,
-              )}
-            >
-              {title}
-            </span>
+            <div data-gtm-block-name="carrossel-categorias">
+              <input
+                type="radio"
+                name={`product-tabs-${slotId}`}
+                defaultChecked={index === 0}
+                value={index}
+                class="peer hidden"
+                hx-trigger="change"
+                hx-target={`#${slotId}`}
+                hx-swap="innerHTML"
+                hx-select="section>*"
+                hx-post={loader &&
+                  (useComponent<ProductSliderProps>(
+                    ProductSliderShelf,
+                    {
+                      skuStyle: skuStyle,
+                      nameStyle: nameStyle,
+                      loader: asResolved(loader),
+                      dotsColor: dotsColor,
+                      borderColor: borderColor,
+                      divId,
+                      overrideGTM: "carrossel-categorias",
+                    },
+                  ))}
+                hx-on:click={useScript(goToItem, rootId, index)}
+                hx-indicator={`#${slotId}`}
+              />
+              <span
+                class={clx(
+                  "block px-6 py-2 border-b-2 transition-colors whitespace-nowrap",
+                  tabStyle,
+                )}
+                data-gtm-element="category-tab"
+                data-gtm-value={title}
+              >
+                {title}
+              </span>
+            </div>
           </label>
         ))}
       </div>
@@ -279,6 +284,7 @@ const TabbedShelf = (
             dotsColor: dotsColor,
             borderColor: borderColor,
             divId,
+            overrideGTM: "carrossel-categorias",
           }))}
         hx-trigger="load"
         hx-select="section>*"

@@ -310,6 +310,8 @@ function Result(props: Props) {
             product={_product}
             skuStyle={listingMain!.cardStyling!.skuStyle}
             nameStyle={listingMain!.cardStyling!.nameStyle}
+            shouldHideGTM={true}
+            index={_index}
           />
         ))}
       </div>
