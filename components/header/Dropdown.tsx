@@ -76,16 +76,20 @@ function Dropdown(
                 fontWeight ?? "font-semibold",
               )}
             >
-              <a
-                class="min-w-max flex items-center w-max h-[38px] hover:!bg-transparent gap-2.5"
-                href={link}
-                target={isBlank ? "_blank" : "_self"}
-                rel={isBlank ? "noopener noreferrer" : ""}
-                {...event}
-              >
-                {icon && <Icon id={icon} size={16} />}
-                <p>{title}</p>
-              </a>
+              <div data-gtm-block-name="navigation-menu">
+                <a
+                  class="min-w-max flex items-center w-max h-[38px] hover:!bg-transparent gap-2.5"
+                  href={link}
+                  target={isBlank ? "_blank" : "_self"}
+                  rel={isBlank ? "noopener noreferrer" : ""}
+                  {...event}
+                  data-gtm-element="menu-link"
+                  data-gtm-value={title}
+                >
+                  {icon && <Icon id={icon} size={16} />}
+                  <p>{title}</p>
+                </a>
+              </div>
             </li>
           );
         })}

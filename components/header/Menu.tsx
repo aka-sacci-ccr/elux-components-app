@@ -115,10 +115,10 @@ const MenuMobile = (
                     <input type="checkbox" class="hidden peer" id={id} />
                     <div
                       class={clx(
-                        "text-base font-normal leading-none h-[54px] flex justify-between items-center peer-checked:bg-base-200",
+                        "text-base font-normal leading-none h-[54px] flex flex-row items-center peer-checked:bg-base-200",
                       )}
                       style={{ color: color }}
-                      {...onClickEvent}
+                      data-gtm-block-name="navigation-menu"
                     >
                       <span class="flex items-center gap-2 h-full">
                         {icon && <Icon class="text-primary" id={icon} />}
@@ -126,13 +126,19 @@ const MenuMobile = (
                           href={link}
                           target={isBlank ? "_blank" : "_self"}
                           rel={isBlank ? "noopener noreferrer" : ""}
-                          class="h-full font-semibold items-center flex text-secondary"
+                          class="h-full font-semibold items-center flex text-secondary w-max"
                           {...datalayerEvent}
+                          data-gtm-element="menu-link"
+                          data-gtm-value={title}
                         >
                           {title}
                         </a>
                       </span>
-                      <p>
+                      <p
+                        {...onClickEvent}
+                        class="w-full h-full content-center"
+                        style={{ placeItems: "self-end" }}
+                      >
                         <Icon class="text-primary" id="chevron-right" />
                       </p>
                     </div>
@@ -222,40 +228,44 @@ function Menu({ links, menuText, hideSecondaryMenu }: MenuProps) {
                     input.checked = true;
                   }, id)}
                 >
-                  <Radio id={id} />
-                  <a
-                    {...event}
-                    class={clx(
-                      "text-base font-normal leading-none min-h-[54px] p-2 flex justify-between items-center peer-checked:bg-base-200 border-b border-base-200",
-                      color && TEXT_COLORS[color],
+                  <div data-gtm-block-name="navigation-menu">
+                    <Radio id={id} />
+                    <a
+                      {...event}
+                      data-gtm-element="menu-link"
+                      data-gtm-value={title}
+                      class={clx(
+                        "text-base font-normal leading-none min-h-[54px] p-2 flex justify-between items-center peer-checked:bg-base-200 border-b border-base-200",
+                        color && TEXT_COLORS[color],
+                      )}
+                      href={link}
+                      target={isBlank ? "_blank" : "_self"}
+                      rel={isBlank ? "noopener noreferrer" : ""}
+                    >
+                      <span class="flex items-center gap-2">
+                        {icon && <Icon class="text-primary" id={icon} />}
+                        <p>{title}</p>
+                      </span>
+                      <p>
+                        <Icon class="text-primary" id="chevron-right" />
+                      </p>
+                    </a>
+                    {collums && collums.length > 0 && (
+                      <div class="absolute hidden hover:flex peer-checked:flex bg-base-100 z-40 items-start justify-start flex-col gap-2 p-6 top-0 left-[295px] h-full">
+                        <a
+                          href={link}
+                          target={isBlank ? "_blank" : "_self"}
+                          rel={isBlank ? "noopener noreferrer" : ""}
+                          class="flex items-center px-2 text-base font-semibold"
+                        >
+                          {title}
+                        </a>
+                        <ul class="flex items-start justify-start h-full">
+                          {collums.map((column) => <Column {...column} />)}
+                        </ul>
+                      </div>
                     )}
-                    href={link}
-                    target={isBlank ? "_blank" : "_self"}
-                    rel={isBlank ? "noopener noreferrer" : ""}
-                  >
-                    <span class="flex items-center gap-2">
-                      {icon && <Icon class="text-primary" id={icon} />}
-                      <p>{title}</p>
-                    </span>
-                    <p>
-                      <Icon class="text-primary" id="chevron-right" />
-                    </p>
-                  </a>
-                  {collums && collums.length > 0 && (
-                    <div class="absolute hidden hover:flex peer-checked:flex bg-base-100 z-40 items-start justify-start flex-col gap-2 p-6 top-0 left-[295px] h-full">
-                      <a
-                        href={link}
-                        target={isBlank ? "_blank" : "_self"}
-                        rel={isBlank ? "noopener noreferrer" : ""}
-                        class="flex items-center px-2 text-base font-semibold"
-                      >
-                        {title}
-                      </a>
-                      <ul class="flex items-start justify-start h-full">
-                        {collums.map((column) => <Column {...column} />)}
-                      </ul>
-                    </div>
-                  )}
+                  </div>
                 </li>
               );
             })}

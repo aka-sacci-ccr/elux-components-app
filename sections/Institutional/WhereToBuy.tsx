@@ -34,6 +34,7 @@ export function loader(props: Props, req: Request, ctx: AppContext) {
     ...props,
     countryContent,
     siteTemplate: ctx.siteTemplate,
+    countryName: countryContent?.label,
     url,
   };
 }
@@ -128,6 +129,7 @@ export default function Support(
     countryContent,
     url,
     emptyContent,
+    countryName,
   }: ReturnType<
     typeof loader
   >,
@@ -221,10 +223,13 @@ export default function Support(
               const href = new URL(url);
               href.searchParams.set("country", id);
               return (
-                <li class="h-[38px] items-center w-full cursor-pointer">
+                <div
+                  data-gtm-block-name="where-to-buy"
+                  class="h-[38px] items-center w-full cursor-pointer"
+                >
                   <a
                     class={clx(
-                      "w-full h-full flex flex-row gap-2.5 px-4 rounded-none",
+                      "w-full h-full flex flex-row gap-2.5 px-4 rounded-none items-center",
                       HOVER_TEXT_COLORS[countrySelectStyle.hoverFontColor],
                       HOVER_BG_COLORS[countrySelectStyle.hoverColor],
                       countryContent?.id === id && clx(
@@ -232,14 +237,16 @@ export default function Support(
                         BG_COLORS[countrySelectStyle.hoverColor],
                       ),
                     )}
+                    data-gtm-element="country-selector-link"
+                    data-gtm-value={label}
                     href={href.href}
                   >
-                    <span class="p-0 ">
+                    <span class="p-0">
                       {icon && <Icon id={icon} width={20} height={15} />}
                     </span>
                     <span class="p-0 hover:!bg-transparent">{label}</span>
                   </a>
-                </li>
+                </div>
               );
             })}
           </ul>
@@ -250,6 +257,7 @@ export default function Support(
         siteTemplate={siteTemplate}
         device={device}
         stores={countryContent?.countryStores}
+        countryName={countryName ?? ""}
       />
     </Container>
   );

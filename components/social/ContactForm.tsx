@@ -232,7 +232,10 @@ export default function ContactForm({
       >
         <div class="flex flex-col gap-6 mt-12 max-w-[687px] outline-0">
           {/* Country Select field */}
-          <div class="form-control md:max-w-[333px]">
+          <div
+            class="form-control md:max-w-[333px]"
+            data-gtm-block-name="contact-form"
+          >
             <label class={labelClass}>
               {contactForm.country.label}
             </label>
@@ -241,6 +244,7 @@ export default function ContactForm({
               name="country"
               data-required
               hx-on:change={useScript(handleRequiredSelect, "country")}
+              data-gtm-element={`form-field-${contactForm.country.label}`}
             >
               <option value="default" default>
                 {contactForm.country.placeholder}
@@ -256,7 +260,7 @@ export default function ContactForm({
 
           <div class="flex flex-col gap-6 md:flex-row md:gap-5">
             {/* Product Code field */}
-            <div class="form-control w-full">
+            <div class="form-control w-full" data-gtm-block-name="contact-form">
               <label class={labelClass}>
                 {contactForm.productCode.label}
               </label>
@@ -265,6 +269,7 @@ export default function ContactForm({
                 placeholder={contactForm.productCode.placeholder}
                 class={inputClass}
                 name="serialNumber"
+                data-gtm-element={`form-field-${contactForm.productCode.label}`}
               />
             </div>
             {/* Subject Select field */}
@@ -285,7 +290,7 @@ export default function ContactForm({
             </div>
           </div>
           {/* Message Textarea */}
-          <div class="form-control">
+          <div class="form-control" data-gtm-block-name="contact-form">
             <label class={labelClass}>
               {contactForm.message.label}
             </label>
@@ -316,7 +321,7 @@ export default function ContactForm({
           {/* Personal data section */}
           <div class="flex flex-col max-md:gap-6 md:grid md:grid-cols-2 md:gap-y-5 md:gap-x-6">
             {/* Name field */}
-            <div class="form-control">
+            <div class="form-control" data-gtm-block-name="contact-form">
               <label class={labelClass}>
                 {contactForm.name.label}
               </label>
@@ -331,7 +336,7 @@ export default function ContactForm({
               <ErrorComponent name={"nameControl"} text={requiredFieldText!} />
             </div>
             {/* Surname field */}
-            <div class="form-control">
+            <div class="form-control" data-gtm-block-name="contact-form">
               <label class={labelClass}>
                 {contactForm.surnames.label}
               </label>
@@ -349,7 +354,7 @@ export default function ContactForm({
               />
             </div>
             {/* Email field */}
-            <div class="form-control">
+            <div class="form-control" data-gtm-block-name="contact-form">
               <label class={labelClass}>
                 {contactForm.email.label}
               </label>
@@ -364,7 +369,7 @@ export default function ContactForm({
               <ErrorComponent name={"mailControl"} text={requiredFieldText!} />
             </div>
             {/* Confirm Email field */}
-            <div class="form-control">
+            <div class="form-control" data-gtm-block-name="contact-form">
               <label class={labelClass}>
                 {contactForm.confirmEmail.label}
               </label>
@@ -390,7 +395,7 @@ export default function ContactForm({
               />
             </div>
             {/* Confirm Phone number */}
-            <div class="form-control">
+            <div class="form-control" data-gtm-block-name="contact-form">
               <label class={labelClass}>
                 {contactForm.phone.label}
               </label>
@@ -404,31 +409,34 @@ export default function ContactForm({
           </div>
         </div>
         <hr class="hidden md:block md:w-full border-base-200 mt-10" />
-        <button
-          type="submit"
-          class={clx(
-            "btn btn-ghost px-6.5 min-h-10.5 max-h-10.5 mt-12 md:mt-6",
-            "font-semibold text-sm w-full",
-            "[&_section]:contents",
-            "self-center md:self-end md:max-w-[242px]",
-            TEXT_COLORS[buttonProps?.fontColor ?? "white"],
-            BG_COLORS[buttonProps?.color ?? "primary"],
-            buttonProps?.borderColor
-              ? BORDER_COLORS[buttonProps.borderColor]
-              : "",
-            buttonProps?.borderWidth && buttonProps.borderWidth !== "0"
-              ? BORDER_CLASSES.full[buttonProps.borderWidth]
-              : "",
-            buttonProps?.hoverColor
-              ? HOVER_BG_COLORS_WITH_BORDER[buttonProps.hoverColor]
-              : "",
-          )}
-        >
-          <span class="inline [.htmx-request_&]:hidden">
-            {buttonProps?.text ?? "Send message"}
-          </span>
-          <span class="loading loading-spinner hidden [.htmx-request_&]:block" />
-        </button>
+        <div data-gtm-block-name="contact-form" class="flex flex-row-reverse">
+          <button
+            type="submit"
+            class={clx(
+              "btn btn-ghost px-6.5 min-h-10.5 max-h-10.5 mt-12 md:mt-6",
+              "font-semibold text-sm w-full",
+              "[&_section]:contents",
+              "self-center md:self-end md:max-w-[242px]",
+              TEXT_COLORS[buttonProps?.fontColor ?? "white"],
+              BG_COLORS[buttonProps?.color ?? "primary"],
+              buttonProps?.borderColor
+                ? BORDER_COLORS[buttonProps.borderColor]
+                : "",
+              buttonProps?.borderWidth && buttonProps.borderWidth !== "0"
+                ? BORDER_CLASSES.full[buttonProps.borderWidth]
+                : "",
+              buttonProps?.hoverColor
+                ? HOVER_BG_COLORS_WITH_BORDER[buttonProps.hoverColor]
+                : "",
+            )}
+            data-gtm-element={buttonProps?.text ?? "Send message"}
+          >
+            <span class="inline [.htmx-request_&]:hidden">
+              {buttonProps?.text ?? "Send message"}
+            </span>
+            <span class="loading loading-spinner hidden [.htmx-request_&]:block" />
+          </button>
+        </div>
       </form>
       <script
         dangerouslySetInnerHTML={{ __html: useScript(script, characterLimit) }}

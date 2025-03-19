@@ -25,18 +25,22 @@ function NavItem(
         "group-has-[#open-menu:checked]/header:pointer-events-none",
       )}
     >
-      <a
-        href={link}
-        {...event}
-        class={clx(
-          "text-base font-normal leading-none h-7 flex items-center",
-        )}
-        style={{ color: color }}
-        target={isBlank ? "_blank" : "_self"}
-        rel={isBlank ? "noopener noreferrer" : ""}
-      >
-        <p class="leading-none text-secondary font-medium text-sm">{title}</p>
-      </a>
+      <div data-gtm-block-name="navigation-menu">
+        <a
+          href={link}
+          {...event}
+          class={clx(
+            "text-base font-normal leading-none h-7 flex items-center",
+          )}
+          style={{ color: color }}
+          target={isBlank ? "_blank" : "_self"}
+          rel={isBlank ? "noopener noreferrer" : ""}
+          data-gtm-element="menu-link"
+          data-gtm-value={title}
+        >
+          <p class="leading-none text-secondary font-medium text-sm">{title}</p>
+        </a>
+      </div>
 
       {hasContentDiv && (
         <div

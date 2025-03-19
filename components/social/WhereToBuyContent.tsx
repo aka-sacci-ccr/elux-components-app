@@ -13,10 +13,11 @@ export interface Props {
   siteTemplate: "frigidaire" | "elux";
   device: "desktop" | "mobile";
   stores?: CountryStores[];
+  countryName: string;
 }
 
 export default function WhereToBuyContent(
-  { stores, siteTemplate, device }: Props,
+  { stores, siteTemplate, device, countryName }: Props,
 ) {
   if (!stores || stores.length === 0) {
     return <div class="h-[300px]"></div>;
@@ -72,7 +73,7 @@ export default function WhereToBuyContent(
             />
           </Picture>
           {/* Text */}
-          <div class="flex flex-col">
+          <div class="flex flex-col" data-gtm-block-name="retailers">
             <label
               class={clx(
                 titleFontSize,
@@ -84,6 +85,9 @@ export default function WhereToBuyContent(
             </label>
             <a
               href={store.href}
+              data-gtm-element="retailers-link"
+              data-gtm-country={countryName}
+              data-gtm-retailer={store.title}
               target="_blank"
               rel="noopener noreferrer"
               class={clx(

@@ -45,8 +45,16 @@ const Desktop = ({ logo, menu }: ReturnType<typeof loader>) => {
           "flex flex-col gap-4 max-w-[1280px] mx-auto h-[70px]",
         )}
       >
-        <div class="flex justify-between items-center h-full px-13.5 text-secondary">
-          <a href="/" aria-label="Store logo">
+        <div
+          class="flex justify-between items-center h-full px-13.5 text-secondary"
+          data-gtm-block-name="navigation-menu"
+        >
+          <a
+            href="/"
+            aria-label="Store logo"
+            data-gtm-element="menu-link"
+            data-gtm-value="Store logo"
+          >
             <Image
               src={logo.src}
               alt={logo.alt}
@@ -108,6 +116,7 @@ const Mobile = ({ logo, menu }: Props) => (
             "flex items-center gap-2",
             menu.languages.hide && "w-full",
           )}
+          data-gtm-block-name="navigation-menu"
         >
           <label
             for={"open-menu"}
@@ -122,6 +131,8 @@ const Mobile = ({ logo, menu }: Props) => (
               href="/"
               class="flex-grow inline-flex items-center justify-center"
               aria-label="Store logo"
+              data-gtm-element="menu-link"
+              data-gtm-value="Store logo"
             >
               <Image
                 src={logo.src}
