@@ -50,7 +50,10 @@ export default function ProductSlider(
               index={index}
               class="w-[245px] min-w-[245px] pt-4 pb-4 h-[376px] min-h-[376px]"
             >
-              <div data-gtm-block-name={overrideGTM ?? "carrossel-produtos"}>
+              <div
+                data-gtm-block-name={overrideGTM ?? "carrossel-produtos"}
+                class="h-full"
+              >
                 <ProductCard
                   product={p}
                   skuStyle={skuStyle}

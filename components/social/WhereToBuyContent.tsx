@@ -30,7 +30,6 @@ export default function WhereToBuyContent(
     fontColor,
     titleFontSize,
     descriptionFontSize,
-    imagesSizes,
     colorBorder,
     fontWeight,
     descriptionFontColor,
@@ -47,31 +46,33 @@ export default function WhereToBuyContent(
       {stores.map((store) => (
         <div class="flex flex-col gap-2 sm:gap-4">
           {/* Image */}
-          <Picture
-            class={clx(
-              "h-min rounded",
-              BORDER_COLORS[colorBorder],
-              store.disableBorder ? "border-none border-0" : "border",
-            )}
-          >
-            <Source
-              media="(max-width: 640px)"
-              src={store.mobileImage}
-              width={imagesSizes.mobile.width ?? 327}
-              height={imagesSizes.mobile.height ?? 148}
-            />
-            <Source
-              media="(min-width: 640px)"
-              src={store.desktopImage}
-              width={imagesSizes.desktop.width ?? 333}
-              height={imagesSizes.desktop.height ?? 174}
-            />
-            <img
-              src={store.desktopImage}
-              alt={store.title}
-              class="w-full object-cover"
-            />
-          </Picture>
+          <div class="h-[148px] sm:h-[174px] content-center">
+            <Picture
+              class={clx(
+                "h-min rounded",
+                BORDER_COLORS[colorBorder],
+                store.disableBorder ? "border-none border-0" : "border",
+              )}
+            >
+              <Source
+                media="(max-width: 640px)"
+                src={store.mobileImage}
+                width={327}
+                height={148}
+              />
+              <Source
+                media="(min-width: 640px)"
+                src={store.desktopImage}
+                width={333}
+                height={174}
+              />
+              <img
+                src={store.desktopImage}
+                alt={store.title}
+                class="w-full object-cover"
+              />
+            </Picture>
+          </div>
           {/* Text */}
           <div class="flex flex-col" data-gtm-block-name="retailers">
             <label
