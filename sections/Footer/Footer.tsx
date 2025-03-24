@@ -154,7 +154,10 @@ function Footer({
               )}
               {/* Images from extra media */}
               {extraMedia.images && extraMedia.images.length > 0 && (
-                <div class="flex flex-row gap-2.5 h-full items-center">
+                <div
+                  class="flex flex-row gap-2.5 h-full items-center"
+                  data-gtm-block-name="footer"
+                >
                   {extraMedia.images?.map((
                     { src, alt, link, height, isBlank, width },
                   ) => (
@@ -162,6 +165,8 @@ function Footer({
                       href={link}
                       target={isBlank ? "_blank" : "_self"}
                       rel={isBlank ? "noopener noreferrer" : ""}
+                      data-gtm-element="footer-link"
+                      data-gtm-value={alt}
                     >
                       <Image
                         class="flex-shrink"
