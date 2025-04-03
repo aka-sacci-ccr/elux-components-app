@@ -175,13 +175,15 @@ export default function Support(
               >
                 {cardItems.map(({ href, icon, label }) => (
                   <div class="flex flex-row gap-3 sm:gap-4 items-center font-light">
-                    <Icon
-                      id={icon}
-                      width={icons.iconSize}
-                      height={icons.iconSize}
-                      size={icons.iconSize}
-                      class={TEXT_COLORS[icons.iconColor]}
-                    />
+                    <div class="w-max">
+                      <Icon
+                        id={icon}
+                        width={icons.iconSize}
+                        height={icons.iconSize}
+                        size={icons.iconSize}
+                        class={TEXT_COLORS[icons.iconColor]}
+                      />
+                    </div>
                     <a href={href}>{label}</a>
                   </div>
                 ))}
