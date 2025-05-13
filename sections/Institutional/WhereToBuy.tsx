@@ -26,7 +26,7 @@ import { HOVER_TEXT_COLORS } from "../../utils/constants.tsx";
 
 export function loader(props: Props, req: Request, ctx: AppContext) {
   const url = new URL(req.url);
-  const countryId = url.searchParams.get("country");
+  const countryId = url.searchParams.get("country") ?? props.forceCountry;
   const countryContent = countryId
     ? props?.countries?.find(({ id }) => id === countryId)
     : undefined;
@@ -53,6 +53,11 @@ export interface Props {
    * @description Text to show when there are no country or city selected
    */
   emptyContent: string;
+  /**
+   * @title Force country
+   * @description If a country is selected, it will be shown even if there are no stores in that country
+   */
+  forceCountry?: string;
   /**
    * @title Cards
    */
