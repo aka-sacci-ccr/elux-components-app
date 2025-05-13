@@ -59,6 +59,10 @@ export interface Props {
    */
   forceCountry?: string;
   /**
+   * @title Hide country selector
+   */
+  hideCountrySelector?: boolean;
+  /**
    * @title Cards
    */
   countries: CountryCardContent[] | undefined;
@@ -135,6 +139,7 @@ export default function Support(
     url,
     emptyContent,
     countryName,
+    hideCountrySelector = false,
   }: ReturnType<
     typeof loader
   >,
@@ -174,88 +179,91 @@ export default function Support(
       )}
       {/** Country Cards */}
       <div class="flex flex-row flex-wrap pt-6 gap-4">
-        <div
-          name="country"
-          class="dropdown"
-        >
+        {!hideCountrySelector && (
           <div
-            tabIndex={0}
-            role="button"
-            class={clx(
-              "w-[327px] h-12 border-xs text-base font-normal px-4 items-center flex flex-row justify-between group bg-white",
-              ROUNDED_OPTIONS[countrySelectStyle.rounded],
-              TEXT_COLORS[countrySelectStyle.optionsColor],
-              BORDER_COLORS[countrySelectStyle.borderColor],
-              siteTemplate === "elux" &&
-                "focus:!border-b-transparent focus:rounded-b-none",
-              FOCUS_TEXT_COLORS[countrySelectStyle.selectColor],
-            )}
+            name="country"
+            class="dropdown"
           >
-            <span class="flex flex-row gap-2.5 items-center">
-              {countryContent
-                ? (
-                  <>
-                    {countryContent.icon && (
-                      <Icon id={countryContent.icon} width={20} height={15} />
-                    )}
-                    {countryContent.label}
-                  </>
-                )
-                : emptyContent}
-            </span>
-            <Icon
-              id="chevron-right"
-              width={24}
-              height={24}
-              class="text-primary rotate-90 group-focus:-rotate-90 duration-150 ease-in-out"
-            />
-          </div>
-          <ul
-            tabIndex={0}
-            class={clx(
-              "dropdown-content menu bg-white z-[1] w-[327px] shadow text-base !px-0 !py-1",
-              BORDER_COLORS[countrySelectStyle.borderColor],
-              TEXT_COLORS[countrySelectStyle.optionsColor],
-              siteTemplate === "frigidaire"
-                ? "!rounded mt-1 border-xs"
-                : "border-x border-b !rounded-b-[1px]",
-            )}
-            style={{
-              boxShadow: "0px 8px 16px 0px #56697326",
-            }}
-          >
-            {countries?.map(({ label, icon, id }) => {
-              const href = new URL(url);
-              href.searchParams.set("country", id);
-              return (
-                <div
-                  data-gtm-block-name="where-to-buy"
-                  class="h-[38px] items-center w-full cursor-pointer"
-                >
-                  <a
-                    class={clx(
-                      "w-full h-full flex flex-row gap-2.5 px-4 rounded-none items-center",
-                      HOVER_TEXT_COLORS[countrySelectStyle.hoverFontColor],
-                      HOVER_BG_COLORS[countrySelectStyle.hoverColor],
-                      countryContent?.id === id && clx(
-                        TEXT_COLORS[countrySelectStyle.hoverFontColor],
-                        BG_COLORS[countrySelectStyle.hoverColor],
-                      ),
-                    )}
-                    data-gtm-element="country-selector-link"
-                    data-gtm-value={label}
-                    href={href.href}
+            <div
+              tabIndex={0}
+              role="button"
+              class={clx(
+                "w-[327px] h-12 border-xs text-base font-normal px-4 items-center flex flex-row justify-between group bg-white",
+                ROUNDED_OPTIONS[countrySelectStyle.rounded],
+                TEXT_COLORS[countrySelectStyle.optionsColor],
+                BORDER_COLORS[countrySelectStyle.borderColor],
+                siteTemplate === "elux" &&
+                  "focus:!border-b-transparent focus:rounded-b-none",
+                FOCUS_TEXT_COLORS[countrySelectStyle.selectColor],
+              )}
+            >
+              <span class="flex flex-row gap-2.5 items-center">
+                {countryContent
+                  ? (
+                    <>
+                      {countryContent.icon && (
+                        <Icon id={countryContent.icon} width={20} height={15} />
+                      )}
+                      {countryContent.label}
+                    </>
+                  )
+                  : emptyContent}
+              </span>
+              <Icon
+                id="chevron-right"
+                width={24}
+                height={24}
+                class="text-primary rotate-90 group-focus:-rotate-90 duration-150 ease-in-out"
+              />
+            </div>
+
+            <ul
+              tabIndex={0}
+              class={clx(
+                "dropdown-content menu bg-white z-[1] w-[327px] shadow text-base !px-0 !py-1",
+                BORDER_COLORS[countrySelectStyle.borderColor],
+                TEXT_COLORS[countrySelectStyle.optionsColor],
+                siteTemplate === "frigidaire"
+                  ? "!rounded mt-1 border-xs"
+                  : "border-x border-b !rounded-b-[1px]",
+              )}
+              style={{
+                boxShadow: "0px 8px 16px 0px #56697326",
+              }}
+            >
+              {countries?.map(({ label, icon, id }) => {
+                const href = new URL(url);
+                href.searchParams.set("country", id);
+                return (
+                  <div
+                    data-gtm-block-name="where-to-buy"
+                    class="h-[38px] items-center w-full cursor-pointer"
                   >
-                    <span class="p-0">
-                      {icon && <Icon id={icon} width={20} height={15} />}
-                    </span>
-                    <span class="p-0 hover:!bg-transparent">{label}</span>
-                  </a>
-                </div>
-              );
-            })}
-          </ul>
-        </div>
+                    <a
+                      class={clx(
+                        "w-full h-full flex flex-row gap-2.5 px-4 rounded-none items-center",
+                        HOVER_TEXT_COLORS[countrySelectStyle.hoverFontColor],
+                        HOVER_BG_COLORS[countrySelectStyle.hoverColor],
+                        countryContent?.id === id && clx(
+                          TEXT_COLORS[countrySelectStyle.hoverFontColor],
+                          BG_COLORS[countrySelectStyle.hoverColor],
+                        ),
+                      )}
+                      data-gtm-element="country-selector-link"
+                      data-gtm-value={label}
+                      href={href.href}
+                    >
+                      <span class="p-0">
+                        {icon && <Icon id={icon} width={20} height={15} />}
+                      </span>
+                      <span class="p-0 hover:!bg-transparent">{label}</span>
+                    </a>
+                  </div>
+                );
+              })}
+            </ul>
+          </div>
+        )}
       </div>
       {/** Store Cards */}
       <Content
