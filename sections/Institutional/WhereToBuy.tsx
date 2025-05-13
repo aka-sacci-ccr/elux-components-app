@@ -178,8 +178,8 @@ export default function Support(
         </div>
       )}
       {/** Country Cards */}
-      <div class="flex flex-row flex-wrap pt-6 gap-4">
-        {!hideCountrySelector && (
+      {!hideCountrySelector && (
+        <div class="flex flex-row flex-wrap pt-6 gap-4">
           <div
             name="country"
             class="dropdown"
@@ -263,8 +263,8 @@ export default function Support(
               })}
             </ul>
           </div>
-        )}
-      </div>
+        </div>
+      )}
       {/** Store Cards */}
       <Content
         siteTemplate={siteTemplate}
