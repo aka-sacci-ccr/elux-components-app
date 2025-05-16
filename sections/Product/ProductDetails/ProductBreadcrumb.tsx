@@ -144,3 +144,16 @@ const getBreadcrumbItems = (
 
   return breadcrumbItems;
 };
+
+export const LoadingFallback = ({ spacing }: Partial<Props>) => {
+  return (
+    <Container
+      spacing={spacing}
+      class="container px-6 lg:px-0 flex justify-center items-center"
+    >
+      <div class="h-5 content-center">
+        <span class="loading loading-dots loading-md text-primary" />
+      </div>
+    </Container>
+  );
+};

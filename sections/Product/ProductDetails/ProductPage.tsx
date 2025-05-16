@@ -140,3 +140,11 @@ function NotFound({ language }: { language: "EN" | "ES" }) {
     </div>
   );
 }
+
+export const LoadingFallback = () => {
+  return (
+    <div class="w-full flex flex-col justify-center items-center h-[100vh]">
+      <span class="loading loading-spinner text-primary loading-lg" />
+    </div>
+  );
+};
