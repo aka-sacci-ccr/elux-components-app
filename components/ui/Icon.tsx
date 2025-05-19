@@ -61,7 +61,9 @@ export type AvailableIcons =
   | "pan-frigidaire"
   | "chevron-down-frigidaire"
   | "refrigerator-frigidaire-alt"
-  | "cross-frigidaire";
+  | "cross-frigidaire"
+  | "microwave-elux"
+  | "empotrable-elux";
 
 interface Props extends JSX.SVGAttributes<SVGSVGElement> {
   /**
