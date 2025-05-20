@@ -99,7 +99,7 @@ function ProductImageZoom(
                           class="object-cover w-full h-full"
                           width={56}
                           height={56}
-                          src={img.thumbnailUrl!}
+                          src={img.thumbnailUrl ?? "https://deco-sites-assets.s3.sa-east-1.amazonaws.com/elux-latam/66714740-8a8a-4db5-a88b-3e31f20a65ed/Frame-3.png"}
                           alt={img.alternateName}
                         />
                       </div>
