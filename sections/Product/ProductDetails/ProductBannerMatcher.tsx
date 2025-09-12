@@ -83,6 +83,16 @@ interface Props {
   product: ProductDetailsPage | null;
 }
 
+export function LoadingFallback() {
+  return (
+    <Container class="flex flex-col items-center justify-center">
+      <div class="w-full h-[260px] flex items-center justify-center">
+        <div class="loading loading-spinner loading-lg text-primary"></div>
+      </div>
+    </Container>
+  );
+}
+
 export default function ProductBannerMatcher(
   { banner = null, siteTemplate }: ReturnType<typeof loader>,
 ) {
