@@ -41,7 +41,7 @@ export default function BlogpostContent(
       IFRAME_KEY_REGEX,
       (_match) =>
         render(
-          <YoutubeVideo url={url} class="min-h-[185px] sm:min-h-[486px]" />,
+          <YoutubeVideo url={url} class="min-h-[185px] sm:min-h-[486px]" title="YouTube video player" />,
         ),
     )
     : postPage.post.content;

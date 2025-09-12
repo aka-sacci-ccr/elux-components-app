@@ -62,7 +62,7 @@ function ProductImageZoom(
                       class="h-full w-auto"
                     />
                   )
-                  : <YoutubeVideo url={image.contentUrl!} />}
+                  : <YoutubeVideo url={image.contentUrl!} thumbnailUrl={image.thumbnailUrl} title={image.alternateName} />}
               </div>
             </Slider.Item>
           ))}
@@ -116,7 +116,7 @@ function ProductImageZoom(
           </Slider.NextButton>
         </div>
       </div>
-      <Slider.JS rootId={container} infinite={true} />
+      <Slider.JS rootId={container} infinite />
       <script
         type="module"
         dangerouslySetInnerHTML={{

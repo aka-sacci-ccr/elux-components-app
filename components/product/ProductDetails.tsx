@@ -118,7 +118,7 @@ export default function ProductDetails(
   };
 
   if (!hasDimensions && !hasDimensionsWithBox && !hasTableProperties) {
-    return <></>;
+    return null;
   }
 
   return (

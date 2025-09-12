@@ -10,12 +10,17 @@ import {
 } from "../../../utils/types.ts";
 import { AppContext } from "../../../mod.ts";
 import { LANGUAGE_DIFFS } from "../../../utils/constants.tsx";
+import SEO, {
+  Props as SEOProps,
+} from "apps/commerce/sections/Seo/SeoPDPV2.tsx";
 
 interface ProductPageProps {
   /** @description product loader of the page */
   page: ProductDetailsPage | null;
   /** @description Product main colors */
   productMain: ProductMainProps;
+  /** @description SEO props */
+  seo: Omit<SEOProps, "jsonLD">;
   /** @description Spacing config */
   spacing?: SpacingConfig;
 }
@@ -109,21 +114,24 @@ export default function ProductPage(
   if (!page) return <NotFound language={language} />;
   const { product } = page;
   const { additionalProperty, description } = product;
-
+  const { seo } = page;
   return (
-    <Container class="flex flex-col" spacing={spacing}>
-      <ProductMain
-        page={page}
-        productMain={productMain}
-        language={language}
-      />
-      <ProductDetails
-        additionalProperty={additionalProperty}
-        description={description}
-        language={language}
-        productMain={productMain}
-      />
-    </Container>
+    <>
+      <SEO {...seo} jsonLD={page} />
+      <Container class="flex flex-col" spacing={spacing}>
+        <ProductMain
+          page={page}
+          productMain={productMain}
+          language={language}
+        />
+        <ProductDetails
+          additionalProperty={additionalProperty}
+          description={description}
+          language={language}
+          productMain={productMain}
+        />
+      </Container>
+    </>
   );
 }
 

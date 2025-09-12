@@ -93,7 +93,7 @@ export default function GallerySlider(props: Props) {
                         />
                       </label>
                     )
-                    : <YoutubeVideo url={img.contentUrl!} />}
+                    : <YoutubeVideo url={img.contentUrl!} thumbnailUrl={img.thumbnailUrl} title={img.alternateName} />}
                 </Slider.Item>
               ))}
             </Slider>
