@@ -85,7 +85,6 @@ export default async function loader(
 
   if (!checkPath(paths, categoryTree)) {
     //If the path is wrong or malformed, return null
-    logger.error("PLP path is wrong or malformed");
     return null;
   }
 
