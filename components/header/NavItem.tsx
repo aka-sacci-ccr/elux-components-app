@@ -4,7 +4,9 @@ import { clx } from "../../utils/clx.ts";
 import Column from "./Collum.tsx";
 import { useSendEvent } from "../../sdk/useSendEvent.ts";
 function NavItem(
-  { title, collums, link, isBlank, color }: Department,
+  { title, collums, link, isBlank, color, siteTemplate }: Department & {
+    siteTemplate?: "elux" | "frigidaire";
+  },
 ) {
   const hasContentDiv = collums && collums.length > 0;
   const event = useSendEvent({
@@ -20,7 +22,8 @@ function NavItem(
   return (
     <li
       class={clx(
-        "group flex items-center justify-center h-full relative teste",
+        "group flex items-center justify-center h-full relative",
+        siteTemplate === "elux" ? "px-6" : "teste",
         hasContentDiv ? "hover-nav-item" : "",
         "group-has-[#open-menu:checked]/header:pointer-events-none",
       )}

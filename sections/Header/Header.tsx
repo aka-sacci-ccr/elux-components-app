@@ -36,7 +36,7 @@ export const loader = (props: SectionProps, _req: Request, ctx: AppContext) => {
 };
 
 type Props = SectionProps;
-const Desktop = ({ logo, menu }: ReturnType<typeof loader>) => {
+const Desktop = ({ logo, menu, siteTemplate }: ReturnType<typeof loader>) => {
   const hideSecondaryMenu = menu.hideSecondaryMenu;
   return (
     <>
@@ -69,7 +69,7 @@ const Desktop = ({ logo, menu }: ReturnType<typeof loader>) => {
                   <Icon
                     class={clx(
                       "rotate-90 group-has-[#open-menu:checked]/header:-rotate-90 duration-150 ease-in-out",
-                      "text-white"
+                      "text-white",
                     )}
                     id="chevron-right"
                   />
@@ -77,16 +77,19 @@ const Desktop = ({ logo, menu }: ReturnType<typeof loader>) => {
                 <Menu {...menu} />
               </div>
             )}
-            {menu.extraLinks?.map((props) => (
-              <Dropdown {...props} />
-            ))}
+            {menu.extraLinks?.map((props) => <Dropdown {...props} />)}
             {!menu.languages.hide && <Dropdown {...menu.languages} />}
           </div>
         </div>
       </div>
       {!hideSecondaryMenu && (
         <div class="bg-base-200 h-[72px] shadow-[0px_1px_4px_0px_#56697326]">
-          <ul class="flex justify-between h-full max-w-[1280px] mx-auto text-sm text-secondary font-medium">
+          <ul
+            class={clx(
+              "flex h-full max-w-[1280px] mx-auto text-sm text-secondary font-medium",
+              siteTemplate === "elux" ? "justify-start" : "justify-between",
+            )}
+          >
             <li class="relative w-[182px] mr-6">
               <label
                 htmlFor="open-menu"
@@ -97,9 +100,7 @@ const Desktop = ({ logo, menu }: ReturnType<typeof loader>) => {
               </label>
               <Menu {...menu} />
             </li>
-            {menu.links.map((props) => (
-              <NavItem {...props} />
-            ))}
+            {menu.links.map((props) => <NavItem {...props} siteTemplate={siteTemplate} />)}
           </ul>
         </div>
       )}
