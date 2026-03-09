@@ -35,8 +35,8 @@
     "@zaubrik/djwt": "jsr:@zaubrik/djwt@^3.0.2",
     "fast-json-patch": "npm:fast-json-patch@^3.1.1",
     "simple-git": "npm:simple-git@^3.25.0",
-    "drizzle-orm": "https://esm.sh/drizzle-orm@0.32.2",
-    "drizzle-orm/": "https://esm.sh/drizzle-orm@0.32.2/",
+    "drizzle-orm": "npm:drizzle-orm@0.43.1",
+    "drizzle-orm/": "npm:drizzle-orm@0.43.1/",
     "https://esm.sh/*preact-render-to-string@6.3.1": "npm:preact-render-to-string@6.4.2",
     "@deco/dev": "jsr:@deco/dev@1.133.2"
   },

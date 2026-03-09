@@ -31,7 +31,7 @@ export default async function createCategory(
     logger.error(e);
     return {
       success: false,
-      message: e,
+      message: e instanceof Error ? e.message : "Unknown error",
     };
   }
 }
