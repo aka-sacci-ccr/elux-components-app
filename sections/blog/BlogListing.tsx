@@ -32,18 +32,14 @@ export type SortBy =
   | "date_desc"
   | "date_asc"
   | "title_asc"
-  | "title_desc"
-  | "view_asc"
-  | "view_desc";
+  | "title_desc";
 
 const SORT_BY_QUERY_PARAM = "sortBy";
 const SORT_BY_OPTIONS: Array<{ value: SortBy; label: string }> = [
-  { value: "date_desc", label: "Mais recentes" },
-  { value: "date_asc", label: "Mais antigos" },
+  { value: "date_desc", label: "Más reciente" },
+  { value: "date_asc", label: "Más viejo" },
   { value: "title_asc", label: "Título (A-Z)" },
   { value: "title_desc", label: "Título (Z-A)" },
-  { value: "view_asc", label: "Visualizações (menores)" },
-  { value: "view_desc", label: "Visualizações (maiores)" },
 ];
 
 function getSortByFromUrl(url: string): SortBy {
