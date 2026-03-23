@@ -42,6 +42,29 @@ const SORT_BY_OPTIONS: Array<{ value: SortBy; label: string }> = [
   { value: "title_desc", label: "Título (Z-A)" },
 ];
 
+export interface Props {
+  /**
+   * @title Section title
+   */
+  title?: string;
+  /**
+   * @title Post listing integration
+   */
+  page: BlogPostListingPage | null;
+  /**
+   * @title Layout
+   */
+  layout?: Layout;
+  /**
+   * @title Container spacing
+   */
+  spacing?: SpacingConfig;
+  /**
+   * @ignore
+   */
+  partial?: "hideMore" | "hideLess" | null;
+}
+
 function getSortByFromUrl(url: string): SortBy {
   const parsed = new URL(url).searchParams.get(SORT_BY_QUERY_PARAM);
   return SORT_BY_OPTIONS.some(({ value }) => value === parsed)
@@ -67,28 +90,6 @@ function getUrlWithSortBy(url: string, sortBy: SortBy) {
   return parsed.href;
 }
 
-export interface Props {
-  /**
-   * @title Section title
-   */
-  title?: string;
-  /**
-   * @title Post listing integration
-   */
-  page: BlogPostListingPage | null;
-  /**
-   * @title Layout
-   */
-  layout?: Layout;
-  /**
-   * @title Container spacing
-   */
-  spacing?: SpacingConfig;
-  /**
-   * @ignore
-   */
-  partial?: "hideMore" | "hideLess" | null;
-}
 const useUrlRebased = (overrides: string | undefined, base: string) => {
   let url: string | undefined = undefined;
   if (overrides) {
@@ -102,6 +103,8 @@ const useUrlRebased = (overrides: string | undefined, base: string) => {
   }
   return url;
 };
+
+
 function PageResult(
   props: SectionProps<typeof loader> & {
     isDesktop: boolean;
