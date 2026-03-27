@@ -12,6 +12,10 @@ import { Menu as MenuProps } from "../../loaders/menu.ts";
 import Dropdown from "../../components/header/Dropdown.tsx";
 import NavItem from "../../components/header/NavItem.tsx";
 import Menu from "../../components/header/Menu.tsx";
+import TopNotification, {
+  TOP_NOTIFICATION_HEIGHT,
+  type TopNotificationProps,
+} from "../../components/header/TopNotification.tsx";
 import { Colors } from "../../utils/types.ts";
 import { clx } from "../../utils/clx.ts";
 import { AppContext } from "../../mod.ts";
@@ -25,6 +29,11 @@ export interface SectionProps {
   /** @title Logo */
   logo: Logo;
   menu: MenuProps;
+  /**
+   * @title Notificação superior
+   * @description Barra opcional exibida acima do menu/logotipo.
+   */
+  topNotification?: TopNotificationProps;
   backgroundColor?: Colors;
 }
 
@@ -165,29 +174,66 @@ function Header({
 }: ReturnType<typeof loader>) {
   const device = useDevice();
   const hideSecondaryMenu = props.menu.hideSecondaryMenu;
+  const topNotification = props.topNotification;
+  const hasTopNotification = !!topNotification?.active
+    && topNotification.items?.length > 0;
+  const closeId = "header-top-notification-close";
+
+  const baseHeaderHeight = device === "desktop"
+    ? hideSecondaryMenu
+      ? HEADER_HEIGHT_DESKTOP_NO_SECONDARY
+      : HEADER_HEIGHT_DESKTOP
+    : HEADER_HEIGHT_MOBILE;
+
   return (
-    <header
-      style={{
-        height: device === "desktop"
-          ? hideSecondaryMenu
-            ? HEADER_HEIGHT_DESKTOP_NO_SECONDARY
-            : HEADER_HEIGHT_DESKTOP
-          : HEADER_HEIGHT_MOBILE,
-      }}
-    >
-      <div
-        class={clx(
-          "group/header bg-base-100 fixed w-full z-40",
-          BG_COLORS[backgroundColor ?? "white"],
-          props.siteTemplate === "elux" &&
+    <>
+      {hasTopNotification && (
+        <>
+          <input id={closeId} type="checkbox" class="peer hidden" />
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+                .top-notification {
+                  display: none;
+                }
+
+                #${closeId}[data-ready="true"]:not(:checked) ~ .top-notification {
+                  display: block;
+                }
+
+                #${closeId}[data-ready="true"]:not(:checked) ~ header {
+                  height: calc(${baseHeaderHeight} + ${TOP_NOTIFICATION_HEIGHT});
+                }
+
+                #${closeId}[data-ready="true"]:not(:checked) ~ header .header-fixed {
+                  top: ${TOP_NOTIFICATION_HEIGHT};
+                }
+              `,
+            }}
+          />
+          {topNotification && (
+            <div class="top-notification">
+              <TopNotification {...topNotification} closeId={closeId} />
+            </div>
+          )}
+        </>
+      )}
+      <header style={{ height: baseHeaderHeight }}>
+        <div
+          class={clx(
+            "group/header bg-base-100 fixed w-full z-40 header-fixed",
+            "top-0",
+            BG_COLORS[backgroundColor ?? "white"],
+            props.siteTemplate === "elux" &&
             "md:shadow-[0px_1px_3px_0px_#00000033]",
-        )}
-      >
-        {device === "desktop"
-          ? <Desktop logo={logo} {...props} />
-          : <Mobile logo={logo} {...props} />}
-      </div>
-    </header>
+          )}
+        >
+          {device === "desktop"
+            ? <Desktop logo={logo} {...props} />
+            : <Mobile logo={logo} {...props} />}
+        </div>
+      </header>
+    </>
   );
 }
 
