@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { useScript } from "@deco/deco/hooks";
+import { useScript, useScriptAsDataURI } from "@deco/deco/hooks";
 import { clx } from "../../utils/clx.ts";
 function Dot({ index, ...props }: {
   index: number;
@@ -267,16 +267,13 @@ function JS(
 ) {
   return (
     <script
-      type="module"
-      dangerouslySetInnerHTML={{
-        __html: useScript(onLoad, {
-          rootId,
-          scroll,
-          interval,
-          infinite,
-          goToDisabled,
-        }),
-      }}
+      src={useScriptAsDataURI(onLoad, {
+        rootId,
+        scroll,
+        interval,
+        infinite,
+        goToDisabled,
+      })}
     />
   );
 }
