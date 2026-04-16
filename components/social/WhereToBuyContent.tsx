@@ -46,30 +46,30 @@ export default function WhereToBuyContent(
       {stores.map((store) => (
         <div class="flex flex-col gap-2 sm:gap-4">
           {/* Image */}
-          <div class="h-[148px] sm:h-[174px] content-center">
+          <div class="h-[148px] sm:h-[174px] flex items-center justify-center overflow-hidden">
             <Picture
               class={clx(
-                "h-min rounded",
+                "flex items-center justify-center h-full w-full rounded",
                 BORDER_COLORS[colorBorder],
                 store.disableBorder ? "border-none border-0" : "border",
               )}
             >
               <Source
-                media="(max-width: 640px)"
+                media="(max-width: 767px)"
                 src={store.mobileImage}
                 width={327}
                 height={148}
               />
               <Source
-                media="(min-width: 640px)"
+                media="(min-width: 768px)"
                 src={store.desktopImage}
-                width={333}
+                width={400}
                 height={174}
               />
               <img
                 src={store.desktopImage}
                 alt={store.title}
-                class="w-full object-cover"
+                class="w-full h-full object-contain"
               />
             </Picture>
           </div>
