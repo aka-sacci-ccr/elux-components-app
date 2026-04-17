@@ -49,7 +49,7 @@ export default function ProductCard(
             height={HEIGHT}
             style={{ aspectRatio: ASPECT_RATIO }}
             class={clx(
-              "object-cover",
+              "object-contain",
               "rounded w-full",
               "col-span-full row-span-full",
               "transition-opacity",
