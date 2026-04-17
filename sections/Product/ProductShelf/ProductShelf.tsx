@@ -1,5 +1,5 @@
 import { Product } from "apps/commerce/types.ts";
-import { asResolved, type Resolved } from "@deco/deco";
+import { type Resolved } from "@deco/deco";
 import Container, { SpacingConfig } from "../../container/Container.tsx";
 import { AppContext } from "../../../mod.ts";
 import { clx } from "../../../utils/clx.ts";
@@ -10,19 +10,14 @@ import { CardStyling } from "../../../components/product/ProductCard.tsx";
 import ProductSlider, {
   Props as ProductSliderProps,
 } from "../../../components/product/ProductSlider.tsx";
-import { useComponent } from "../../Component.tsx";
-import { useScript } from "@deco/deco/hooks";
-
-const ProductSliderShelf = import.meta.resolve(
-  "../../../components/product/ProductSlider.tsx",
-);
+import { useScriptAsDataURI } from "@deco/deco/hooks";
 
 export interface Props {
   /**
    * @title Title
    * @description Title of the product shelf
    */
-  title: string;
+  title?: string;
   /**
    * @title Extra link
    * @description Extra link of the product shelf
@@ -71,28 +66,79 @@ interface TabbedShelf {
    * @description Products of the tab
    */
   loader: Resolved<Product[] | null>;
+  /** @hide true */
+  initialProducts?: Product[] | null;
 }
 
-export const loader = (props: Props, req: Request, ctx: AppContext) => {
+export const loader = async (props: Props, req: Request, ctx: AppContext) => {
   const url = new URL(req.url);
+  const { products } = props;
+
+  if (Array.isArray(products) && (products as TabbedShelf[]).length > 0) {
+    const tabs = products as TabbedShelf[];
+    const resolvedTabs = await Promise.all(
+      tabs.map(async (tab) => {
+        if (!tab.loader) return { ...tab, initialProducts: null };
+        try {
+          // deco already strips the "resolved" wrapper, so loader has __resolveType directly
+          const { __resolveType, ...loaderProps } =
+            tab.loader as unknown as Record<string, unknown>;
+          // deno-lint-ignore no-explicit-any
+          const tabProducts = await (ctx as any).invoke(
+            __resolveType as string,
+            loaderProps,
+          ) as Product[] | null;
+          return { ...tab, initialProducts: tabProducts };
+        } catch {
+          return { ...tab, initialProducts: null };
+        }
+      }),
+    );
+    return {
+      ...props,
+      products: resolvedTabs,
+      siteTemplate: ctx.siteTemplate,
+      url,
+    };
+  }
+
   return {
     ...props,
     siteTemplate: ctx.siteTemplate,
-    url: url,
+    url,
   };
 };
 
-function goToItem(rootId: string, index: number) {
+function setupTabs(rootId: string, slotId: string, tabInputName: string) {
   const root = document.getElementById(rootId);
-  const item = root?.querySelector<HTMLLabelElement>(
-    `[data-tab-index="${index}"]`,
-  );
-  const slider = root?.querySelector<HTMLDivElement>(`[data-tab-slider]`);
-  if (item && slider) {
-    slider.scrollTo({
-      left: item.offsetLeft - slider.offsetLeft,
+  const slot = document.getElementById(slotId);
+  if (!root || !slot) return;
+
+  function activatePanel(index: number) {
+    // scroll the tab label into view
+    const item = root!.querySelector<HTMLElement>(
+      `[data-tab-index="${index}"]`,
+    );
+    const tabSlider = root!.querySelector<HTMLElement>("[data-tab-slider]");
+    if (item && tabSlider) {
+      tabSlider.scrollTo({ left: item.offsetLeft - tabSlider.offsetLeft });
+    }
+    // show/hide panels
+    slot!.querySelectorAll<HTMLElement>("[data-tab-panel]").forEach((panel) => {
+      panel.style.display =
+        Number(panel.dataset.tabPanel) === index ? "" : "none";
     });
+    // trigger resize so Slider.JS recalculates for the newly visible carousel
+    globalThis.dispatchEvent(new Event("resize"));
   }
+
+  root
+    .querySelectorAll<HTMLInputElement>(`input[name="${tabInputName}"]`)
+    .forEach((radio) => {
+      radio.addEventListener("change", () => {
+        activatePanel(Number(radio.value));
+      });
+    });
 }
 
 export default function ProductShelf(
@@ -214,6 +260,7 @@ const TabbedShelf = (
     },
 ) => {
   const slotId = useId();
+  const tabInputName = `product-tabs-${slotId}`;
   return (
     <div class="flex flex-col">
       <div
@@ -221,7 +268,7 @@ const TabbedShelf = (
         role="tablist"
         data-tab-slider
       >
-        {products.map(({ title, loader }, index) => (
+        {products.map(({ title }, index) => (
           <label
             key={index}
             class={clx(
@@ -235,29 +282,10 @@ const TabbedShelf = (
             <div data-gtm-block-name="carrossel-categorias">
               <input
                 type="radio"
-                name={`product-tabs-${slotId}`}
+                name={tabInputName}
                 defaultChecked={index === 0}
                 value={index}
                 class="peer hidden"
-                hx-trigger="change"
-                hx-target={`#${slotId}`}
-                hx-swap="innerHTML"
-                hx-select="section>*"
-                hx-post={loader &&
-                  (useComponent<ProductSliderProps>(
-                    ProductSliderShelf,
-                    {
-                      skuStyle: skuStyle,
-                      nameStyle: nameStyle,
-                      loader: asResolved(loader),
-                      dotsColor: dotsColor,
-                      borderColor: borderColor,
-                      divId,
-                      overrideGTM: "carrossel-categorias",
-                    },
-                  ))}
-                hx-on:click={useScript(goToItem, rootId, index)}
-                hx-indicator={`#${slotId}`}
               />
               <span
                 class={clx(
@@ -273,24 +301,29 @@ const TabbedShelf = (
           </label>
         ))}
       </div>
-      <div
-        id={slotId}
-        class="min-h-[376px] lg:min-h-[400px]"
-        hx-post={products[0].loader &&
-          (useComponent<ProductSliderProps>(ProductSliderShelf, {
-            skuStyle: skuStyle,
-            nameStyle: nameStyle,
-            loader: asResolved(products[0].loader),
-            dotsColor: dotsColor,
-            borderColor: borderColor,
-            divId,
-            overrideGTM: "carrossel-categorias",
-          }))}
-        hx-trigger="load"
-        hx-select="section>*"
-      >
-        <span class="loading loading-spinner text-primary loading-lg hidden [.htmx-request_&]:block mx-auto lg:mt-[180px] mt-[168px]" />
+      <div id={slotId} class="min-h-[376px] lg:min-h-[400px]">
+        {products.map(({ initialProducts }, index) => (
+          <div
+            key={index}
+            data-tab-panel={index}
+            style={index !== 0 ? "display:none" : ""}
+          >
+            <ProductSlider
+              skuStyle={skuStyle}
+              nameStyle={nameStyle}
+              products={initialProducts ?? null}
+              dotsColor={dotsColor}
+              borderColor={borderColor}
+              divId={divId}
+              overrideGTM="carrossel-categorias"
+            />
+          </div>
+        ))}
       </div>
+      {/* Setup script: attaches change listeners to radio inputs for tab switching */}
+      <script
+        src={useScriptAsDataURI(setupTabs, rootId, slotId, tabInputName)}
+      />
     </div>
   );
 };
