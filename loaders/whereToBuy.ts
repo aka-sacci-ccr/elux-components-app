@@ -33,31 +33,58 @@ export interface CountryCardContent {
   countryStores?: CountryStores[];
 }
 
+export interface Image{
+  /**
+   * @title Image
+   */
+  image: ImageWidget;
+
+  /**
+   * @title width
+   * @description width of the image edit the size of the image for ajustement of the image
+   * @default 400
+   */
+  width?: number;
+
+  /**
+   * @title height
+   * @description height of the image edit the size of the image for ajustement of the image
+   * @default 174
+   */
+  height?: number;
+
+  /**
+   * @title disable border
+   * @description disable border of the image
+   */
+  disableBorder?: boolean;
+}
+
 export interface CountryStores {
+  desktopImage: Image;
+  mobileImage: Image;
   /**
-   * @title Desktop store image
+   * @title alt
+   * @description alt of the image
    */
-  desktopImage: ImageWidget;
+  alt: string;
+
   /**
-   * @title Mobile store image
-   */
-  mobileImage: ImageWidget;
-  /**
-   * @title Title
+   * @title title
+   * @description title of the image
    */
   title: string;
   /**
-   * @title Description
+   * @title description
+   * @description description of the image
    */
   description: string;
   /**
-   * @title Href
+   * @title href
+   * @description href of the image
    */
   href?: string;
-  /**
-   * @title Disable Card Border
-   */
-  disableBorder?: boolean;
+  
 }
 
 /**
