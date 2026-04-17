@@ -51,24 +51,26 @@ export default function WhereToBuyContent(
               class={clx(
                 "flex items-center justify-center h-full w-full rounded",
                 BORDER_COLORS[colorBorder],
-                store.disableBorder ? "border-none border-0" : "border",
+                (device === "mobile" ? store.mobileImage.disableBorder : store.desktopImage.disableBorder)
+                  ? "border-none border-0"
+                  : "border",
               )}
             >
               <Source
                 media="(max-width: 767px)"
-                src={store.mobileImage}
-                width={327}
-                height={148}
+                src={store.mobileImage.image}
+                width={store.mobileImage.width ?? 327}
+                height={store.mobileImage.height ?? 148}
               />
               <Source
                 media="(min-width: 768px)"
-                src={store.desktopImage}
-                width={400}
-                height={174}
+                src={store.desktopImage.image}
+                width={store.desktopImage.width ?? 400}
+                height={store.desktopImage.height ?? 174}
               />
               <img
-                src={store.desktopImage}
-                alt={store.title}
+                src={store.desktopImage.image}
+                alt={store.alt ?? store.title}
                 class="w-full h-full object-contain"
               />
             </Picture>
